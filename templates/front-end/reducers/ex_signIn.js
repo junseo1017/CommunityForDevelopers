@@ -3,9 +3,9 @@
 // https://github.com/ZeroCho/react-nodebird/blob/master/toolkit/front/reducers/user.js
 
 // 아래는 동기적 상태 관리
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {status: ' '};
+const initialState = { status: ' ' };
 
 const signInSlice = createSlice({
   name: 'SignInStatus',
