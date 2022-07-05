@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import { HeaderContainer, HeaderContent, HeaderLogo } from "./HeaderStyles";
+import { HeaderContainer, HeaderContent, HeaderLogo } from "./styles/HeaderStyles";
 import Logo from "./logo";
 
 const Header = () => {
