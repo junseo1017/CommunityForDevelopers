@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import {css, jsx} from '@emotion/react';
-import {HeaderContainer, HeaderContent, HeaderLogo} from './HeaderStyles';
+import { css, jsx } from "@emotion/react";
+import { HeaderContainer, HeaderContent, HeaderLogo } from "./HeaderStyles";
+import Logo from "./logo";
 
 const Header = () => {
   return (
@@ -8,11 +9,13 @@ const Header = () => {
       <div>
         <div css={HeaderContent}>
           <nav>
-            <a css={HeaderLogo}>로고</a>
+            <a href="/">
+              <Logo />
+            </a>
             <div>
-            <a>포트폴리오</a>
-            <a>Q&A</a>
-            <a>Magazine</a>
+              <a>포트폴리오</a>
+              <a>Q&A</a>
+              <a>Magazine</a>
             </div>
           </nav>
           <nav>

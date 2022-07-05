@@ -1,11 +1,13 @@
 /** @jsxImportSource @emotion/react */
-import {css, jsx} from '@emotion/react';
-
+import { css, jsx } from "@emotion/react";
 export const HeaderContainer = css`
   position: relative;
   flex: 0 0 auto;
   font-size: 16px;
   font-weight: 700;
+  & a {
+    color: black;
+  }
   & > div {
     position: fixed;
     z-index: 1000;
@@ -26,11 +28,12 @@ export const HeaderContent = css`
   & nav {
     display: flex;
     flex-direction: row;
-    gap: 3vw;
+    gap: 1vw;
   }
   & nav div {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 1.5vw;
   }
   @media (min-width: 768px) {
@@ -47,5 +50,3 @@ export const HeaderContent = css`
     }
   }
 `;
-
-export const HeaderLogo = css``;

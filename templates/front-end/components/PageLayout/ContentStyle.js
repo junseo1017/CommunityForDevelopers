@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import {css, jsx} from '@emotion/react';
+import { css, jsx } from "@emotion/react";
 
 export const ContentContainer = css`
   display: flex;
@@ -7,7 +7,7 @@ export const ContentContainer = css`
   flex-direction: column;
   margin-top: 81px;
   @media (min-width: 768px) {
-  & {
+    & {
       padding-top: 10px;
       padding-bottom: 10px;
     }
