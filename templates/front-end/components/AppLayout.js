@@ -1,8 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import {css, jsx} from '@emotion/react';
-
-const AppLayout = () => {
-  return <h1>hi</h1>;
+import Header from './Layout/Header';
+import Footer from './Layout/Footer';
+import {ContentContainer} from './Layout/ContentStyle';
+const AppLayout = ({children}) => {
+  return (
+    <>
+      <Header />
+      <div css={ContentContainer}>{children}</div>
+      <Footer />
+    </>
+  );
 };
 
 export default AppLayout;
