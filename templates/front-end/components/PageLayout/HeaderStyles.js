@@ -22,14 +22,19 @@ export const HeaderContent = css`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  height: 81px;
   & nav {
     display: flex;
     flex-direction: row;
-    gap: 5vw;
+    gap: 3vw;
+  }
+  & nav div {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5vw;
   }
   @media (min-width: 768px) {
     & {
-      height: 80px;
       padding-top: 10px;
       padding-bottom: 10px;
     }

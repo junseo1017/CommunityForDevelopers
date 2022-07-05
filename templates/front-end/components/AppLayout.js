@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import {css, jsx} from '@emotion/react';
-import Header from './Layout/Header';
-import Footer from './Layout/Footer';
-import {ContentContainer} from './Layout/ContentStyle';
+import Header from './PageLayout/Header';
+import Footer from './PageLayout/Footer';
+import {ContentContainer} from './PageLayout/ContentStyle';
 const AppLayout = ({children}) => {
   return (
     <>

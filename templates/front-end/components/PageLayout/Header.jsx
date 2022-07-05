@@ -9,9 +9,11 @@ const Header = () => {
         <div css={HeaderContent}>
           <nav>
             <a css={HeaderLogo}>로고</a>
+            <div>
             <a>포트폴리오</a>
             <a>Q&A</a>
             <a>Magazine</a>
+            </div>
           </nav>
           <nav>
             <a>로그인</a>
