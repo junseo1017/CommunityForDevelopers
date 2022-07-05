@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
+import AddButton from "./AddButtone";
 import { HeaderContainer, HeaderContent, HeaderLogo } from "./styles/HeaderStyles";
 import Logo from "./logo";
 
@@ -19,8 +20,11 @@ const Header = () => {
             </div>
           </nav>
           <nav>
-            <a>로그인</a>
-            <a>회원가입</a>
+            <AddButton />
+            <div>
+              <a>로그인</a>
+              <a>회원가입</a>
+            </div>
           </nav>
         </div>
       </div>

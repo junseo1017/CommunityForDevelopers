@@ -26,12 +26,14 @@ export const HeaderContent = css`
   justify-content: space-between;
   align-items: center;
   height: 81px;
-  & nav {
+  & > nav {
     display: flex;
     flex-direction: row;
-    gap: 1vw;
+    justify-content: center;
+    align-items: center;
+    gap: 2vw;
   }
-  & nav div {
+  & > nav > div {
     display: flex;
     flex-direction: row;
     align-items: center;
