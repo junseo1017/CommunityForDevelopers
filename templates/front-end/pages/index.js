@@ -1,49 +1,30 @@
 /** @jsxImportSource @emotion/react */
-import React from "react";
 import AppLayout from "../components/AppLayout";
-import Head from "next/head";
-import { Row, Col, Card, List, Input, Space, Checkbox, Select, Tag, Divider } from "antd";
-import Link from "next/link";
-import PortfolioCard from "../components/PortfolioCard";
-import styled from "@emotion/styled";
-import { jsx } from "@emotion/react";
+import React, { useMemo } from "react";
+import { List, Select, Divider } from "antd";
+import PortfolioCard from "../components/Cards/PortfolioCard";
+import PorfolioSearch from "../components/Forms/PorfolioSearch";
 
 const tagsOptions = [
   {
     value: "gold",
+    label: "React",
   },
   {
     value: "lime",
+    label: "Typescript",
   },
   {
     value: "green",
+    label: "Redux",
   },
   {
     value: "cyan",
+    label: "Next js",
   },
 ];
-const tagRender = (props) => {
-  const { label, value, closable, onClose } = props;
 
-  const onPreventMouseDown = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-  };
-
-  return (
-    <Tag
-      color={value}
-      onMouseDown={onPreventMouseDown}
-      closable={closable}
-      onClose={onClose}
-      style={{
-        marginRight: 3,
-      }}>
-      {label}
-    </Tag>
-  );
-};
-const options = [
+const checkboxOptions = [
   {
     label: "Apple",
     value: "Apple",
@@ -76,76 +57,107 @@ const data = [
   {
     title: "Title 6",
   },
+  {
+    title: "Title 6",
+  },
+  {
+    title: "Title 6",
+  },
+  {
+    title: "Title 6",
+  },
+  {
+    title: "Title 6",
+  },
+  {
+    title: "Title 6",
+  },
+  {
+    title: "Title 6",
+  },
+  {
+    title: "Title 6",
+  },
+  {
+    title: "Title 6",
+  },
+  {
+    title: "Title 6",
+  },
+  {
+    title: "Title 6",
+  },
+  {
+    title: "Title 6",
+  },
+  {
+    title: "Title 6",
+  },
+  {
+    title: "Title 6",
+  },
+  {
+    title: "Title 6",
+  },
+  {
+    title: "Title 6",
+  },
+  {
+    title: "Title 6",
+  },
+  {
+    title: "Title 6",
+  },
+  {
+    title: "Title 6",
+  },
 ];
+
 const Home = () => {
-  const { Search } = Input;
   const { Option } = Select;
-  const children = [];
+  const orderBys = [];
+  orderBys.push(<Option key={0}>추천 순</Option>);
   for (let i = 10; i < 36; i++) {
-    children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
+    orderBys.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
   }
+
+  const portfolioSearchObjects = useMemo(
+    () => ({
+      checkboxOptions,
+      orderBys,
+      tagsOptions,
+    }),
+    [],
+  );
 
   return (
     <AppLayout>
-      <div style={{ display: "flex", justifyContent: "center", paddingTop: "10px" }}>
-        <Space direction="vertical">
-          <Row align="middle" gutter={[16, 16]}>
-            <Col flex="1 1 200px">
-              <Search
-                placeholder="input search text"
-                allowClear
-                enterButton
-                size="large"
-                onSearch={() => {}}
-              />
-            </Col>
-            <Col flex="0 0 auto">
-              <Select
-                size="large"
-                defaultValue="a1"
-                onChange={() => {}}
-                style={{
-                  width: 200,
-                }}>
-                {children}
-              </Select>
-            </Col>
-            <Col flex="0 0 auto">
-              <Checkbox.Group options={options} defaultValue={["Pear"]} onChange={() => {}} />
-            </Col>
-            <Col flex="0 0 auto">
-              <Select
-                size="large"
-                mode="multiple"
-                showArrow
-                bordered={false}
-                tagRender={tagRender}
-                defaultValue={["gold", "cyan"]}
-                style={{
-                  width: "100%",
-                }}
-                options={tagsOptions}
-              />
-            </Col>
-          </Row>
-          <List
-            grid={{
-              gutter: 16,
-              xs: 1,
-              sm: 2,
-              md: 2,
-              lg: 3,
-              xl: 4,
-              xxl: 5,
-            }}
-            dataSource={data}
-            renderItem={(item) => (
-              <List.Item>
-                <PortfolioCard />
-              </List.Item>
-            )}
-          />
-        </Space>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          padding: "10px",
+        }}>
+        <PorfolioSearch {...portfolioSearchObjects} />
+        <Divider style={{ marginTop: 5, marginBottom: 15 }} />
+        <List
+          grid={{
+            gutter: 16,
+            xs: 1,
+            sm: 2,
+            md: 2,
+            lg: 3,
+            xl: 4,
+            xxl: 4,
+          }}
+          dataSource={data}
+          renderItem={(item) => (
+            <List.Item>
+              <PortfolioCard />
+            </List.Item>
+          )}
+        />
       </div>
     </AppLayout>
   );
