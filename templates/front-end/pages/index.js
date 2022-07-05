@@ -17,7 +17,7 @@ import Link from 'next/link';
 import PortfolioCard from '../components/PortfolioCard';
 import styled from '@emotion/styled';
 import { jsx } from '@emotion/react';
-const { Search } = Input;
+
 const tagsOptions = [
   {
     value: 'gold',
@@ -89,6 +89,7 @@ const data = [
   },
 ];
 const Home = () => {
+  const { Search } = Input;
   const { Option } = Select;
   const children = [];
   for (let i = 10; i < 36; i++) {
