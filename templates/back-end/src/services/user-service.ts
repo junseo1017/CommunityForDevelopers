@@ -30,4 +30,4 @@ class UserService {
   // 회원 탈퇴
 }
 
-export const userService = new UserService(userModel);
+// export const userService = new UserService(userModel);

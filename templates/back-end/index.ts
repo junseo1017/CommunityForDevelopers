@@ -1,9 +1,9 @@
-import "dotenv/config";
+import dotenv from "dotenv";
 import { app } from "./src/app";
+dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT;
 
-app.listen(PORT, () => {
-  console.log(`정상적으로 서버를 시작하였습니다.
-  http://localhost:${PORT}`);
+app.listen(port, () => {
+  console.log("타입스크립트로 서버실행중입니다");
 });

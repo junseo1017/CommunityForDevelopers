@@ -5,3 +5,7 @@ yarn.lock
 **/.DS_Store
 .cache
 .env
+
+package-lock.json
+
+dist/
