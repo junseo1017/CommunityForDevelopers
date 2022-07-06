@@ -1,5 +1,4 @@
 import React from "react";
-import Answer from "./Answer";
 import TopButton from "../TopButton";
 import { Row, Col, Button, Badge, Divider } from "antd";
 import { QuestionOutlined, StarOutlined, CommentOutlined } from "@ant-design/icons";
