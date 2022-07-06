@@ -1,4 +1,4 @@
-import { UserModel } from "../db";
+import { userModel, UserModel } from "../db";
 
 class UserService {
   userModel;
@@ -14,7 +14,7 @@ class UserService {
   // 로그인 및 토큰 발급
 
   // 내 정보 보기
-  async getMyInfo(userId) {
+  async getMyInfo(userId: string) {
     if (!userId) {
       throw new Error("로그인이 필요합니다.");
     }
@@ -30,4 +30,5 @@ class UserService {
   // 회원 탈퇴
 }
 
-// export const userService = new UserService(userModel);
+const userService = new UserService(userModel);
+export { userService };
