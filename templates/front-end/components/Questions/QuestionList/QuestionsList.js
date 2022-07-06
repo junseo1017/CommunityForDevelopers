@@ -1,8 +1,7 @@
 import React from "react";
-
-import { Segmented, Divider, List } from "antd";
+import { Divider, List } from "antd";
 import QuestionItem from "./QuestionItem";
-import TopButton from "./TopButton";
+import TopButton from "../TopButton";
 
 const QuestionsList = ({ questions }) => {
   return (
@@ -12,7 +11,7 @@ const QuestionsList = ({ questions }) => {
         {questions.map((questions, index) => {
           return (
             <QuestionItem
-              index={index}
+              qusetId={questions.qusetId}
               title={questions.title}
               description={questions.description}
               recommendations={questions.recommendations}

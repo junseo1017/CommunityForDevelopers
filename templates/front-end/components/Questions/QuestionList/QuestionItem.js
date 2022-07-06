@@ -2,7 +2,7 @@ import React from "react";
 import { List, Badge, Tag } from "antd";
 import { LikeOutlined } from "@ant-design/icons";
 
-const QuestionItem = ({ index, title, description, recommendations, tags, user }) => {
+const QuestionItem = ({ qusetId, title, description, recommendations, tags, user }) => {
   return (
     <List.Item>
       <List.Item.Meta
@@ -12,7 +12,7 @@ const QuestionItem = ({ index, title, description, recommendations, tags, user }
           </Badge>
         }
         title={
-          <a href="https://ant.design" style={{ fontSize: "2em" }}>
+          <a href={`/questions/${qusetId}`} style={{ fontSize: "2em" }}>
             {title}
           </a>
         }

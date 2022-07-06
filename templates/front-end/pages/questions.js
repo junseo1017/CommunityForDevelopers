@@ -1,10 +1,10 @@
 import React from "react";
-import Questions from "../components/Questions/Questions";
+import Questions from "../components/Questions/QuestionList/Questions";
 import AppLayout from "../components/AppLayout";
 
 const dummy_questions = [
   {
-    qusetId: "question 1",
+    qusetId: "q1",
     title: "How to use google analytics with next.js app?",
     description:
       "I'm using styled-components with next.js so my styles need to be server-side rendered, hence how can I add google analytics to my website? I checked next.js google analytics example but as I said my _document file is different because of using styled-components.",
@@ -13,7 +13,7 @@ const dummy_questions = [
     user: "userA",
   },
   {
-    qusetId: "question 2",
+    qusetId: "q2",
     title: "How to use google analytics with next.js app?",
     description:
       "I'm using styled-components with next.js so my styles need to be server-side rendered, hence how can I add google analytics to my website? I checked next.js google analytics example but as I said my _document file is different because of using styled-components.",
@@ -22,7 +22,7 @@ const dummy_questions = [
     user: "userA",
   },
   {
-    qusetId: "question 3",
+    qusetId: "q3",
     title: "How to use google analytics with next.js app?",
     description:
       "I'm using styled-components with next.js so my styles need to be server-side rendered, hence how can I add google analytics to my website? I checked next.js google analytics example but as I said my _document file is different because of using styled-components.",
@@ -31,7 +31,7 @@ const dummy_questions = [
     user: "userA",
   },
   {
-    qusetId: "question 4",
+    qusetId: "q4",
     title: "How to use google analytics with next.js app?",
     description:
       "I'm using styled-components with next.js so my styles need to be server-side rendered, hence how can I add google analytics to my website? I checked next.js google analytics example but as I said my _document file is different because of using styled-components.",
@@ -40,7 +40,7 @@ const dummy_questions = [
     user: "userA",
   },
   {
-    qusetId: "question 5",
+    qusetId: "q5",
     title: "How to use google analytics with next.js app?",
     description:
       "I'm using styled-components with next.js so my styles need to be server-side rendered, hence how can I add google analytics to my website? I checked next.js google analytics example but as I said my _document file is different because of using styled-components.",
