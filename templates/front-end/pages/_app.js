@@ -1,5 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
+import '../styles/globals.css';
 import 'antd/dist/antd.css';
 import wrapper from '../store/index';
 const MyApp = ({ Component, pageProps }) => {
