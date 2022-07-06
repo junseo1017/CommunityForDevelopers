@@ -1,26 +1,13 @@
-import { Schema } from "mongoose";
-import { boolean } from "yargs";
+import mongoose, { Schema } from "mongoose";
+import { IUser } from "../interface/user-interface";
 
-export interface item extends mongoose.Document {
-  userId: string,
-  name: string,
-  email: string,
-  password: string,
-  job: string,
-  imageUrl: string,
-  skills: [string],
-  scraps: [string],
-  role: string,
-  deleted: boolean
-}
-
-const UserSchema = new Schema(
+const UserSchema: Schema = new Schema(
   {
     userId: {
       type: String,
       required: true,
     },
-    name: {
+    nickname: {
       type: String,
       required: true,
     },
@@ -54,8 +41,8 @@ const UserSchema = new Schema(
       default: "user",
     },
     deleted: {
-      type: boolean,
-      required: false,
+      type: Schema.Types.Boolean,
+      required: true,
       default: "false",
     },
   },
@@ -64,5 +51,6 @@ const UserSchema = new Schema(
     timestamps: true,
   }
 );
+export default mongoose.model<IUser>('User', UserSchema);
 
-export { UserSchema };
+

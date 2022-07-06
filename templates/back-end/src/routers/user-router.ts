@@ -11,7 +11,7 @@ userRouter.get("/my", loginRequired, async (req, res, next) => {
     // 토큰에서 userId 추출
     const userId = req.currentUserId;
     // db에서 내 정보 가져옴
-    let myInfo = await userService.getMyInfo(userId);
+    const myInfo = await userService.getMyInfo(userId);
 
     // 내 정보에서 password를 제외하고 front에 전달
     const myInfoWithoutPwd = await userService.exceptPwd(myInfo._doc);
@@ -25,19 +25,12 @@ userRouter.get("/my", loginRequired, async (req, res, next) => {
 
 // 회원가입 할때 작성한 이메일로 인증코드가 담긴 메일 전송
 
-
-
 // 회원가입
 
 // 로그인
 
-
-
-
 // 회원 정보 수정
 
-
 // 회원 탈퇴
-
 
 export { userRouter };
