@@ -9,7 +9,7 @@ const addButtonStyle = css`
     transition: 0.4s;
     color: white;
     border-radius: 10px;
-    width: 7vw;
+    width: 100px;
     height: 40px;
     display: flex;
     justify-content: center;
@@ -17,6 +17,11 @@ const addButtonStyle = css`
   }
   & div:hover {
     background-color: black;
+  }
+  @media (max-width: 768px) {
+    & div {
+      width: 80px;
+    }
   }
 `;
 
@@ -39,7 +44,9 @@ const AddButton = () => {
     <div css={addButtonStyle}>
       <Dropdown overlay={menu}>
         <a href="#">
-          <Space>작업 공유</Space>
+          <Space>
+            <PlusCircleOutlined style={{ fontSize: "25px" }} />
+          </Space>
         </a>
       </Dropdown>
     </div>

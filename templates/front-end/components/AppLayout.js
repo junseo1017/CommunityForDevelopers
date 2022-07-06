@@ -7,8 +7,10 @@ import { ContentContainer } from "./PageLayout/styles/ContentStyle";
 const AppLayout = ({ children }) => {
   return (
     <>
-      <Header />
-      <div css={[ContentContainer]}>{children}</div>
+      <div style={{ height: "100%", minHeight: "80vh" }}>
+        <Header />
+        <div css={[ContentContainer]}>{children}</div>
+      </div>
       <Footer />
     </>
   );

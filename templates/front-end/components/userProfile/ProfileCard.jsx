@@ -3,14 +3,18 @@ import { css, jsx } from "@emotion/react";
 import { useRouter } from "next/router";
 import { Avatar, Card } from "antd";
 import { ProfileCardContainer, ProfileCardContent, CardProfile } from "./styles/ProfileCardStyles";
-
+import { useMediaQuery } from "react-responsive";
 const ProfileCard = () => {
   const router = useRouter();
+  const isresponsive = useMediaQuery({
+    query: "(max-width:768px)",
+  });
+  console.log(isresponsive);
   return (
     <Card css={ProfileCardContainer}>
       <div>
         <div css={CardProfile}>
-          <Avatar size={150} src="https://joeschmoe.io/api/v1/random" />
+          <Avatar size={isresponsive ? 130 : 150} src="https://joeschmoe.io/api/v1/random" />
           <p>{router.query.id}</p>
         </div>
         <div css={ProfileCardContent}>

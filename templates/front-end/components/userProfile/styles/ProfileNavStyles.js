@@ -4,6 +4,7 @@ import { css, jsx } from "@emotion/react";
 export const profileNavContainer = css`
   border-bottom: 1px solid #eaedef;
   padding-bottom: 20px;
+  font-size: 16px;
   @media (max-width: 768px) {
     padding-bottom: 10px;
   }

@@ -8,7 +8,7 @@ export const ProfileCardContainer = css`
   margin: 0 10px;
   @media (max-width: 768px) {
     width: 100%;
-    height: 300px;
+    height: 250px;
     margin: 10px 0;
   }
   & > div {
@@ -22,7 +22,7 @@ export const ProfileCardContainer = css`
       width: 100%;
       display: flex;
       flex-direction: row;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
     }
   }
@@ -33,6 +33,13 @@ export const ProfileCardContent = css`
   flex-direction: row;
   justify-content: space-around;
   gap: 10px;
+  @media (max-width: 768px) {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 export const CardProfile = css`
