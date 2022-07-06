@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
+import { responsiveContainer } from "./common";
 export const HeaderContainer = css`
   position: relative;
   flex: 0 0 auto;
@@ -25,28 +26,18 @@ export const HeaderContent = css`
   justify-content: space-between;
   align-items: center;
   height: 81px;
-  & nav {
+  & > nav {
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
     gap: 1vw;
   }
-  & nav div {
+  & > nav > div {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 1.5vw;
   }
-  @media (min-width: 768px) {
-    & {
-      padding-top: 10px;
-      padding-bottom: 10px;
-    }
-  }
-  @media (min-width: 1256px) {
-    & {
-      max-width: 1256px;
-      margin: 0 auto;
-      padding: 0 60px;
-    }
-  }
+  ${responsiveContainer}
 `;
