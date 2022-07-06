@@ -31,7 +31,7 @@ export const HeaderContent = css`
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 2vw;
+    gap: 1vw;
   }
   & > nav > div {
     display: flex;
