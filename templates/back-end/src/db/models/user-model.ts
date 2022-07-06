@@ -35,5 +35,3 @@ export class UserModel {
     return await User.findOneAndDelete({ email });
   }
 }
-
-export const userModel = new UserModel();

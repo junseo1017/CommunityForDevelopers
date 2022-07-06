@@ -2,12 +2,12 @@ import cors from "cors";
 import express from "express";
 import { userRouter } from "./routers";
 import { errorHandler } from "./middlewares";
-import dotenv from "dotenv";
 import morgan from "morgan";
+
+//아래꺼 질문드리기 morgan하고 관련있는 것 같은데...
 import { accessLogStream } from "./config/log";
 
 const app = express();
-dotenv.config();
 
 // CORS 에러 방지
 app.use(cors());
@@ -23,8 +23,7 @@ app.use(
     stream: accessLogStream,
   })
 );
-// html, css, js 라우팅
-app.use(viewsRouter);
+
 // api 라우팅
 // 아래처럼 하면, userRouter 에서 '/login' 으로 만든 것이 실제로는 앞에 /api가 붙어서
 // /api/login 으로 요청을 해야 하게 됨. 백엔드용 라우팅을 구분하기 위함임.
