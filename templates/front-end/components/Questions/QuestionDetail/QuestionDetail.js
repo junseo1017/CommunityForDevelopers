@@ -6,6 +6,11 @@ import TopButton from "../TopButton";
 import { Button, Badge, Divider, Collapse } from "antd";
 import { QuestionOutlined, LikeOutlined, MessageOutlined } from "@ant-design/icons";
 import { FlexBox, ColFlexBox, CommentsContainer } from "../styles/QuestionStyle";
+import dynamic from "next/dynamic";
+
+const Editor = dynamic(() => import("../Editor"), {
+  ssr: false,
+});
 
 const dummy_answers = [
   {
@@ -64,14 +69,7 @@ const QuestionDetail = ({ questId }) => {
         <Button size="large" type="primary" onClick={() => setIsAnswered(!isAnswered)}>
           답변하기
         </Button>
-        <div>
-          {!isAnswered && (
-            <form>
-              <label>답변 작성하기</label>
-              <input />
-            </form>
-          )}
-        </div>
+        <div>{!isAnswered && <Editor title="답변하기" />}</div>
         <Comments />
         <Divider plain />
       </div>
