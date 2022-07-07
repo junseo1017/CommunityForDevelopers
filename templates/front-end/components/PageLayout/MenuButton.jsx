@@ -1,0 +1,75 @@
+/** @jsxImportSource @emotion/react */
+import { css, jsx } from "@emotion/react";
+import { useState } from "react";
+import { Drawer } from "antd";
+import { MenuOutlined } from "@ant-design/icons";
+import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { UIActions } from "../../reducers/ui";
+const MenuButtonStyle = css`
+  & div {
+    color: black;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 26px;
+  }
+`;
+
+const MenuContanier = css`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 5vw;
+  & a {
+    color: black;
+    font-size: 22px;
+    font-weight: 700;
+  }
+`;
+
+const DrawerStyle = css`
+  & .ant-drawer-content-wrapper {
+    width: 200px !important;
+  }
+`;
+
+const MenuButton = () => {
+  const [visible, setVisible] = useState(false);
+
+  const showDrawer = () => {
+    setVisible(true);
+  };
+
+  const onClose = () => {
+    setVisible(false);
+  };
+
+  return (
+    <>
+      <div onClick={showDrawer} css={MenuButtonStyle}>
+        <div>
+          <MenuOutlined />
+        </div>
+      </div>
+      <Drawer css={DrawerStyle} placement="right" onClose={onClose} visible={visible}>
+        <div css={MenuContanier}>
+          <Link href="/">
+            <a>포트폴리오</a>
+          </Link>
+          <Link href="/questions">
+            <a>Q&A</a>
+          </Link>
+          <a>Magazine</a>
+          <Link href="/profile/junseolee">
+            <a>내 정보</a>
+          </Link>
+        </div>
+      </Drawer>
+    </>
+  );
+};
+
+export default MenuButton;

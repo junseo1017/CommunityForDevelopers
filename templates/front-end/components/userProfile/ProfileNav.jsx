@@ -1,22 +1,30 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-
+import Link from "next/link";
 import { profileNavContainer, profileNavStyle } from "./styles/ProfileNavStyles";
 const ProfileNav = () => {
   return (
     <div css={profileNavContainer}>
       <ul css={profileNavStyle}>
         <li>
-          <a href="">내 정보</a>
+          <Link href="/profile/3">
+            <a>내 정보</a>
+          </Link>
         </li>
         <li>
-          <a href="">포트폴리오</a>
+          <Link href="/profile/portfolio/3">
+            <a>포트폴리오</a>
+          </Link>
         </li>
         <li>
-          <a href="">스크랩북</a>
+          <Link href="/profile/scrap/3">
+            <a>스크랩북</a>
+          </Link>
         </li>
         <li>
-          <a href="">질문&답변</a>
+          <Link href="/profile/scrap/3">
+            <a>질문&답변</a>
+          </Link>
         </li>
       </ul>
     </div>
