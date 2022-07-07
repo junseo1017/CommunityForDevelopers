@@ -9,12 +9,10 @@ userRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       //전체 사용자 목록을 얻음
-      // const userId = req.body.userId;
-      // console.log(userId);
-      // const users = await userService.getMyInfo(userId);
-      // res.send(users);
-      console.log(process.env.MONGODB_URL);
-      res.send("Express + TypeScript Server [타입스크립트로 서버실행중입니다]");
+      const userId = req.body.userId;
+      console.log(userId);
+      const users = await userService.getMyInfo(userId);
+      res.send(users);
     } catch (error) {
       next(error);
     }

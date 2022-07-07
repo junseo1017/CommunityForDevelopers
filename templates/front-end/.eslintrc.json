@@ -12,7 +12,7 @@
     "airbnb/rules/react",
     "plugin:prettier/recommended",
     "next/babel",
-     "next/core-web-vitals"
+    "next/core-web-vitals"
   ],
   "env": {
     "browser": true,
@@ -39,10 +39,7 @@
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": [
-          ".js",
-          ".jsx"
-        ]
+        "extensions": [".js", ".jsx"]
       }
     ],
     "prettier/prettier": [
