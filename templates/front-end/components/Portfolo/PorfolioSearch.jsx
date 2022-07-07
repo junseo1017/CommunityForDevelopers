@@ -2,7 +2,7 @@
 import React, { useMemo } from "react";
 import TagRender from "./TagRender";
 import { Row, Col, Checkbox, Select, Input } from "antd";
-import { SearchButton, CheckboxButton } from "./PorfolioSearchStyle";
+import { SearchButton, CheckboxButton } from "./styles/PorfolioSearchStyle";
 
 const PorfolioSearch = ({ checkboxOptions, orderBys, tagsOptions }) => {
   const { Search } = Input;
@@ -10,7 +10,7 @@ const PorfolioSearch = ({ checkboxOptions, orderBys, tagsOptions }) => {
 
   return (
     <>
-      <Row align="middle" gutter={[16, 16]}>
+      <Row align="middle" gutter={[16, 16]} justify="end">
         <Col flex="1 1 200px">
           <Search
             placeholder="input search text"
