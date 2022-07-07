@@ -1,6 +1,5 @@
 import { Schema } from "mongoose";
 
-
 const UserSchema = new Schema(
   {
     userId: {
@@ -51,6 +50,4 @@ const UserSchema = new Schema(
     timestamps: true,
   }
 );
-export { UserSchema }
-
-
+export { UserSchema };

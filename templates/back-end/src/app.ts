@@ -3,7 +3,6 @@ import express, { Express, Request, Response, NextFunction } from "express";
 import * as Routers from "./routers";
 import { errorHandler } from "./middlewares";
 
-
 const app: Express = express();
 
 //CORS 에러 방지

@@ -9,7 +9,7 @@ userRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       //전체 사용자 목록을 얻음
-      const { userId } = req.body;
+      const userId = req.body.userId;
       console.log(userId);
       const users = await userService.getMyInfo(userId);
       res.send(users);

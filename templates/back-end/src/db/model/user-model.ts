@@ -2,7 +2,6 @@ import { model } from "mongoose";
 import { UserSchema } from "../schema/user-schema";
 import { IUserInputDTO } from "../interface/user-interface";
 
-
 const User = model("users", UserSchema);
 
 export class UserModel {
@@ -41,4 +40,3 @@ export class UserModel {
 const userModel = new UserModel();
 
 export { userModel };
-
