@@ -130,3 +130,8 @@ export const CardFormStyle = css`
     }
   } ;
 `;
+
+export const EditorStyle = css`
+  width: 100%;
+  background-color: gray;
+`;
