@@ -2,8 +2,8 @@
 import AppLayout from "../components/AppLayout";
 import React, { useMemo } from "react";
 import { List, Select, Divider } from "antd";
-import PortfolioCard from "../components/Cards/PortfolioCard";
-import PorfolioSearch from "../components/Forms/PorfolioSearch";
+import PortfolioCard from "../components/Portfolo/PortfolioCard";
+import PorfolioSearch from "../components/Portfolo/PorfolioSearch";
 
 const tagsOptions = [
   {
@@ -148,8 +148,8 @@ const Home = () => {
             sm: 2,
             md: 2,
             lg: 3,
-            xl: 4,
-            xxl: 4,
+            xl: 3,
+            xxl: 3,
           }}
           dataSource={data}
           renderItem={(item) => (
