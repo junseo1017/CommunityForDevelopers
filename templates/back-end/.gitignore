@@ -1,0 +1,11 @@
+# Dependencies
+node_modules
+yarn.lock
+**/access.log
+**/.DS_Store
+.cache
+.env
+
+package-lock.json
+
+dist/
