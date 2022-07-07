@@ -5,6 +5,7 @@ export const FlexBox = css`
   display: flex;
   width: 80%;
   padding: 0 1em;
+  margin: 1em;
   gap: 2em;
 `;
 
@@ -14,7 +15,8 @@ export const ColFlexBox = css`
   width: 80%;
   padding: 0 1em;
 
-  & > a {
+  & > button,
+  a {
     align-self: flex-end;
   }
 `;

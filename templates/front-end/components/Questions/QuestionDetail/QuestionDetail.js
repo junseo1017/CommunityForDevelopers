@@ -1,9 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import TopButton from "../TopButton";
+import React, { useState } from "react";
 import Comments from "./Comments";
-import { Button, Badge, Divider, Collapse, Panel } from "antd";
-import { QuestionOutlined, LikeOutlined } from "@ant-design/icons";
+import TopButton from "../TopButton";
+import { Button, Badge, Divider, Collapse } from "antd";
+import { QuestionOutlined, LikeOutlined, MessageOutlined } from "@ant-design/icons";
 import { FlexBox, ColFlexBox, CommentsContainer } from "../styles/QuestionStyle";
 
 const dummy_answers = [
@@ -28,6 +29,12 @@ const dummy_answers = [
 ];
 
 const QuestionDetail = ({ questId }) => {
+  const [isAnswered, setIsAnswered] = useState(true);
+
+  if (dummy_answers.length === 0) {
+    setIsAnswered(false);
+  }
+
   const onChange = (key) => {
     console.log(key);
   };
@@ -42,6 +49,7 @@ const QuestionDetail = ({ questId }) => {
         </a>
         <Divider plain />
       </div>
+
       <div css={ColFlexBox}>
         <div css={FlexBox}>
           <QuestionOutlined style={{ fontSize: "2em" }} />
@@ -53,18 +61,25 @@ const QuestionDetail = ({ questId }) => {
           assumenda eaque? Culpa quibusdam veritatis a. Lorem ipsum dolor, sit amet consectetur
           adipisicing elit. Quo molestiae quod quos consequuntur?
         </p>
-        <a href="/answer">
-          <Button size="large" type="primary">
-            답변하기
-          </Button>
-        </a>
+        <Button size="large" type="primary" onClick={() => setIsAnswered(!isAnswered)}>
+          답변하기
+        </Button>
+        <div>
+          {!isAnswered && (
+            <form>
+              <label>답변 작성하기</label>
+              <input />
+            </form>
+          )}
+        </div>
+        <Comments />
         <Divider plain />
       </div>
       {dummy_answers.map((answer) => {
         return (
           <div css={ColFlexBox}>
             <div css={FlexBox}>
-              <QuestionOutlined style={{ fontSize: "2em" }} />
+              <MessageOutlined style={{ fontSize: "2em" }} />
               <h2>{answer.title}</h2>
             </div>
             <p>{answer.content}</p>
@@ -72,20 +87,17 @@ const QuestionDetail = ({ questId }) => {
               <Badge count={answer.like}>
                 <LikeOutlined style={{ fontSize: "2em" }} />
               </Badge>
-              <Button type="text">댓글 보기</Button>
-              {/* <Collapse defaultActiveKey={["1"]} onChange={onChange}>
-                <Panel header="This is panel header 1" key="1">
-                  {<Comments />}
-                </Panel>
-              </Collapse> */}
             </div>
+            <Collapse>
+              <Collapse.Panel header="댓글 보기">
+                <Comments />
+              </Collapse.Panel>
+            </Collapse>
             <Divider plain />
           </div>
         );
       })}
-      <div css={CommentsContainer}>
-        <Comments />
-      </div>
+
       <Divider plain />
       <TopButton />
     </>
