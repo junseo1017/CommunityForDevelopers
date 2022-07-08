@@ -1,6 +1,5 @@
 import { combineReducers } from "redux";
 import { HYDRATE } from "next-redux-wrapper";
-import UISlice from "./ui";
 const rootReducer = (state, action) => {
   switch (action.type) {
     case HYDRATE:
