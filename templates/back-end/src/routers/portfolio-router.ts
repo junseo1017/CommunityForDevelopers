@@ -17,13 +17,26 @@ portfolioRouter.get(
   }
 );
 
+portfolioRouter.get(
+  "/:portId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const portId = req.params.portId;
+      const Portfolio = await portfolioService.getPortfolio(portId);
+      res.status(200).json(Portfolio);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 portfolioRouter.post(
   "/add",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       // contentTypeChecker(req.body);
       // const userId = req.currentId
-      const userId = "test"
+      const userId = "test";
       // const portId = nanoid();
       const portId = "test1";
       const { title, description, skills, content } = req.body;

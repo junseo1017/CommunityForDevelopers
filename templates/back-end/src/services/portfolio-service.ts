@@ -18,6 +18,14 @@ class PortfolioService {
     return portfolios;
   }
 
+  async getPortfolio(portId: string) {
+    const portfolio = await this.portfolioModel.findById(portId);
+    if (!portfolio) {
+      throw new Error("포토폴리오가 존재하지 않습니다.");
+    }
+    return portfolio;
+  }
+
   async setPortfolio(userId: string, portId: string, portInfo: IPortInputDTO) {
     const portfolio = await this.portfolioModel.findById(portId);
     if (!portfolio) {
