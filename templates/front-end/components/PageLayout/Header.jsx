@@ -15,7 +15,7 @@ const Header = () => {
             </a>
             <div>
               <a>포트폴리오</a>
-              <a>Q&A</a>
+              <a href="/questions">Q&A</a>
               <a>Magazine</a>
             </div>
           </nav>
