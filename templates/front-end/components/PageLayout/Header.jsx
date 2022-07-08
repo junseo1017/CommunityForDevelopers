@@ -28,10 +28,13 @@ const Header = () => {
           </nav>
           <nav>
             <AddButton />
-
             <div>
-              <a>로그인</a>
-              <a>회원가입</a>
+              <Link href="/login">
+                <a>로그인</a>
+              </Link>
+              <Link href="/signup">
+                <a>회원가입</a>
+              </Link>
             </div>
           </nav>
         </div>
