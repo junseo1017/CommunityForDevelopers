@@ -3,7 +3,7 @@ import { css, jsx } from "@emotion/react";
 
 export const FlexBox = css`
   display: flex;
-  width: 80%;
+  width: 100%;
   padding: 0 1em;
   margin: 1em;
   gap: 2em;
@@ -12,7 +12,7 @@ export const FlexBox = css`
 export const ColFlexBox = css`
   display: flex;
   flex-direction: column;
-  width: 80%;
+  width: 100%;
   padding: 0 1em;
 
   & > button,
@@ -73,9 +73,14 @@ export const DescriptionContainer = css`
 export const CommentsContainer = css`
   display: flex;
   flex-direction: column;
-  width: 80%;
-  padding: 1em;
-}
+  width: 100%;
+  padding: 0 2em;
+`;
+
+export const CollapseStyle = css`
+  width: 95%;
+  margin: 0 auto;
+  background-color: none;
 `;
 
 export const CardFormContainer = css`
@@ -87,48 +92,8 @@ export const CardFormContainer = css`
   }
 `;
 
-export const CardFormStyle = css`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-
-  & label {
-    font-weight: 500;
-  }
-
-  & input {
-    border: 1px solid #aca3a37b;
-    box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    height: 40px;
-    width: 100%;
-  }
-
-  & textarea {
-    border: 1px solid #aca3a37b;
-    box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    width: 50%;
-  }
-
-  & .markdown {
-    width: 50%;
-    height: 20em;
-    border: 1px solid black;
-  }
-
-  @media (max-width: 768px) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-
-    & input {
-      width: 60%;
-    }
-  } ;
+export const TextContainer = css`
+  padding: 0 2em;
 `;
 
 export const EditorContainer = css`
@@ -142,5 +107,4 @@ export const EditorStyle = css`
   box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
   border: 1px solid #aca3a37b;
   border-radius: 5px;
-  padding: 0 2em;
 `;
