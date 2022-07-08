@@ -3,6 +3,7 @@ import { css, jsx } from "@emotion/react";
 import { Button, Input, Divider } from "antd";
 import QuestionsList from "./QuestionsList";
 import { FlexBox } from "../styles/QuestionStyle";
+import Link from "next/link";
 
 const Questions = ({ questions }) => {
   return (
@@ -15,11 +16,11 @@ const Questions = ({ questions }) => {
           size="large"
           onSearch={() => {}}
         />
-        <a href="/questions/new">
+        <Link href="/questions/new">
           <Button size="large" type="primary">
             질문하기
           </Button>
-        </a>
+        </Link>
       </div>
       <Divider plain />
       <QuestionsList questions={questions} />

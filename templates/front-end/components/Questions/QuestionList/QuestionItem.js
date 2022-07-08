@@ -3,6 +3,7 @@ import { css, jsx } from "@emotion/react";
 import { Badge, Tag } from "antd";
 import { MessageOutlined } from "@ant-design/icons";
 import { TitleContainer, DescriptionContainer } from "../styles/QuestionStyle";
+import Link from "next/link";
 
 const QuestionItem = ({ questId, title, description, recommendations, tags, user, date }) => {
   const formattedDate = `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
@@ -13,7 +14,7 @@ const QuestionItem = ({ questId, title, description, recommendations, tags, user
         <Badge count={recommendations}>
           <MessageOutlined />
         </Badge>
-        <a href={`/questions/${questId}`}>{title}</a>
+        <Link href={`/questions/${questId}`}>{title}</Link>
       </div>
       <div css={DescriptionContainer}>
         <div>{description}</div>

@@ -13,6 +13,7 @@ import {
   CollapseStyle,
 } from "../styles/QuestionStyle";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 const Editor = dynamic(() => import("../Editor/Editor"), {
   ssr: false,
@@ -58,16 +59,16 @@ const QuestionDetail = ({ questId }) => {
     <>
       <div css={ColFlexBox}>
         <h1>Question Title({questId})</h1>
-        <a href="/questions">
+        <Link href="/questions">
           <Button size="large" type="text">
             목록으로 가기
           </Button>
-        </a>
-        <a href="/questions/new">
+        </Link>
+        <Link href="/questions/new">
           <Button size="large" type="primary">
             다른 질문하기
           </Button>
-        </a>
+        </Link>
         <Divider plain />
       </div>
 
