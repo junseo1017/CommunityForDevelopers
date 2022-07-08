@@ -26,14 +26,13 @@ export const TitleContainer = css`
   gap: 1.5em;
   align-items: center;
 
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
   & svg,
   a {
     font-size: 2em;
     font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   & sup {
