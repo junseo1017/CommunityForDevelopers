@@ -1,13 +1,16 @@
 import { combineReducers } from "redux";
 import { HYDRATE } from "next-redux-wrapper";
+<<<<<<< HEAD
+import UISlice from "./ui";
+=======
+>>>>>>> ae776c104045f2a6bce25af814e66a2cbda0c6c9
 const rootReducer = (state, action) => {
   switch (action.type) {
     case HYDRATE:
       return action.payload;
     default: {
       const combinedReducer = combineReducers({
-        // signin: signInSlice.reducer,
-        // 위 예시 참고 key(자유롭게 작성 useDispatch에서 사용됨) : slice.reducer
+        ui: UISlice.reducer,
       });
       return combinedReducer(state, action);
     }

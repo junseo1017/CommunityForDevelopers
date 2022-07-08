@@ -2,7 +2,12 @@
 import { css, jsx } from "@emotion/react";
 import { useRouter } from "next/router";
 import { Avatar, Card } from "antd";
-import { ProfileCardContainer, ProfileCardContent, CardProfile } from "./styles/ProfileCardStyles";
+import {
+  ProfileCardContainer,
+  ProfileCardContent,
+  CardProfile,
+  CardDetail,
+} from "./styles/ProfileCardStyles";
 import { useMediaQuery } from "react-responsive";
 const ProfileCard = () => {
   const router = useRouter();
@@ -18,9 +23,18 @@ const ProfileCard = () => {
           <p>{router.query.id}</p>
         </div>
         <div css={ProfileCardContent}>
-          <p>좋아요</p>
-          <p>스크랩</p>
-          <p>포트폴리오</p>
+          <div>
+            <p>좋아요</p>
+            <h3>1</h3>
+          </div>
+          <div>
+            <p>스크랩</p>
+            <h3>1</h3>
+          </div>
+          <div>
+            <p>포트폴리오</p>
+            <h3>1</h3>
+          </div>
         </div>
         <div></div>
       </div>

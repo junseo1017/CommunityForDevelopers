@@ -31,7 +31,7 @@ export const myInfoFormStyle = css`
     justify-content: center;
     width: 100%;
     & input {
-      width: 60%;
+      width: 80%;
     }
   } ;
 `;
@@ -52,16 +52,16 @@ export const myInfoSubmitBtnStyle = css`
 `;
 
 export const myInfoSkills = css`
+  width: 100%;
   & > div {
+    width: 100%;
     display: flex;
     flex-direction: row;
-    gap: 10px;
-    height: 40px;
   }
   & input {
-    width: 50%;
-  }
-  & button {
-    cursor: pointer;
+    width: 100%;
+    @media (max-width: 768px) {
+      width: 80%;
+    }
   }
 `;

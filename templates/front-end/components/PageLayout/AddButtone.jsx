@@ -20,7 +20,7 @@ const addButtonStyle = css`
   }
   @media (max-width: 768px) {
     & div {
-      width: 80px;
+      width: 40px;
     }
   }
 `;
