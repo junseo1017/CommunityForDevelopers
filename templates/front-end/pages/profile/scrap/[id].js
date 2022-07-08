@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import ProfileNav from "../../components/userProfile/ProfileNav";
-import AppLayout from "../../components/AppLayout";
-import ProfileCard from "../../components/userProfile/ProfileCard";
-import ProfileMyInfo from "../../components/userProfile/ProfileMyInfo";
-import { ProfileContentContainer } from "./profileStyle";
+import ProfileNav from "../../../components/userProfile/ProfileNav";
+import AppLayout from "../../../components/AppLayout";
+import ProfileCard from "../../../components/userProfile/ProfileCard";
+import ProfileScrap from "../../../components/userProfile/ProfileScrap";
+import { ProfileContentContainer } from "../profileStyle";
 import { useRouter } from "next/router";
 const Profile = () => {
   const router = useRouter();
@@ -14,7 +14,7 @@ const Profile = () => {
       <ProfileNav />
       <div css={ProfileContentContainer}>
         <ProfileCard />
-        <ProfileMyInfo />
+        <ProfileScrap />
       </div>
     </AppLayout>
   );

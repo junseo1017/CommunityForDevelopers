@@ -2,6 +2,7 @@
 import AppLayout from "../components/AppLayout";
 import React, { useMemo } from "react";
 import { List, Select, Divider } from "antd";
+import { BackTop } from "antd";
 import PortfolioCard from "../components/Portfolo/PortfolioCard";
 import PorfolioSearch from "../components/Portfolo/PorfolioSearch";
 
@@ -137,17 +138,16 @@ const Home = () => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          padding: "10px",
         }}>
         <PorfolioSearch {...portfolioSearchObjects} />
         <Divider style={{ marginTop: 5, marginBottom: 15 }} />
         <List
           grid={{
-            gutter: 16,
+            gutter: 18,
             xs: 1,
-            sm: 2,
+            sm: 1,
             md: 2,
-            lg: 3,
+            lg: 2,
             xl: 3,
             xxl: 3,
           }}
@@ -159,6 +159,7 @@ const Home = () => {
           )}
         />
       </div>
+      <BackTop />
     </AppLayout>
   );
 };
