@@ -1,6 +1,6 @@
 import { model } from "mongoose";
 import { UserSchema } from "../schemas/user-schema";
-import { IUserInputDTO } from "../interfaces/user-interface";
+import { IUserInputDTO, IUserInfo } from "../../interfaces/user-interface";
 
 const User = model("users", UserSchema);
 
@@ -21,8 +21,8 @@ export class UserModel {
     return await User.create(userInfo);
   }
 
-  async update(userId: string, update: IUserInputDTO) {
-    const filter = { _id: userId };
+  async update(userId: string, update: IUserInfo) {
+    const filter = { userId };
     const option = { returnOriginal: false };
 
     return await User.findOneAndUpdate(filter, update, option);
