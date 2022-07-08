@@ -1,5 +1,4 @@
 export interface IPort {
-  portId: string;
   userId: string;
   title: string;
   description: string;

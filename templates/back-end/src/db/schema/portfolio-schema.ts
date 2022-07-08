@@ -1,12 +1,8 @@
 import { Schema } from "mongoose";
-import { CommentSchema } from "./comment-schema";
-
+import { shortId } from "./types/short-id"; 
 const PortfolioSchema = new Schema(
   {
-    portId: {
-      type: String,
-      required: true,
-    },
+    portId: shortId,
     userId: {
       type: String,
       required: true,

@@ -1,7 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { portfolioService } from "../services/portfolio-service";
-// import { contentTypeChecker } from "../utils/content-type-checker";
-// import { nanoid } from "nanoid"
+// import { loginRequired } from "../login-required";
 
 const portfolioRouter = Router();
 
@@ -32,16 +31,12 @@ portfolioRouter.get(
 
 portfolioRouter.post(
   "/add",
+  loginRequired,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // contentTypeChecker(req.body);
-      // const userId = req.currentId
-      const userId = "test";
-      // const portId = nanoid();
-      const portId = "test1";
+      const userId = req.currentId;
       const { title, description, skills, content } = req.body;
       const newPortfolio = await portfolioService.addPortfolio({
-        portId,
         userId,
         title,
         description,
@@ -59,10 +54,8 @@ portfolioRouter.put(
   "/:portId",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // contentTypeChecker(req.body);
       const portId = req.params.portId;
-      //const userId = req.cuurentId;
-      const userId = "test";
+      const userId = "asd";
       const { title, description, skills, content } = req.body;
       const toUpdate = {
         ...(title && { title }),
@@ -84,16 +77,14 @@ portfolioRouter.put(
 
 portfolioRouter.delete(
   "/:portid",
+  loginRequired,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // Content-Type 체크
-      // contentTypeChecker(req.body);
       const portId = req.params.portId;
-      // const userId = req.currentId;
+      const userId = req.currentId;
       const deletedPortfolioInfo = await portfolioService.deletePortfolio(
         portId
       );
-      // 상품 삭제 정보 데이터를 JSON 형태로 프론트에 보냄
       res.status(200).json(deletedPortfolioInfo);
     } catch (error) {
       next(error);

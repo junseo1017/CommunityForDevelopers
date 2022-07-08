@@ -5,8 +5,8 @@ class PortfolioService {
     this.portfolioModel = portfolioModel;
   }
   async addPortfolio(portInfo: IPort) {
-    const { portId, userId, title, description, skills, content } = portInfo;
-    const newPortInfo = { portId, userId, title, description, skills, content };
+    const { userId, title, description, skills, content } = portInfo;
+    const newPortInfo = { userId, title, description, skills, content };
     return await this.portfolioModel.create(newPortInfo);
   }
 
@@ -26,7 +26,7 @@ class PortfolioService {
     return portfolio;
   }
 
-  async setPortfolio(userId: string, portId: string, portInfo: IPortInputDTO) {
+  async setPortfolio(portId: string, userId: string, portInfo: IPortInputDTO) {
     const portfolio = await this.portfolioModel.findById(portId);
     if (!portfolio) {
       throw new Error("포토폴리오 정보가 없습니다.");
