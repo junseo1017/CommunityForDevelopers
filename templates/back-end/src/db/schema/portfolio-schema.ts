@@ -7,13 +7,20 @@ const PortfolioSchema = new Schema(
       type: String,
       required: true,
     },
-    author: {
+    userId: {
       type: String,
       required: true,
-      ref: "users",
     },
     title: {
       type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    skills: {
+      type: [String],
       required: true,
     },
     content: {
@@ -25,25 +32,16 @@ const PortfolioSchema = new Schema(
       required: true,
       default: 0,
     },
-    githubUrl: {
-      type: String,
-      required: false,
-    },
-    demoUrl: {
-      type: String,
-      required: false,
-    },
-    comments: {
-      type: [CommentSchema],
-    },
-    deleted: {
-      type: Schema.Types.Boolean,
-      required: true,
-      default: "false",
-    },
+    comments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "comment",
+        required: true,
+      },
+    ],
   },
   {
-    collection: "portfolios",
+    collection: "portfolio",
     timestamps: true,
   }
 );

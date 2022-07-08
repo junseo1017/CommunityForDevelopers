@@ -1,8 +1,9 @@
 import { model } from "mongoose";
 import { UserSchema } from "../schema/user-schema";
-import { IUserInputDTO } from "../interface/user-interface";
+import { IUserInputDTO } from "../../interface/user-interface";
 
 const User = model("users", UserSchema);
+//const User = mongoose.model<IUser & mongoose.Document>("users", UserSchema);
 
 export class UserModel {
   async findByEmail(email: string) {
