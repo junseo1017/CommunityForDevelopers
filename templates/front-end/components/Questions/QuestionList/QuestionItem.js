@@ -1,38 +1,30 @@
-import React from "react";
-import { List, Badge, Tag } from "antd";
-import { LikeOutlined } from "@ant-design/icons";
+/** @jsxImportSource @emotion/react */
+import { css, jsx } from "@emotion/react";
+import { Badge, Tag } from "antd";
+import { MessageOutlined } from "@ant-design/icons";
+import { TitleContainer, DescriptionContainer } from "../styles/QuestionStyle";
 
-const QuestionItem = ({ qusetId, title, description, recommendations, tags, user }) => {
+const QuestionItem = ({ questId, title, description, recommendations, tags, user, date }) => {
+  const formattedDate = `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+
   return (
-    <List.Item>
-      <List.Item.Meta
-        avatar={
-          <Badge count={recommendations} style={{ top: "2.5em", marginRight: "10px" }}>
-            <LikeOutlined style={{ fontSize: "2em", lineHeight: "4em" }} />
-          </Badge>
-        }
-        title={
-          <a href={`/questions/${qusetId}`} style={{ fontSize: "2em" }}>
-            {title}
-          </a>
-        }
-        description={
-          <>
-            <p
-              style={{
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}>
-              {description}
-            </p>
-            {tags.map((tag) => {
-              return <Tag>{tag}</Tag>;
-            })}
-          </>
-        }
-      />
-    </List.Item>
+    <div key={questId}>
+      <div css={TitleContainer}>
+        <Badge count={recommendations}>
+          <MessageOutlined />
+        </Badge>
+        <a href={`/questions/${questId}`}>{title}</a>
+      </div>
+      <div css={DescriptionContainer}>
+        <div>{description}</div>
+        <div>
+          {tags.map((tag, idx) => {
+            return <Tag key={`${questId} + ${idx}`}>{tag}</Tag>;
+          })}
+        </div>
+        <div>{`(${user}가 ${formattedDate}에 질문함)`}</div>
+      </div>
+    </div>
   );
 };
 
