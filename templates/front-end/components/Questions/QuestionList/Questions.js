@@ -1,37 +1,27 @@
-import React from "react";
-import { Button, Row, Col, Input, Segmented, Divider } from "antd";
+/** @jsxImportSource @emotion/react */
+import { css, jsx } from "@emotion/react";
+import { Button, Input, Divider } from "antd";
 import QuestionsList from "./QuestionsList";
+import { FlexBox } from "../styles/QuestionStyle";
 
 const Questions = ({ questions }) => {
   return (
     <>
-      <Row justify="center" align="middle">
-        <Col>
-          <h1>모든 질문({questions.length})</h1>
-        </Col>
-      </Row>
-      <Row justify="center" align="middle" gutter={[16, 16]}>
-        <Col span={16}>
-          <Input.Search
-            placeholder="input search text"
-            allowClear
-            enterButton
-            size="large"
-            onSearch={() => {}}
-          />
-        </Col>
-        <Col>
-          <a href="/">
-            <Button size="large" type="primary">
-              질문하기
-            </Button>
-          </a>
-        </Col>
-      </Row>
+      <div css={FlexBox}>
+        <Input.Search
+          placeholder="input search text"
+          allowClear
+          enterButton
+          size="large"
+          onSearch={() => {}}
+        />
+        <a href="/questions/new">
+          <Button size="large" type="primary">
+            질문하기
+          </Button>
+        </a>
+      </div>
       <Divider plain />
-      <Segmented
-        options={["HTML/CSS", "JavaScript", "Node.js", "React.js", "Next.js", "Python", "Java"]}
-      />
       <QuestionsList questions={questions} />
     </>
   );

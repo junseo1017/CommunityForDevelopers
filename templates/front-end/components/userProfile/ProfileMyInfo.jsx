@@ -20,10 +20,6 @@ const ProfileMyInfo = () => {
     if (e.code === "Enter") e.preventDefault();
   }, []);
 
-  const onClickHandler = useCallback(() => {
-    console.log("ho");
-  }, []);
-
   const onKeyPress = useCallback((e) => {
     if (e.key === "Enter") {
       onClickHandler();
@@ -44,7 +40,6 @@ const ProfileMyInfo = () => {
         <div css={myInfoSkills}>
           <div>
             <input onKeyDown={onKeyPress} {...register("skills")} />
-            <button onClick={onClickHandler}>추가</button>
             <div></div>
           </div>
         </div>

@@ -20,7 +20,7 @@ const addButtonStyle = css`
   }
   @media (max-width: 768px) {
     & div {
-      width: 80px;
+      width: 40px;
     }
   }
 `;
@@ -34,7 +34,7 @@ const AddButton = () => {
           key: "1",
         },
         {
-          label: <a href="/">질문 올리기</a>,
+          label: <a href="/questions/new">질문 올리기</a>,
           key: "1",
         },
       ]}
