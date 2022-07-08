@@ -23,7 +23,7 @@ portfolioRouter.post(
     try {
       // contentTypeChecker(req.body);
       // const userId = req.currentId
-      const userId = "test";
+      const userId = "test"
       // const portId = nanoid();
       const portId = "test1";
       const { title, description, skills, content } = req.body;
@@ -43,11 +43,11 @@ portfolioRouter.post(
 );
 
 portfolioRouter.put(
-  "/:portid",
+  "/:portId",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       // contentTypeChecker(req.body);
-      const portId = req.params.portid;
+      const portId = req.params.portId;
       //const userId = req.cuurentId;
       const userId = "test";
       const { title, description, skills, content } = req.body;
