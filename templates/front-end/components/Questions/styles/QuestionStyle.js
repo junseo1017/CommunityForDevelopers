@@ -69,6 +69,48 @@ export const DescriptionContainer = css`
   }
 `;
 
+export const DetailContainer = css`
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2em;
+`;
+
+export const DetailQuestionContainer = css`
+  display: flex;
+  flex-direction: column;
+
+  & h1 {
+    color: #1890ff;
+    font-weight: 700;
+  }
+
+  & div,
+  button {
+    align-self: flex-end;
+  }
+`;
+
+export const DetailAnswerContainer = css`
+  display: flex;
+  flex-direction: column;
+
+  & div.answer-title {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+
+    & h2 {
+      font-weight: 700;
+    }
+  }
+
+  & div.ant-collapse {
+    background-color: #fff;
+  }
+`;
+
 export const CommentsContainer = css`
   display: flex;
   flex-direction: column;
@@ -77,7 +119,7 @@ export const CommentsContainer = css`
 `;
 
 export const CollapseStyle = css`
-  width: 95%;
+  width: 100%;
   margin: 0 auto;
   background-color: none;
 `;
@@ -92,7 +134,7 @@ export const CardFormContainer = css`
 `;
 
 export const TextContainer = css`
-  padding: 0 2em;
+  padding: 1em;
 `;
 
 export const EditorContainer = css`
@@ -100,7 +142,7 @@ export const EditorContainer = css`
   display: flex;
   flex-direction: column;
 
-  & > h1 {
+  & > h2 {
     align-self: center;
   }
 
