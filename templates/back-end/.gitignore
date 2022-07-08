@@ -1,9 +1,14 @@
 # Dependencies
 node_modules
 yarn.lock
+
+# build
+dist/
+
+# local env files
+.env
+
+# misc
 **/access.log
 **/.DS_Store
 .cache
-.env
-
-dist/
