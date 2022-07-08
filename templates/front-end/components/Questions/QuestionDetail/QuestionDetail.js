@@ -18,6 +18,8 @@ const Editor = dynamic(() => import("../Editor/Editor"), {
   ssr: false,
 });
 
+import AddEditor from "../Editor/AddEditor";
+
 const dummy_answers = [
   {
     id: "a1",
@@ -83,7 +85,16 @@ const QuestionDetail = ({ questId }) => {
         <Button size="large" type="primary" onClick={() => setIsAnswered(!isAnswered)}>
           답변하기
         </Button>
-        <div>{!isAnswered && <Editor title="답변하기" css={EditorContainer} />}</div>
+        <div>
+          {!isAnswered && (
+            <div css={EditorContainer}>
+              <h1>답변하기</h1>
+              <div>
+                <AddEditor />
+              </div>
+            </div>
+          )}
+        </div>
         <Divider plain />
       </div>
       {dummy_answers.map((answer) => {

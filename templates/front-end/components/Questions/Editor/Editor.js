@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
+import { LoadingOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { createReactEditorJS } from "react-editor-js";
 import Image from "@editorjs/image";
@@ -17,7 +18,7 @@ const Editor = ({ imageArray, handleInitialize, data }) => {
 
   // 에디터 컴포넌트 구현
   let editorComponent = !editorTools ? (
-    "Loading..."
+    <LoadingOutlined />
   ) : (
     <ReactEditorJS
       css={EditorSize}

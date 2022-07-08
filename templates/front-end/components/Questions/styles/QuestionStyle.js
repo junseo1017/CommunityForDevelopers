@@ -100,11 +100,12 @@ export const EditorContainer = css`
   width: 100%;
   display: flex;
   flex-direction: column;
-`;
 
-export const EditorStyle = css`
-  width: 100%;
-  box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
-  border: 1px solid #aca3a37b;
-  border-radius: 5px;
+  & > h1 {
+    align-self: center;
+  }
+
+  & > button {
+    align-self: end;
+  }
 `;
