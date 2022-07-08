@@ -6,6 +6,4 @@ yarn.lock
 .cache
 .env
 
-package-lock.json
-
 dist/
