@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { portfolioService } from "../services/portfolio-service";
-// import { loginRequired } from "../login-required";
+import { extendReq, loginRequired } from "../middlewares/login-required";
 
 const portfolioRouter = Router();
 
@@ -32,9 +32,12 @@ portfolioRouter.get(
 portfolioRouter.post(
   "/add",
   loginRequired,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: extendReq, res: Response, next: NextFunction) => {
     try {
-      const userId = req.currentId;
+      const userId = req.currentUserId || "";
+      if (!userId) {
+        throw new Error("Forbidden");
+      }
       const { title, description, skills, content } = req.body;
       const newPortfolio = await portfolioService.addPortfolio({
         userId,
@@ -52,10 +55,13 @@ portfolioRouter.post(
 
 portfolioRouter.put(
   "/:portId",
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: extendReq, res: Response, next: NextFunction) => {
     try {
       const portId = req.params.portId;
-      const userId = "asd";
+      const userId = req.currentUserId || "";
+      if (!userId) {
+        throw new Error("Forbidden");
+      }
       const { title, description, skills, content } = req.body;
       const toUpdate = {
         ...(title && { title }),
@@ -81,7 +87,6 @@ portfolioRouter.delete(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const portId = req.params.portId;
-      const userId = req.currentId;
       const deletedPortfolioInfo = await portfolioService.deletePortfolio(
         portId
       );

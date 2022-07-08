@@ -7,7 +7,6 @@ export const responsiveContainer = css`
     font-size: 12px;
   }
   @media (min-width: 768px) {
-    padding: 20px;
     font-size: 16px;
   }
   @media (min-width: 1256px) {

@@ -1,9 +1,8 @@
 import { model } from "mongoose";
-import { UserSchema } from "../schema/user-schema";
-import { IUserInputDTO } from "../../interface/user-interface";
+import { UserSchema } from "../schemas/user-schema";
+import { IUserInputDTO, IUserInfo } from "../../interfaces/user-interface";
 
 const User = model("users", UserSchema);
-//const User = mongoose.model<IUser & mongoose.Document>("users", UserSchema);
 
 export class UserModel {
   async findByEmail(email: string) {
@@ -22,8 +21,8 @@ export class UserModel {
     return await User.create(userInfo);
   }
 
-  async update(userId: string, update: IUserInputDTO) {
-    const filter = { _id: userId };
+  async update(userId: string, update: IUserInfo) {
+    const filter = { userId };
     const option = { returnOriginal: false };
 
     return await User.findOneAndUpdate(filter, update, option);

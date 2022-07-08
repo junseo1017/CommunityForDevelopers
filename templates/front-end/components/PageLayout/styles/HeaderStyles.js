@@ -17,6 +17,10 @@ export const HeaderContainer = css`
     width: 100vw;
     border-bottom: 1px solid #eaedef;
     background-color: white;
+    @media (max-width: 768px) {
+      border-bottom: none;
+      padding: 0 10px;
+    }
   }
 `;
 
@@ -32,6 +36,9 @@ export const HeaderContent = css`
     justify-content: center;
     align-items: center;
     gap: 1vw;
+    @media (max-width: 768px) {
+      gap: 4vw;
+    }
   }
   & > nav > div {
     display: flex;
@@ -39,5 +46,6 @@ export const HeaderContent = css`
     align-items: center;
     gap: 1.5vw;
   }
+
   ${responsiveContainer}
 `;

@@ -1,5 +1,5 @@
-import { portfolioModel, PortfolioModel } from "../db/model/portfolio-model";
-import { IPortInputDTO, IPort } from "../interface/portfolio-interface";
+import { portfolioModel, PortfolioModel } from "../db/models/portfolio-model";
+import { IPortInputDTO, IPort } from "../interfaces/portfolio-interface";
 class PortfolioService {
   constructor(private portfolioModel: PortfolioModel) {
     this.portfolioModel = portfolioModel;

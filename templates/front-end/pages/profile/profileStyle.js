@@ -13,4 +13,6 @@ export const ProfileContentContainer = css`
     flex-direction: column;
     justify-content: space-between;
   }
+  & > div {
+  }
 `;

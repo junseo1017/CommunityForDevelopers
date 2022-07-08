@@ -1,6 +1,6 @@
 import { model } from "mongoose";
-import { PortfolioSchema } from "../schema/portfolio-schema";
-import { IPort, IPortInputDTO } from "../../interface/portfolio-interface";
+import { PortfolioSchema } from "../schemas/portfolio-schema";
+import { IPort, IPortInputDTO } from "../../interfaces/portfolio-interface";
 
 const Portfolio = model("portofolios", PortfolioSchema);
 

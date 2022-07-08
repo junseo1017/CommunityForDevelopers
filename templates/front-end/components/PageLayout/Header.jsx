@@ -3,6 +3,7 @@ import { css, jsx } from "@emotion/react";
 import AddButton from "./AddButtone";
 import { HeaderContainer, HeaderContent, HeaderLogo } from "./styles/HeaderStyles";
 import Logo from "./logo";
+import Link from "next/link";
 
 const Header = () => {
   return (
@@ -10,20 +11,30 @@ const Header = () => {
       <div>
         <div css={HeaderContent}>
           <nav>
-            <a href="/">
-              <Logo />
-            </a>
+            <Link href="/">
+              <a>
+                <Logo />
+              </a>
+            </Link>
             <div>
-              <a>포트폴리오</a>
-              <a>Q&A</a>
+              <Link href="/">
+                <a>포트폴리오</a>
+              </Link>
+              <Link href="/questions">
+                <a>Q&A</a>
+              </Link>
               <a>Magazine</a>
             </div>
           </nav>
           <nav>
             <AddButton />
             <div>
-              <a>로그인</a>
-              <a>회원가입</a>
+              <Link href="/login">
+                <a>로그인</a>
+              </Link>
+              <Link href="/signup">
+                <a>회원가입</a>
+              </Link>
             </div>
           </nav>
         </div>
