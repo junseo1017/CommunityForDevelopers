@@ -5,12 +5,14 @@ import Head from "next/head";
 import { dummy_qna } from "../../components/Questions/dummy";
 
 const questions = () => {
+  const questions = dummy_qna.filter((qna) => !qna.isAnswer);
+
   return (
     <AppLayout>
       <Head>
         <title>모든 질문</title>
       </Head>
-      <Questions questions={dummy_qna} />
+      <Questions questions={questions} />
     </AppLayout>
   );
 };

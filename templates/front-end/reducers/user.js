@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { signup } from "../actions/sign";
+import { signup, login } from "../actions/sign";
 
 const initialState = {
   isLoggedin: null, // 로그인 여부

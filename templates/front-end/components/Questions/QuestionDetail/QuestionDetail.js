@@ -25,7 +25,7 @@ const QuestionDetail = ({ qnaId }) => {
 
   // parentQuestion === qnaId && isAnswer로 조회하는 api
   // 아니면 qnaId, parentQuestion이 url의 qnaId와 일치하는 글의 배열을 가져와서 작업
-  const answers = dummy_qna.filter((qna) => qna.isAnswer);
+  const answers = dummy_qna.filter((qna) => qna.isAnswer && qna.parentQuestion === qnaId);
 
   return (
     <div css={DetailContainer}>

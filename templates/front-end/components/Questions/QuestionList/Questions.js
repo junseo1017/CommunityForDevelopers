@@ -25,7 +25,7 @@ const Questions = ({ questions }) => {
       const filteredQuestionList = questions.filter((question) => {
         return (
           question.title.toLowerCase().includes(query) ||
-          question.description.toLowerCase().includes(query)
+          question.content.toLowerCase().includes(query)
         );
       });
       setQuestionsList(filteredQuestionList);
