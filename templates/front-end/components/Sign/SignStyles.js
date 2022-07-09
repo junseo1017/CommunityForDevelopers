@@ -96,6 +96,28 @@ export const SignUpContentStyle = css`
     font-weight: 500;
     padding-left: 2px;
   }
+  & span {
+    color: rgb(255, 119, 119);
+    padding-left: 5px;
+    font-weight: 500;
+  }
+  & input {
+    width: 360px;
+    height: 40px;
+    border-radius: 5px;
+    font-weight: 700;
+    margin: 5px 0;
+    border: 1px solid rgb(219, 219, 219);
+
+    ::placeholder {
+      padding-left: 10px;
+      font-weight: 500;
+    }
+    :focus {
+      outline: none !important;
+      box-shadow: 0 0 10px #719ece;
+    }
+  }
 
   & > form > div {
     display: flex;
@@ -123,40 +145,9 @@ export const signUpBtn = css`
   }
 `;
 
-export const input = css`
-  & input {
-    width: 360px;
-    height: 40px;
-    border-radius: 5px;
-    border: 1px solid rgb(219, 219, 219);
-    font-weight: 700;
-    margin: 5px 0;
-    ::placeholder {
-      padding-left: 10px;
-      font-weight: 500;
-    }
-    :focus {
-      outline: none !important;
-      box-shadow: 0 0 10px #719ece;
-    }
-  }
-`;
-
 export const errorInput = css`
-  & input {
-    width: 360px;
-    height: 40px;
-    border-radius: 5px;
-    border: 1px solid rgb(255, 119, 119);
-    font-weight: 700;
-    margin: 5px 0;
-    ::placeholder {
-      padding-left: 10px;
-      font-weight: 500;
-    }
-    :focus {
-      outline: none !important;
-      box-shadow: 0 0 10px #719ece;
-    }
+  border: 1px solid rgb(255, 119, 119) !important;
+  :focus {
+    box-shadow: 0 0 0 2px rgb(255, 119, 119) !important;
   }
 `;

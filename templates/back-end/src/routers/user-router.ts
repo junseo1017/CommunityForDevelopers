@@ -1,5 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { userService } from "../services";
+import { extendReq, loginRequired } from "../middlewares";
 
 const userRouter = Router();
 
@@ -44,6 +45,7 @@ userRouter.post(
 // 전체 유저 목록
 userRouter.get(
   "/users",
+  loginRequired,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const users = await userService.getUsers();
@@ -57,13 +59,15 @@ userRouter.get(
 // id로 유저 정보 불러오기 (토큰으로 불러오게 할 예정)
 userRouter.get(
   "/users",
-  async (req: Request, res: Response, next: NextFunction) => {
+  loginRequired,
+  async (req: extendReq, res: Response, next: NextFunction) => {
     try {
-      //전체 사용자 목록을 얻음
-      const userId = req.body.userId;
-      console.log(userId);
-      const users = await userService.getMyInfo(userId);
-      res.send(users);
+      const userId = req.currentUserId;
+
+      if (userId !== undefined) {
+        const users = await userService.getMyInfo(userId);
+        res.send(users);
+      }
     } catch (error) {
       next(error);
     }
@@ -72,6 +76,7 @@ userRouter.get(
 
 userRouter.patch(
   "/users/:userId",
+  loginRequired,
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.userId;
     const { nickname, email, password, job, imgUrl, skills } = req.body;
@@ -106,6 +111,7 @@ userRouter.patch(
 
 userRouter.delete(
   "/users/:userId",
+  loginRequired,
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.userId;
     const currentPassword = req.body.currentPassword;
