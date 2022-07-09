@@ -19,10 +19,12 @@ const UserSchema = new Schema(
     job: {
       type: String,
       required: false,
+      default: "",
     },
     imgUrl: {
       type: String,
-      required: true,
+      required: false,
+      default: "",
     },
     skills: {
       type: [String],

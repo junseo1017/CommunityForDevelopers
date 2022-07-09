@@ -16,5 +16,6 @@ app.use(express.urlencoded({ extended: false }));
 
 // routing
 app.use("/api", Routers.userRouter);
-
+app.use("/api/portfolio", Routers.portfolioRouter);
+app.use(errorHandler);
 export { app };
