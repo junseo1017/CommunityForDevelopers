@@ -9,7 +9,6 @@
     "start": "node dist/index.js",
     "start_ts": "nodemon index.ts --exec \"ts-node index.ts\"",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
-    "dev:server": "nodemon --exec ts-node -e ts,tsx,js,json index.ts",
     "lint": "eslint .",
     "lint:fix": "eslint --fix --ext .js,.jsx,.ts ."
   },
