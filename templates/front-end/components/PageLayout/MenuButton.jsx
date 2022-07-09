@@ -4,8 +4,6 @@ import { useState } from "react";
 import { Drawer } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 import Link from "next/link";
-import { useDispatch, useSelector } from "react-redux";
-import { UIActions } from "../../reducers/ui";
 const MenuButtonStyle = css`
   & div {
     color: black;

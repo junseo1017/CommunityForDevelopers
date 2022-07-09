@@ -17,7 +17,11 @@ export const SignInFormStyle = css`
     font-size: 15px;
     line-height: 21px;
     &::placeholder {
-      padding-left: 20px;
+      padding-left: 10px;
+    }
+    &:focus {
+      outline: none !important;
+      box-shadow: 0 0 10px #719ece;
     }
   }
   & > div {
@@ -25,7 +29,6 @@ export const SignInFormStyle = css`
       border-radius: 4px 4px 0 0;
     }
     input:last-child {
-      border-top: none;
       border-radius: 0 0 4px 4px;
     }
   }

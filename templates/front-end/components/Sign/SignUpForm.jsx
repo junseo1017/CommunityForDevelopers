@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Divider, message } from "antd";
 import Router from "next/router";
 import axios from "axios";
-import { signup } from "../../actions/signup";
+import { signup } from "../../actions/sign";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import {
@@ -17,14 +17,13 @@ import {
 
 const RegExp = {
   email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-  password: /^[a-zA-Z0-9]{8,15}$/,
+  password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/,
 };
 
 const SignUpForm = () => {
   const [action, setAction] = useState(null);
   const dispatch = useDispatch();
   const { signupLoading, signupDone, signupError } = useSelector((state) => state.user);
-
   const {
     register,
     unregister,
@@ -36,7 +35,7 @@ const SignUpForm = () => {
   useEffect(() => {
     if (action) {
       if (signupDone) {
-        message.success("회원가입에 성공하셨습니다.").then(() => Router.push("/").then());
+        message.success("회원가입에 성공하였습니다.").then(() => Router.push("/").then());
       }
       if (signupError) {
         message.error(JSON.stringify(signupError, null, 4)).then();
@@ -48,9 +47,9 @@ const SignUpForm = () => {
   const onSubmit = (data) => {
     dispatch(
       signup({
-        email: data.user_email,
-        nickname: data.user_nickname,
-        password: data.user_password,
+        email: data.email,
+        nickname: data.nickname,
+        password: data.password,
       }),
     );
     setAction(true);
@@ -141,7 +140,7 @@ const SignUpForm = () => {
                   css={errors.passwordCheck && errorInput}
                   placeholder="비밀번호를 입력해주세요"
                   type="password"
-                  {...unregister("passwordCheck", {
+                  {...register("passwordCheck", {
                     required: true,
                     validate: (value) => {
                       if (watch("password") !== value) {
