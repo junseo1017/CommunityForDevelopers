@@ -2,7 +2,7 @@
 import { css, jsx } from "@emotion/react";
 import LoginLogo from "../../components/Sign/LoginLogo";
 import SignUpForm from "../../components/Sign/SignUpForm";
-
+import Link from "next/link";
 const signUpContainer = css`
   display: flex;
   flex-direction: column;
@@ -17,7 +17,12 @@ const signUpContainer = css`
 const SignUp = () => {
   return (
     <div css={signUpContainer}>
-      <LoginLogo />
+      <Link href="/">
+        <a>
+          <LoginLogo />
+        </a>
+      </Link>
+
       <SignUpForm />
     </div>
   );

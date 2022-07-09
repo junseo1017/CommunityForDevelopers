@@ -1,6 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import { Divider } from "antd";
+import { useEffect, useState } from "react";
+import { Divider, message } from "antd";
+import Router from "next/router";
+import axios from "axios";
+import { signup } from "../../actions/sign";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import {
   SignUpFormStyle,
@@ -8,22 +13,48 @@ import {
   SignUpContentStyle,
   signUpBtn,
   errorInput,
-  input,
 } from "./SignStyles";
 
+const RegExp = {
+  email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+  password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/,
+};
+
 const SignUpForm = () => {
+  const [action, setAction] = useState(null);
+  const dispatch = useDispatch();
+  const { signupLoading, signupDone, signupError } = useSelector((state) => state.user);
   const {
     register,
+    unregister,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
-  const RegExp = {
-    email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-    password: /^[a-zA-Z0-9]{8,15}$/,
+  useEffect(() => {
+    if (action) {
+      if (signupDone) {
+        message.success("회원가입에 성공하였습니다.").then(() => Router.push("/").then());
+      }
+      if (signupError) {
+        message.error(JSON.stringify(signupError, null, 4)).then();
+      }
+      setAction(null);
+    }
+  }, [signupDone, signupError]);
+
+  const onSubmit = (data) => {
+    dispatch(
+      signup({
+        email: data.email,
+        nickname: data.nickname,
+        password: data.password,
+      }),
+    );
+    setAction(true);
   };
+
   const emailErrorMessage = () => {
     if (errors.email && errors.email.type === "required") {
       return <span>이메일을 입력해주세요.</span>;
@@ -39,6 +70,7 @@ const SignUpForm = () => {
       return <span>{errors.password.message}</span>;
     }
   };
+
   const pwCkErrorMessage = () => {
     if (errors.passwordCheck && errors.passwordCheck.type === "required") {
       return <span>비밀번호를 한 번 더 입력해주세요</span>;
@@ -54,6 +86,7 @@ const SignUpForm = () => {
       return <span>{errors.nickname.message}</span>;
     }
   };
+
   return (
     <div css={SignUpFormStyle}>
       <div>
