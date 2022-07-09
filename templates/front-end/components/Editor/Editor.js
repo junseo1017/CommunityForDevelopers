@@ -1,30 +1,30 @@
 /** @jsxImportSource @emotion/react */
-import { css, jsx } from "@emotion/react";
 import React, { useEffect, useState } from "react";
 import { createReactEditorJS } from "react-editor-js";
 import Image from "@editorjs/image";
 import { DEFAULTVALUE } from "./defaultValue";
+import { EditorSize, TextCener } from "./styles/EditorStyle";
 const ReactEditorJS = createReactEditorJS();
 
 //import API from "../api/image" // Your server url
 
 const Editor = ({ imageArray, handleInitialize, data }) => {
   const [editorTools, setEditorTools] = useState("");
-  const EditorSize = css`
-    width: 100%;
-    height: 100%;
-  `;
+
   let editorComponent;
   if (!editorTools) editorComponent = "Loading...";
   else {
     editorComponent = (
-      <ReactEditorJS
-        css={EditorSize}
-        onInitialize={handleInitialize}
-        tools={editorTools}
-        placeholder={`포트폴리오 내용을 작성해주세요`}
-        defaultValue={DEFAULTVALUE}
-      />
+      <>
+        <h1 css={TextCener}>내용 작성</h1>
+        <ReactEditorJS
+          css={EditorSize}
+          onInitialize={handleInitialize}
+          tools={editorTools}
+          placeholder={`포트폴리오 내용을 작성해주세요`}
+          defaultValue={DEFAULTVALUE}
+        />
+      </>
     );
   }
 
