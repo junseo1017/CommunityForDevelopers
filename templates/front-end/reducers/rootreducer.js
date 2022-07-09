@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import { HYDRATE } from "next-redux-wrapper";
 
-import UISlice from "./ui";
+import userSlice from "./user";
 
 const rootReducer = (state, action) => {
   switch (action.type) {
@@ -9,7 +9,7 @@ const rootReducer = (state, action) => {
       return action.payload;
     default: {
       const combinedReducer = combineReducers({
-        ui: UISlice.reducer,
+        user: userSlice.reducer,
       });
       return combinedReducer(state, action);
     }

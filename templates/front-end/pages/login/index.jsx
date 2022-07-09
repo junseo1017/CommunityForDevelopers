@@ -8,7 +8,11 @@ import { LoginPageContainer } from "./loginstyle";
 const Login = () => {
   return (
     <div css={LoginPageContainer}>
-      <LoginLogo />
+      <Link href="/">
+        <a>
+          <LoginLogo />
+        </a>
+      </Link>
       <SignInForm />
       <Link href="/signup">
         <h2 className="signUp">회원가입</h2>
