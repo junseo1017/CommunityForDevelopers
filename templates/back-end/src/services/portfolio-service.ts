@@ -32,7 +32,7 @@ class PortfolioService {
       throw new Error("포토폴리오 정보가 없습니다.");
     }
     if (portfolio.userId !== userId) {
-      throw new Error("Forrbidden");
+      throw new Error("Forbidden");
     }
     return await this.portfolioModel.update(portId, portInfo);
   }
