@@ -135,6 +135,12 @@ export const CardFormContainer = css`
 
 export const TextContainer = css`
   padding: 1em;
+
+  & h2 {
+    text-align: center;
+    color: #1890ff;
+    font-weight: bold;
+  }
 `;
 
 export const EditorContainer = css`

@@ -16,6 +16,7 @@ import Link from "next/link";
 import Editor from "../Editor/Editor";
 import AddEditor from "../Editor/AddEditor";
 import { dummy_qna } from "../dummy";
+import Output from "editorjs-react-renderer";
 
 const QuestionDetail = ({ qnaId }) => {
   const [isEditMode, setIsEditMode] = useState(false);
@@ -26,9 +27,6 @@ const QuestionDetail = ({ qnaId }) => {
   // parentQuestion === qnaId && isAnswer로 조회하는 api
   // 아니면 qnaId, parentQuestion이 url의 qnaId와 일치하는 글의 배열을 가져와서 작업
   const answers = dummy_qna.filter((qna) => qna.isAnswer && qna.parentQuestion === qnaId);
-
-  const questionsContent = question[0].content.replace("\n", "");
-  console.log(questionsContent);
 
   return (
     <div css={DetailContainer}>
@@ -47,7 +45,7 @@ const QuestionDetail = ({ qnaId }) => {
           </Link>
         </div>
         <Divider plain />
-        <Editor css={TextContainer} data={JSON.parse(questionsContent)} />
+        <Output data={JSON.parse(question[0].content)} />
         <Button size="large" type="primary" onClick={() => setIsEditMode(!isEditMode)}>
           답변하기
         </Button>
@@ -65,6 +63,11 @@ const QuestionDetail = ({ qnaId }) => {
         <div></div>
       </div>
       <Divider plain />
+      {answers.length === 0 && (
+        <div css={TextContainer}>
+          <h2>아직 답변이 없습니다. 당신의 지식을 공유해 보세요!</h2>
+        </div>
+      )}
       {answers &&
         answers.map((answer) => {
           return (
@@ -78,6 +81,7 @@ const QuestionDetail = ({ qnaId }) => {
                   </Badge>
                 </Button>
               </div>
+              <Output data={JSON.parse(answer.content)} />
               <Editor data={JSON.parse(answer.content)} />
               <Collapse>
                 <Collapse.Panel header="댓글 보기">

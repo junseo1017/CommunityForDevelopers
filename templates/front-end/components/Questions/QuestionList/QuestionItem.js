@@ -17,7 +17,7 @@ const QuestionItem = ({ qnaId, title, content, recommendations, tags, user, date
         <Link href={`/questions/${qnaId}`}>{title}</Link>
       </div>
       <div css={DescriptionContainer}>
-        <div>{content}</div>
+        {/* <div>{content}</div> */}
         <div>
           {tags.map((tag, idx) => {
             return <Tag key={`${qnaId} + ${idx}`}>{tag}</Tag>;
