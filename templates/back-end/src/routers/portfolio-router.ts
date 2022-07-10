@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { portfolioService } from "../services/portfolio-service";
 import { extendReq, loginRequired } from "../middlewares/login-required";
-
+import { portfolioJoiSchema } from "../db/schemas/joi-schemas/portfolio-schema";
 const portfolioRouter = Router();
 
 portfolioRouter.get(
@@ -36,6 +36,13 @@ portfolioRouter.post(
     try {
       const userId = req.currentUserId || "";
       const { title, description, skills, content } = req.body;
+      await portfolioJoiSchema.validateAsync({
+        userId,
+        title,
+        description,
+        skills,
+        content,
+      });
       const newPortfolio = await portfolioService.addPortfolio({
         userId,
         title,
@@ -58,6 +65,13 @@ portfolioRouter.put(
       const portId = req.params.portId;
       const userId = req.currentUserId || "";
       const { title, description, skills, content } = req.body;
+      await portfolioJoiSchema.validateAsync({
+        userId,
+        title,
+        description,
+        skills,
+        content,
+      });
       const toUpdate = {
         ...(title && { title }),
         ...(description && { description }),
