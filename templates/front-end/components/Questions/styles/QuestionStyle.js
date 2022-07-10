@@ -57,13 +57,13 @@ export const DescriptionContainer = css`
   display: flex;
   flex-direction: column;
 
-  & div:first-child {
+  & div:first-of-type {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  & div:last-child {
+  & div:last-of-type {
     opacity: 0.75;
     align-self: flex-end;
   }
