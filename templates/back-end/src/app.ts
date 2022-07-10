@@ -1,5 +1,5 @@
 import cors from "cors";
-import express, { Express } from "express";
+import express, { Express, Router } from "express";
 import * as Routers from "./routers";
 import { errorHandler } from "./middlewares";
 
@@ -17,5 +17,6 @@ app.use(express.urlencoded({ extended: false }));
 // routing
 app.use("/api", Routers.userRouter);
 app.use("/api/portfolio", Routers.portfolioRouter);
+app.use("/api/qna", Routers.qnaRouter);
 app.use(errorHandler);
 export { app };
