@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { signup, login } from "../actions/sign";
 
 const initialState = {
-  isLoggedin: null, // 로그인 여부
+  isLoggedin: false, // 로그인 여부
   // 회원가입 진행 상태 관련
   signupLoading: false,
   signupDone: false,
@@ -33,6 +33,7 @@ const userSlice = createSlice({
         state.loginDone = true;
       })
       .addCase(login.rejected, (state, action) => {
+        console.log("rejected");
         state.loginLoading = false;
         state.loginError = action.payload;
       })

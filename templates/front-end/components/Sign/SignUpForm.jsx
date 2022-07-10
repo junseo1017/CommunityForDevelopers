@@ -29,11 +29,11 @@ const SignUpForm = () => {
   useEffect(() => {
     if (signupFlag) {
       if (signupDone) {
-        message.success("회원가입에 성공하였습니다.").then(() => Router.push("/").then());
+        message.success("회원가입에 성공하였습니다.").then(() => Router.push("/login").then());
         setSignupFlag(null);
       }
       if (signupError) {
-        message.error(JSON.stringify(signupError, null, 4)).then();
+        message.error(JSON.stringify(signupError.reason, null, 4)).then();
       }
     }
   }, [signupDone, signupError]);

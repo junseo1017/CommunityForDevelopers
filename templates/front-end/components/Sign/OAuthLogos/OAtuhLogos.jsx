@@ -1,7 +1,7 @@
 export const KakaoLogo = () => {
   return (
     <svg width="48" height="48" viewBox="0 0 48 48" preserveAspectRatio="xMidYMid meet">
-      <g fill="none" fill-rule="evenodd">
+      <g fill="none" fillRule="evenodd">
         <path
           fill="#ffeb00"
           d="M0 24C0 10.745 10.745 0 24 0s24 10.745 24 24-10.745 24-24 24S0 37.255 0 24z"></path>
@@ -16,7 +16,7 @@ export const KakaoLogo = () => {
 export const NaverLogo = () => {
   return (
     <svg width="48" height="48" viewBox="0 0 48 48" preserveAspectRatio="xMidYMid meet">
-      <g fill="none" fill-rule="evenodd">
+      <g fill="none" fillRule="evenodd">
         <path
           fill="#00C63B"
           d="M0 24C0 10.745 10.745 0 24 0s24 10.745 24 24-10.745 24-24 24S0 37.255 0 24z"></path>

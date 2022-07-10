@@ -1,11 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import AddButton from "./AddButtone";
+import AddButton from "./AddButton";
+import LoggedinMenu from "./LoggedinMenu";
 import { HeaderContainer, HeaderContent, HeaderLogo } from "./styles/HeaderStyles";
+import { useSelector } from "react-redux";
 import Logo from "./logo";
 import Link from "next/link";
 
 const Header = () => {
+  const { isLoggedin } = useSelector((state) => state.user);
+
   return (
     <header css={HeaderContainer}>
       <div>
@@ -29,12 +33,7 @@ const Header = () => {
           <nav>
             <AddButton />
             <div>
-              <Link href="/login">
-                <a>로그인</a>
-              </Link>
-              <Link href="/signup">
-                <a>회원가입</a>
-              </Link>
+              <LoggedinMenu />
             </div>
           </nav>
         </div>
