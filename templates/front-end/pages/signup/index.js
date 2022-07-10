@@ -22,7 +22,6 @@ const SignUp = () => {
           <LoginLogo />
         </a>
       </Link>
-
       <SignUpForm />
     </div>
   );

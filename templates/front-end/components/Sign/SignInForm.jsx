@@ -2,6 +2,8 @@
 import { css, jsx } from "@emotion/react";
 import { useForm } from "react-hook-form";
 import { SignInFormStyle, SignBtnStyle, errorInput } from "./SignStyles";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const RegExp = {
   email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -9,12 +11,16 @@ const RegExp = {
 };
 
 const SignInForm = () => {
+  const dispatch = useDispatch();
+  const { isLoggedin, loginError } = useSelector((state) => state.user);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => console.log(data);
+
+  useEffect(() => {}, []);
 
   return (
     <form css={SignInFormStyle} onSubmit={handleSubmit(onSubmit)}>

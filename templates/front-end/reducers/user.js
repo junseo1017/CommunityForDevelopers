@@ -21,12 +21,13 @@ const userSlice = createSlice({
     builder
       // login
       .addCase(login.pending, (state) => {
+        console.log("pending");
         state.loginLoading = true;
         state.loginDone = false;
         state.loginError = null;
       })
       .addCase(login.fulfilled, (state, action) => {
-        console.log(action.payload);
+        console.log("fullfilled", action.payload);
         state.loginLoading = false;
         state.isLoggedin = action.payload;
         state.loginDone = true;
@@ -37,11 +38,14 @@ const userSlice = createSlice({
       })
       // signup
       .addCase(signup.pending, (state) => {
+        console.log("pending");
+
         state.signupLoading = true;
         state.signupDone = false;
         state.signupError = null;
       })
       .addCase(signup.fulfilled, (state) => {
+        console.log("fulfilled");
         state.signupLoading = false;
         state.signupDone = true;
       })
