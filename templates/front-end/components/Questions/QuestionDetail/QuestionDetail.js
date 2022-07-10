@@ -3,17 +3,17 @@ import { css, jsx } from "@emotion/react";
 import React, { useEffect, useState } from "react";
 import Comments from "./Comments";
 import TopButton from "../TopButton";
-import { Button, Badge, Divider, Collapse } from "antd";
-import { QuestionOutlined, LikeOutlined, MessageOutlined } from "@ant-design/icons";
+import { Button, Badge, Divider, Collapse, Input } from "antd";
+import { LikeOutlined, MessageOutlined } from "@ant-design/icons";
 import {
   DetailContainer,
   DetailQuestionContainer,
   TextContainer,
   EditorContainer,
   DetailAnswerContainer,
-  CollapseStyle,
 } from "../styles/QuestionStyle";
 import Link from "next/link";
+import Editor from "../Editor/Editor";
 import AddEditor from "../Editor/AddEditor";
 import { dummy_qna } from "../dummy";
 
@@ -26,6 +26,9 @@ const QuestionDetail = ({ qnaId }) => {
   // parentQuestion === qnaId && isAnswer로 조회하는 api
   // 아니면 qnaId, parentQuestion이 url의 qnaId와 일치하는 글의 배열을 가져와서 작업
   const answers = dummy_qna.filter((qna) => qna.isAnswer && qna.parentQuestion === qnaId);
+
+  const questionsContent = question[0].content.replace("\n", "");
+  console.log(questionsContent);
 
   return (
     <div css={DetailContainer}>
@@ -44,13 +47,18 @@ const QuestionDetail = ({ qnaId }) => {
           </Link>
         </div>
         <Divider plain />
-        <p css={TextContainer}>{question[0].content}</p>
+        <Editor css={TextContainer} data={JSON.parse(questionsContent)} />
         <Button size="large" type="primary" onClick={() => setIsEditMode(!isEditMode)}>
           답변하기
         </Button>
         {isEditMode && (
           <div css={EditorContainer}>
             <h2>답변하기</h2>
+            <Input
+              size="large"
+              placeholder="답변의 제목을 작성하세요"
+              onChange={(e) => console.log(e.target.value)}
+            />
             <AddEditor />
           </div>
         )}
@@ -70,7 +78,7 @@ const QuestionDetail = ({ qnaId }) => {
                   </Badge>
                 </Button>
               </div>
-              <p css={TextContainer}>{answer.content}</p>
+              <Editor data={JSON.parse(answer.content)} />
               <Collapse>
                 <Collapse.Panel header="댓글 보기">
                   <Comments />
