@@ -1,5 +1,5 @@
 import { Schema } from "mongoose";
-import { shortId } from "./types/short-id"; 
+import { shortId } from "./types/short-id";
 const PortfolioSchema = new Schema(
   {
     portId: shortId,
@@ -32,12 +32,12 @@ const PortfolioSchema = new Schema(
       {
         type: Schema.Types.ObjectId,
         ref: "comment",
-        required: true,
+        required: false,
       },
     ],
   },
   {
-    collection: "portfolio",
+    collection: "portfolios",
     timestamps: true,
   }
 );
