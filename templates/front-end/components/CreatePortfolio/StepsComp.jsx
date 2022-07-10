@@ -1,15 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
 import React, { useState } from "react";
-import { Steps, Button, message } from "antd";
+import { Steps, Button } from "antd";
 import { StepsPadding, ButtonCss } from "./styles/StepsComponentStyle";
 import { blackBtn } from "../Common/style/btnStyle";
 const { Step } = Steps;
 
-const StepsComp = ({ setCurrent, current = 0, save }) => {
-  const next = () => {
-    setCurrent(current + 1);
-  };
+const StepsComp = ({ setCurrent, current = 0, save, showModal, next }) => {
   const prev = () => {
     setCurrent(current - 1);
   };
@@ -56,9 +53,7 @@ const StepsComp = ({ setCurrent, current = 0, save }) => {
             css={ButtonCss}
             type="primary"
             onClick={(e) => {
-              next();
-              save(e);
-              message.success("Processing complete!");
+              showModal();
             }}>
             Done
           </Button>

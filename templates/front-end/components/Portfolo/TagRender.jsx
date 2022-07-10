@@ -11,7 +11,7 @@ const TagRender = (props) => {
 
   return (
     <Tag
-      color={value}
+      color="blue"
       onMouseDown={onPreventMouseDown}
       closable={closable}
       onClose={onClose}

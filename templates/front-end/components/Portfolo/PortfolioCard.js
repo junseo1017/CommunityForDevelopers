@@ -36,7 +36,7 @@ const ScrollDiv = styled.div`
 
 const HeartIcon = (props) => <Icon component={HeartSvg} {...props} />;
 
-const PortfolioCard = () => {
+const PortfolioCard = ({ title, description, image, skills }) => {
   const IconText = ({ icon, text }) => (
     <Space>
       {React.createElement(icon)}
@@ -56,10 +56,10 @@ const PortfolioCard = () => {
       }
       actions={[]}>
       <Meta
-        title="Card title"
+        title={title || "제목"}
         description={
           <div>
-            <div>This is the description</div>
+            <div>{description || `한줄 설명`}</div>
           </div>
         }
       />
@@ -69,16 +69,19 @@ const PortfolioCard = () => {
           display: "flex",
           alignContent: "center",
           justifyContent: "flex-start",
+          marginBottom: 5,
         }}>
         <ScrollDiv>
-          <Tag style={{ marginBottom: 5 }} color="magenta">
-            magenta
-          </Tag>
-          <Tag color="green">green</Tag>
+          {skills ? (
+            skills.map((value, index) => (
+              <Tag color="blue" key={`${value}${index}`}>
+                {value}
+              </Tag>
+            ))
+          ) : (
+            <Tag color="white">magenta</Tag>
+          )}
 
-          <Tag color="volcano">volcano</Tag>
-          <Tag color="blue">blue</Tag>
-          <Tag color="gold">gold</Tag>
           <div style={{ verticalAlign: "middle" }}></div>
         </ScrollDiv>
       </div>

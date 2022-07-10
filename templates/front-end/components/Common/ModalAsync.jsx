@@ -1,41 +1,21 @@
 import { Button, Modal } from "antd";
 import React, { useState } from "react";
 
-const ModalAsync = () => {
-  const [visible, setVisible] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState("Content of the modal");
-  const handleOk = () => {
-    setModalText("The modal will be closed after two seconds");
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setVisible(false);
-      setConfirmLoading(false);
-    }, 2000);
-  };
+const ModalAsync = ({ visible, setVisible, handleOk, confirmLoading, modalText }) => {
   const handleCancel = () => {
     console.log("Clicked cancel button");
     setVisible(false);
   };
 
-  const showModal = () => {
-    setVisible(true);
-  };
-
   return (
-    <>
-      <Button type="primary" onClick={showModal}>
-        Open Modal with async logic
-      </Button>
-      <Modal
-        title="Title"
-        visible={visible}
-        onOk={handleOk}
-        confirmLoading={confirmLoading}
-        onCancel={handleCancel}>
-        <p>{modalText}</p>
-      </Modal>
-    </>
+    <Modal
+      title="Title"
+      visible={visible}
+      onOk={handleOk}
+      confirmLoading={confirmLoading}
+      onCancel={handleCancel}>
+      <p>{modalText}</p>
+    </Modal>
   );
 };
 
