@@ -9,18 +9,20 @@ import {
   CardDetail,
 } from "./styles/ProfileCardStyles";
 import { useMediaQuery } from "react-responsive";
+import { useSelector } from "react-redux";
+
 const ProfileCard = () => {
-  const router = useRouter();
+  const { userInfo } = useSelector((state) => state.user);
+  const { nickname } = userInfo;
   const isresponsive = useMediaQuery({
     query: "(max-width:768px)",
   });
-  console.log(isresponsive);
   return (
     <Card css={ProfileCardContainer}>
       <div>
         <div css={CardProfile}>
           <Avatar size={isresponsive ? 130 : 150} src="https://joeschmoe.io/api/v1/random" />
-          <p>{router.query.id}</p>
+          {nickname ? <p>{nickname}</p> : <p></p>}
         </div>
         <div css={ProfileCardContent}>
           <div>

@@ -6,21 +6,22 @@ import TopButton from "../TopButton";
 import { ColFlexBox } from "../styles/QuestionStyle";
 
 const QuestionsList = ({ questions }) => {
+  console.log("List questions", questions);
   return (
     <>
       <div css={ColFlexBox}>
         {questions.map((questions) => {
           return (
-            <div key={questions.questId}>
+            <div key={questions.qnaId}>
               <QuestionItem
-                questId={questions.questId}
+                qnaId={questions.qnaId}
                 title={questions.title}
-                description={questions.description}
-                recommendations={questions.recommendations}
-                numOfAnswers={questions.answers.length}
+                contents={questions.contents}
+                imgUrl={questions.imgUrl}
+                recommends={questions.recommends.length}
                 tags={questions.tags}
-                user={questions.user}
-                date={questions.date}
+                user={questions.userId}
+                date={questions.createdAt}
               />
               <Divider plain />
             </div>

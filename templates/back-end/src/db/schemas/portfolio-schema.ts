@@ -31,7 +31,7 @@ const PortfolioSchema = new Schema(
     comments: [
       {
         type: Schema.Types.ObjectId,
-        ref: "comment",
+        ref: "comments",
         required: false,
       },
     ],

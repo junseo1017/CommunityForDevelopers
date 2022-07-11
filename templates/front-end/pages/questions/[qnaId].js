@@ -4,11 +4,11 @@ import { useRouter } from "next/router";
 
 const QuestionDetailPage = () => {
   const router = useRouter();
-  const { questId } = router.query;
+  const { qnaId } = router.query;
 
   return (
     <AppLayout>
-      <QuestionDetail questId={questId} />
+      <QuestionDetail qnaId={qnaId} />
     </AppLayout>
   );
 };

@@ -1,95 +1,47 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Questions from "../../components/Questions/QuestionList/Questions";
 import AppLayout from "../../components/AppLayout";
 import Head from "next/head";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { qnaActions, getQnaData } from "../../reducers/qna";
 
-const dummy_questions = [
-  {
-    questId: "q1",
-    title: "How to use google analytics with next.js app?",
-    description:
-      "I'm using styled-components with next.js so my styles need to be server-side rendered, hence how can I add google analytics to my website? I checked next.js google analytics example but as I said my _document file is different because of using styled-components.",
-    recommendations: 3,
-    tags: ["next.js", "styled-components", "google-analytics"],
-    user: "userA",
-    date: new Date(),
-    answers: [
-      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatum hic laborum accusantium iure natus eum quod vero vitae alias, perferendis ad maiores, odit expedita, neque placeat. Possimus iure sequi aspernatur.",
-      "Possimus numquam temporibus animi aspernatur suscipit officiis cupiditate, itaque beatae harum sunt! Libero cum ex fuga, voluptatibus sequi magni, laboriosam quae enim alias accusamus odit provident minus repellat eveniet aspernatur!",
-      "In dolore distinctio fugiat necessitatibus omnis excepturi recusandae voluptate iure esse labore temporibus autem animi suscipit neque, harum sapiente laudantium porro officiis commodi. Temporibus facilis sit soluta corporis cumque nisi!",
-    ],
-  },
-  {
-    questId: "q2",
-    title: "How to use google analytics with next.js app?",
-    description:
-      "I'm using styled-components with next.js so my styles need to be server-side rendered, hence how can I add google analytics to my website? I checked next.js google analytics example but as I said my _document file is different because of using styled-components.",
-    recommendations: 92,
-    tags: ["next.js", "styled-components", "google-analytics"],
-    user: "userA",
-    date: new Date(),
-    answers: [
-      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatum hic laborum accusantium iure natus eum quod vero vitae alias, perferendis ad maiores, odit expedita, neque placeat. Possimus iure sequi aspernatur.",
-      "Possimus numquam temporibus animi aspernatur suscipit officiis cupiditate, itaque beatae harum sunt! Libero cum ex fuga, voluptatibus sequi magni, laboriosam quae enim alias accusamus odit provident minus repellat eveniet aspernatur!",
-      "In dolore distinctio fugiat necessitatibus omnis excepturi recusandae voluptate iure esse labore temporibus autem animi suscipit neque, harum sapiente laudantium porro officiis commodi. Temporibus facilis sit soluta corporis cumque nisi!",
-    ],
-  },
-  {
-    questId: "q3",
-    title: "How to use google analytics with next.js app?",
-    description:
-      "I'm using styled-components with next.js so my styles need to be server-side rendered, hence how can I add google analytics to my website? I checked next.js google analytics example but as I said my _document file is different because of using styled-components.",
-    recommendations: 122,
-    tags: ["next.js", "styled-components", "google-analytics"],
-    user: "userA",
-    date: new Date(),
-    answers: [
-      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatum hic laborum accusantium iure natus eum quod vero vitae alias, perferendis ad maiores, odit expedita, neque placeat. Possimus iure sequi aspernatur.",
-      "Possimus numquam temporibus animi aspernatur suscipit officiis cupiditate, itaque beatae harum sunt! Libero cum ex fuga, voluptatibus sequi magni, laboriosam quae enim alias accusamus odit provident minus repellat eveniet aspernatur!",
-      "In dolore distinctio fugiat necessitatibus omnis excepturi recusandae voluptate iure esse labore temporibus autem animi suscipit neque, harum sapiente laudantium porro officiis commodi. Temporibus facilis sit soluta corporis cumque nisi!",
-    ],
-  },
-  {
-    questId: "q4",
-    title: "How to use google analytics with next.js app?",
-    description:
-      "I'm using styled-components with next.js so my styles need to be server-side rendered, hence how can I add google analytics to my website? I checked next.js google analytics example but as I said my _document file is different because of using styled-components.",
-    recommendations: 1225,
-    tags: ["next.js", "styled-components", "google-analytics"],
-    user: "userA",
-    date: new Date(),
-    answers: [
-      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatum hic laborum accusantium iure natus eum quod vero vitae alias, perferendis ad maiores, odit expedita, neque placeat. Possimus iure sequi aspernatur.",
-      "Possimus numquam temporibus animi aspernatur suscipit officiis cupiditate, itaque beatae harum sunt! Libero cum ex fuga, voluptatibus sequi magni, laboriosam quae enim alias accusamus odit provident minus repellat eveniet aspernatur!",
-      "In dolore distinctio fugiat necessitatibus omnis excepturi recusandae voluptate iure esse labore temporibus autem animi suscipit neque, harum sapiente laudantium porro officiis commodi. Temporibus facilis sit soluta corporis cumque nisi!",
-    ],
-  },
-  {
-    questId: "q5",
-    title: "How to use google analytics with next.js app?",
-    description:
-      "I'm using styled-components with next.js so my styles need to be server-side rendered, hence how can I add google analytics to my website? I checked next.js google analytics example but as I said my _document file is different because of using styled-components.",
-    recommendations: 0,
-    tags: ["next.js", "styled-components", "google-analytics"],
-    user: "userA",
-    date: new Date(),
-    answers: [
-      "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatum hic laborum accusantium iure natus eum quod vero vitae alias, perferendis ad maiores, odit expedita, neque placeat. Possimus iure sequi aspernatur.",
-      "Possimus numquam temporibus animi aspernatur suscipit officiis cupiditate, itaque beatae harum sunt! Libero cum ex fuga, voluptatibus sequi magni, laboriosam quae enim alias accusamus odit provident minus repellat eveniet aspernatur!",
-      "In dolore distinctio fugiat necessitatibus omnis excepturi recusandae voluptate iure esse labore temporibus autem animi suscipit neque, harum sapiente laudantium porro officiis commodi. Temporibus facilis sit soluta corporis cumque nisi!",
-    ],
-  },
-];
+const questions = ({ result }) => {
+  // const [qnas, setQnas] = useState([]);
+  console.log("inner result", result); // 찍힘
 
-const questions = () => {
+  const dispatch = useDispatch();
+  const qnas = useSelector((state) => state.qnas);
+
+  useEffect(() => {
+    dispatch(qnaActions.getQnaData());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setQnas(result);
+  }, []);
+
   return (
     <AppLayout>
       <Head>
         <title>모든 질문</title>
       </Head>
-      <Questions questions={dummy_questions} />
+      <Questions questions={qnas} />
     </AppLayout>
   );
 };
 
 export default questions;
+
+// export const getServerSideProps = async () => {
+//   const response = await axios.get("http://localhost:5000/api/qnas");
+//   // console.log("response", response); // 찍힘
+//   const result = response.data;
+//   console.log("result", result); // 찍힘
+
+//   return {
+//     props: {
+//       result,
+//     },
+//   };
+// };

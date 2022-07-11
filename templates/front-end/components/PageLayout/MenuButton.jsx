@@ -3,6 +3,8 @@ import { css, jsx } from "@emotion/react";
 import { useState } from "react";
 import { Drawer } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
+import LoggedinMenu from "./LoggedinMenu";
+
 import Link from "next/link";
 const MenuButtonStyle = css`
   & div {
@@ -61,9 +63,7 @@ const MenuButton = () => {
             <a>Q&A</a>
           </Link>
           <a>Magazine</a>
-          <Link href="/profile/junseolee">
-            <a>내 정보</a>
-          </Link>
+          <LoggedinMenu />
         </div>
       </Drawer>
     </>
