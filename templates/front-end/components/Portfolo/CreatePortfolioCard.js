@@ -1,132 +1,75 @@
-import React, { useState } from "react";
+/** @jsxImportSource @emotion/react */
+import {
+  LabelCss,
+  FormItemLayout,
+  TailFormItemLayout,
+  Container,
+  LeftCard,
+  RightCard,
+} from "./styles/CreatePortfolioCardStyle";
+// import React, { useEffect, useState } from "react";
+// import { useSelector, useDispatch } from "react-redux";
+// import { portfolioActions } from "../../reducers/portfolio";
 import { UploadOutlined } from "@ant-design/icons";
-import { Steps, Card, Button, Form, Input, Select, Tag, Upload } from "antd";
+import TagRender from "./TagRender";
+import useSelects from "../../hooks/useSelects";
+import {
+  Steps,
+  Divider,
+  Space,
+  Typography,
+  Card,
+  Button,
+  Form,
+  Input,
+  Select,
+  Tag,
+  Upload,
+} from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import PortfolioCard from "./PortfolioCard";
-
+import { css } from "@emotion/react";
 const { Step } = Steps;
 
-const options = [
-  {
-    value: "gold",
-  },
-  {
-    value: "lime",
-  },
-  {
-    value: "green",
-  },
-  {
-    value: "cyan",
-  },
-];
+const CreatePortfolioCard = ({ setPortfCardValue }) => {
+  const [items, name, onNameChange, addItem] = useSelects();
+  //const portfolioValue = useSelector(({ portfolio }) => portfolio);
 
-const tagRender = (props) => {
-  const { label, value, closable, onClose } = props;
-
-  const onPreventMouseDown = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
+  const onFinish = (values) => {
+    values;
   };
-  return (
-    <Tag
-      color={value}
-      onMouseDown={onPreventMouseDown}
-      closable={closable}
-      onClose={onClose}
-      style={{
-        marginRight: 3,
-      }}>
-      {label}
-    </Tag>
-  );
-};
-const tagsOptions = [
-  {
-    value: "gold",
-    label: "React",
-  },
-  {
-    value: "lime",
-    label: "Typescript",
-  },
-  {
-    value: "green",
-    label: "Redux",
-  },
-  {
-    value: "cyan",
-    label: "Next js",
-  },
-];
-const formItemLayout = {
-  labelCol: {
-    xs: {
-      span: 24,
-    },
-    sm: {
-      span: 8,
-    },
-  },
-  wrapperCol: {
-    xs: {
-      span: 24,
-    },
-    sm: {
-      span: 16,
-    },
-  },
-};
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0,
-    },
-    sm: {
-      span: 16,
-      offset: 8,
-    },
-  },
-};
-
-const CreatePortfolioCard = () => {
-  const [current, setCurrent] = useState(0);
   const onChange = (value) => {
     console.log("onChange:", current);
     setCurrent(value);
   };
-  const [form] = Form.useForm();
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
-  };
+  // useEffect(() => {
+  //   console.log(portfolioValue);
+  // }, [portfolioValue]);
+
   const normFile = (e) => {
     console.log("Upload event:", e);
-
     if (Array.isArray(e)) {
       return e;
     }
-
     return e?.fileList;
   };
 
+  const [form] = Form.useForm();
+  const titleValue = Form.useWatch("title", form);
+  const descriptionValue = Form.useWatch("description", form);
+  const imageValue = Form.useWatch("image", form);
+  const skillsValue = Form.useWatch("skills", form);
+
+  const { Option } = Select;
+
   return (
-    <div
-      style={{
-        display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
-        height: "100%",
-      }}>
-      <Card
-        style={{
-          boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.2)",
-          flex: 1,
-          marginRight: 20,
-        }}>
+    <div css={Container}>
+      <Card css={LeftCard}>
         <Form
-          {...formItemLayout}
+          onValuesChange={(value, allValues) => {
+            setPortfCardValue(allValues);
+          }}
+          {...FormItemLayout}
           form={form}
           name="register"
           onFinish={onFinish}
@@ -135,20 +78,33 @@ const CreatePortfolioCard = () => {
             prefix: "86",
           }}
           scrollToFirstError>
-          <Form.Item label="Dragger">
-            <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
-              <Upload.Dragger name="files" action="/upload.do">
-                <p className="ant-upload-drag-icon">
-                  <UploadOutlined />
-                </p>
-                <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                <p className="ant-upload-hint">Support for a single or bulk upload.</p>
-              </Upload.Dragger>
+          <div css={LabelCss}>
+            <Form.Item label="썸네일 이미지">
+              <Form.Item
+                className="image-required"
+                name="image"
+                valuePropName="fileList"
+                getValueFromEvent={normFile}
+                noStyle
+                rules={[
+                  {
+                    required: true,
+                    message: "썸네일 이미지를 첨부해주세요",
+                  },
+                ]}>
+                <Upload.Dragger name="files" /*action="/upload.do"*/ maxCount={1}>
+                  <p className="ant-upload-drag-icon">
+                    <UploadOutlined />
+                  </p>
+                  <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                  <p className="ant-upload-hint">Support for a single or bulk upload.</p>
+                </Upload.Dragger>
+              </Form.Item>
             </Form.Item>
-          </Form.Item>
+          </div>
           <Form.Item
             name="title"
-            label="title"
+            label="제목"
             rules={[
               {
                 required: true,
@@ -160,18 +116,18 @@ const CreatePortfolioCard = () => {
 
           <Form.Item
             name="description"
-            label="description"
+            label="설명"
             rules={[
               {
                 required: true,
                 message: "설명을 작성해주세요",
               },
             ]}>
-            <Input.TextArea showCount maxLength={100} />
+            <Input.TextArea showCount maxLength={46} />
           </Form.Item>
           <Form.Item
-            name="select"
-            label="Select"
+            name="skills"
+            label="skills"
             hasFeedback
             rules={[
               {
@@ -182,23 +138,51 @@ const CreatePortfolioCard = () => {
             <Select
               mode="multiple"
               showArrow
-              tagRender={tagRender}
+              tagRender={TagRender}
+              placeholder="사용했던 skills를 선택해주세요."
               //defaultValue={["gold", "cyan"]}
               style={{
                 width: "100%",
               }}
-              options={options}
-            />
-          </Form.Item>
-          <Form.Item {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit">
-              Register
-            </Button>
+              options={items}
+              dropdownRender={(menu) => (
+                <>
+                  {menu}
+                  <Divider
+                    style={{
+                      margin: "8px 0",
+                    }}
+                  />
+                  <Space
+                    align="center"
+                    style={{
+                      padding: "0 8px 4px",
+                    }}>
+                    <Input placeholder="Please enter item" value={name} onChange={onNameChange} />
+                    <Typography.Link
+                      onClick={addItem}
+                      style={{
+                        whiteSpace: "nowrap",
+                      }}>
+                      <PlusOutlined /> Add item
+                    </Typography.Link>
+                  </Space>
+                </>
+              )}>
+              {items.map((item) => (
+                <Option key={item}>{item}</Option>
+              ))}
+            </Select>
           </Form.Item>
         </Form>
       </Card>
-      <Card style={{ boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.2)", flex: 0.8 }}>
-        <PortfolioCard />
+      <Card css={RightCard}>
+        <PortfolioCard
+          title={titleValue}
+          description={descriptionValue}
+          image={imageValue}
+          skills={skillsValue}
+        />
       </Card>
     </div>
   );

@@ -39,6 +39,7 @@ const Editor = ({ imageArray, handleInitialize, data }) => {
             uploader: {
               uploadByFile(file) {
                 let formData = new FormData();
+                console.log(file);
                 formData.append("images", file);
 
                 // send image to server
