@@ -18,5 +18,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/api", Routers.userRouter);
 app.use("/api/portfolios", Routers.portfolioRouter);
 app.use("/api/qnas", Routers.qnaRouter);
+
 app.use(errorHandler);
 export { app };
