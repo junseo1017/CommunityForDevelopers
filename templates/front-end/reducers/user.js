@@ -3,6 +3,8 @@ import { signup, login } from "../actions/sign";
 
 const initialState = {
   isLoggedin: false, // 로그인 여부
+  // refresh할 경우 로그인 여부 체크
+  isLoggedinCheck: false,
   // 회원가입
   signupLoading: false,
   signupDone: false,
@@ -24,8 +26,15 @@ const userSlice = createSlice({
     logout(state) {
       state.isLoggedin = false;
     },
-    addLoggedinStatus(state, action) {
+    addLoginStatus(state, action) {
       state.isLoggedin = action.payload;
+      state.isLoggedinCheck = false;
+    },
+    checkLoggedin(state) {
+      state.isLoggedinCheck = true;
+    },
+    checkLoggedinDone(state) {
+      state.isLoggedinCheck = false;
     },
   },
   extraReducers: (builder) =>
