@@ -6,7 +6,7 @@ const userRouter = Router();
 
 // 회원가입
 userRouter.post(
-  "/register",
+  "/",
   async (req: Request, res: Response, next: NextFunction) => {
     const { nickname, email, password, job, imgUrl, skills } = req.body;
 
@@ -44,7 +44,7 @@ userRouter.post(
 
 // 전체 유저 목록
 userRouter.get(
-  "/users",
+  "/",
   loginRequired,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -56,16 +56,16 @@ userRouter.get(
   }
 );
 
-// id로 유저 정보 불러오기 (토큰으로 불러오게 할 예정)
+// id로 유저 정보 불러오기 (token decoded)
 userRouter.get(
-  "/users",
+  "/token",
   loginRequired,
   async (req: extendReq, res: Response, next: NextFunction) => {
     try {
       const userId = req.currentUserId;
 
       if (userId !== undefined) {
-        const users = await userService.getMyInfo(userId);
+        const users = await userService.getUserInfo(userId);
         res.send(users);
       }
     } catch (error) {
@@ -75,7 +75,7 @@ userRouter.get(
 );
 
 userRouter.patch(
-  "/users/:userId",
+  "/:userId",
   loginRequired,
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.userId;
@@ -110,7 +110,7 @@ userRouter.patch(
 );
 
 userRouter.delete(
-  "/users/:userId",
+  "/:userId",
   loginRequired,
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.userId;
