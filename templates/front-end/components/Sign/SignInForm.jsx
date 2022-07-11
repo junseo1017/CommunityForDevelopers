@@ -4,9 +4,10 @@ import { Divider, message } from "antd";
 import { useForm } from "react-hook-form";
 import Router from "next/router";
 import { SignInFormStyle, SignBtnStyle, errorInput } from "./SignStyles";
-import { login } from "../../actions/sign";
+import { login } from "../../actions/user";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useCallback } from "react";
 
 const RegExp = {
   email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -38,7 +39,7 @@ const SignInForm = () => {
     }
   }, [isLoggedin, loginError]);
 
-  const onSubmit = (data) => {
+  const onSubmit = useCallback((data) => {
     dispatch(
       login({
         email: data.email,
@@ -46,7 +47,7 @@ const SignInForm = () => {
       }),
     );
     setSigninFlag(true);
-  };
+  }, []);
 
   return (
     <form css={SignInFormStyle} onSubmit={handleSubmit(onSubmit)}>

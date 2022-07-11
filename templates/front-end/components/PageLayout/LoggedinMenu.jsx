@@ -11,14 +11,18 @@ const LoggedinMenu = () => {
     dispatch(userSlice.actions.logout());
   };
 
+  const findOne = () => {
+    console.log("hi");
+  };
+
   return (
     <>
-      {!isLoggedinCheck ? (
+      {isLoggedinCheck ? (
         isLoggedin ? (
           <>
-            <Link href="/profile/junseolee">
-              <a>내 정보</a>
-            </Link>
+            {/* <Link onClick={findOne} href="#"> */}
+            <a onClick={findOne}>내 정보</a>
+            {/* </Link> */}
             <a onClick={logoutHandler}>로그아웃</a>
           </>
         ) : (
@@ -33,10 +37,8 @@ const LoggedinMenu = () => {
         )
       ) : (
         <>
-          <h1>hi</h1>
-          <h1>hi</h1>
-          <h1>hi</h1>
-          <h1>hi</h1>
+          <a style={{ width: "50px", backgroundColor: "white" }}></a>
+          <a style={{ width: "50px", backgroundColor: "white" }}></a>
         </>
       )}
     </>

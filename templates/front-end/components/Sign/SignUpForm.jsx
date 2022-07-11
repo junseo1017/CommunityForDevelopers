@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Divider, message } from "antd";
 import Router from "next/router";
 import axios from "axios";
-import { signup } from "../../actions/sign";
+import { signup } from "../../actions/user";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { SignUpFormStyle, SignUpContentStyle, signUpBtn, errorInput } from "./SignStyles";
