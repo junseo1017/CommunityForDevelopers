@@ -74,7 +74,7 @@ class UserService {
 
   //유저별 게시글 조회
 
-  // tokem으로 user 정보 보기
+  // token으로 user 정보 보기
   async getUserInfo(userId: string) {
     const userInfo = await this.userModel.findById(userId);
     if (!userInfo) {
