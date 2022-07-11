@@ -4,14 +4,13 @@ import React, { useState, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
 import { Button, Input } from "antd";
 import { EditorContainer } from "../styles/QuestionStyle";
+import axios from "axios";
 
 const Editor = dynamic(() => import("./Editor"), {
   ssr: false,
 });
 
-const AddEditor = ({ data }) => {
-  console.log("data from AddEditor", typeof data);
-  console.log("data from AddEditor", data);
+const AddEditor = ({ titleData, data, isAnswer, parentQnaId }) => {
   const editorCore = useRef(null);
   // 업로드된 이미지 추적
   const [imageArray, setImageArray] = useState([]);
@@ -31,11 +30,17 @@ const AddEditor = ({ data }) => {
     // 에디터의 컨텐츠를 가져와 서버에 저장하기
     try {
       const savedData = await editorCore.current.save();
-      console.log("savedData", savedData);
       const data = {
-        description: JSON.stringify(savedData),
+        title: titleData,
+        contents: JSON.stringify(savedData),
       };
-      console.log("data", data);
+
+      await axios.post("/api/qnas", {
+        title: data.title,
+        contents: data.contents,
+        isAnswer,
+        parentQnaId,
+      });
 
       // 서버에서 사용하지 않는 이미지 제거하기
 
@@ -43,11 +48,6 @@ const AddEditor = ({ data }) => {
     } catch (e) {
       console.log(e);
     }
-  };
-
-  // 위에랑 합쳐서 데이터 보내기
-  const saveTitle = (title) => {
-    console.log("title", title);
   };
 
   // 사용하지 않는 이미지를 제거하기 위해 imageArray와 현재 에디터의 이미지를 가져와 비교하기
@@ -80,7 +80,6 @@ const AddEditor = ({ data }) => {
       <Button
         onClick={() => {
           saveContents();
-          saveTitle(title);
         }}>
         저장하기
       </Button>
