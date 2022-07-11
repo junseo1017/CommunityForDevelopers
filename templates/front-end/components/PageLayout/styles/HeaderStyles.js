@@ -44,7 +44,7 @@ export const HeaderContent = css`
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 1.5vw;
+    gap: 1vw;
   }
 
   ${responsiveContainer}

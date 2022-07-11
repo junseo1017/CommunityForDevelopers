@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import AddButton from "./AddButtone";
-import { HeaderContainer, HeaderContent, HeaderLogo } from "./styles/HeaderStyles";
+import AddButton from "./AddButton";
+import LoggedinMenu from "./LoggedinMenu";
+import { HeaderContainer, HeaderContent } from "./styles/HeaderStyles";
 import Logo from "./logo";
 import Link from "next/link";
 
@@ -29,12 +30,7 @@ const Header = () => {
           <nav>
             <AddButton />
             <div>
-              <Link href="/login">
-                <a>로그인</a>
-              </Link>
-              <Link href="/signup">
-                <a>회원가입</a>
-              </Link>
+              <LoggedinMenu />
             </div>
           </nav>
         </div>

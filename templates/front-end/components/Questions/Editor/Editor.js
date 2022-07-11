@@ -8,7 +8,10 @@ import DEFAULTVALUE from "./defaultValue";
 const ReactEditorJS = createReactEditorJS();
 
 const Editor = ({ imageArray, handleInitialize, data }) => {
+  console.log("data from Editor", typeof data);
+  console.log("data from Editor", data);
   const [editorTools, setEditorTools] = useState("");
+  // const readData = JSON.parse(data);
 
   // 에디터 사이즈 설정
   const EditorSize = css`
@@ -17,15 +20,15 @@ const Editor = ({ imageArray, handleInitialize, data }) => {
   `;
 
   // 에디터 컴포넌트 구현
-  let editorComponent = !editorTools ? (
+  const editorComponent = !editorTools ? (
     <LoadingOutlined />
   ) : (
     <ReactEditorJS
       css={EditorSize}
       onInitialize={handleInitialize}
       tools={editorTools}
-      placeholder={`...을 작성해주세요`}
-      defaultValue={DEFAULTVALUE}
+      placeholder={`질문/답변을 작성해주세요`}
+      data={data}
     />
   );
 
