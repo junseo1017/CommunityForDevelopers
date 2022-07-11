@@ -28,13 +28,11 @@ export const login = createAsyncThunk("user/login", async (data, { rejectWithVal
 
 export const userinfo = createAsyncThunk("user/nickname", async (data, { rejectWithValue }) => {
   try {
-    console.log(`localStorage.getItem("token")`);
     const response = await axios.get("/api/users/token", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);

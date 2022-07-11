@@ -7,7 +7,7 @@ const initialState = {
   // 새로고침 발생할 경우 로그인 여부 체크
   isLoggedinCheck: false,
   // 유저 정보
-  userInfo: null,
+  userInfo: { _id: null },
   // 회원가입
   signupLoading: false,
   signupDone: false,
@@ -32,6 +32,7 @@ const userSlice = createSlice({
   reducers: {
     logout(state) {
       state.isLoggedin = false;
+      state.userInfo = null;
     },
     addLoginStatus(state, action) {
       state.isLoggedin = action.payload;

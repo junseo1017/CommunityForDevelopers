@@ -11,10 +11,12 @@ import { useCallback } from "react";
 const MyApp = ({ Component, pageProps }) => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.isLoggedin);
-  const getuserInfo = () => {
-    console.log(token);
+
+  const getuserInfo = useCallback(() => {
     dispatch(userinfo(token));
-  };
+    console.log("check실행");
+  }, [token]);
+
   const checkLoginStatus = useCallback(() => {
     dispatch(userSlice.actions.checkLoggedin());
     const checkStorage = localStorage.getItem("token");

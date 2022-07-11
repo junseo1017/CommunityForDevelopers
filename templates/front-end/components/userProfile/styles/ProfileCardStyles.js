@@ -30,7 +30,6 @@ export const ProfileCardContainer = css`
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
   margin: 0 10px;
   @media (max-width: 768px) {
-    display: block;
     width: 100%;
     height: 250px;
     margin: 10px 0;
@@ -48,6 +47,7 @@ export const ProfileCardContainer = css`
       flex-direction: row;
       justify-content: center;
       align-items: center;
+      gap: 30px;
     }
   }
 `;
@@ -56,7 +56,7 @@ export const ProfileCardContent = css`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  gap: 10px;
+  gap: 20px;
   border-top: solid 1px #eaedef;
   padding-top: 20px;
   @media (max-width: 768px) {
@@ -66,6 +66,12 @@ export const ProfileCardContent = css`
     justify-content: center;
     align-items: center;
     border-top: none;
+    gap: 20px;
+    padding: 0px;
+    p,
+    h3 {
+      margin: 0;
+    }
   }
   & > div {
     ${CardDetail}
