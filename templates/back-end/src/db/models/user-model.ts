@@ -10,7 +10,10 @@ export class UserModel {
   }
 
   async findById(userId: string) {
-    return await User.findOne({ userId }, { email: 1, nickname: 1 });
+    return await User.findOne(
+      { userId },
+      { email: 1, nickname: 1, job: 1, skills: 1, imgUrl: 1 }
+    );
   }
 
   async findAll() {
