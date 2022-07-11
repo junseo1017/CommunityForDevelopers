@@ -46,7 +46,7 @@ class UserService {
 
     const user = await this.userModel.findByEmail(email);
 
-    if (!user || user.deleted) {
+    if (!user /*|| user.deleted*/) {
       throw new Error(
         "해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요."
       );
@@ -74,7 +74,7 @@ class UserService {
 
   //유저별 게시글 조회
 
-  // tokem으로 user 정보 보기
+  // token으로 user 정보 보기
   async getUserInfo(userId: string) {
     const userInfo = await this.userModel.findById(userId);
     if (!userInfo) {

@@ -1,5 +1,6 @@
 import { Schema } from "mongoose";
 import { shortId } from "./types/short-id";
+import MongooseDelete from "mongoose-delete";
 
 const UserSchema = new Schema(
   {
@@ -36,13 +37,8 @@ const UserSchema = new Schema(
     },
     role: {
       type: String,
-      required: false,
-      default: "user",
-    },
-    deleted: {
-      type: Schema.Types.Boolean,
       required: true,
-      default: "false",
+      default: "user",
     },
   },
   {
@@ -50,4 +46,8 @@ const UserSchema = new Schema(
     timestamps: true,
   }
 );
+
+//soft delete plugin
+UserSchema.plugin(MongooseDelete);
+
 export { UserSchema };
