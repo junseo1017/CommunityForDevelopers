@@ -31,7 +31,7 @@ export const myInfoFormStyle = css`
     justify-content: center;
     width: 100%;
     & input {
-      width: 80%;
+      width: 100%;
     }
   } ;
 `;

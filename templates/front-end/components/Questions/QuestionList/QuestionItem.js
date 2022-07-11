@@ -3,23 +3,24 @@ import { css, jsx } from "@emotion/react";
 import { Badge, Tag } from "antd";
 import { MessageOutlined } from "@ant-design/icons";
 import { TitleContainer, DescriptionContainer } from "../styles/QuestionStyle";
+import Link from "next/link";
 
-const QuestionItem = ({ questId, title, description, recommendations, tags, user, date }) => {
+const QuestionItem = ({ qnaId, title, content, recommendations, tags, user, date }) => {
   const formattedDate = `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
 
   return (
-    <div key={questId}>
+    <div key={qnaId}>
       <div css={TitleContainer}>
         <Badge count={recommendations}>
           <MessageOutlined />
         </Badge>
-        <a href={`/questions/${questId}`}>{title}</a>
+        <Link href={`/questions/${qnaId}`}>{title}</Link>
       </div>
       <div css={DescriptionContainer}>
-        <div>{description}</div>
+        {/* <div>{content}</div> */}
         <div>
           {tags.map((tag, idx) => {
-            return <Tag key={`${questId} + ${idx}`}>{tag}</Tag>;
+            return <Tag key={`${qnaId} + ${idx}`}>{tag}</Tag>;
           })}
         </div>
         <div>{`(${user}가 ${formattedDate}에 질문함)`}</div>

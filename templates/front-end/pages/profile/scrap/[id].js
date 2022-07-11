@@ -7,8 +7,6 @@ import ProfileScrap from "../../../components/userProfile/ProfileScrap";
 import { ProfileContentContainer } from "../profileStyle";
 import { useRouter } from "next/router";
 const Profile = () => {
-  const router = useRouter();
-  console.log(router.query.id);
   return (
     <AppLayout>
       <ProfileNav />
