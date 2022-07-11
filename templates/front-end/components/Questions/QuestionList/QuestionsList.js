@@ -11,13 +11,12 @@ const QuestionsList = ({ questions }) => {
       <div css={ColFlexBox}>
         {questions.map((questions) => {
           return (
-            <div key={questions.questId}>
+            <div key={questions.qnaId}>
               <QuestionItem
-                questId={questions.questId}
+                qnaId={questions.qnaId}
                 title={questions.title}
-                description={questions.description}
-                recommendations={questions.recommendations}
-                numOfAnswers={questions.answers.length}
+                content={questions.content}
+                recommendations={questions.recommendations.length}
                 tags={questions.tags}
                 user={questions.user}
                 date={questions.date}

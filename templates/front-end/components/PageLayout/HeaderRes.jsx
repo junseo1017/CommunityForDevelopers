@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import AddButton from "./AddButtone";
+import AddButton from "./AddButton";
 import MenuButton from "./MenuButton";
-import { HeaderContainer, HeaderContent, HeaderLogo } from "./styles/HeaderStyles";
-import { MenuOutlined } from "@ant-design/icons";
+import { HeaderContainer, HeaderContent } from "./styles/HeaderStyles";
+
 import Logo from "./logo";
 import Link from "next/link";
 const Header = () => {

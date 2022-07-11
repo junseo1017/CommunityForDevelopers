@@ -7,13 +7,8 @@ import axios from "axios";
 import { signup } from "../../actions/sign";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import {
-  SignUpFormStyle,
-  SignUpOAuthStyle,
-  SignUpContentStyle,
-  signUpBtn,
-  errorInput,
-} from "./SignStyles";
+import { SignUpFormStyle, SignUpContentStyle, signUpBtn, errorInput } from "./SignStyles";
+import OAuthSign from "./OAuthSign";
 
 const RegExp = {
   email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -21,26 +16,25 @@ const RegExp = {
 };
 
 const SignUpForm = () => {
-  const [action, setAction] = useState(null);
+  const [signupFlag, setSignupFlag] = useState(null);
   const dispatch = useDispatch();
-  const { signupLoading, signupDone, signupError } = useSelector((state) => state.user);
+  const { signupDone, signupError } = useSelector((state) => state.user);
   const {
     register,
-    unregister,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
 
   useEffect(() => {
-    if (action) {
+    if (signupFlag) {
       if (signupDone) {
-        message.success("회원가입에 성공하였습니다.").then(() => Router.push("/").then());
+        message.success("회원가입에 성공하였습니다.").then(() => Router.push("/login").then());
+        setSignupFlag(null);
       }
       if (signupError) {
-        message.error(JSON.stringify(signupError, null, 4)).then();
+        message.error(JSON.stringify(signupError.reason, null, 4)).then();
       }
-      setAction(null);
     }
   }, [signupDone, signupError]);
 
@@ -52,7 +46,7 @@ const SignUpForm = () => {
         password: data.password,
       }),
     );
-    setAction(true);
+    setSignupFlag(true);
   };
 
   const emailErrorMessage = () => {
@@ -91,13 +85,7 @@ const SignUpForm = () => {
     <div css={SignUpFormStyle}>
       <div>
         <h2>회원가입</h2>
-        <section css={SignUpOAuthStyle}>
-          <h3>간편 회원가입</h3>
-          <div>
-            <p>네이버</p>
-            <p>카카오</p>
-          </div>
-        </section>
+        <OAuthSign />
         <Divider plain></Divider>
         <section css={SignUpContentStyle}>
           <form onSubmit={handleSubmit(onSubmit)}>
