@@ -1,9 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState, useCallback } from "react";
-
+import { useSelector, useDispatch } from "react-redux";
 import Head from "next/head";
 import AppLayout from "../components/AppLayout";
 import dynamic from "next/dynamic";
+import { portfolioActions } from "../reducers/portfolio";
 import ResultComp from "../components/CreatePortfolio/ResultComp";
 import CreatePortfolioCard from "../components/Portfolo/CreatePortfolioCard";
 import StepsComp from "../components/CreatePortfolio/StepsComp";
@@ -16,18 +17,35 @@ let Editor = dynamic(() => import("../components/Editor/Editor"), {
 });
 
 const createPortfolio = () => {
+  const dispatch = useDispatch();
   const [current, setCurrent] = useState(0);
+  const [cardValue, setCardValue] = useState({
+    titleValue: "",
+    descriptionValue: "",
+    imageValue: "",
+    skillsValue: "",
+  });
+  const setPortfCardValue = useCallback((value) => {
+    setCardValue(value);
+  }, []);
   const setCurrentStep = useCallback((num) => {
     setCurrent(num);
   }, []);
-  const next = () => {
-    setCurrent(current + 1);
-  };
+  const next = useCallback(() => {
+    setCurrent((prev) => prev + 1);
+  }, [current]);
+  const prev = useCallback(() => {
+    setCurrent((prev) => prev - 1);
+  }, [current]);
+  const onSubmitCard = useCallback(() => {
+    console.log("Received values of form: ", cardValue);
+    let formData = new FormData();
+    formData.append("file", cardValue.image[0].originFileObj);
+    dispatch(portfolioActions.updateState({ ...cardValue, image: "tempURL" }));
+  }, [cardValue]);
   const [savePortf, handleInitialize, imageArray] = useEditor();
   const [modalVisible, setModalVisible, handleOk, confirmLoading, modalText, showModal] =
     useModalAsync(savePortf, "포트폴리오를 저장하시겠습니까?", next);
-
-  const onSubmit = useCallback((data) => console.log(data), []);
 
   return (
     <AppLayout>
@@ -44,13 +62,15 @@ const createPortfolio = () => {
       <StepsComp
         current={current}
         setCurrent={setCurrentStep}
+        onSubmitCard={onSubmitCard}
         save={savePortf}
         showModal={showModal}
         next={next}
+        prev={prev}
       />
 
       {current === 2 && <ResultComp />}
-      {current === 0 && <CreatePortfolioCard onSubmit={onSubmit} />}
+      {current === 0 && <CreatePortfolioCard setPortfCardValue={setPortfCardValue} />}
       {current === 1 && <Editor handleInitialize={handleInitialize} imageArray={imageArray} />}
     </AppLayout>
   );

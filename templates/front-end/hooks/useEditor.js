@@ -1,7 +1,9 @@
 import React, { useState, useCallback, useRef } from "react";
+import { useSelector } from "react-redux";
 
 const useEditor = () => {
   const editorCore = useRef(null);
+  const portfolioValue = useSelector(({ portfolio }) => portfolio);
   const [imageArray, setImageArray] = useState([]); /* to keep track of uploaded image */
   const handleInitialize = useCallback((instance) => {
     editorCore.current = instance;
@@ -10,6 +12,7 @@ const useEditor = () => {
     const array = imageArray.filter((image) => image !== img);
     setImageArray(array);
   }
+
   const savePortfolio = async () => {
     /* get the editor.js content and save it to server */
     try {
@@ -18,11 +21,10 @@ const useEditor = () => {
       const data = {
         content: JSON.stringify(savedData),
       };
-      console.log(data);
 
       /* Clear all the unused images from server */
       await clearEditorLeftoverImages();
-      return data;
+      return { ...portfolioValue, ...data };
       /* Save portfolio to server */
       //createPortfolio(data);
     } catch (err) {
@@ -56,7 +58,7 @@ const useEditor = () => {
       }
     }
   };
-  const savePortf = useCallback(savePortfolio, []);
+  const savePortf = useCallback(savePortfolio, [portfolioValue]);
 
   return [savePortf, handleInitialize, imageArray];
 };

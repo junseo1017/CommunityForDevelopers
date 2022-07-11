@@ -6,16 +6,7 @@ import { StepsPadding, ButtonCss } from "./styles/StepsComponentStyle";
 import { blackBtn } from "../Common/style/btnStyle";
 const { Step } = Steps;
 
-const StepsComp = ({ setCurrent, current = 0, save, showModal, next }) => {
-  const prev = () => {
-    setCurrent(current - 1);
-  };
-
-  const onChange = (value) => {
-    console.log("onChange:", current);
-    setCurrent(value);
-  };
-
+const StepsComp = ({ setCurrent, current = 0, showModal, next, onSubmitCard, prev }) => {
   return (
     <>
       <Steps css={StepsPadding} current={current}>
@@ -43,7 +34,12 @@ const StepsComp = ({ setCurrent, current = 0, save, showModal, next }) => {
             </Button>
           )}
           {current < 1 && (
-            <Button type="primary" onClick={() => next()}>
+            <Button
+              type="primary"
+              onClick={() => {
+                onSubmitCard();
+                next();
+              }}>
               Next
             </Button>
           )}

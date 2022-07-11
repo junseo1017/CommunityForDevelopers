@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
+import Link from "next/link";
 import { Dropdown, Menu, Space } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 
@@ -30,7 +31,11 @@ const AddButton = () => {
     <Menu
       items={[
         {
-          label: <a href="/"> 내 포트폴리오 추가하기</a>,
+          label: (
+            <Link href="/createPortfolio">
+              <a> 내 포트폴리오 추가하기</a>
+            </Link>
+          ),
           key: "1",
         },
         {

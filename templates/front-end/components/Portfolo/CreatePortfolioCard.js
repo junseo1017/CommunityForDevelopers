@@ -7,7 +7,9 @@ import {
   LeftCard,
   RightCard,
 } from "./styles/CreatePortfolioCardStyle";
-import React, { useState } from "react";
+// import React, { useEffect, useState } from "react";
+// import { useSelector, useDispatch } from "react-redux";
+// import { portfolioActions } from "../../reducers/portfolio";
 import { UploadOutlined } from "@ant-design/icons";
 import TagRender from "./TagRender";
 import useSelects from "../../hooks/useSelects";
@@ -29,11 +31,21 @@ import PortfolioCard from "./PortfolioCard";
 import { css } from "@emotion/react";
 const { Step } = Steps;
 
-const CreatePortfolioCard = () => {
+const CreatePortfolioCard = ({ setPortfCardValue }) => {
   const [items, name, onNameChange, addItem] = useSelects();
+  //const portfolioValue = useSelector(({ portfolio }) => portfolio);
+
   const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+    values;
   };
+  const onChange = (value) => {
+    console.log("onChange:", current);
+    setCurrent(value);
+  };
+  // useEffect(() => {
+  //   console.log(portfolioValue);
+  // }, [portfolioValue]);
+
   const normFile = (e) => {
     console.log("Upload event:", e);
     if (Array.isArray(e)) {
@@ -54,6 +66,9 @@ const CreatePortfolioCard = () => {
     <div css={Container}>
       <Card css={LeftCard}>
         <Form
+          onValuesChange={(value, allValues) => {
+            setPortfCardValue(allValues);
+          }}
           {...FormItemLayout}
           form={form}
           name="register"
@@ -158,11 +173,6 @@ const CreatePortfolioCard = () => {
                 <Option key={item}>{item}</Option>
               ))}
             </Select>
-          </Form.Item>
-          <Form.Item {...TailFormItemLayout}>
-            <Button type="primary" htmlType="submit">
-              Register
-            </Button>
           </Form.Item>
         </Form>
       </Card>

@@ -14,6 +14,7 @@ const useModalAsync = (asyncCallback, modalDescription, optionalCallback) => {
     setConfirmLoading(true);
     try {
       const content = await asyncCallback();
+      console.log(content);
       setTimeout(() => {
         setModalVisible(false);
         setConfirmLoading(false);
