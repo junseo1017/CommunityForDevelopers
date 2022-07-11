@@ -26,6 +26,9 @@ qnaRouter.get(
   }
 );
 
+//localhost:5000/api/qnas/:qnaId
+//localhost:5000/api/qnas/:userId
+
 // 아래와 같이 코딩하면 안됨... 경로가 위에랑 겹침 어떻게 하지..? query string 사용해야 될거같은데
 qnaRouter.get(
   "/:userId",

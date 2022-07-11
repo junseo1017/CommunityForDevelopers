@@ -20,8 +20,7 @@ class UserService {
     const user = await this.userModel.findByEmail(email);
     if (user) {
       throw new Error(
-        "Forbidden"
-        // "이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요."
+        "이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요."
       );
     }
 
@@ -75,16 +74,13 @@ class UserService {
 
   //유저별 게시글 조회
 
-  // 내 정보 보기
-  async getMyInfo(userId: string) {
-    if (!userId) {
-      throw new Error("로그인이 필요합니다.");
+  // tokem으로 user 정보 보기
+  async getUserInfo(userId: string) {
+    const userInfo = await this.userModel.findById(userId);
+    if (!userInfo) {
+      throw new Error("해당 ID에 맞는 회원 정보를 불러올 수 없습니다.");
     }
-    const my = await this.userModel.findById(userId);
-    if (!my) {
-      throw new Error("회원 정보를 불러올 수 없습니다.");
-    }
-    return my;
+    return userInfo;
   }
 
   async getUsers() {
