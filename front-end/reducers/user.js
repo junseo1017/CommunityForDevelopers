@@ -35,7 +35,7 @@ const userSlice = createSlice({
       state.userInfo = null;
     },
     addLoginStatus(state, action) {
-      state.isLoggedin = action.payload;
+      state.isLoggedin = action.payload.token;
     },
     checkLoggedin(state) {
       state.isLoggedinCheck = true;
