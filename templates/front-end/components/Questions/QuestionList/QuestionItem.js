@@ -5,13 +5,16 @@ import { MessageOutlined } from "@ant-design/icons";
 import { TitleContainer, DescriptionContainer } from "../styles/QuestionStyle";
 import Link from "next/link";
 
-const QuestionItem = ({ qnaId, title, content, recommendations, tags, user, date }) => {
-  const formattedDate = `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+const QuestionItem = ({ qnaId, title, contents, recommends, tags, user, date }) => {
+  console.log(qnaId, title, contents, recommends, tags, user, date);
+  const formattedDate = `${new Date(date).getFullYear()}년 ${
+    new Date(date).getMonth() + 1
+  }월 ${new Date(date).getDate()}일`;
 
   return (
     <div key={qnaId}>
       <div css={TitleContainer}>
-        <Badge count={recommendations}>
+        <Badge count={recommends}>
           <MessageOutlined />
         </Badge>
         <Link href={`/questions/${qnaId}`}>{title}</Link>

@@ -6,6 +6,7 @@ import TopButton from "../TopButton";
 import { ColFlexBox } from "../styles/QuestionStyle";
 
 const QuestionsList = ({ questions }) => {
+  console.log("List questions", questions);
   return (
     <>
       <div css={ColFlexBox}>
@@ -15,11 +16,12 @@ const QuestionsList = ({ questions }) => {
               <QuestionItem
                 qnaId={questions.qnaId}
                 title={questions.title}
-                content={questions.content}
-                recommendations={questions.recommendations.length}
+                contents={questions.contents}
+                imgUrl={questions.imgUrl}
+                recommends={questions.recommends.length}
                 tags={questions.tags}
-                user={questions.user}
-                date={questions.date}
+                user={questions.userId}
+                date={questions.createdAt}
               />
               <Divider plain />
             </div>
