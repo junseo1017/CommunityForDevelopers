@@ -9,7 +9,7 @@ userRouter.post(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
     const { nickname, email, password, job, imgUrl, skills } = req.body;
-
+    console.log(req.body);
     try {
       const newUser = await userService.addUser({
         nickname,
