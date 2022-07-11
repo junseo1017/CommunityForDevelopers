@@ -1,10 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { signup, login } from "../actions/sign";
+import { signup, login, userinfo } from "../actions/user";
 
 const initialState = {
-  isLoggedin: false, // 로그인 여부
-  // refresh할 경우 로그인 여부 체크
+  // 로그인 여부
+  isLoggedin: false,
+  // 새로고침 발생할 경우 로그인 여부 체크
   isLoggedinCheck: false,
+  // 유저 정보
+  userInfo: null,
   // 회원가입
   signupLoading: false,
   signupDone: false,
@@ -17,6 +20,10 @@ const initialState = {
   logoutLoading: false,
   logoutDone: false,
   logoutError: null,
+  // 유저 정보 조회
+  loadUserLoading: false,
+  loadUserDone: false,
+  loadUserError: null,
 };
 
 const userSlice = createSlice({
@@ -28,13 +35,9 @@ const userSlice = createSlice({
     },
     addLoginStatus(state, action) {
       state.isLoggedin = action.payload;
-      state.isLoggedinCheck = false;
     },
     checkLoggedin(state) {
       state.isLoggedinCheck = true;
-    },
-    checkLoggedinDone(state) {
-      state.isLoggedinCheck = false;
     },
   },
   extraReducers: (builder) =>
@@ -73,6 +76,22 @@ const userSlice = createSlice({
       .addCase(signup.rejected, (state, action) => {
         state.signupLoading = false;
         state.signupError = action.payload;
+      })
+      .addCase(userinfo.pending, (state) => {
+        console.log("pending");
+        state.loadUserLoading = true;
+        state.loadUserDone = false;
+        state.loadUserError = null;
+      })
+      .addCase(userinfo.fulfilled, (state, action) => {
+        console.log("fulfilled");
+        state.loadUserLoading = false;
+        state.userInfo = action.payload;
+        state.loadUserDone = true;
+      })
+      .addCase(userinfo.rejected, (state, action) => {
+        state.loadUserLoading = false;
+        state.loadUserError = action.payload;
       })
       .addDefaultCase((state) => state),
 });

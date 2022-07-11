@@ -5,23 +5,27 @@ import "antd/dist/antd.css";
 import { useEffect } from "react";
 import wrapper from "../store/index";
 import { useSelector, useDispatch } from "react-redux";
+import { userinfo } from "../actions/user";
 import userSlice from "../reducers/user";
 import { useCallback } from "react";
 const MyApp = ({ Component, pageProps }) => {
   const dispatch = useDispatch();
-
+  const token = useSelector((state) => state.user.isLoggedin);
   const checkLoginStatus = useCallback(() => {
     dispatch(userSlice.actions.checkLoggedin());
     const checkStorage = localStorage.getItem("token");
     if (!checkStorage) {
-      return dispatch(userSlice.actions.checkLoggedinDone());
+      return;
     }
     dispatch(userSlice.actions.addLoginStatus(checkStorage));
+    getuserInfo();
   }, []);
 
   useEffect(() => {
     checkLoginStatus();
+    getuserInfo();
   }, []);
+
   return (
     <>
       <Head>
