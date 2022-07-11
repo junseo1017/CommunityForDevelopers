@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { portfolioService } from "../services/portfolio-service";
 import { extendReq, loginRequired } from "../middlewares/login-required";
-
+import { portfolioJoiSchema } from "../db/schemas/joi-schemas/portfolio-schema";
 const portfolioRouter = Router();
 
 portfolioRouter.get(
@@ -30,15 +30,19 @@ portfolioRouter.get(
 );
 
 portfolioRouter.post(
-  "/add",
+  "/",
   loginRequired,
   async (req: extendReq, res: Response, next: NextFunction) => {
     try {
       const userId = req.currentUserId || "";
-      if (!userId) {
-        throw new Error("Forbidden");
-      }
       const { title, description, skills, content } = req.body;
+      await portfolioJoiSchema.validateAsync({
+        userId,
+        title,
+        description,
+        skills,
+        content,
+      });
       const newPortfolio = await portfolioService.addPortfolio({
         userId,
         title,
@@ -55,14 +59,19 @@ portfolioRouter.post(
 
 portfolioRouter.put(
   "/:portId",
+  loginRequired,
   async (req: extendReq, res: Response, next: NextFunction) => {
     try {
       const portId = req.params.portId;
       const userId = req.currentUserId || "";
-      if (!userId) {
-        throw new Error("Forbidden");
-      }
       const { title, description, skills, content } = req.body;
+      await portfolioJoiSchema.validateAsync({
+        userId,
+        title,
+        description,
+        skills,
+        content,
+      });
       const toUpdate = {
         ...(title && { title }),
         ...(description && { description }),
@@ -82,13 +91,15 @@ portfolioRouter.put(
 );
 
 portfolioRouter.delete(
-  "/:portid",
+  "/:portId",
   loginRequired,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: extendReq, res: Response, next: NextFunction) => {
     try {
       const portId = req.params.portId;
+      const userId = req.currentUserId || "";
       const deletedPortfolioInfo = await portfolioService.deletePortfolio(
-        portId
+        portId,
+        userId
       );
       res.status(200).json(deletedPortfolioInfo);
     } catch (error) {
