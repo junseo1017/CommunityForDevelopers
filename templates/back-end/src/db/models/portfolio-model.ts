@@ -6,7 +6,13 @@ const Portfolio = model("portofolios", PortfolioSchema);
 
 export class PortfolioModel {
   async findById(portId: string) {
-    return await Portfolio.findOne({ portId });
+    return await Portfolio.findOne({ portId }).populate({
+      path: "comments",
+      populate: {
+        path: "author",
+        select: ["nickname", "deleted"],
+      },
+    });
   }
 
   async findAll() {

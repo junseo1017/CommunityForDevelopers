@@ -17,7 +17,11 @@ app.use(express.urlencoded({ extended: false }));
 // routing
 app.use("/api/users", Routers.userRouter);
 app.use("/api/portfolios", Routers.portfolioRouter);
+<<<<<<< HEAD
+app.use("/api/comments", Routers.commentRouter);
+=======
 app.use("/api/qnas", Routers.qnaRouter);
 
+>>>>>>> 146bb6c83cb482b01ee06f94ffea3183c50c674d
 app.use(errorHandler);
 export { app };

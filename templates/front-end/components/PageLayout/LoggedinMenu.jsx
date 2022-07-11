@@ -1,28 +1,26 @@
 import { useSelector, useDispatch } from "react-redux";
 import Link from "next/link";
 import userSlice from "../../reducers/user";
+import { useEffect } from "react";
 
 const LoggedinMenu = () => {
   const dispatch = useDispatch();
-  const { isLoggedin, isLoggedinCheck } = useSelector((state) => state.user);
-
+  const { isLoggedin, isLoggedinCheck, userInfo } = useSelector((state) => state.user);
   const logoutHandler = () => {
     localStorage.removeItem("token");
     dispatch(userSlice.actions.logout());
   };
 
-  const findOne = () => {
-    console.log("hi");
-  };
+  useEffect(() => {}, []);
 
   return (
     <>
       {isLoggedinCheck ? (
         isLoggedin ? (
           <>
-            {/* <Link onClick={findOne} href="#"> */}
-            <a onClick={findOne}>내 정보</a>
-            {/* </Link> */}
+            <Link href={`/profile/${userInfo._id}`}>
+              <a>내 정보</a>
+            </Link>
             <a onClick={logoutHandler}>로그아웃</a>
           </>
         ) : (

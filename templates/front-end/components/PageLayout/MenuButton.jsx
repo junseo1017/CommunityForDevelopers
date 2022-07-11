@@ -2,7 +2,6 @@
 import { css, jsx } from "@emotion/react";
 import { useState } from "react";
 import { Drawer } from "antd";
-import { useSelector } from "react-redux";
 import { MenuOutlined } from "@ant-design/icons";
 import LoggedinMenu from "./LoggedinMenu";
 
@@ -38,7 +37,6 @@ const DrawerStyle = css`
 `;
 
 const MenuButton = () => {
-  const { isLoggedin } = useSelector((state) => state.user);
   const [visible, setVisible] = useState(false);
 
   const showDrawer = () => {
