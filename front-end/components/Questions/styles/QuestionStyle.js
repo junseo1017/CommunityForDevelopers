@@ -157,12 +157,38 @@ export const EditorContainer = css`
   width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  padding: 0 2em;
+  gap: 1em;
 
-  & > h2 {
-    align-self: center;
+  & > h1 {
+    color: #1890ff;
+    font-weight: bold;
+  }
+
+  & > input.ant-input-lg {
+    width: 50%;
+  }
+
+  & > span,
+  input.ant-input-sm {
+    width: 7em;
+  }
+
+  & > div {
+    width: 80%;
+    display: flex;
+    flex-wrap: wrap;
   }
 
   & > button {
     align-self: end;
+  }
+
+  @media (max-width: 768px) {
+    & > input.ant-input-lg,
+    input.ant-input-sm {
+      width: 80%;
+    }
   }
 `;
