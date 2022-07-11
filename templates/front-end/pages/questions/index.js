@@ -2,22 +2,23 @@ import React, { useState, useEffect } from "react";
 import Questions from "../../components/Questions/QuestionList/Questions";
 import AppLayout from "../../components/AppLayout";
 import Head from "next/head";
-import { dummy_qna } from "../../components/Questions/dummy";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { qnaActions, getQnaData } from "../../reducers/qna";
 
-const questions = () => {
-  // 더미데이터 활용
-  const questions = dummy_qna.filter((qna) => !qna.isAnswer);
+const questions = ({ result }) => {
+  // const [qnas, setQnas] = useState([]);
+  console.log("inner result", result); // 찍힘
 
-  const [qnas, setQnas] = useState([]);
+  const dispatch = useDispatch();
+  const qnas = useSelector((state) => state.qnas);
 
   useEffect(() => {
-    const getQnaData = async () => {
-      const response = await axios.get("http://localhost:5000/api/qna");
-      console.log("response", response);
-      setQnas(response);
-    };
-    getQnaData();
+    dispatch(qnaActions.getQnaData());
+  }, [dispatch]);
+
+  useEffect(() => {
+    setQnas(result);
   }, []);
 
   return (
@@ -25,9 +26,22 @@ const questions = () => {
       <Head>
         <title>모든 질문</title>
       </Head>
-      <Questions questions={questions} />
+      <Questions questions={qnas} />
     </AppLayout>
   );
 };
 
 export default questions;
+
+// export const getServerSideProps = async () => {
+//   const response = await axios.get("http://localhost:5000/api/qnas");
+//   // console.log("response", response); // 찍힘
+//   const result = response.data;
+//   console.log("result", result); // 찍힘
+
+//   return {
+//     props: {
+//       result,
+//     },
+//   };
+// };

@@ -15,18 +15,29 @@ import {
 import Link from "next/link";
 import Editor from "../Editor/Editor";
 import AddEditor from "../Editor/AddEditor";
-import { dummy_qna } from "../dummy";
 import Output from "editorjs-react-renderer";
+import axios from "axios";
 
 const QuestionDetail = ({ qnaId }) => {
   const [isEditMode, setIsEditMode] = useState(false);
+  const [qna, setQna] = useState([]);
+
+  useEffect(() => {
+    const getQnaDataByQnaId = async () => {
+      const response = await axios.get(`http://localhost:5000/api/qna/${qnaId}`);
+      const result = response.data;
+      setQna(result);
+    };
+
+    getQnaDataByQnaId();
+  }, []);
 
   // qnaId로 조회하는 api
-  const question = dummy_qna.filter((qna) => qna.qnaId === qnaId);
+  // const question = dummy_qna.filter((qna) => qna.qnaId === qnaId);
 
   // parentQuestion === qnaId && isAnswer로 조회하는 api
   // 아니면 qnaId, parentQuestion이 url의 qnaId와 일치하는 글의 배열을 가져와서 작업
-  const answers = dummy_qna.filter((qna) => qna.isAnswer && qna.parentQuestion === qnaId);
+  // const answers = dummy_qna.filter((qna) => qna.isAnswer && qna.parentQuestion === qnaId);
 
   return (
     <div css={DetailContainer}>
