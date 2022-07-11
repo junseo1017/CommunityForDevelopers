@@ -13,9 +13,8 @@ const questions = () => {
 
   useEffect(() => {
     const getQnaData = async () => {
-      const response = await axios.get("/api/qna");
-      console.log(response);
-
+      const response = await axios.get("http://localhost:5000/api/qna");
+      console.log("response", response);
       setQnas(response);
     };
     getQnaData();
