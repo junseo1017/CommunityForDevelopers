@@ -12,23 +12,25 @@ export const SignInFormStyle = css`
   & > div > input {
     display: flex;
     flex-direction: column;
-
     border: 1px solid rgb(219, 219, 219);
     font-size: 15px;
     line-height: 21px;
+    transition: 100ms linear;
+
     &::placeholder {
       padding-left: 10px;
     }
     &:focus {
       outline: none !important;
       box-shadow: 0 0 10px #719ece;
+      z-index: 10000;
     }
   }
   & > div {
-    input:first-child {
+    input:first-of-type {
       border-radius: 4px 4px 0 0;
     }
-    input:last-child {
+    input:last-of-type {
       border-radius: 0 0 4px 4px;
     }
   }
@@ -111,7 +113,7 @@ export const SignUpContentStyle = css`
     font-weight: 700;
     margin: 5px 0;
     border: 1px solid rgb(219, 219, 219);
-
+    transition: 100ms linear;
     ::placeholder {
       padding-left: 10px;
       font-weight: 500;

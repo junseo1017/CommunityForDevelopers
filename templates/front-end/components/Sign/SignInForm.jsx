@@ -1,7 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
+import { Divider, message } from "antd";
 import { useForm } from "react-hook-form";
+import Router from "next/router";
 import { SignInFormStyle, SignBtnStyle, errorInput } from "./SignStyles";
+import { login } from "../../actions/sign";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const RegExp = {
   email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -9,12 +14,39 @@ const RegExp = {
 };
 
 const SignInForm = () => {
+  const dispatch = useDispatch();
+  const [signinFlag, setSigninFlag] = useState(null);
+  const { isLoggedin, loginError } = useSelector((state) => state.user);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
+
+  useEffect(() => {
+    if (signinFlag) {
+      if (isLoggedin) {
+        localStorage.setItem("token", isLoggedin.token);
+        Router.push("/");
+        setSigninFlag(null);
+      }
+      if (loginError) {
+        console.log(loginError);
+        message.error(JSON.stringify(loginError.reason, null, 4)).then();
+        setSigninFlag(null);
+      }
+    }
+  }, [isLoggedin, loginError]);
+
+  const onSubmit = (data) => {
+    dispatch(
+      login({
+        email: data.email,
+        password: data.password,
+      }),
+    );
+    setSigninFlag(true);
+  };
 
   return (
     <form css={SignInFormStyle} onSubmit={handleSubmit(onSubmit)}>
@@ -30,7 +62,8 @@ const SignInForm = () => {
           })}
         />
         <input
-          css={errors.email && errorInput}
+          css={errors.password && errorInput}
+          type="password"
           placeholder="비밀번호을 입력해주세요"
           {...register("password", {
             required: true,
