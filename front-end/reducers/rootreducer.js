@@ -10,7 +10,7 @@ const rootReducer = (state, action) => {
       return action.payload;
     default: {
       const combinedReducer = combineReducers({
-        /*user: userSlice.reducer,*/
+        user: userSlice.reducer,
         portfolio: portfolioSlice.reducer,
       });
       return combinedReducer(state, action);
