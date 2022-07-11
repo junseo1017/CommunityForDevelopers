@@ -10,11 +10,10 @@ const Editor = dynamic(() => import("./Editor"), {
   ssr: false,
 });
 
-const AddEditor = ({ titleData, data, isAnswer, parentQnaId }) => {
+const AddEditor = ({ title, data, isAnswer, parentQnaId, tags }) => {
   const editorCore = useRef(null);
   // 업로드된 이미지 추적
   const [imageArray, setImageArray] = useState([]);
-  const [title, setTitle] = useState("");
 
   const handleInitialize = useCallback((instance) => {
     editorCore.current = instance;
@@ -30,16 +29,13 @@ const AddEditor = ({ titleData, data, isAnswer, parentQnaId }) => {
     // 에디터의 컨텐츠를 가져와 서버에 저장하기
     try {
       const savedData = await editorCore.current.save();
-      const data = {
-        title: titleData,
-        contents: JSON.stringify(savedData),
-      };
 
       await axios.post("/api/qnas", {
-        title: data.title,
-        contents: data.contents,
+        title,
+        contents: JSON.stringify(savedData),
         isAnswer,
         parentQnaId,
+        tags,
       });
 
       // 서버에서 사용하지 않는 이미지 제거하기

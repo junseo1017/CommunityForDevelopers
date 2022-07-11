@@ -71,7 +71,7 @@ const QuestionDetail = ({ qna }) => {
               placeholder="답변의 제목을 작성하세요"
               onChange={(e) => setAnswerTItle(e.target.value)}
             />
-            <AddEditor titleData={answerTitle} isAnswer parentQnaId={qna.qnaId} />
+            <AddEditor title={answerTitle} isAnswer parentQnaId={qna.qnaId} />
           </div>
         )}
         <div></div>
