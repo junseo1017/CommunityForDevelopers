@@ -17,12 +17,12 @@ export interface IUserInfo {
   skills: string[];
 }
 
-export interface IloginInfo {
+export interface ILoginInfo {
   email: string;
   password: string;
 }
 
-export interface IsearchInfo {
+export interface ISearchInfo {
   userId: string;
   currentPassword: string;
 }

@@ -1,8 +1,8 @@
 import { UserModel, userModel } from "../db";
 import {
   IUserInfo,
-  IloginInfo,
-  IsearchInfo,
+  ILoginInfo,
+  ISearchInfo,
 } from "../interfaces/user-interface";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -20,7 +20,8 @@ class UserService {
     const user = await this.userModel.findByEmail(email);
     if (user) {
       throw new Error(
-        "이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요."
+        "Forbidden"
+        // "이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요."
       );
     }
 
@@ -41,7 +42,7 @@ class UserService {
   }
 
   // 로그인 및 토큰 발급
-  async getUserToken(loginInfo: IloginInfo) {
+  async getUserToken(loginInfo: ILoginInfo) {
     const { email, password } = loginInfo;
 
     const user = await this.userModel.findByEmail(email);
@@ -92,7 +93,7 @@ class UserService {
   }
 
   // 회원 정보 수정
-  async setUser(userInfoRequired: IsearchInfo, toUpdate: IUserInfo) {
+  async setUser(userInfoRequired: ISearchInfo, toUpdate: IUserInfo) {
     const { userId, currentPassword } = userInfoRequired;
 
     let user = await this.userModel.findById(userId);
@@ -126,7 +127,7 @@ class UserService {
   }
 
   // 회원 탈퇴
-  async deleteUser(userInfoRequired: IsearchInfo) {
+  async deleteUser(userInfoRequired: ISearchInfo) {
     const { userId, currentPassword } = userInfoRequired;
 
     const user = await this.userModel.findById(userId);
