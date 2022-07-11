@@ -3,6 +3,7 @@ import Table from "@editorjs/table";
 import List from "@editorjs/list";
 import Warning from "@editorjs/warning";
 import Code from "@editorjs/code";
+import CodeBox from "@bomdi/codebox";
 import LinkTool from "@editorjs/link";
 import Raw from "@editorjs/raw";
 import Header from "@editorjs/header";
@@ -36,7 +37,16 @@ const EDITOR_JS_TOOLS = {
     },
   },
   warning: Warning,
-  code: Code,
+  //code: Code,
+  codeBox: {
+    class: CodeBox,
+    config: {
+      themeURL:
+        "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/dracula.min.css", // Optional
+      //themeName: "atom-one-dark", // Optional
+      useDefaultTheme: "light", // Optional. This also determines the background color of the language select drop-down
+    },
+  },
   linkTool: {
     class: LinkTool,
     config: {
