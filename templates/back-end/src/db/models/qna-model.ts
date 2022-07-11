@@ -5,12 +5,16 @@ import { IQnaInputDTO } from "../../interfaces/qna-interface";
 const Qna = model("qnas", QnaSchema);
 
 export class QnaModel {
+  async findAll() {
+    return await Qna.find({});
+  }
+
   async findById(qnaId: string) {
     return await Qna.findOne({ qnaId });
   }
 
-  async findAll() {
-    return await Qna.find({});
+  async findByUserId(userId: string) {
+    return await Qna.find({ userId });
   }
 
   async create(qnaInfo: IQnaInputDTO) {

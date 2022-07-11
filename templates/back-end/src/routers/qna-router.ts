@@ -18,7 +18,21 @@ qnaRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const qnaId = req.params.qnaId;
-      const QnA = await qnaService.getQna(qnaId);
+      const QnA = await qnaService.getQnaById(qnaId);
+      res.status(200).json(QnA);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// 아래와 같이 코딩하면 안됨... 경로가 위에랑 겹침 어떻게 하지..? query string 사용해야 될거같은데
+qnaRouter.get(
+  "/:userId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.params.userId;
+      const QnA = await qnaService.getQnaByUserId(userId);
       res.status(200).json(QnA);
     } catch (error) {
       next(error);

@@ -36,8 +36,16 @@ class QnaService {
     return QnAs;
   }
 
-  async getQna(qnaId: string) {
+  async getQnaById(qnaId: string) {
     const QnA = await this.qnaModel.findById(qnaId);
+    if (!QnA) {
+      throw new Error("QnA가 존재하지 않습니다.");
+    }
+    return QnA;
+  }
+
+  async getQnaByUserId(userId: string) {
+    const QnA = await this.qnaModel.findByUserId(userId);
     if (!QnA) {
       throw new Error("QnA가 존재하지 않습니다.");
     }
