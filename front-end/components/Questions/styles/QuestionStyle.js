@@ -86,6 +86,16 @@ export const DetailQuestionContainer = css`
     font-weight: 700;
   }
 
+  & div:first-of-type,
+  div.tag-container {
+    align-self: flex-start;
+
+    & p {
+      margin: 0.25em 0;
+      font-size: 12px;
+    }
+  }
+
   & div,
   button {
     align-self: flex-end;

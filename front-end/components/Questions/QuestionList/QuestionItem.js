@@ -17,10 +17,10 @@ const QuestionItem = ({ qnaId, title, contents, recommends, tags, user, date }) 
         <Badge count={recommends}>
           <MessageOutlined />
         </Badge>
-        <Link href={`/questions/${qnaId}`}>{title}</Link>
+        <Link href={`/qna/${qnaId}`}>{title}</Link>
       </div>
       <div css={DescriptionContainer}>
-        {/* <div>{content}</div> */}
+        <div>{contents}</div>
         <div>
           {tags.map((tag, idx) => {
             return <Tag key={`${qnaId} + ${idx}`}>{tag}</Tag>;
