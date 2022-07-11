@@ -2,14 +2,11 @@
 import { css, jsx } from "@emotion/react";
 import AddButton from "./AddButton";
 import LoggedinMenu from "./LoggedinMenu";
-import { HeaderContainer, HeaderContent, HeaderLogo } from "./styles/HeaderStyles";
-import { useSelector } from "react-redux";
+import { HeaderContainer, HeaderContent } from "./styles/HeaderStyles";
 import Logo from "./logo";
 import Link from "next/link";
 
 const Header = () => {
-  const { isLoggedin } = useSelector((state) => state.user);
-
   return (
     <header css={HeaderContainer}>
       <div>

@@ -1,8 +1,14 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Link from "next/link";
+import userSlice from "../../reducers/user";
 
 const LoggedinMenu = () => {
+  const dispatch = useDispatch();
   const { isLoggedin } = useSelector((state) => state.user);
+  const logoutHandler = () => {
+    localStorage.removeItem("token");
+    dispatch(userSlice.actions.logout());
+  };
   return (
     <>
       {isLoggedin ? (
@@ -10,9 +16,7 @@ const LoggedinMenu = () => {
           <Link href="/profile/junseolee">
             <a>내 정보</a>
           </Link>
-          <Link href="#">
-            <a>로그아웃</a>
-          </Link>
+          <a onClick={logoutHandler}>로그아웃</a>
         </>
       ) : (
         <>

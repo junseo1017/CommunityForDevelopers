@@ -3,20 +3,31 @@ import { signup, login } from "../actions/sign";
 
 const initialState = {
   isLoggedin: false, // 로그인 여부
-  // 회원가입 진행 상태 관련
+  // 회원가입
   signupLoading: false,
   signupDone: false,
   signupError: null,
-  // 로그인 진행 상태 관련
+  // 로그인
   loginLoading: false,
   loginDone: false,
   loginError: null,
+  // 로그아웃
+  logoutLoading: false,
+  logoutDone: false,
+  logoutError: null,
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    logout(state) {
+      state.isLoggedin = false;
+    },
+    addLoggedinStatus(state, action) {
+      state.isLoggedin = action.payload;
+    },
+  },
   extraReducers: (builder) =>
     builder
       // login

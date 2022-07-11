@@ -15,7 +15,7 @@ const RegExp = {
 
 const SignInForm = () => {
   const dispatch = useDispatch();
-  const [signinFlag, setSignipFlag] = useState(null);
+  const [signinFlag, setSigninFlag] = useState(null);
   const { isLoggedin, loginError } = useSelector((state) => state.user);
   const {
     register,
@@ -26,12 +26,14 @@ const SignInForm = () => {
   useEffect(() => {
     if (signinFlag) {
       if (isLoggedin) {
+        localStorage.setItem("token", isLoggedin.token);
         Router.push("/");
         setSigninFlag(null);
       }
       if (loginError) {
         console.log(loginError);
         message.error(JSON.stringify(loginError.reason, null, 4)).then();
+        setSigninFlag(null);
       }
     }
   }, [isLoggedin, loginError]);
@@ -43,7 +45,7 @@ const SignInForm = () => {
         password: data.password,
       }),
     );
-    setSignipFlag(true);
+    setSigninFlag(true);
   };
 
   return (

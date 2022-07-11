@@ -18,9 +18,8 @@ export const signup = createAsyncThunk("user/signup", async (data, { rejectWithV
 
 export const login = createAsyncThunk("user/login", async (data, { rejectWithValue }) => {
   try {
-    console.log(data);
     console.log(`%c 로그인 요청: ${Object.values(data)} `, "color: green;");
-    const response = await axios.get("/api/login", data);
+    const response = await axios.post("/api/login", data);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);

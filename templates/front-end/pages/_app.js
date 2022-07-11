@@ -2,8 +2,22 @@ import React from "react";
 import Head from "next/head";
 import "../styles/globals.css";
 import "antd/dist/antd.css";
+import { useEffect } from "react";
 import wrapper from "../store/index";
+import { useSelector, useDispatch } from "react-redux";
+import userSlice from "../reducers/user";
+import { useCallback } from "react";
 const MyApp = ({ Component, pageProps }) => {
+  const dispatch = useDispatch();
+  const checkLoggedIn = useCallback(() => {
+    const checkStorage = localStorage.getItem("token");
+    if (!checkStorage) return;
+    dispatch(userSlice.actions.addLoggedinStatus(checkStorage));
+  }, []);
+
+  useEffect(() => {
+    checkLoggedIn();
+  }, []);
   return (
     <>
       <Head>
