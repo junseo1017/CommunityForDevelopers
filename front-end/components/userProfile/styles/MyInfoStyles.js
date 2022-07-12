@@ -17,8 +17,7 @@ export const myInfoFormStyle = css`
   & label {
     font-weight: 500;
   }
-  & input,
-  select {
+  & input {
     border: 1px solid #aca3a37b;
     box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
     border-radius: 5px;
@@ -27,6 +26,7 @@ export const myInfoFormStyle = css`
     padding-left: 10px;
     font-weight: 500;
   }
+
   @media (max-width: 768px) {
     display: flex;
     flex-direction: column;

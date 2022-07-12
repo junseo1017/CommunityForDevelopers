@@ -2,6 +2,8 @@
 import { css, jsx } from "@emotion/react";
 import { Card, Button, Tag } from "antd";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useState } from "react";
 import { useCallback, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,22 +16,28 @@ import {
 } from "./styles/MyInfoStyles";
 
 const ProfileMyInfo = () => {
-  const skillRef = useRef([]);
   const { userInfo } = useSelector((state) => state.user);
+  const [info, setInfo] = useState(null);
   const dispatch = useDispatch();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm({ defaultValues: info });
+
+  useEffect(() => {
+    setInfo(userInfo);
+    reset(userInfo);
+  }, [userInfo]);
+
   const onSubmit = (data) => {
-    dispatch(
-      patchUserinfo({
-        userId: "5HKrqUmpNJYFi8_aiOGnw",
-        email: userInfo.email,
-        password: "123123as",
-        currentPassword: "123123as",
-        nickname: userInfo.nickname,
-        job: userInfo.job,
-        skills: userInfo.skills,
-      }),
-    );
+    // dispatch(
+    //   patchUserinfo({
+    //     userId: "5HKrqUmpNJYFi8_aiOGnw",
+    //     email: userInfo.email,
+    //     password: "123123as",
+    //     currentPassword: "123123as",
+    //     nickname: userInfo.nickname,
+    //     job: userInfo.job,
+    //     skills: userInfo.skills,
+    //   }),
+    // );
     console.log(data);
   };
 
@@ -39,7 +47,7 @@ const ProfileMyInfo = () => {
 
   const onKeyPress = useCallback((e) => {
     if (e.key === "Enter") {
-      onClickHandler();
+      console.log("hi");
     }
   }, []);
   return (
@@ -53,35 +61,31 @@ const ProfileMyInfo = () => {
         />
 
         <label>{"별명"}</label>
-        <input defaultValue={userInfo.nickname} {...register("nickname")} />
+        <input autoComplete="off" {...register("nickname", { required: true })} />
 
         <label>{"프로필 사진"}</label>
-        <input defaultValue={userInfo.imgUrl} {...register("imgUrl")} />
+        <input autoComplete="off" {...register("imgUrl")} />
 
         <label>{"직업"}</label>
-        <input
-          defaultValue={userInfo.imgUrl}
-          {...register("imgUrl")}
-          list="list"
-          autoComplete="off"
-        />
+        <input {...register("job")} list="list" autoComplete="off" />
         <datalist id="list">
           <option value="웹 개발자" />
           <option value="서버 개발자" />
           <option value="프론트엔드 개발자" />
+          <option value="백엔드 개발자" />
           <option value="소프트웨어 엔지니어" />
           <option value="안드로이드 개발자" />
           <option value="iOS 개발자" />
           <option value="데이터 엔지니어" />
-          <option value="학생" />
           <option value="DevOps 엔지니어" />
           <option value="머신러닝 엔지니어" />
+          <option value="학생" />
         </datalist>
 
         <label>{"사용 기술"}</label>
         <div css={myInfoSkills}>
           <div>
-            <input onKeyDown={onKeyPress} defaultValue={userInfo.skills} {...register("skills")} />
+            <input autoComplete="off" onKeyDown={onKeyPress} {...register("skills")} />
             <div></div>
           </div>
         </div>
