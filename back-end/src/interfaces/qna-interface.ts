@@ -1,4 +1,5 @@
-export interface IQna {
+import { Types } from "mongoose";
+export interface Qna {
   qnaId: string;
   title: string;
   contents: string;
@@ -10,12 +11,11 @@ export interface IQna {
   parentQnaId: string;
 }
 
-export interface IQnaInputDTO {
+export interface QnaInputDTO {
   title: string;
   contents: string;
-  userId: string;
+  author: string;
   imgUrl: string;
-  recommends: string[];
   tags: string[];
   isAnswer: boolean;
   parentQnaId: string;

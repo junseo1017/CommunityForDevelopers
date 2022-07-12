@@ -1,27 +1,18 @@
 import { Types } from "mongoose";
 import { qnaModel, QnaModel } from "../db/models/qna-model";
-import { IQna, IQnaInputDTO } from "../interfaces/qna-interface";
+import { QnaInputDTO } from "../interfaces/qna-interface";
 class QnaService {
   constructor(private qnaModel: QnaModel) {
     this.qnaModel = qnaModel;
   }
-  async addQna(qnaInfo: IQnaInputDTO) {
-    const {
-      title,
-      contents,
-      userId,
-      imgUrl,
-      recommends,
-      tags,
-      isAnswer,
-      parentQnaId,
-    } = qnaInfo;
+  async addQna(qnaInfo: QnaInputDTO) {
+    const { title, contents, author, imgUrl, tags, isAnswer, parentQnaId } =
+      qnaInfo;
     const newQnaInfo = {
       title,
       contents,
-      userId,
+      author,
       imgUrl,
-      recommends,
       tags,
       isAnswer,
       parentQnaId,
@@ -53,14 +44,14 @@ class QnaService {
     return QnA;
   }
 
-  async setQna(qnaId: string, userId: string, qnaInfo: IQnaInputDTO) {
+  async setQna(qnaId: string, userId: string, qnaInfo: QnaInputDTO) {
     const QnA = await this.qnaModel.findById(qnaId);
     if (!QnA) {
       throw new Error("QnA 정보가 없습니다.");
     }
-    // if (QnA.userId !== userId) {
-    //   throw new Error("Forrbidden");
-    // }
+    if (!QnA.author.equals(userId)) {
+      throw new Error("Forbidden");
+    }
     return await this.qnaModel.update(qnaId, qnaInfo);
   }
 

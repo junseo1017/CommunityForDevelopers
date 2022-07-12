@@ -1,6 +1,6 @@
 import { model, Types } from "mongoose";
 import { QnaSchema } from "../schemas/qna-schema";
-import { IQnaInputDTO } from "../../interfaces/qna-interface";
+import { QnaInputDTO } from "../../interfaces/qna-interface";
 
 const Qna = model("qnas", QnaSchema);
 
@@ -10,18 +10,30 @@ export class QnaModel {
   }
 
   async findById(qnaId: string) {
-    return await Qna.findOne({ qnaId });
+    return await Qna.findOne({ _id: qnaId }).populate([
+      {
+        path: "author",
+        select: "nickname",
+      },
+      {
+        path: "comments",
+        populate: {
+          path: "author",
+          select: ["nickname", "deleted"],
+        },
+      },
+    ]);
   }
 
   async findByUserId(userId: string) {
     return await Qna.find({ userId });
   }
 
-  async create(qnaInfo: IQnaInputDTO) {
+  async create(qnaInfo: QnaInputDTO) {
     return await Qna.create(qnaInfo);
   }
 
-  async update(qnaId: string, update: IQnaInputDTO) {
+  async update(qnaId: string, update: QnaInputDTO) {
     const filter = { qnaId };
     const option = { returnOriginal: false };
 
