@@ -1,9 +1,7 @@
 import { Schema } from "mongoose";
-import { shortId } from "./types/short-id";
 
 const QnaSchema = new Schema(
   {
-    qnaId: shortId,
     title: {
       type: String,
       required: true,
