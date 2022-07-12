@@ -1,10 +1,10 @@
 import { Schema } from "mongoose";
-import { shortId } from "./types/short-id";
+
 const PortfolioSchema = new Schema(
   {
-    portId: shortId,
-    userId: {
-      type: String,
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: "users",
       required: true,
     },
     title: {

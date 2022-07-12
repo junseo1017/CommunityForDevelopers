@@ -29,22 +29,36 @@ portfolioRouter.get(
   }
 );
 
+portfolioRouter.get(
+  "/user/list",
+  loginRequired,
+  async (req: extendReq, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.currentUserId || "";
+      const Portfolio = await portfolioService.getUserPortfolio(userId);
+      res.status(200).json(Portfolio);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 portfolioRouter.post(
   "/",
   loginRequired,
   async (req: extendReq, res: Response, next: NextFunction) => {
     try {
-      const userId = req.currentUserId || "";
+      const author = req.currentUserId || "";
       const { title, description, skills, content } = req.body;
       await portfolioJoiSchema.validateAsync({
-        userId,
+        author,
         title,
         description,
         skills,
         content,
       });
       const newPortfolio = await portfolioService.addPortfolio({
-        userId,
+        author,
         title,
         description,
         skills,
@@ -63,10 +77,10 @@ portfolioRouter.put(
   async (req: extendReq, res: Response, next: NextFunction) => {
     try {
       const portId = req.params.portId;
-      const userId = req.currentUserId || "";
+      const author = req.currentUserId || "";
       const { title, description, skills, content } = req.body;
       await portfolioJoiSchema.validateAsync({
-        userId,
+        author,
         title,
         description,
         skills,
@@ -80,7 +94,7 @@ portfolioRouter.put(
       };
       const updatedPortfolioInfo = await portfolioService.setPortfolio(
         portId,
-        userId,
+        author,
         toUpdate
       );
       res.status(200).json(updatedPortfolioInfo);
@@ -96,10 +110,10 @@ portfolioRouter.delete(
   async (req: extendReq, res: Response, next: NextFunction) => {
     try {
       const portId = req.params.portId;
-      const userId = req.currentUserId || "";
+      const author = req.currentUserId || "";
       const deletedPortfolioInfo = await portfolioService.deletePortfolio(
         portId,
-        userId
+        author
       );
       res.status(200).json(deletedPortfolioInfo);
     } catch (error) {

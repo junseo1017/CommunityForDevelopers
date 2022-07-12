@@ -1,5 +1,5 @@
 export interface IPort {
-  userId: string;
+  author: string;
   title: string;
   description: string;
   skills: string[];
