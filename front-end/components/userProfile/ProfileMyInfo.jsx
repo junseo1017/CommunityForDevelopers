@@ -16,40 +16,50 @@ import {
 } from "./styles/MyInfoStyles";
 
 const ProfileMyInfo = () => {
+  const [skills, setSkills] = useState([]);
   const { userInfo } = useSelector((state) => state.user);
-  const [info, setInfo] = useState(null);
   const dispatch = useDispatch();
-  const { register, handleSubmit, reset } = useForm({ defaultValues: info });
+  const { register, handleSubmit, reset } = useForm({ defaultValues: userInfo });
 
   useEffect(() => {
-    setInfo(userInfo);
     reset(userInfo);
+    setSkills(userInfo.skills);
   }, [userInfo]);
 
   const onSubmit = (data) => {
     // dispatch(
     //   patchUserinfo({
-    //     userId: "5HKrqUmpNJYFi8_aiOGnw",
     //     email: userInfo.email,
-    //     password: "123123as",
-    //     currentPassword: "123123as",
-    //     nickname: userInfo.nickname,
-    //     job: userInfo.job,
-    //     skills: userInfo.skills,
+    //     nickname: data.nickname,
+    //     job: data.job,
+    //     skills,
     //   }),
     // );
-    console.log(data);
+    console.log({
+      email: userInfo.email,
+      nickname: data.nickname,
+      job: data.job,
+      skills,
+    });
   };
 
   const checkKeyDown = useCallback((e) => {
     if (e.code === "Enter") e.preventDefault();
   }, []);
 
-  const onKeyPress = useCallback((e) => {
+  const onKeyPress = (e) => {
+    if (!e.target.value) return;
     if (e.key === "Enter") {
-      console.log("hi");
+      console.log(e.target.value);
+      setSkills([...skills, e.target.value]);
+      e.target.value = "";
     }
-  }, []);
+  };
+
+  const deleteTagHandler = (e) => {
+    setSkills(skills.filter((elem) => elem != e.target.id));
+  };
+
   return (
     <Card css={myInfoCardContainer}>
       <form css={myInfoFormStyle} onSubmit={handleSubmit(onSubmit)} onKeyDown={checkKeyDown}>
@@ -81,15 +91,20 @@ const ProfileMyInfo = () => {
           <option value="머신러닝 엔지니어" />
           <option value="학생" />
         </datalist>
-
         <label>{"사용 기술"}</label>
         <div css={myInfoSkills}>
+          <input autoComplete="off" onKeyDown={onKeyPress} />
           <div>
-            <input autoComplete="off" onKeyDown={onKeyPress} {...register("skills")} />
-            <div></div>
+            {skills &&
+              skills.map((e, i) => {
+                return (
+                  <Tag id={e} onClick={deleteTagHandler} key={`e+${i}`} color="default">
+                    {e}
+                  </Tag>
+                );
+              })}
           </div>
         </div>
-
         <input css={myInfoSubmitBtnStyle} type="submit" value={"회원정보 변경"} />
       </form>
     </Card>
