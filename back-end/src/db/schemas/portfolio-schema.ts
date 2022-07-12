@@ -1,4 +1,13 @@
-import { Schema } from "mongoose";
+import { Schema, Document, Types } from "mongoose";
+export interface PortfolioType extends Document {
+  author: Types.ObjectId;
+  title: string;
+  description: string;
+  skills: string;
+  content: string;
+  recommends: string;
+  comments: Types.ObjectId[];
+}
 
 const PortfolioSchema = new Schema(
   {

@@ -1,9 +1,12 @@
-import { model } from "mongoose";
-import { PortfolioSchema } from "../schemas/portfolio-schema";
+import { model, Document } from "mongoose";
+import { PortfolioSchema, PortfolioType } from "../schemas/portfolio-schema";
 import { IPort, IPortInputDTO } from "../../interfaces/portfolio-interface";
 
-const Portfolio = model("portofolios", PortfolioSchema);
-
+// const Portfolio = model("portofolios", PortfolioSchema);
+const Portfolio = model<PortfolioType & Document>(
+  "portofolios",
+  PortfolioSchema
+);
 export class PortfolioModel {
   async findById(portId: string) {
     return await Portfolio.findOne({ _id: portId }).populate([
