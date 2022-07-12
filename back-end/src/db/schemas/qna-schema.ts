@@ -41,7 +41,7 @@ const QnaSchema = new Schema(
     },
   },
   {
-    collection: "qna",
+    collection: "qnas",
     timestamps: true,
   }
 );

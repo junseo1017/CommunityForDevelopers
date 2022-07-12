@@ -26,15 +26,12 @@ qnaRouter.get(
   }
 );
 
-//localhost:5000/api/qnas/:qnaId
-//localhost:5000/api/qnas/:userId
-
-// 아래와 같이 코딩하면 안됨... 경로가 위에랑 겹침 어떻게 하지..? query string 사용해야 될거같은데
 qnaRouter.get(
-  "/:userId",
-  async (req: Request, res: Response, next: NextFunction) => {
+  "/user/list",
+  loginRequired,
+  async (req: extendReq, res: Response, next: NextFunction) => {
     try {
-      const userId = req.params.userId;
+      const userId = req.currentUserId || "";
       const QnA = await qnaService.getQnaByUserId(userId);
       res.status(200).json(QnA);
     } catch (error) {
