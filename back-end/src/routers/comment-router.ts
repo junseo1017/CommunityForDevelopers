@@ -1,15 +1,15 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Router, Response, NextFunction } from "express";
 import { extendReq, loginRequired } from "../middlewares/login-required";
-import { commentService, portfolioService } from "../services";
+import { commentService, portfolioService, qnaService } from "../services";
 
 const commentRouter = Router();
 
 commentRouter.post(
-  "/:postId",
+  "/portfolio/:id",
   loginRequired,
   async (req: extendReq, res: Response, next: NextFunction) => {
     try {
-      const postId = req.params.postId;
+      const postId = req.params.id;
       const content = req.body.content;
       const author = req.currentUserId || "";
       const newComment = await commentService.addComment({
@@ -17,6 +17,28 @@ commentRouter.post(
         content,
         author,
       });
+      await portfolioService.setPortfolioComment(postId, newComment._id);
+      res.status(201).json(newComment);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+commentRouter.post(
+  "/qna/:id",
+  loginRequired,
+  async (req: extendReq, res: Response, next: NextFunction) => {
+    try {
+      const postId = req.params.id;
+      const content = req.body.content;
+      const author = req.currentUserId || "";
+      const newComment = await commentService.addComment({
+        postId,
+        content,
+        author,
+      });
+      await qnaService.setQnaComment(postId, newComment._id);
       res.status(201).json(newComment);
     } catch (error) {
       next(error);
@@ -39,6 +61,24 @@ commentRouter.put(
         toUpdate
       );
       res.status(200).json(updatedCommentInfo);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+commentRouter.delete(
+  "/:commentId",
+  loginRequired,
+  async (req: extendReq, res: Response, next: NextFunction) => {
+    try {
+      const commentId = req.params.commentId;
+      const userId = req.currentUserId || "";
+      const deletedComment = await commentService.deleteComment(
+        commentId,
+        userId
+      );
+      res.status(200).json(deletedComment);
     } catch (error) {
       next(error);
     }

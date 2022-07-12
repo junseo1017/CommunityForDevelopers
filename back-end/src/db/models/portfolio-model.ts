@@ -1,4 +1,4 @@
-import { model, Document } from "mongoose";
+import { model, Types, Document } from "mongoose";
 import { PortfolioSchema, PortfolioType } from "../schemas/portfolio-schema";
 import { IPort, IPortInputDTO } from "../../interfaces/portfolio-interface";
 
@@ -18,7 +18,7 @@ export class PortfolioModel {
         path: "comments",
         populate: {
           path: "author",
-          select: ["nickname", "deleted"],
+          select: "nickname",
         },
       },
     ]);
@@ -41,6 +41,17 @@ export class PortfolioModel {
     const option = { returnOriginal: false };
 
     return await Portfolio.findOneAndUpdate(filter, update, option);
+  }
+
+  async updateComment(portId: string, commentId: Types.ObjectId) {
+    const filter = { portId };
+    const option = { returnOriginal: false };
+
+    return await Portfolio.findOneAndUpdate(
+      filter,
+      { $addToSet: { comments: commentId } },
+      option
+    );
   }
 
   async deleteById(portId: string) {

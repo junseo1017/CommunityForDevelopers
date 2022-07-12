@@ -1,9 +1,18 @@
-import { Schema } from "mongoose";
-import { shortId } from "./types/short-id";
+import { Schema, Document, Types } from "mongoose";
+export interface QnaType extends Document {
+  title: string;
+  contents: string;
+  author: Types.ObjectId;
+  imgUrl: string;
+  recommends: string[];
+  tage: string[];
+  isAnswer: boolean;
+  parentQnaId: string;
+  comments: Types.ObjectId[];
+}
 
 const QnaSchema = new Schema(
   {
-    qnaId: shortId,
     title: {
       type: String,
       required: true,
@@ -12,8 +21,9 @@ const QnaSchema = new Schema(
       type: String,
       required: true,
     },
-    userId: {
-      type: String,
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: "users",
       required: true,
     },
     imgUrl: {
@@ -39,6 +49,13 @@ const QnaSchema = new Schema(
       required: false,
       default: "",
     },
+    comments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "comments",
+        required: false,
+      },
+    ],
   },
   {
     collection: "qnas",

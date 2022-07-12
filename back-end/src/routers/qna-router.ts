@@ -42,30 +42,16 @@ qnaRouter.get(
 
 qnaRouter.post(
   "/",
-  // loginRequired,
+  loginRequired,
   async (req: extendReq, res: Response, next: NextFunction) => {
     try {
-      // const userId = req.currentUserId || "";
-      // 테스트용 임시 ID값 하드코딩
-      const userId = "KtXccvPJdBvT1dylCr83J";
-      if (!userId) {
-        throw new Error("Forbidden");
-      }
-      const {
-        title,
-        contents,
-        imgUrl,
-        recommends,
-        tags,
-        isAnswer,
-        parentQnaId,
-      } = req.body;
+      const author = req.currentUserId || "";
+      const { title, contents, imgUrl, tags, isAnswer, parentQnaId } = req.body;
       const newQnA = await qnaService.addQna({
         title,
         contents,
-        userId,
+        author,
         imgUrl,
-        recommends,
         tags,
         isAnswer,
         parentQnaId,
@@ -79,32 +65,16 @@ qnaRouter.post(
 
 qnaRouter.patch(
   "/:qnaId",
-  // loginRequired,
+  loginRequired,
   async (req: extendReq, res: Response, next: NextFunction) => {
     try {
       const qnaId = req.params.qnaId;
-      // const userId = req.currentUserId || "";
-      // 테스트용 임시 ID값 하드코딩
-      const userId = "KtXccvPJdBvT1dylCr83J";
-      if (!userId) {
-        throw new Error("Forbidden");
-      }
-
-      const {
-        title,
-        contents,
-        imgUrl,
-        recommends,
-        tags,
-        isAnswer,
-        parentQnaId,
-      } = req.body;
-
+      const userId = req.currentUserId || "";
+      const { title, contents, imgUrl, tags, isAnswer, parentQnaId } = req.body;
       const toUpdate = {
         ...(title && { title }),
         ...(contents && { contents }),
         ...(imgUrl && { imgUrl }),
-        ...(recommends && { recommends }),
         ...(tags && { tags }),
         ...(isAnswer && { isAnswer }),
         ...(parentQnaId && { parentQnaId }),
@@ -119,14 +89,12 @@ qnaRouter.patch(
 
 qnaRouter.delete(
   "/:qnaId",
-  // loginRequired,
-  async (req: Request, res: Response, next: NextFunction) => {
+  loginRequired,
+  async (req: extendReq, res: Response, next: NextFunction) => {
     try {
       const qnaId = req.params.qnaId;
-      // const userId = req.currentUserId || "";
-      // 테스트용 임시 ID값 하드코딩
-      // const userId = "KtXccvPJdBvT1dylCr83J";
-      const deletedQna = await qnaService.deleteQna(qnaId);
+      const userId = req.currentUserId || "";
+      const deletedQna = await qnaService.deleteQna(qnaId, userId);
       res.status(200).json(deletedQna);
     } catch (error) {
       next(error);
