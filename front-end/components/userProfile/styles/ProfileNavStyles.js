@@ -6,6 +6,7 @@ export const profileNavContainer = css`
   padding-bottom: 20px;
   font-size: 16px;
   @media (max-width: 768px) {
+    font-size: 14px;
     padding-bottom: 10px;
   }
 `;

@@ -20,21 +20,41 @@ export const login = createAsyncThunk("user/login", async (data, { rejectWithVal
   try {
     console.log(`%c 로그인 요청: ${Object.values(data)} `, "color: green;");
     const response = await axios.post("/api/users/login", data);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);
   }
 });
 
-export const userinfo = createAsyncThunk("user/nickname", async (data, { rejectWithValue }) => {
+export const userinfo = createAsyncThunk("user/userinfo", async (data, { rejectWithValue }) => {
   try {
+    console.log("hi");
     const response = await axios.get("/api/users/token", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
+    console.log(response.data);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);
   }
 });
+
+export const patchUserinfo = createAsyncThunk(
+  "user/patchUserinfo",
+  async (data, { rejectWithValue }) => {
+    try {
+      console.log(`%c 유저 정보 수정 요청: ${Object.values(data)} `, "color: green;");
+      const response = await axios.patch(`/api/users/${data.userId}`, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);

@@ -79,8 +79,8 @@ userRouter.patch(
   loginRequired,
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.userId;
+    console.log(req.body);
     const { nickname, email, password, job, imgUrl, skills } = req.body;
-
     const currentPassword = req.body.currentPassword;
 
     if (!currentPassword) {

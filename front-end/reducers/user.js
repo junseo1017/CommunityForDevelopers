@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { signup, login, userinfo } from "../actions/user";
+import { signup, login, userinfo, patchUserinfo } from "../actions/user";
 
 const initialState = {
   // 로그인 여부
@@ -7,7 +7,7 @@ const initialState = {
   // 새로고침 발생할 경우 로그인 여부 체크
   isLoggedinCheck: false,
   // 유저 정보
-  userInfo: { _id: null },
+  userInfo: { _id: null, email: null },
   // 회원가입
   signupLoading: false,
   signupDone: false,
@@ -24,6 +24,10 @@ const initialState = {
   loadUserLoading: false,
   loadUserDone: false,
   loadUserError: null,
+  // 유저 정보 수정
+  patchUserLoading: false,
+  patchUserDone: false,
+  patchUserError: null,
 };
 
 const userSlice = createSlice({
@@ -32,10 +36,10 @@ const userSlice = createSlice({
   reducers: {
     logout(state) {
       state.isLoggedin = false;
-      state.userInfo = null;
+      state.userInfo = { _id: null, email: null };
     },
     addLoginStatus(state, action) {
-      state.isLoggedin = action.payload.token;
+      state.isLoggedin = action.payload;
     },
     checkLoggedin(state) {
       state.isLoggedinCheck = true;
@@ -93,6 +97,20 @@ const userSlice = createSlice({
       .addCase(userinfo.rejected, (state, action) => {
         state.loadUserLoading = false;
         state.loadUserError = action.payload;
+      })
+      .addCase(patchUserinfo.pending, (state) => {
+        state.patchUserLoading = true;
+        state.patchUserDone = false;
+        state.patchUserError = null;
+      })
+      .addCase(patchUserinfo.fulfilled, (state, action) => {
+        state.patchUserLoading = false;
+        state.patchUserDone = true;
+        state.userInfo = action.payload;
+      })
+      .addCase(patchUserinfo.rejected, (state, action) => {
+        state.patchUserLoading = false;
+        state.patchUserError = action.payload;
       })
       .addDefaultCase((state) => state),
 });
