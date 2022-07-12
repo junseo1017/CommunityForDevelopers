@@ -1,14 +1,17 @@
 import { useSelector, useDispatch } from "react-redux";
 import Link from "next/link";
 import userSlice from "../../reducers/user";
+import { message } from "antd";
 import { useCallback } from "react";
 const LoggedinMenu = () => {
   const dispatch = useDispatch();
   const { isLoggedin, isLoggedinCheck, userInfo } = useSelector((state) => state.user);
-  const logoutHandler = useCallback(() => {
+
+  const logoutHandler = () => {
     localStorage.removeItem("token");
     dispatch(userSlice.actions.logout());
-  },[]);
+    message.success("정상적으로 로그아웃 되었습니다.");
+  };
 
   return (
     <>

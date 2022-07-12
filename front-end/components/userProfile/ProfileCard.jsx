@@ -21,7 +21,7 @@ const ProfileCard = () => {
     <Card css={ProfileCardContainer}>
       <div>
         <div css={CardProfile}>
-          <Avatar size={isresponsive ? 130 : 150} src="https://joeschmoe.io/api/v1/random" />
+          <Avatar size={isresponsive ? 100 : 150} src="https://joeschmoe.io/api/v1/random" />
           {nickname ? <p>{nickname}</p> : <p></p>}
         </div>
         <div css={ProfileCardContent}>

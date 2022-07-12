@@ -57,14 +57,11 @@ export const myInfoSubmitBtnStyle = css`
 export const myInfoSkills = css`
   width: 100%;
   & > div {
+    padding: 20px;
     width: 100%;
     display: flex;
     flex-direction: row;
-  }
-  & input {
-    width: 100%;
-    @media (max-width: 768px) {
-      width: 80%;
-    }
+    flex-wrap: wrap;
+    row-gap: 10px;
   }
 `;

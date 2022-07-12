@@ -11,24 +11,25 @@ import { useCallback } from "react";
 const MyApp = ({ Component, pageProps }) => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.user.isLoggedin);
-  const getuserInfo = useCallback(() => {
+  const getuserInfo = () => {
     dispatch(userinfo());
-  }, [token]);
+  };
 
   // 로그인 여부 확인
-  const checkLoginStatus = useCallback(() => {
+  const checkLoginStatus = () => {
     dispatch(userSlice.actions.checkLoggedin());
     const checkStorage = localStorage.getItem("token");
     if (!checkStorage) {
       return;
     }
+
     dispatch(userSlice.actions.addLoginStatus(checkStorage));
     getuserInfo();
-  }, []);
+  };
 
   useEffect(() => {
     checkLoginStatus();
-  }, []);
+  }, [token]);
 
   return (
     <>

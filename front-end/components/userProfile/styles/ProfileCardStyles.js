@@ -7,21 +7,20 @@ const CardDetail = css`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  & > p,h3 {
-    font-size: 14px ;
-    font-weight: 700 ;
+  & > p,
+  h3 {
+    font-size: 14px;
+    font-weight: 700;
     margin: 0 0 10px 0;
   }
   @media (max-width: 768px) {
     width: 120px;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: end;
     align-items: stretch;
     gap: 1.5rem;
   }
-
 `;
-
 
 export const ProfileCardContainer = css`
   display: flex;
@@ -51,7 +50,7 @@ export const ProfileCardContainer = css`
       flex-direction: row;
       justify-content: space-around;
       align-items: center;
-      gap: 30px;
+      gap: 10px;
     }
   }
 `;
@@ -63,7 +62,7 @@ export const ProfileCardContent = css`
   gap: 15px;
   border-top: solid 1px #eaedef;
   padding-top: 20px;
-   @media (max-width: 768px) {
+  @media (max-width: 768px) {
     width: 100px;
     display: flex;
     flex-direction: column;
@@ -88,5 +87,11 @@ export const CardProfile = css`
     font-size: 26px;
     font-weight: 900;
     padding: 20px 0 0 0;
+    @media (max-width: 768px) {
+      width: 130px;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 10px 0 0 0;
+    }
   }
 `;

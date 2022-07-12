@@ -16,7 +16,8 @@ cd community-for-developers/back-end
 
 프로필 사진 없을 경우, 기본 이미지로 적용
 
-사용 기술 배열 만들고, tag component사용해서 추가하기
+<!-- 사용 기술 배열 만들고, tag component사용해서 추가하기 -->
+<!-- 태그 컴포넌트 누르면 배열에서 삭제 데이터 보낼 때 배열 형식으로 보내기-->
 
 회원정보 변경 (patch api 만들기) -> req.body 수정 용민님께 요청 (현재 비밀번호 x / 비밀번호 변경은 항목 따로 만들기)
 
