@@ -13,16 +13,13 @@ import {
   DetailAnswerContainer,
 } from "../styles/QuestionStyle";
 import Link from "next/link";
-import Editor from "../Editor/Editor";
 import AddEditor from "../Editor/AddEditor";
-import axios from "axios";
 import Output from "editorjs-react-renderer";
+// const Output = dynamic(async () => await import("editorjs-react-renderer"), { ssr: false });
 
-const QuestionDetail = ({ qna }) => {
+const QuestionDetail = ({ qna, answers }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [answerTitle, setAnswerTItle] = useState("");
-
-  console.log(qna);
 
   const formattingDate = (date) => {
     return `${new Date(date).getFullYear()}년 ${new Date(date).getMonth() + 1}월 ${new Date(
@@ -77,7 +74,7 @@ const QuestionDetail = ({ qna }) => {
         <div></div>
       </div>
       <Divider plain />
-      {/* {answers.length === 0 && (
+      {answers.length === 0 && (
         <div css={TextContainer}>
           <h2>아직 답변이 없습니다. 당신의 지식을 공유해 보세요!</h2>
         </div>
@@ -90,13 +87,12 @@ const QuestionDetail = ({ qna }) => {
                 <MessageOutlined style={{ fontSize: "2em" }} />
                 <h2>{answer.title}</h2>
                 <Button type="text">
-                  <Badge count={answer.recommendations.length}>
+                  <Badge count={answer.recommends.length}>
                     <LikeOutlined style={{ fontSize: "2em" }} />
                   </Badge>
                 </Button>
               </div>
-              <Output data={JSON.parse(answer.content)} />
-              <Editor data={JSON.parse(answer.content)} />
+              <Output data={JSON.parse(answer.contents)} />
               <Collapse>
                 <Collapse.Panel header="댓글 보기">
                   <Comments />
@@ -105,7 +101,7 @@ const QuestionDetail = ({ qna }) => {
               <Divider plain />
             </div>
           );
-        })} */}
+        })}
       <TopButton />
     </div>
   );

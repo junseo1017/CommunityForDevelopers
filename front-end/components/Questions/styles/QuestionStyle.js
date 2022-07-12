@@ -56,6 +56,7 @@ export const TitleContainer = css`
 export const DescriptionContainer = css`
   display: flex;
   flex-direction: column;
+  margin-top: 1em;
 
   & div:first-of-type {
     overflow: hidden;

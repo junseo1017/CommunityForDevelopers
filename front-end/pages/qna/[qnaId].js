@@ -11,10 +11,12 @@ const QuestionDetail = dynamic(
   { ssr: false },
 );
 
-const QuestionDetailPage = ({ qna }) => {
+const QuestionDetailPage = ({ qna, answers }) => {
+  console.log(answers);
+
   return (
     <AppLayout>
-      <QuestionDetail qna={qna} />
+      <QuestionDetail qna={qna} answers={answers} />
     </AppLayout>
   );
 };
@@ -22,16 +24,25 @@ const QuestionDetailPage = ({ qna }) => {
 export default QuestionDetailPage;
 
 export async function getServerSideProps({ query }) {
-  console.log("context", query);
-  const qnaId = query.qnaId;
+  try {
+    console.log("context", query);
+    const qnaId = query.qnaId;
 
-  const response = await axios.get(`/api/qnas/${qnaId}`);
-  console.log("response: ", response.data);
-  const qna = response.data;
+    const response = await axios.get(`/api/qnas/${qnaId}`);
+    console.log("response: ", response.data);
+    const qna = response.data;
 
-  return {
-    props: {
-      qna,
-    },
-  };
+    const answer_response = await axios.get("/api/qnas");
+    const answers = answer_response.data.filter((answer) => answer.parentQnaId === qnaId);
+    console.log("answer: ", answers);
+
+    return {
+      props: {
+        qna,
+        answers,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+  }
 }

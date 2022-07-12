@@ -16,14 +16,14 @@ const questions = ({ qnas }) => {
 
   // console.log(qnas);
 
-  const filterdQnas = qnas.filter((qna) => !qna.isAnswer);
+  const filterdQuestions = qnas.filter((qna) => !qna.isAnswer);
 
   return (
     <AppLayout>
       <Head>
         <title>모든 질문</title>
       </Head>
-      <Questions questions={filterdQnas} />
+      <Questions questions={filterdQuestions} />
     </AppLayout>
   );
 };

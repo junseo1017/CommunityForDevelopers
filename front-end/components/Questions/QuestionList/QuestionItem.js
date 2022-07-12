@@ -4,9 +4,11 @@ import { Badge, Tag } from "antd";
 import { MessageOutlined } from "@ant-design/icons";
 import { TitleContainer, DescriptionContainer } from "../styles/QuestionStyle";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+// import Output from "editorjs-react-renderer";
+const Output = dynamic(() => import("editorjs-react-renderer"), { ssr: false });
 
-const QuestionItem = ({ qnaId, title, contents, recommends, tags, user, date }) => {
-  console.log(qnaId, title, contents, recommends, tags, user, date);
+const QuestionItem = ({ qnaId, title, recommends, tags, user, date }) => {
   const formattedDate = `${new Date(date).getFullYear()}년 ${
     new Date(date).getMonth() + 1
   }월 ${new Date(date).getDate()}일`;
@@ -20,7 +22,7 @@ const QuestionItem = ({ qnaId, title, contents, recommends, tags, user, date }) 
         <Link href={`/qna/${qnaId}`}>{title}</Link>
       </div>
       <div css={DescriptionContainer}>
-        <div>{contents}</div>
+        {/* <Output data={JSON.parse(contents)} /> */}
         <div>
           {tags.map((tag, idx) => {
             return <Tag key={`${qnaId} + ${idx}`}>{tag}</Tag>;

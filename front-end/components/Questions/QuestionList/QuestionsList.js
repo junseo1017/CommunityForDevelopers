@@ -16,8 +16,6 @@ const QuestionsList = ({ questions }) => {
               <QuestionItem
                 qnaId={questions.qnaId}
                 title={questions.title}
-                contents={questions.contents}
-                imgUrl={questions.imgUrl}
                 recommends={questions.recommends.length}
                 tags={questions.tags}
                 user={questions.userId}
