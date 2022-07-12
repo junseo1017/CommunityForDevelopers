@@ -32,9 +32,7 @@ export default questions;
 
 export async function getServerSideProps(context) {
   try {
-    console.log(context);
     const response = await axios.get("/api/qnas");
-    console.log("response: ", response.data);
     const qnas = response.data;
 
     return {
