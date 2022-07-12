@@ -72,7 +72,6 @@ userRouter.patch(
   loginRequired,
   async (req: extendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
-
     const { nickname, job, imgUrl, skills } = req.body;
 
     const toUpdate = {

@@ -48,7 +48,7 @@ const Questions = ({ questions }) => {
             searchQuestions();
           }}
         />
-        <Link href="/questions/new">
+        <Link href="/qna/new">
           <Button size="large" type="primary">
             질문하기
           </Button>
