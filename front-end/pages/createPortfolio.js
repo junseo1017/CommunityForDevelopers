@@ -11,13 +11,25 @@ import StepsComp from "../components/CreatePortfolio/StepsComp";
 import ModalAsync from "../components/Common/ModalAsync";
 import useEditor from "../hooks/useEditor";
 import useModalAsync from "../hooks/useModalAsync";
+import { addPortfolio /*uploadImages*/ } from "../actions/portfolio";
 
 let Editor = dynamic(() => import("../components/Editor/Editor"), {
   ssr: false,
 });
 
 const createPortfolio = () => {
+  /* redux */
+  const [action, setAction] = useState(null);
+  const { imagePaths, addPortfolioLoading, addPortfolioDone, addPortfolioError } = useSelector(
+    (state) => state.portfolio,
+  );
+  const { userInfo } = useSelector((state) => state.user);
+  console.log(userInfo.email);
   const dispatch = useDispatch();
+  const dispatchAddPortfolio = useCallback((data) => {
+    dispatch(addPortfolio(data));
+  }, []);
+
   const [current, setCurrent] = useState(0);
   const [cardValue, setCardValue] = useState({
     titleValue: "",
@@ -45,7 +57,7 @@ const createPortfolio = () => {
   }, [cardValue]);
   const [savePortf, handleInitialize, imageArray] = useEditor();
   const [modalVisible, setModalVisible, handleOk, confirmLoading, modalText, showModal] =
-    useModalAsync(savePortf, "포트폴리오를 저장하시겠습니까?", next);
+    useModalAsync(savePortf, "포트폴리오를 저장하시겠습니까?", next, dispatchAddPortfolio);
 
   return (
     <AppLayout>
@@ -63,7 +75,6 @@ const createPortfolio = () => {
         current={current}
         setCurrent={setCurrentStep}
         onSubmitCard={onSubmitCard}
-        save={savePortf}
         showModal={showModal}
         next={next}
         prev={prev}
