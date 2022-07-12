@@ -7,16 +7,13 @@ import axios from "axios";
 // import { qnaActions, getQnaData } from "../../reducers/qna";
 
 const questions = ({ qnas }) => {
-  // const dispatch = useDispatch();
-  // const qnas = useSelector((state) => state.qnas);
+  const [filterdQuestions, setFilterdQuestions] = useState([]);
 
-  // useEffect(() => {
-  //   dispatch(getQnaData());
-  // }, [dispatch]);
-
-  // console.log(qnas);
-
-  const filterdQuestions = qnas.filter((qna) => !qna.isAnswer);
+  useEffect(() => {
+    if (!qnas) {
+      setFilterdQuestions(qnas.filter((qna) => !qna.isAnswer));
+    }
+  }, [qnas]);
 
   return (
     <AppLayout>
@@ -30,9 +27,17 @@ const questions = ({ qnas }) => {
 
 export default questions;
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
   try {
     const response = await axios.get("/api/qnas");
+    console.log(response, `color: ${"#FF0000"}`);
+
+    if (!response) {
+      return {
+        notFound: true,
+      };
+    }
+
     const qnas = response.data;
 
     return {
@@ -41,6 +46,10 @@ export async function getServerSideProps(context) {
       },
     };
   } catch (error) {
-    console.log(error);
+    return {
+      redirect: {
+        destination: "/",
+      },
+    };
   }
 }

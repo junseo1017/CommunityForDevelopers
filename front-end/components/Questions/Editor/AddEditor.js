@@ -2,15 +2,17 @@
 import { css, jsx } from "@emotion/react";
 import React, { useState, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
-import { Button, Input } from "antd";
+import { Button } from "antd";
 import { EditorContainer } from "../styles/QuestionStyle";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 const Editor = dynamic(() => import("./Editor"), {
   ssr: false,
 });
 
 const AddEditor = ({ title, data, isAnswer, parentQnaId, tags }) => {
+  const router = useRouter();
   const editorCore = useRef(null);
   // 업로드된 이미지 추적
   const [imageArray, setImageArray] = useState([]);
@@ -76,6 +78,7 @@ const AddEditor = ({ title, data, isAnswer, parentQnaId, tags }) => {
       <Button
         onClick={() => {
           saveContents();
+          router.push("/qna");
         }}>
         저장하기
       </Button>

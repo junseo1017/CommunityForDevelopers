@@ -11,6 +11,7 @@ import {
   TextContainer,
   EditorContainer,
   DetailAnswerContainer,
+  CommentsContainer,
 } from "../styles/QuestionStyle";
 import Link from "next/link";
 import AddEditor from "../Editor/AddEditor";
@@ -30,7 +31,7 @@ const QuestionDetail = ({ qna, answers, users }) => {
   return (
     <div css={DetailContainer}>
       <div css={DetailQuestionContainer}>
-        <div>
+        <div className="badge-container">
           <Badge count={qna.recommends.length}>
             <LikeOutlined style={{ fontSize: "2em" }} />
           </Badge>
