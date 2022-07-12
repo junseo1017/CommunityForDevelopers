@@ -18,7 +18,7 @@ export class PortfolioModel {
         path: "comments",
         populate: {
           path: "author",
-          select: ["nickname", "deleted"],
+          select: "nickname",
         },
       },
     ]);

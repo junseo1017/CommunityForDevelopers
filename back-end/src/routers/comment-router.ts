@@ -74,6 +74,11 @@ commentRouter.delete(
     try {
       const commentId = req.params.commentId;
       const userId = req.currentUserId || "";
+      const deletedComment = await commentService.deleteComment(
+        commentId,
+        userId
+      );
+      res.status(200).json(deletedComment);
     } catch (error) {
       next(error);
     }

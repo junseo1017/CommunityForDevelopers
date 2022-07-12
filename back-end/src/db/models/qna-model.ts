@@ -19,7 +19,7 @@ export class QnaModel {
         path: "comments",
         populate: {
           path: "author",
-          select: ["nickname", "deleted"],
+          select: "nickname",
         },
       },
     ]);
@@ -51,7 +51,7 @@ export class QnaModel {
     );
   }
   async deleteById(qnaId: string) {
-    return await Qna.findOneAndDelete({ qnaId });
+    return await Qna.findOneAndDelete({ _id: qnaId });
   }
 }
 

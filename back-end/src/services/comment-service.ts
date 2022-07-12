@@ -22,11 +22,23 @@ class CommentService {
     if (!comment) {
       throw new Error("댓글 정보가 없습니다.");
     }
-    // if (comment.author !== userId) {
-    //   throw new Error("Forbidden");
-    // }
+    if (!comment.author.equals(userId)) {
+      throw new Error("Forbidden");
+    }
     return await commentModel.update(commentId, commentInfo);
   }
+
+  async deleteComment(commentId: string, userId: string) {
+    const comment = await this.commentModel.findById(commentId);
+    if (!comment) {
+      throw new Error("해당 댓글이 존재하지 않습니다.");
+    }
+    if (!comment.author.equals(userId)) {
+      throw new Error("Forbidden");
+    }
+    return await this.commentModel.deleteById(commentId);
+  }
 }
+
 const commentService = new CommentService(commentModel);
 export { commentService };

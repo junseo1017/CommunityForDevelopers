@@ -1,11 +1,15 @@
 import { model } from "mongoose";
-import { CommentSchema } from "../schemas/comment-schema";
+import { CommentSchema, CommentType } from "../schemas/comment-schema";
 import { ICommentForUpdate, ICommentInput } from "../../interfaces";
-const Comment = model("comments", CommentSchema);
+import { SoftDeleteModel } from "soft-delete-plugin-mongoose";
 
+const Comment = model<CommentType, SoftDeleteModel<CommentType>>(
+  "comments",
+  CommentSchema
+);
 export class CommentModel {
   async findById(commentId: string) {
-    return await Comment.findOne({ commentId });
+    return await Comment.findOne({ _id: commentId });
   }
 
   async create(commentInfo: ICommentInput) {
@@ -19,8 +23,8 @@ export class CommentModel {
     return await Comment.findOneAndUpdate(filter, update, option);
   }
 
-  async updateFordelete(portId: string) {
-    return await Comment.findOneAndDelete({ portId });
+  async deleteById(commentId: string) {
+    return await Comment.softDelete({ _id: commentId });
   }
 }
 

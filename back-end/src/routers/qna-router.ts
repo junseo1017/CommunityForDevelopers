@@ -90,13 +90,11 @@ qnaRouter.patch(
 qnaRouter.delete(
   "/:qnaId",
   loginRequired,
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: extendReq, res: Response, next: NextFunction) => {
     try {
       const qnaId = req.params.qnaId;
-      // const userId = req.currentUserId || "";
-      // 테스트용 임시 ID값 하드코딩
-      const userId = "KtXccvPJdBvT1dylCr83J";
-      const deletedQna = await qnaService.deleteQna(qnaId);
+      const userId = req.currentUserId || "";
+      const deletedQna = await qnaService.deleteQna(qnaId, userId);
       res.status(200).json(deletedQna);
     } catch (error) {
       next(error);

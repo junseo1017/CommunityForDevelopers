@@ -56,17 +56,20 @@ class QnaService {
   }
 
   async setQnaComment(qnaId: string, commentId: Types.ObjectId) {
-    const portfolio = await this.qnaModel.findById(qnaId);
-    if (!portfolio) {
-      throw new Error("포토폴리오 정보가 없습니다.");
+    const QnA = await this.qnaModel.findById(qnaId);
+    if (!QnA) {
+      throw new Error("QnA정보가 없습니다.");
     }
     return await this.qnaModel.updateComment(qnaId, commentId);
   }
 
-  async deleteQna(qnaId: string) {
+  async deleteQna(qnaId: string, userId: string) {
     const QnA = await this.qnaModel.deleteById(qnaId);
     if (!QnA) {
       throw new Error("해당 QnA가 존재하지 않습니다.");
+    }
+    if (!QnA.author.equals(userId)) {
+      throw new Error("Forbidden");
     }
     return QnA;
   }
