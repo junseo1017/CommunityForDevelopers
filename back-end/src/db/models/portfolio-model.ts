@@ -1,4 +1,4 @@
-import mongoose, { model } from "mongoose";
+import { model } from "mongoose";
 import { PortfolioSchema } from "../schemas/portfolio-schema";
 import { IPort, IPortInputDTO } from "../../interfaces/portfolio-interface";
 
