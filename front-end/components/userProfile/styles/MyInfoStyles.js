@@ -17,12 +17,15 @@ export const myInfoFormStyle = css`
   & label {
     font-weight: 500;
   }
-  & input {
+  & input,
+  select {
     border: 1px solid #aca3a37b;
     box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     height: 40px;
     width: 100%;
+    padding-left: 10px;
+    font-weight: 500;
   }
   @media (max-width: 768px) {
     display: flex;
@@ -43,7 +46,7 @@ export const myInfoSubmitBtnStyle = css`
   cursor: pointer;
   border: 1px solid #aca3a37b;
   box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
-  transition: 150ms linear;
+  transition: 100ms linear;
   :hover {
     background-color: black;
     color: white;
