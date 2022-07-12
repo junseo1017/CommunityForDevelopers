@@ -1,4 +1,4 @@
-import { model } from "mongoose";
+import { model, Types } from "mongoose";
 import { QnaSchema } from "../schemas/qna-schema";
 import { IQnaInputDTO } from "../../interfaces/qna-interface";
 
@@ -28,6 +28,16 @@ export class QnaModel {
     return await Qna.findOneAndUpdate(filter, update, option);
   }
 
+  async updateComment(qnaId: string, commentId: Types.ObjectId) {
+    const filter = { qnaId };
+    const option = { returnOriginal: false };
+
+    return await Qna.findOneAndUpdate(
+      filter,
+      { $addToSet: { comments: commentId } },
+      option
+    );
+  }
   async deleteById(qnaId: string) {
     return await Qna.findOneAndDelete({ qnaId });
   }

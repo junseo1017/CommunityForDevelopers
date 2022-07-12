@@ -3,7 +3,6 @@ import { shortId } from "./types/short-id";
 
 const QnaSchema = new Schema(
   {
-    qnaId: shortId,
     title: {
       type: String,
       required: true,
@@ -12,8 +11,9 @@ const QnaSchema = new Schema(
       type: String,
       required: true,
     },
-    userId: {
-      type: String,
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: "users",
       required: true,
     },
     imgUrl: {
@@ -39,6 +39,13 @@ const QnaSchema = new Schema(
       required: false,
       default: "",
     },
+    comments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "comments",
+        required: false,
+      },
+    ],
   },
   {
     collection: "qna",

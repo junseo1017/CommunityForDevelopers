@@ -1,4 +1,4 @@
-import { model } from "mongoose";
+import { model, Types } from "mongoose";
 import { PortfolioSchema } from "../schemas/portfolio-schema";
 import { IPort, IPortInputDTO } from "../../interfaces/portfolio-interface";
 
@@ -38,6 +38,17 @@ export class PortfolioModel {
     const option = { returnOriginal: false };
 
     return await Portfolio.findOneAndUpdate(filter, update, option);
+  }
+
+  async updateComment(portId: string, commentId: Types.ObjectId) {
+    const filter = { portId };
+    const option = { returnOriginal: false };
+
+    return await Portfolio.findOneAndUpdate(
+      filter,
+      { $addToSet: { comments: commentId } },
+      option
+    );
   }
 
   async deleteById(portId: string) {

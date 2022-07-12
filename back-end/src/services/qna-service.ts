@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { qnaModel, QnaModel } from "../db/models/qna-model";
 import { IQna, IQnaInputDTO } from "../interfaces/qna-interface";
 class QnaService {
@@ -62,6 +63,15 @@ class QnaService {
     // }
     return await this.qnaModel.update(qnaId, qnaInfo);
   }
+
+  async setQnaComment(qnaId: string, commentId: Types.ObjectId) {
+    const portfolio = await this.qnaModel.findById(qnaId);
+    if (!portfolio) {
+      throw new Error("포토폴리오 정보가 없습니다.");
+    }
+    return await this.qnaModel.updateComment(qnaId, commentId);
+  }
+
   async deleteQna(qnaId: string) {
     const QnA = await this.qnaModel.deleteById(qnaId);
     if (!QnA) {

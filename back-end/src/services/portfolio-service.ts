@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { portfolioModel, PortfolioModel } from "../db/models/portfolio-model";
 import { IPortInputDTO, IPort } from "../interfaces/portfolio-interface";
 class PortfolioService {
@@ -43,6 +44,13 @@ class PortfolioService {
       throw new Error("Forbidden");
     }
     return await this.portfolioModel.update(portId, portInfo);
+  }
+  async setPortfolioComment(portId: string, commentId: Types.ObjectId) {
+    const portfolio = await this.portfolioModel.findById(portId);
+    if (!portfolio) {
+      throw new Error("포토폴리오 정보가 없습니다.");
+    }
+    return await this.portfolioModel.updateComment(portId, commentId);
   }
   async deletePortfolio(portId: string, userId: string) {
     const portfolio = await this.portfolioModel.findById(portId);
