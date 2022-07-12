@@ -1,9 +1,7 @@
 import { Schema } from "mongoose";
-import { shortId } from "./types/short-id";
 
 const CommentSchema = new Schema(
   {
-    commentId: shortId,
     postId: {
       type: String,
       required: true,

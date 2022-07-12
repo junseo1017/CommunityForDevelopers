@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { extendReq, loginRequired } from "../middlewares/login-required";
-import { commentService } from "../services";
+import { commentService, portfolioService } from "../services";
 
 const commentRouter = Router();
 
