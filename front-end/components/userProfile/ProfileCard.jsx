@@ -26,7 +26,7 @@ const ProfileCard = () => {
         </div>
         <div css={ProfileCardContent}>
           <div>
-            <p>좋아요</p>
+            <p>포트폴리오</p>
             <h3>1</h3>
           </div>
           <div>
@@ -34,7 +34,11 @@ const ProfileCard = () => {
             <h3>1</h3>
           </div>
           <div>
-            <p>포트폴리오</p>
+            <p>질문</p>
+            <h3>1</h3>
+          </div>
+          <div>
+            <p>답변</p>
             <h3>1</h3>
           </div>
         </div>
