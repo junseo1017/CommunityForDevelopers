@@ -62,10 +62,13 @@ class UserService {
     }
 
     const secretKey = process.env.JWT_SECRET_KEY || "secret-key";
-
-    const token = jwt.sign({ userId: user.userId, role: user.role }, secretKey);
+    const token = jwt.sign({ userId: user._id, role: user.role }, secretKey);
 
     return { token };
+  }
+
+  async getUsers() {
+    return await this.userModel.findAll();
   }
 
   async getUserInfo(userId: string) {
@@ -74,11 +77,6 @@ class UserService {
       throw new Error("해당 ID에 맞는 회원 정보를 불러올 수 없습니다.");
     }
     return userInfo;
-  }
-
-  async getUsers() {
-    const users = await this.userModel.findAll();
-    return users;
   }
 
   // 회원 정보 수정

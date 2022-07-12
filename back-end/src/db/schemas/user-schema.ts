@@ -1,9 +1,7 @@
 import { Schema, Document } from "mongoose";
-import { shortId } from "./types/short-id";
 import { softDeletePlugin } from "soft-delete-plugin-mongoose";
 
 export interface UserType extends Document {
-  userId: string;
   nickname: string;
   email: string;
   password: string;
@@ -16,7 +14,6 @@ export interface UserType extends Document {
 
 const UserSchema = new Schema(
   {
-    userId: shortId,
     nickname: {
       type: String,
       required: true,
