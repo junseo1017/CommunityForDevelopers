@@ -6,7 +6,7 @@ import { StepsPadding, ButtonCss } from "./styles/StepsComponentStyle";
 import { blackBtn } from "../Common/style/btnStyle";
 const { Step } = Steps;
 
-const StepsComp = ({ setCurrent, current = 0, showModal, next, onSubmitCard, prev }) => {
+const StepsComp = ({ current = 0, showModal, next, onSubmitCard, prev }) => {
   return (
     <>
       <Steps css={StepsPadding} current={current}>

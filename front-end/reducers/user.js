@@ -24,6 +24,8 @@ const initialState = {
   loadUserLoading: false,
   loadUserDone: false,
   loadUserError: null,
+  /* By 지의신 Portfolio */
+  me: null,
   // 유저 정보 수정
   patchUserLoading: false,
   patchUserDone: false,
@@ -43,6 +45,10 @@ const userSlice = createSlice({
     },
     checkLoggedin(state) {
       state.isLoggedinCheck = true;
+    },
+    /* By 지의신 Portfolio */
+    addPortfolioToMe(state, action) {
+      state.me.Portfolios.unshift({ id: action.payload });
     },
   },
   extraReducers: (builder) =>
