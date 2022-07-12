@@ -1,6 +1,6 @@
-cd community-for-developers/templates/front-end
+cd community-for-developers/front-end
 
-cd community-for-developers/templates/back-end
+cd community-for-developers/back-end
 
 <!-- 회원가입 유효성 검사 완성 > 백엔드 전달 o -->
 <!-- 회원가입 api 연동 RTK Thunk 예시 하나 작성해보기 (backurl 설정) -->
@@ -11,10 +11,17 @@ cd community-for-developers/templates/back-end
 <!-- 회원가입 후 홈 화면으로 이동 (reducer 작동 과정 체크) -->
 <!-- 새로고침하면 헤더 메뉴 깜빡이는거 수정 -->
 <!-- 로그아웃 구현 (state / localstorage 비우기) -->
+<!-- 내 정보에 회원정보 불러오기 -->
+<!-- 회원정보 redux에서 가져와서 defaultValue 인식하게 만들기 -->
+
+프로필 사진 없을 경우, 기본 이미지로 적용
+
+<!-- 사용 기술 배열 만들고, tag component사용해서 추가하기 -->
+<!-- 태그 컴포넌트 누르면 배열에서 삭제 데이터 보낼 때 배열 형식으로 보내기-->
+
+회원정보 변경 (patch api 만들기) -> req.body 수정 용민님께 요청 (현재 비밀번호 x / 비밀번호 변경은 항목 따로 만들기)
 
 로그아웃 시 알람띄우기
-
-회원정보 불러오기
 
 간편로그인 api 연동
 

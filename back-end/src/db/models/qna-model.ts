@@ -1,8 +1,8 @@
-import { model, Types } from "mongoose";
-import { QnaSchema } from "../schemas/qna-schema";
+import { model, Types, Document } from "mongoose";
+import { QnaSchema, QnaType } from "../schemas/qna-schema";
 import { QnaInputDTO } from "../../interfaces/qna-interface";
 
-const Qna = model("qnas", QnaSchema);
+const Qna = model<QnaType & Document>("qnas", QnaSchema);
 
 export class QnaModel {
   async findAll() {

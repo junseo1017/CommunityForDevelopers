@@ -1,21 +1,21 @@
 import { UserModel, userModel } from "../db";
 import {
-  IUserInfo,
-  ILoginInfo,
-  ISearchInfo,
+  InputDTO,
+  UpdateInfo,
+  LoginInfo,
+  SearchInfo,
 } from "../interfaces/user-interface";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 class UserService {
   userModel;
-  // 본 파일의 맨 아래에서, new UserService(userModel) 하면, 이 함수의 인자로 전달됨
   constructor(userModel: UserModel) {
     this.userModel = userModel;
   }
-  // 회원가입
-  async addUser(userInfo: IUserInfo) {
-    const { nickname, email, password, job, imgUrl, skills } = userInfo;
+
+  async addUser(userInfo: InputDTO) {
+    const { nickname, email, password } = userInfo;
 
     const user = await this.userModel.findByEmail(email);
     if (user) {
@@ -30,9 +30,6 @@ class UserService {
       nickname,
       email,
       password: hashedPassword,
-      job,
-      imgUrl,
-      skills,
     };
 
     const createdNewUser = await this.userModel.create(newUserInfo);
@@ -40,13 +37,12 @@ class UserService {
     return createdNewUser;
   }
 
-  // 로그인 및 토큰 발급
-  async getUserToken(loginInfo: ILoginInfo) {
+  async getUserToken(loginInfo: LoginInfo) {
     const { email, password } = loginInfo;
 
     const user = await this.userModel.findByEmail(email);
 
-    if (!user /*|| user.deleted*/) {
+    if (!user) {
       throw new Error(
         "해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요."
       );
@@ -72,9 +68,6 @@ class UserService {
     return { token };
   }
 
-  //유저별 게시글 조회
-
-  // token으로 user 정보 보기
   async getUserInfo(userId: string) {
     const userInfo = await this.userModel.findById(userId);
     if (!userInfo) {
@@ -89,10 +82,19 @@ class UserService {
   }
 
   // 회원 정보 수정
-  async setUser(userInfoRequired: ISearchInfo, toUpdate: IUserInfo) {
+  async setUser(userId: string, toUpdate: UpdateInfo) {
+    if (!(await this.userModel.findById(userId))) {
+      throw new Error("가입 내역이 없습니다. 다시 한 번 확인해 주세요.");
+    }
+
+    return await this.userModel.update(userId, toUpdate);
+  }
+
+  // 비밀번호 수정
+  async setPassword(userInfoRequired: SearchInfo, password: string) {
     const { userId, currentPassword } = userInfoRequired;
 
-    let user = await this.userModel.findById(userId);
+    const user = await this.userModel.getPassword(userId);
 
     if (!user) {
       throw new Error("가입 내역이 없습니다. 다시 한 번 확인해 주세요.");
@@ -110,23 +112,18 @@ class UserService {
       );
     }
 
-    const { password } = toUpdate;
-
     if (password) {
       const newPasswordHash = await bcrypt.hash(password, 10);
-      toUpdate.password = newPasswordHash;
+      password = newPasswordHash;
     }
 
-    user = await this.userModel.update(userId, toUpdate);
-
-    return user;
+    return await this.userModel.update(userId, { password });
   }
 
-  // 회원 탈퇴
-  async deleteUser(userInfoRequired: ISearchInfo) {
+  async deleteUser(userInfoRequired: SearchInfo) {
     const { userId, currentPassword } = userInfoRequired;
 
-    const user = await this.userModel.findById(userId);
+    const user = await this.userModel.getPassword(userId);
 
     if (!user) {
       throw new Error("가입 내역이 없습니다. 다시 한 번 확인해 주세요.");

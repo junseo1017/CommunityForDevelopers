@@ -26,9 +26,6 @@ qnaRouter.get(
   }
 );
 
-//localhost:5000/api/qnas/:qnaId
-//localhost:5000/api/qnas/:userId
-
 qnaRouter.get(
   "/user/list",
   loginRequired,

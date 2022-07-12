@@ -1,4 +1,15 @@
-import { Schema } from "mongoose";
+import { Schema, Document, Types } from "mongoose";
+export interface QnaType extends Document {
+  title: string;
+  contents: string;
+  author: Types.ObjectId;
+  imgUrl: string;
+  recommends: string[];
+  tage: string[];
+  isAnswer: boolean;
+  parentQnaId: string;
+  comments: Types.ObjectId[];
+}
 
 const QnaSchema = new Schema(
   {
@@ -47,7 +58,7 @@ const QnaSchema = new Schema(
     ],
   },
   {
-    collection: "qna",
+    collection: "qnas",
     timestamps: true,
   }
 );

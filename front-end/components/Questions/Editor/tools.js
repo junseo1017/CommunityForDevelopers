@@ -13,6 +13,7 @@ import Delimiter from "@editorjs/delimiter";
 import ImageTool from "@editorjs/image";
 import InlineCode from "@editorjs/inline-code";
 import SimpleImage from "@editorjs/simple-image";
+import CodeBox from "@bomdi/codebox";
 
 const EDITOR_JS_TOOLS = {
   embed: {
@@ -36,7 +37,15 @@ const EDITOR_JS_TOOLS = {
     },
   },
   warning: Warning,
-  code: Code,
+  codeBox: {
+    class: CodeBox,
+    config: {
+      themeURL:
+        "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/dracula.min.css", // Optional
+      //themeName: "atom-one-dark", // Optional
+      useDefaultTheme: "light", // Optional. This also determines the background color of the language select drop-down
+    },
+  },
   linkTool: {
     class: LinkTool,
     config: {

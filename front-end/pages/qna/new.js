@@ -9,9 +9,9 @@ import { EditorContainer } from "../../components/Questions/styles/QuestionStyle
 import { useState } from "react";
 
 const newQuestion = () => {
-  const [title, setTitle] = useState("");
+  const [questionTitle, setQuestionTitle] = useState("");
   const [tags, setTags] = useState([]);
-  const [content, setContent] = useState("");
+  console.log(tags);
 
   return (
     <AppLayout>
@@ -23,10 +23,10 @@ const newQuestion = () => {
         <Input
           size="large"
           placeholder="질문의 제목을 작성하세요"
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => setQuestionTitle(e.target.value)}
         />
-        <AddTags />
-        <AddEditor />
+        <AddTags addTags={setTags} />
+        <AddEditor title={questionTitle} isAnswer={false} parentQnaId={""} tags={tags} />
       </div>
     </AppLayout>
   );

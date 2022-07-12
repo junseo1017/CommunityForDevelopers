@@ -5,6 +5,7 @@ import { List, Select, Divider } from "antd";
 import { BackTop } from "antd";
 import PortfolioCard from "../components/Portfolo/PortfolioCard";
 import PorfolioSearch from "../components/Portfolo/PorfolioSearch";
+import { loadPortfolios } from "../actions/portfolio";
 
 const tagsOptions = [
   {
@@ -163,5 +164,15 @@ const Home = () => {
     </AppLayout>
   );
 };
+
+// SSR (프론트 서버에서 실행)
+// export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+//   await context.store.dispatch(loadPortfolios());
+//   await context.store.dispatch(loadMyInfo());
+
+//   return {
+//     props: {},
+//   };
+// });
 
 export default Home;
