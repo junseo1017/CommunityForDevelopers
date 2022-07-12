@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 const useEditor = () => {
   const editorCore = useRef(null);
-  const portfolioValue = useSelector(({ portfolio }) => portfolio);
+  const portfolioValue = useSelector(({ portfolio }) => portfolio.singlePortfolio);
   const [imageArray, setImageArray] = useState([]); /* to keep track of uploaded image */
   const handleInitialize = useCallback((instance) => {
     editorCore.current = instance;
