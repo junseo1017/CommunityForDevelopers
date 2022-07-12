@@ -1,6 +1,10 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { userService } from "../services";
 import { extendReq, loginRequired } from "../middlewares";
+import {
+  userCreateJoiSchema,
+  userUpdateJoiSchema,
+} from "../db/schemas/joi-schemas";
 
 const userRouter = Router();
 
@@ -10,6 +14,12 @@ userRouter.post(
     const { nickname, email, password } = req.body;
 
     try {
+      await userCreateJoiSchema.validateAsync({
+        email,
+        nickname,
+        password,
+      });
+
       const newUser = await userService.addUser({
         nickname,
         email,
@@ -37,18 +47,13 @@ userRouter.post(
   }
 );
 
-userRouter.get(
-  "/",
-  loginRequired,
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const users = await userService.getUsers();
-      res.status(200).json(users);
-    } catch (error) {
-      next(error);
-    }
+userRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    res.status(200).json(await userService.getUsers());
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 userRouter.get(
   "/token",
@@ -82,6 +87,7 @@ userRouter.patch(
     };
 
     try {
+      await userUpdateJoiSchema.validateAsync({ nickname });
       const updatedUserInfo = await userService.setUser(userId, toUpdate);
       res.status(200).json(updatedUserInfo);
     } catch (error) {
