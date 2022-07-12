@@ -3,7 +3,7 @@ import { Input, Tag } from "antd";
 // import { TweenOneGroup } from "rc-tween-one";
 import React, { useEffect, useRef, useState } from "react";
 
-const AddTags = () => {
+const AddTags = ({ addTags }) => {
   const [tags, setTags] = useState([]);
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -14,6 +14,10 @@ const AddTags = () => {
       inputRef.current?.focus();
     }
   }, []);
+
+  useEffect(() => {
+    addTags(tags);
+  }, [tags]);
 
   const handleClose = (removedTag) => {
     const newTags = tags.filter((tag) => tag !== removedTag);
@@ -37,12 +41,16 @@ const AddTags = () => {
     setInputVisible(false);
     setInputValue("");
   };
-  console.log(tags);
+
   return (
     <>
       <div>
-        {tags.map((tag) => {
-          return <Tag>{tag}</Tag>;
+        {tags.map((tag, index) => {
+          return (
+            <Tag key={index} onClick={(e) => handleClose(e.target.innerText)}>
+              {tag}
+            </Tag>
+          );
         })}
       </div>
       {inputVisible && (
@@ -50,13 +58,11 @@ const AddTags = () => {
           ref={inputRef}
           type="text"
           size="small"
-          style={{
-            width: 78,
-          }}
           value={inputValue}
           onChange={handleInputChange}
           onBlur={handleInputConfirm}
           onPressEnter={handleInputConfirm}
+          placeholder="태그를 입력하세요."
         />
       )}
       {!inputVisible && (

@@ -10,25 +10,26 @@ import userSlice from "../reducers/user";
 import { useCallback } from "react";
 const MyApp = ({ Component, pageProps }) => {
   const dispatch = useDispatch();
-  const { isLoggedin } = useSelector((state) => state.user);
-  const getuserInfo = useCallback(() => {
-    dispatch(userinfo(isLoggedin));
-    console.log("check실행");
-  }, [isLoggedin]);
+  const { token } = useSelector((state) => state.user.isLoggedin);
+  const getuserInfo = () => {
+    dispatch(userinfo());
+  };
 
-  const checkLoginStatus = useCallback(() => {
+  // 로그인 여부 확인
+  const checkLoginStatus = () => {
     dispatch(userSlice.actions.checkLoggedin());
     const checkStorage = localStorage.getItem("token");
     if (!checkStorage) {
       return;
     }
+
     dispatch(userSlice.actions.addLoginStatus(checkStorage));
     getuserInfo();
-  }, []);
+  };
 
   useEffect(() => {
     checkLoginStatus();
-  }, []);
+  }, [token]);
 
   return (
     <>

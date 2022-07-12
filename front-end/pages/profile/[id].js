@@ -5,6 +5,7 @@ import AppLayout from "../../components/AppLayout";
 import ProfileCard from "../../components/userProfile/ProfileCard";
 import ProfileMyInfo from "../../components/userProfile/ProfileMyInfo";
 import { ProfileContentContainer } from "./profileStyle";
+import { useEffect } from "react";
 const Profile = () => {
   return (
     <AppLayout>
