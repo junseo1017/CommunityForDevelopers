@@ -95,7 +95,7 @@ const QuestionDetail = ({ qna, answers, users }) => {
               <Output data={JSON.parse(answer.contents)} />
               <Collapse>
                 <Collapse.Panel header="댓글 보기">
-                  <Comments contentId={answer.qnaId} users={users} />
+                  <Comments contentId={answer.qnaId} />
                 </Collapse.Panel>
               </Collapse>
               <Divider plain />
@@ -108,25 +108,3 @@ const QuestionDetail = ({ qna, answers, users }) => {
 };
 
 export default QuestionDetail;
-
-export async function getServerSideProps() {
-  try {
-    const response = await axios.get("/api/users", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-
-    console.log("response", response);
-
-    const users = response;
-
-    return {
-      props: {
-        users,
-      },
-    };
-  } catch (error) {
-    console.log(error);
-  }
-}

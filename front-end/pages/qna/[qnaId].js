@@ -12,8 +12,6 @@ const QuestionDetail = dynamic(
 );
 
 const QuestionDetailPage = ({ qna, answers }) => {
-  console.log(answers);
-
   return (
     <AppLayout>
       <QuestionDetail qna={qna} answers={answers} />
