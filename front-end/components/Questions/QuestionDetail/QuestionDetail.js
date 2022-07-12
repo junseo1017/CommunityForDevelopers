@@ -17,7 +17,7 @@ import AddEditor from "../Editor/AddEditor";
 import Output from "editorjs-react-renderer";
 // const Output = dynamic(async () => await import("editorjs-react-renderer"), { ssr: false });
 
-const QuestionDetail = ({ qna, answers }) => {
+const QuestionDetail = ({ qna, answers, users }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [answerTitle, setAnswerTItle] = useState("");
 
@@ -95,7 +95,7 @@ const QuestionDetail = ({ qna, answers }) => {
               <Output data={JSON.parse(answer.contents)} />
               <Collapse>
                 <Collapse.Panel header="댓글 보기">
-                  <Comments />
+                  <Comments contentId={answer.qnaId} users={users} />
                 </Collapse.Panel>
               </Collapse>
               <Divider plain />
@@ -108,3 +108,25 @@ const QuestionDetail = ({ qna, answers }) => {
 };
 
 export default QuestionDetail;
+
+export async function getServerSideProps() {
+  try {
+    const response = await axios.get("/api/users", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    console.log("response", response);
+
+    const users = response;
+
+    return {
+      props: {
+        users,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+  }
+}
