@@ -1,73 +1,58 @@
 import { Avatar, Button, Comment, Form, Input, List } from "antd";
 import moment from "moment";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 const { TextArea } = Input;
+import { MentionsInput, Mention } from "react-mentions";
+import { useEffect } from "react";
+import axios from "axios";
 
-const CommentList = ({ comments }) => (
-  <List
-    dataSource={comments}
-    header={`${comments.length} ${comments.length > 1 ? "replies" : "reply"}`}
-    itemLayout="horizontal"
-    renderItem={(props) => <Comment {...props} />}
-  />
-);
+const Comments = ({ contentId }) => {
+  const [userList, setUserList] = useState([]);
 
-const Editor = ({ onChange, onSubmit, submitting, value }) => (
-  <>
-    <Form.Item>
-      <TextArea rows={4} onChange={onChange} value={value} />
-    </Form.Item>
-    <Form.Item>
-      <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
-        Add Comment
-      </Button>
-    </Form.Item>
-  </>
-);
+  useEffect(() => {
+    const getUsers = async () => {
+      try {
+        const response = await axios.get("/api/users", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
 
-const Comments = () => {
+        const users = response.data.map((user) => user.nickname);
+        setUserList(users);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getUsers();
+  }, []);
+
+  const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
-  const [submitting, setSubmitting] = useState(false);
-  const [value, setValue] = useState("");
-
-  const handleSubmit = () => {
-    if (!value) return;
-    setSubmitting(true);
-    setTimeout(() => {
-      setSubmitting(false);
-      setValue("");
-      setComments([
-        ...comments,
-        {
-          author: "Han Solo",
-          avatar: "https://joeschmoe.io/api/v1/random",
-          content: <p>{value}</p>,
-          datetime: moment().fromNow(),
-        },
-      ]);
-    }, 1000);
+  console.log(userList);
+  const handleChange = (e) => {
+    setComment(e.target.value);
   };
 
-  const handleChange = (e) => {
-    setValue(e.target.value);
+  const handleSubmit = () => {
+    setComments([...comments, comment]);
   };
 
   return (
-    <>
-      {comments.length > 0 && <CommentList comments={comments} />}
-      <Comment
-        avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
-        content={
-          <Editor
-            onChange={handleChange}
-            onSubmit={handleSubmit}
-            submitting={submitting}
-            value={value}
-          />
-        }
-      />
-    </>
+    <div>
+      {comments.map((comment) => (
+        <div>{comment}</div>
+      ))}
+      <MentionsInput value={comment} onChange={handleChange} placeholder="댓글을 작성하세요.">
+        <Mention trigger="@" data={userList} />
+      </MentionsInput>
+      <Button onClick={handleSubmit}>Submit</Button>
+    </div>
   );
 };
 
 export default Comments;
+
+export async function getServerSideProps() {}

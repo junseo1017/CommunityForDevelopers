@@ -56,6 +56,7 @@ export const TitleContainer = css`
 export const DescriptionContainer = css`
   display: flex;
   flex-direction: column;
+  margin-top: 1em;
 
   & div:first-of-type {
     overflow: hidden;
@@ -84,6 +85,16 @@ export const DetailQuestionContainer = css`
   & h1 {
     color: #1890ff;
     font-weight: 700;
+  }
+
+  & div:first-of-type,
+  div.tag-container {
+    align-self: flex-start;
+
+    & p {
+      margin: 0.25em 0;
+      font-size: 12px;
+    }
   }
 
   & div,
@@ -147,12 +158,38 @@ export const EditorContainer = css`
   width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  padding: 0 2em;
+  gap: 1em;
 
-  & > h2 {
-    align-self: center;
+  & > h1 {
+    color: #1890ff;
+    font-weight: bold;
+  }
+
+  & > input.ant-input-lg {
+    width: 50%;
+  }
+
+  & > span,
+  input.ant-input-sm {
+    width: 7em;
+  }
+
+  & > div {
+    width: 80%;
+    display: flex;
+    flex-wrap: wrap;
   }
 
   & > button {
     align-self: end;
+  }
+
+  @media (max-width: 768px) {
+    & > input.ant-input-lg,
+    input.ant-input-sm {
+      width: 80%;
+    }
   }
 `;

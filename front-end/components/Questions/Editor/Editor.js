@@ -4,12 +4,9 @@ import { LoadingOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { createReactEditorJS } from "react-editor-js";
 import Image from "@editorjs/image";
-import DEFAULTVALUE from "./defaultValue";
 const ReactEditorJS = createReactEditorJS();
 
 const Editor = ({ imageArray, handleInitialize, data }) => {
-  console.log("data from Editor", typeof data);
-  console.log("data from Editor", data);
   const [editorTools, setEditorTools] = useState("");
   // const readData = JSON.parse(data);
 
