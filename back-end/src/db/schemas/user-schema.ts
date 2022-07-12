@@ -1,6 +1,18 @@
-import { Schema } from "mongoose";
+import { Schema, Document } from "mongoose";
 import { shortId } from "./types/short-id";
-import MongooseDelete from "mongoose-delete";
+import { softDeletePlugin } from "soft-delete-plugin-mongoose";
+
+export interface UserType extends Document {
+  userId: string;
+  nickname: string;
+  email: string;
+  password: string;
+  job: string;
+  imgUrl: string;
+  skills: string[];
+  scraps: string[];
+  role: string;
+}
 
 const UserSchema = new Schema(
   {
@@ -48,6 +60,6 @@ const UserSchema = new Schema(
 );
 
 //soft delete plugin
-UserSchema.plugin(MongooseDelete);
+UserSchema.plugin(softDeletePlugin);
 
 export { UserSchema };

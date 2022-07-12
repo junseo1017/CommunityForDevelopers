@@ -1,9 +1,14 @@
 import { model } from "mongoose";
-import { UserSchema } from "../schemas/user-schema";
-import { IUserInputDTO, IUserInfo } from "../../interfaces/user-interface";
+import { UserSchema, UserType } from "../schemas/user-schema";
+import {
+  InputDTO,
+  Password,
+  UpdateInfo,
+} from "../../interfaces/user-interface";
+import { SoftDeleteModel } from "soft-delete-plugin-mongoose";
 
-const User = model("users", UserSchema);
-
+// const User = model("users", UserSchema);
+const User = model<UserType, SoftDeleteModel<UserType>>("users", UserSchema);
 export class UserModel {
   async findByEmail(email: string) {
     return await User.findOne({ email });
@@ -12,7 +17,7 @@ export class UserModel {
   async findById(userId: string) {
     return await User.findOne(
       { userId },
-      { _id: 0, email: 1, nickname: 1, job: 1, skills: 1, imgUrl: 1 }
+      { _id: 0, userId: 1, email: 1, nickname: 1, job: 1, skills: 1, imgUrl: 1 }
     );
   }
 
@@ -20,11 +25,15 @@ export class UserModel {
     return await User.find({});
   }
 
-  async create(userInfo: IUserInputDTO) {
+  async getPassword(userId: string) {
+    return await User.findOne({ userId }, { _id: 0, userId: 1, password: 1 });
+  }
+
+  async create(userInfo: InputDTO) {
     return await User.create(userInfo);
   }
 
-  async update(userId: string, update: IUserInfo) {
+  async update(userId: string, update: UpdateInfo | Password) {
     const filter = { userId };
     const option = { returnOriginal: false };
 
@@ -32,11 +41,13 @@ export class UserModel {
   }
 
   async deleteById(userId: string) {
-    return await User.findOneAndDelete({ userId });
+    return await User.softDelete({ userId });
+    // return await User.findOneAndDelete({ userId });
   }
 
   async deleteByEmail(email: string) {
-    return await User.findOneAndDelete({ email });
+    return await User.softDelete({ email });
+    // return await User.findOneAndDelete({ email });
   }
 }
 

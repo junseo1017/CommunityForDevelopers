@@ -1,28 +1,26 @@
-export interface IUserInputDTO {
+export interface InputDTO {
   nickname: string;
   email: string;
   password: string;
-  job?: string;
-  imgUrl: string;
-  skills: string[];
-  scraps?: string[];
 }
 
-export interface IUserInfo {
+export interface UpdateInfo {
   nickname: string;
-  email: string;
-  password: string;
   job?: string;
   imgUrl: string;
   skills: string[];
 }
 
-export interface ILoginInfo {
+export interface Password {
+  password: string;
+}
+
+export interface LoginInfo {
   email: string;
   password: string;
 }
 
-export interface ISearchInfo {
+export interface SearchInfo {
   userId: string;
   currentPassword: string;
 }
