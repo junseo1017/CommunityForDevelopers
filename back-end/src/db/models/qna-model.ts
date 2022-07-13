@@ -6,7 +6,10 @@ const Qna = model<QnaType & Document>("qnas", QnaSchema);
 
 export class QnaModel {
   async findAll() {
-    return await Qna.find({});
+    return await Qna.find({}).populate({
+      path: "author",
+      select: "nickname",
+    });
   }
 
   async findById(qnaId: string) {
@@ -26,7 +29,10 @@ export class QnaModel {
   }
 
   async findByUserId(userId: string) {
-    return await Qna.find({ userId });
+    return await Qna.find({ author: userId }).populate({
+      path: "author",
+      select: "nickname",
+    });
   }
 
   async create(qnaInfo: QnaInputDTO) {
