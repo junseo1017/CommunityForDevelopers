@@ -1,12 +1,24 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
 
-export const FlexBox = css`
+export const SearchBarContainer = css`
   display: flex;
   width: 100%;
   padding: 0 1em;
   margin: 1em;
   gap: 2em;
+
+  align-items: center;
+
+  & span.ant-input-affix-wrapper,
+  button.ant-input-search-button {
+    height: 10vh;
+  }
+
+  & button.ant-input-search-button,
+  input.ant-input {
+    font-size: 2em;
+  }
 `;
 
 export const ColFlexBox = css`
@@ -87,7 +99,7 @@ export const DetailQuestionContainer = css`
     font-weight: 700;
   }
 
-  & div:first-of-type,
+  & div.badge-container,
   div.tag-container {
     align-self: flex-start;
 
@@ -97,7 +109,7 @@ export const DetailQuestionContainer = css`
     }
   }
 
-  & div,
+  & > div,
   button {
     align-self: flex-end;
   }
@@ -125,23 +137,18 @@ export const DetailAnswerContainer = css`
 export const CommentsContainer = css`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 50%;
   padding: 0 2em;
+`;
+
+export const CommentStyle = css`
+  height: 5em;
 `;
 
 export const CollapseStyle = css`
   width: 100%;
   margin: 0 auto;
   background-color: none;
-`;
-
-export const CardFormContainer = css`
-  width: 80%;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-
-  @media (max-width: 768px) {
-    width: 100%;
-  }
 `;
 
 export const TextContainer = css`
@@ -162,13 +169,17 @@ export const EditorContainer = css`
   padding: 0 2em;
   gap: 1em;
 
+  border: 1px solid #000000;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+
   & > h1 {
     color: #1890ff;
     font-weight: bold;
   }
 
   & > input.ant-input-lg {
-    width: 50%;
+    width: 50vw;
   }
 
   & > span,
@@ -176,20 +187,34 @@ export const EditorContainer = css`
     width: 7em;
   }
 
-  & > div {
-    width: 80%;
+  & div.codex-editor--narrow {
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
+
+    & div {
+      width: 100%;
+    }
+
+    & div.ce-toolbar__plus {
+      width: 2em;
+      height: 2em;
+    }
   }
 
-  & > button {
+  & button {
     align-self: end;
   }
 
   @media (max-width: 768px) {
     & > input.ant-input-lg,
     input.ant-input-sm {
-      width: 80%;
+      width: 100%;
+    }
+
+    & div.codex-editor--narrow {
+      width: 100%;
     }
   }
 `;

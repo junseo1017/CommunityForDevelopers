@@ -25,11 +25,17 @@ export class PortfolioModel {
   }
 
   async findByUserId(userId: string) {
-    return await Portfolio.find({ author: userId });
+    return await Portfolio.find({ author: userId }).populate({
+      path: "author",
+      select: "nickname",
+    });
   }
 
   async findAll() {
-    return await Portfolio.find({});
+    return await Portfolio.find({}).populate({
+      path: "author",
+      select: "nickname",
+    });
   }
 
   async create(portInfo: IPort) {

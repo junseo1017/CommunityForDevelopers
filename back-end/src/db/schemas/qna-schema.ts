@@ -5,7 +5,7 @@ export interface QnaType extends Document {
   author: Types.ObjectId;
   imgUrl: string;
   recommends: string[];
-  tage: string[];
+  tages: string[];
   isAnswer: boolean;
   parentQnaId: string;
   comments: Types.ObjectId[];

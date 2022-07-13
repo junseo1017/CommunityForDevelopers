@@ -27,11 +27,10 @@ qnaRouter.get(
 );
 
 qnaRouter.get(
-  "/user/list",
-  loginRequired,
+  "/user/:userId",
   async (req: extendReq, res: Response, next: NextFunction) => {
     try {
-      const userId = req.currentUserId || "";
+      const userId = req.params.userId;
       const QnA = await qnaService.getQnaByUserId(userId);
       res.status(200).json(QnA);
     } catch (error) {
