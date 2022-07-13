@@ -63,7 +63,7 @@ const userSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         console.log("fullfilled", action.payload);
         state.loginLoading = false;
-        state.isLoggedin = action.payload;
+        state.isLoggedin = action.payload.token;
         state.loginDone = true;
       })
       .addCase(login.rejected, (state, action) => {
@@ -73,14 +73,11 @@ const userSlice = createSlice({
       })
       // signup
       .addCase(signup.pending, (state) => {
-        console.log("pending");
-
         state.signupLoading = true;
         state.signupDone = false;
         state.signupError = null;
       })
       .addCase(signup.fulfilled, (state) => {
-        console.log("fulfilled");
         state.signupLoading = false;
         state.signupDone = true;
       })
@@ -89,13 +86,11 @@ const userSlice = createSlice({
         state.signupError = action.payload;
       })
       .addCase(userinfo.pending, (state) => {
-        console.log("pending");
         state.loadUserLoading = true;
         state.loadUserDone = false;
         state.loadUserError = null;
       })
       .addCase(userinfo.fulfilled, (state, action) => {
-        console.log("fulfilled");
         state.loadUserLoading = false;
         state.userInfo = action.payload;
         state.loadUserDone = true;
