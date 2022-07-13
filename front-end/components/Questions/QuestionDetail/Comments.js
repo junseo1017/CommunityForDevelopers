@@ -1,11 +1,9 @@
 import { Avatar, Button, Comment, Form, Input, List } from "antd";
-import moment from "moment";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
-const { TextArea } = Input;
 import { MentionsInput, Mention } from "react-mentions";
 import { useEffect } from "react";
 import axios from "axios";
+import { CommentsContainer, CommentStyle } from "../styles/QuestionStyle";
 
 const Comments = ({ contentId }) => {
   const [userList, setUserList] = useState([]);
@@ -19,7 +17,10 @@ const Comments = ({ contentId }) => {
           },
         });
 
-        const users = response.data.map((user) => user.nickname);
+        const users = response.data.map((user) => {
+          return { id: user.userId, display: user.nickname };
+        });
+
         setUserList(users);
       } catch (error) {
         console.log(error);
@@ -31,7 +32,7 @@ const Comments = ({ contentId }) => {
 
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
-  console.log(userList);
+
   const handleChange = (e) => {
     setComment(e.target.value);
   };
@@ -42,13 +43,20 @@ const Comments = ({ contentId }) => {
 
   return (
     <div>
-      {comments.map((comment) => (
-        <div>{comment}</div>
-      ))}
+      {comments && (
+        <List
+          dataSource={comments}
+          header={`${comments.length} ${comments.length > 1 ? "replies" : "reply"}`}
+          itemLayout="horizontal"
+          renderItem={(comment) => <Comment css={CommentStyle}>{comment}</Comment>}
+        />
+      )}
       <MentionsInput value={comment} onChange={handleChange} placeholder="댓글을 작성하세요.">
-        <Mention trigger="@" data={userList} />
+        <Mention trigger="@" data={userList} markup="@__display__" />
       </MentionsInput>
-      <Button onClick={handleSubmit}>Submit</Button>
+      <Button type="primary" onClick={handleSubmit}>
+        댓글 추가하기
+      </Button>
     </div>
   );
 };

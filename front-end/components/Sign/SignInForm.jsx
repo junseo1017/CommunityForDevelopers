@@ -27,7 +27,8 @@ const SignInForm = () => {
   useEffect(() => {
     if (signinFlag) {
       if (isLoggedin) {
-        localStorage.setItem("token", isLoggedin.token);
+        console.log("islogin", isLoggedin);
+        localStorage.setItem("token", isLoggedin);
         Router.push("/");
         setSigninFlag(null);
       }
@@ -39,7 +40,7 @@ const SignInForm = () => {
     }
   }, [isLoggedin, loginError]);
 
-  const onSubmit = useCallback((data) => {
+  const onSubmit = (data) => {
     dispatch(
       login({
         email: data.email,
@@ -47,7 +48,7 @@ const SignInForm = () => {
       }),
     );
     setSigninFlag(true);
-  }, []);
+  };
 
   return (
     <form css={SignInFormStyle} onSubmit={handleSubmit(onSubmit)}>
