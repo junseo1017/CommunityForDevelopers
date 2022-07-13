@@ -5,7 +5,7 @@ import "antd/dist/antd.css";
 import { useEffect } from "react";
 import wrapper from "../store/index";
 import { useSelector, useDispatch } from "react-redux";
-import { myinfo, userinfo } from "../actions/user";
+import { myinfo } from "../actions/user";
 import userSlice from "../reducers/user";
 import { useCallback } from "react";
 const MyApp = ({ Component, pageProps }) => {

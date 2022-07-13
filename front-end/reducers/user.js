@@ -25,7 +25,7 @@ const initialState = {
   // 내 정보 조회
   loadMyInfoLoading: false,
   loadMyInfoDone: false,
-  loadMyInforror: null,
+  loadMyInfoError: null,
   // 유저 정보 수정
   patchUserLoading: false,
   patchUserDone: false,
@@ -87,18 +87,18 @@ const userSlice = createSlice({
         state.signupError = action.payload;
       })
       .addCase(myinfo.pending, (state) => {
-        state.loadUserLoading = true;
-        state.loadUserDone = false;
-        state.loadUserError = null;
+        state.loadMyInfoLoading = true;
+        state.loadMyInfoDone = false;
+        state.loadMyInfoError = null;
       })
       .addCase(myinfo.fulfilled, (state, action) => {
-        state.loadUserLoading = false;
+        state.loadMyInfoLoading = false;
         state.me = action.payload;
-        state.loadUserDone = true;
+        state.loadMyInfoDone = true;
       })
       .addCase(myinfo.rejected, (state, action) => {
-        state.loadUserLoading = false;
-        state.loadUserError = action.payload;
+        state.loadMyInfoLoading = false;
+        state.loadMyInfoError = action.payload;
       })
       .addCase(patchUserinfo.pending, (state) => {
         state.patchUserLoading = true;

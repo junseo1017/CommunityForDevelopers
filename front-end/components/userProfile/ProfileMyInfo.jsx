@@ -103,7 +103,7 @@ const ProfileMyInfo = () => {
         <div css={myInfoSkills}>
           <input autoComplete="off" onKeyDown={onKeyPress} />
           <div>
-            {me &&
+            {skills &&
               skills.map((e, i) => {
                 return (
                   <Tag id={e} onClick={deleteTagHandler} key={`e+${i}`} color="default">

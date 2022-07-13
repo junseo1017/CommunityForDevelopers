@@ -16,9 +16,9 @@ const LoggedinMenu = () => {
   return (
     <>
       {isLoggedinCheck ? (
-        me ? (
+        isLoggedin ? (
           <>
-            <Link href={`/profile/${me.email}`}>
+            <Link href={`/profile/${me._id}`}>
               <a>내 정보</a>
             </Link>
             <a onClick={logoutHandler}>로그아웃</a>

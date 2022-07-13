@@ -6,7 +6,9 @@ import AppLayout from "../../components/AppLayout";
 import ProfileCard from "../../components/userProfile/ProfileCard";
 import ProfileMyInfo from "../../components/userProfile/ProfileMyInfo";
 import { ProfileContentContainer } from "./profileStyle";
-import { useDispatch } from "react-redux";
+import { myinfo } from "../../actions/user";
+import { useSelector } from "react-redux";
+
 const Profile = () => {
   return (
     <AppLayout>
@@ -18,5 +20,12 @@ const Profile = () => {
     </AppLayout>
   );
 };
+
+// export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
+//   await store.dispatch(myinfo());
+//   return {
+//     props: {},
+//   };
+// });
 
 export default Profile;

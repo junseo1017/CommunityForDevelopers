@@ -18,10 +18,13 @@ cd community-for-developers/back-end
 <!-- 로그아웃 시 알람띄우기 -->
 <!-- 마이페이지에서 로그아웃했을 때 발생하는 에러 처리 -->
 <!-- 회원정보 변경 (patch api 만들기) -> req.body 수정 용민님께 요청 (현재 비밀번호 x / 비밀번호 변경은 항목 따로 만들기) -->
+<!-- 로그인 된 상태로 로그인 시 리다이렉팅 -->
+<!-- reducer 리팩토링 -->
+
+로그인 확인 app 말고 getserversideprops로 변경하기
+유저정보 serversideprops하기
 
 다른 사람도 프로필 페이지 볼 수 있게 하기 (api 변경 / hidden할 컴포넌트 설정)
-
-유저정보 serversideprops하기
 
 포트폴리오 긁어오기
 

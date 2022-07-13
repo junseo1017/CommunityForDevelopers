@@ -13,7 +13,10 @@ const Login = () => {
   const { isLoggedin } = useSelector((state) => state.user);
 
   // 로그인 된 상태로 로그인 페이지 이동 시 홈으로 라우팅
-  if (isLoggedin) Router.push("/");
+
+  useEffect(() => {
+    if (isLoggedin) Router.push("/");
+  }, [isLoggedin]);
 
   return (
     <div css={LoginPageContainer}>
