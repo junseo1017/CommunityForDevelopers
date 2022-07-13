@@ -12,8 +12,8 @@ import { useMediaQuery } from "react-responsive";
 import { useSelector } from "react-redux";
 
 const ProfileCard = () => {
-  const { userInfo } = useSelector((state) => state.user);
-  const { nickname } = userInfo;
+  const { me } = useSelector((state) => state.user);
+  const { nickname } = me;
   const isresponsive = useMediaQuery({
     query: "(max-width:768px)",
   });

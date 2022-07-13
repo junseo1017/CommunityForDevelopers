@@ -18,14 +18,14 @@ import {
 const ProfileMyInfo = () => {
   const [skills, setSkills] = useState([]);
   const [action, setAction] = useState(false);
-  const { userInfo, patchUserDone, patchUserError } = useSelector((state) => state.user);
+  const { me, patchUserDone, patchUserError } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const { register, handleSubmit, reset } = useForm({ defaultValues: userInfo });
+  const { register, handleSubmit, reset } = useForm({ defaultValues: me });
 
   useEffect(() => {
-    reset(userInfo);
-    setSkills(userInfo.skills);
-  }, [userInfo]);
+    reset(me);
+    setSkills(me.skills);
+  }, [me]);
 
   useEffect(() => {
     if (action) {
@@ -41,7 +41,7 @@ const ProfileMyInfo = () => {
   const onSubmit = (data) => {
     dispatch(
       patchUserinfo({
-        userId: userInfo._id,
+        userId: me._id,
         nickname: data.nickname,
         job: data.job,
         imgUrl: data.imgUrl,
@@ -49,13 +49,6 @@ const ProfileMyInfo = () => {
       }),
     );
     setAction(true);
-
-    console.log({
-      email: userInfo.email,
-      nickname: data.nickname,
-      job: data.job,
-      skills,
-    });
   };
 
   const checkKeyDown = useCallback((e) => {
@@ -81,11 +74,11 @@ const ProfileMyInfo = () => {
         <label>{"이메일"}</label>
         <input
           style={{ backgroundColor: "rgb(220,220,220)" }}
-          value={userInfo.email || ""}
+          value={me.email || ""}
           {...register("email")}
         />
 
-        <label>{"별명"}</label>
+        <label>{"별명 *"}</label>
         <input autoComplete="off" {...register("nickname", { required: true })} />
 
         <label>{"프로필 사진"}</label>
@@ -110,7 +103,7 @@ const ProfileMyInfo = () => {
         <div css={myInfoSkills}>
           <input autoComplete="off" onKeyDown={onKeyPress} />
           <div>
-            {skills &&
+            {me &&
               skills.map((e, i) => {
                 return (
                   <Tag id={e} onClick={deleteTagHandler} key={`e+${i}`} color="default">

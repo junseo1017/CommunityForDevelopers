@@ -5,7 +5,7 @@ import { message } from "antd";
 import { useCallback } from "react";
 const LoggedinMenu = () => {
   const dispatch = useDispatch();
-  const { isLoggedin, isLoggedinCheck, userInfo } = useSelector((state) => state.user);
+  const { isLoggedin, isLoggedinCheck, me } = useSelector((state) => state.user);
 
   const logoutHandler = () => {
     localStorage.removeItem("token");
@@ -16,9 +16,9 @@ const LoggedinMenu = () => {
   return (
     <>
       {isLoggedinCheck ? (
-        isLoggedin ? (
+        me ? (
           <>
-            <Link href={`/profile/${userInfo.email}`}>
+            <Link href={`/profile/${me.email}`}>
               <a>내 정보</a>
             </Link>
             <a onClick={logoutHandler}>로그아웃</a>

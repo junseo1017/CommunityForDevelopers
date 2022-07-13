@@ -5,14 +5,14 @@ import "antd/dist/antd.css";
 import { useEffect } from "react";
 import wrapper from "../store/index";
 import { useSelector, useDispatch } from "react-redux";
-import { userinfo } from "../actions/user";
+import { myinfo, userinfo } from "../actions/user";
 import userSlice from "../reducers/user";
 import { useCallback } from "react";
 const MyApp = ({ Component, pageProps }) => {
   const dispatch = useDispatch();
   const { isLoggedin } = useSelector((state) => state.user);
   const getuserInfo = useCallback(() => {
-    dispatch(userinfo());
+    dispatch(myinfo());
   }, []);
 
   // 로그인 여부 확인

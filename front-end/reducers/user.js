@@ -1,13 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { signup, login, userinfo, patchUserinfo } from "../actions/user";
+import { signup, login, userinfo, patchUserinfo, myinfo } from "../actions/user";
 
 const initialState = {
+  // 내 정보
+  me: false,
   // 로그인 여부
   isLoggedin: false,
   // 새로고침 발생할 경우 로그인 여부 체크
   isLoggedinCheck: false,
   // 유저 정보
-  userInfo: { _id: null, email: null },
+  userInfo: false,
   // 회원가입
   signupLoading: false,
   signupDone: false,
@@ -20,16 +22,15 @@ const initialState = {
   logoutLoading: false,
   logoutDone: false,
   logoutError: null,
-  // 유저 정보 조회
-  loadUserLoading: false,
-  loadUserDone: false,
-  loadUserError: null,
-  /* By 지의신 Portfolio */
-  me: null,
+  // 내 정보 조회
+  loadMyInfoLoading: false,
+  loadMyInfoDone: false,
+  loadMyInforror: null,
   // 유저 정보 수정
   patchUserLoading: false,
   patchUserDone: false,
   patchUserError: null,
+  /* By 지의신 Portfolio */
 };
 
 const userSlice = createSlice({
@@ -38,7 +39,7 @@ const userSlice = createSlice({
   reducers: {
     logout(state) {
       state.isLoggedin = false;
-      state.userInfo = { _id: null, email: null };
+      state.me = false;
     },
     addLoginStatus(state, action) {
       state.isLoggedin = action.payload;
@@ -85,18 +86,17 @@ const userSlice = createSlice({
         state.signupLoading = false;
         state.signupError = action.payload;
       })
-      .addCase(userinfo.pending, (state) => {
+      .addCase(myinfo.pending, (state) => {
         state.loadUserLoading = true;
         state.loadUserDone = false;
         state.loadUserError = null;
       })
-      .addCase(userinfo.fulfilled, (state, action) => {
+      .addCase(myinfo.fulfilled, (state, action) => {
         state.loadUserLoading = false;
-        state.userInfo = action.payload;
-        state.me = action.payload; //By 지의신
+        state.me = action.payload;
         state.loadUserDone = true;
       })
-      .addCase(userinfo.rejected, (state, action) => {
+      .addCase(myinfo.rejected, (state, action) => {
         state.loadUserLoading = false;
         state.loadUserError = action.payload;
       })
@@ -108,7 +108,7 @@ const userSlice = createSlice({
       .addCase(patchUserinfo.fulfilled, (state, action) => {
         state.patchUserLoading = false;
         state.patchUserDone = true;
-        state.userInfo = action.payload;
+        state.me = action.payload;
       })
       .addCase(patchUserinfo.rejected, (state, action) => {
         state.patchUserLoading = false;
