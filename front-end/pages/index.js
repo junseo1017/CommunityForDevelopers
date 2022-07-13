@@ -31,16 +31,16 @@ const tagsOptions = [
 
 const checkboxOptions = [
   {
-    label: "Apple",
-    value: "Apple",
+    label: "제목",
+    value: "제목",
   },
   {
-    label: "Pear",
-    value: "Pear",
+    label: "내용",
+    value: "내용",
   },
   {
-    label: "Orange",
-    value: "Orange",
+    label: "유저",
+    value: "유저",
   },
 ];
 const data = [
@@ -124,6 +124,7 @@ const Home = () => {
   const { mainPortfolios, hasMorePortfolios, loadPortfoliosLoading } = useSelector(
     (state) => state.portfolio,
   );
+  console.log(me);
   console.log(mainPortfolios);
 
   const { Option } = Select;
@@ -164,10 +165,9 @@ const Home = () => {
           }}
           dataSource={mainPortfolios}
           renderItem={(item) => {
-            console.log(item);
             return (
               <List.Item>
-                <PortfolioCard />
+                <PortfolioCard {...item} />
               </List.Item>
             );
           }}
@@ -187,9 +187,8 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ()
   //if (context.req && cookie) {
   //  axios.defaults.headers.Cookie = cookie;
   //}
-  console.log(store);
   await store.dispatch(loadPortfolios());
-  //await store.dispatch(userinfo());
+  await store.dispatch(userinfo());
 
   return {
     props: {},
