@@ -9,7 +9,8 @@ axios.defaults.baseURL = backendUrl;
 export const loadPortfolios = createAsyncThunk(
   "portfolio/loadPortfolios",
   async (data) => {
-    const response = await axios.get(`/portfolios?lastId=${data?.lastId || 0}`);
+    //const response = await axios.get(`/portfolios?lastId=${data?.lastId || 0}`);
+    const response = await axios.get(`/api/portfolios`);
     return response.data;
   },
   {

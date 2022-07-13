@@ -6,6 +6,9 @@ import { BackTop } from "antd";
 import PortfolioCard from "../components/Portfolo/PortfolioCard";
 import PorfolioSearch from "../components/Portfolo/PorfolioSearch";
 import { loadPortfolios } from "../actions/portfolio";
+import { userinfo } from "../actions/user";
+import wrapper from "../store";
+import { useDispatch, useSelector } from "react-redux";
 
 const tagsOptions = [
   {
@@ -116,6 +119,13 @@ const data = [
 ];
 
 const Home = () => {
+  const dispatch = useDispatch();
+  const { me } = useSelector((state) => state.user);
+  const { mainPortfolios, hasMorePortfolios, loadPortfoliosLoading } = useSelector(
+    (state) => state.portfolio,
+  );
+  console.log(mainPortfolios);
+
   const { Option } = Select;
   const orderBys = [];
   orderBys.push(<Option key={0}>추천 순</Option>);
@@ -152,12 +162,15 @@ const Home = () => {
             xl: 3,
             xxl: 3,
           }}
-          dataSource={data}
-          renderItem={(item) => (
-            <List.Item>
-              <PortfolioCard />
-            </List.Item>
-          )}
+          dataSource={mainPortfolios}
+          renderItem={(item) => {
+            console.log(item);
+            return (
+              <List.Item>
+                <PortfolioCard />
+              </List.Item>
+            );
+          }}
         />
       </div>
       <BackTop />
@@ -166,13 +179,21 @@ const Home = () => {
 };
 
 // SSR (프론트 서버에서 실행)
-// export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
-//   await context.store.dispatch(loadPortfolios());
-//   await context.store.dispatch(loadMyInfo());
+export const getServerSideProps = wrapper.getServerSideProps((store) => async () => {
+  //const cookie = context.req ? context.req.headers.cookie : "";
+  //axios.defaults.headers.Cookie = "";
+  // 쿠키가 브라우저에 있는경우만 넣어서 실행
+  // (주의, 아래 조건이 없다면 다른 사람으로 로그인 될 수도 있음)
+  //if (context.req && cookie) {
+  //  axios.defaults.headers.Cookie = cookie;
+  //}
+  console.log(store);
+  await store.dispatch(loadPortfolios());
+  //await store.dispatch(userinfo());
 
-//   return {
-//     props: {},
-//   };
-// });
+  return {
+    props: {},
+  };
+});
 
 export default Home;

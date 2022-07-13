@@ -57,7 +57,7 @@ const createPortfolio = () => {
   }, [cardValue]);
   const [savePortf, handleInitialize, imageArray] = useEditor();
   const [modalVisible, setModalVisible, handleOk, confirmLoading, modalText, showModal] =
-    useModalAsync(savePortf, "포트폴리오를 저장하시겠습니까?", next, dispatchAddPortfolio);
+    useModalAsync(savePortf, "포트폴리오를 저장하시겠습니까?", dispatchAddPortfolio);
 
   return (
     <AppLayout>

@@ -98,6 +98,7 @@ const userSlice = createSlice({
         console.log("fulfilled");
         state.loadUserLoading = false;
         state.userInfo = action.payload;
+        state.me = action.payload; //By 지의신
         state.loadUserDone = true;
       })
       .addCase(userinfo.rejected, (state, action) => {
