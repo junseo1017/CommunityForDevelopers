@@ -83,7 +83,7 @@ const QuestionDetail = ({ qna, answers, users }) => {
       {answers &&
         answers.map((answer) => {
           return (
-            <div css={DetailAnswerContainer} key={answer.qnaId}>
+            <div css={DetailAnswerContainer} key={answer._id}>
               <div className="answer-title">
                 <MessageOutlined style={{ fontSize: "2em" }} />
                 <h2>{answer.title}</h2>
@@ -96,7 +96,7 @@ const QuestionDetail = ({ qna, answers, users }) => {
               <Output data={JSON.parse(answer.contents)} />
               <Collapse>
                 <Collapse.Panel header="댓글 보기">
-                  <Comments contentId={answer.qnaId} />
+                  <Comments contentId={answer._id} />
                 </Collapse.Panel>
               </Collapse>
               <Divider plain />

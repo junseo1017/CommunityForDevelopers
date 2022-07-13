@@ -10,9 +10,7 @@ const questions = ({ qnas }) => {
   const [filterdQuestions, setFilterdQuestions] = useState([]);
 
   useEffect(() => {
-    if (!qnas) {
-      setFilterdQuestions(qnas.filter((qna) => !qna.isAnswer));
-    }
+    setFilterdQuestions(qnas.filter((qna) => !qna.isAnswer));
   }, [qnas]);
 
   return (
@@ -30,15 +28,14 @@ export default questions;
 export async function getServerSideProps() {
   try {
     const response = await axios.get("/api/qnas");
-    console.log(response, `color: ${"#FF0000"}`);
 
-    if (!response) {
-      return {
-        notFound: true,
-      };
-    }
-
-    const qnas = response.data;
+    // if (!response) {
+    //   return {
+    //     notFound: true,
+    //   };
+    // }
+    console.log("response", response.data);
+    const qnas = response.data || [];
 
     return {
       props: {

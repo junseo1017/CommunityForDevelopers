@@ -1,12 +1,24 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
 
-export const FlexBox = css`
+export const SearchBarContainer = css`
   display: flex;
   width: 100%;
   padding: 0 1em;
   margin: 1em;
   gap: 2em;
+
+  align-items: center;
+
+  & span.ant-input-affix-wrapper,
+  button.ant-input-search-button {
+    height: 10vh;
+  }
+
+  & button.ant-input-search-button,
+  input.ant-input {
+    font-size: 2em;
+  }
 `;
 
 export const ColFlexBox = css`

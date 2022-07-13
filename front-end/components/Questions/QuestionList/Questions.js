@@ -1,15 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Button, Input, Divider, Result, Typography } from "antd";
+import { Button, Input, Divider } from "antd";
 import QuestionsList from "./QuestionsList";
-import { FlexBox } from "../styles/QuestionStyle";
+import { SearchBarContainer } from "../styles/QuestionStyle";
 import Link from "next/link";
 
 const Questions = ({ questions }) => {
   const [query, setQuery] = useState("");
   const [questionsList, setQuestionsList] = useState([...questions]);
+  console.log(questions);
 
   const searchQuestions = () => {
     // e.preventDefault();
@@ -35,9 +35,9 @@ const Questions = ({ questions }) => {
 
   return (
     <>
-      <div css={FlexBox}>
+      <div css={SearchBarContainer}>
         <Input.Search
-          placeholder="input search text"
+          placeholder="Search Questions"
           allowClear
           enterButton
           size="large"
@@ -55,7 +55,11 @@ const Questions = ({ questions }) => {
         </Link>
       </div>
       <Divider plain />
-      <QuestionsList questions={questionsList} />
+      {questions ? (
+        <QuestionsList questions={questionsList} />
+      ) : (
+        <h1>아직 질문이 없습니다. 궁금한 질문을 남겨주세요.</h1>
+      )}
     </>
   );
 };
