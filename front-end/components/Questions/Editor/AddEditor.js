@@ -32,13 +32,21 @@ const AddEditor = ({ title, data, isAnswer, parentQnaId, tags }) => {
     try {
       const savedData = await editorCore.current.save();
 
-      await axios.post("/api/qnas", {
-        title,
-        contents: JSON.stringify(savedData),
-        isAnswer,
-        parentQnaId,
-        tags,
-      });
+      await axios.post(
+        "/api/qnas",
+        {
+          title,
+          contents: JSON.stringify(savedData),
+          isAnswer,
+          parentQnaId,
+          tags,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
 
       // 서버에서 사용하지 않는 이미지 제거하기
 
