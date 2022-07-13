@@ -62,23 +62,32 @@ qnaRouter.post(
   }
 );
 
-qnaRouter.patch(
+qnaRouter.put(
   "/:qnaId",
   loginRequired,
   async (req: extendReq, res: Response, next: NextFunction) => {
     try {
       const qnaId = req.params.qnaId;
-      const userId = req.currentUserId || "";
-      const { title, contents, imgUrl, tags, isAnswer, parentQnaId } = req.body;
+      const author = req.currentUserId || "";
+      const {
+        title,
+        contents,
+        imgUrl,
+        recommends,
+        tags,
+        isAnswer,
+        parentQnaId,
+      } = req.body;
       const toUpdate = {
         ...(title && { title }),
         ...(contents && { contents }),
         ...(imgUrl && { imgUrl }),
+        ...(recommends && { recommends }),
         ...(tags && { tags }),
         ...(isAnswer && { isAnswer }),
         ...(parentQnaId && { parentQnaId }),
       };
-      const updatedQnaA = await qnaService.setQna(qnaId, userId, toUpdate);
+      const updatedQnaA = await qnaService.setQna(qnaId, author, toUpdate);
       res.status(200).json(updatedQnaA);
     } catch (error) {
       next(error);

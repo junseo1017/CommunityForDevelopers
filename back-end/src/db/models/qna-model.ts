@@ -56,6 +56,7 @@ export class QnaModel {
       option
     );
   }
+
   async deleteById(qnaId: string) {
     return await Qna.findOneAndDelete({ _id: qnaId });
   }
