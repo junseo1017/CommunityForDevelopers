@@ -30,11 +30,10 @@ portfolioRouter.get(
 );
 
 portfolioRouter.get(
-  "/user/list",
-  loginRequired,
+  "/user/:userId",
   async (req: extendReq, res: Response, next: NextFunction) => {
     try {
-      const userId = req.currentUserId || "";
+      const userId = req.params.userId;
       const Portfolio = await portfolioService.getUserPortfolio(userId);
       res.status(200).json(Portfolio);
     } catch (error) {
