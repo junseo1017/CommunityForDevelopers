@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 
 const ProfileNav = () => {
   const { userInfo } = useSelector((state) => state.user);
-
   return (
     <div css={profileNavContainer}>
       <ul css={profileNavStyle}>

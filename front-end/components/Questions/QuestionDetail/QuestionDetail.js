@@ -11,6 +11,7 @@ import {
   TextContainer,
   EditorContainer,
   DetailAnswerContainer,
+  CommentsContainer,
 } from "../styles/QuestionStyle";
 import Link from "next/link";
 import AddEditor from "../Editor/AddEditor";
@@ -30,7 +31,7 @@ const QuestionDetail = ({ qna, answers, users }) => {
   return (
     <div css={DetailContainer}>
       <div css={DetailQuestionContainer}>
-        <div>
+        <div className="badge-container">
           <Badge count={qna.recommends.length}>
             <LikeOutlined style={{ fontSize: "2em" }} />
           </Badge>
@@ -68,7 +69,7 @@ const QuestionDetail = ({ qna, answers, users }) => {
               placeholder="답변의 제목을 작성하세요"
               onChange={(e) => setAnswerTItle(e.target.value)}
             />
-            <AddEditor title={answerTitle} isAnswer parentQnaId={qna.qnaId} />
+            <AddEditor title={answerTitle} isAnswer parentQnaId={qna._id} />
           </div>
         )}
         <div></div>
@@ -82,7 +83,7 @@ const QuestionDetail = ({ qna, answers, users }) => {
       {answers &&
         answers.map((answer) => {
           return (
-            <div css={DetailAnswerContainer} key={answer.qnaId}>
+            <div css={DetailAnswerContainer} key={answer._id}>
               <div className="answer-title">
                 <MessageOutlined style={{ fontSize: "2em" }} />
                 <h2>{answer.title}</h2>
@@ -95,7 +96,7 @@ const QuestionDetail = ({ qna, answers, users }) => {
               <Output data={JSON.parse(answer.contents)} />
               <Collapse>
                 <Collapse.Panel header="댓글 보기">
-                  <Comments contentId={answer.qnaId} />
+                  <Comments contentId={answer._id} />
                 </Collapse.Panel>
               </Collapse>
               <Divider plain />

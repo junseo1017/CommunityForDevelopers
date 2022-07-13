@@ -9,9 +9,10 @@ import { EditorContainer } from "../../components/Questions/styles/QuestionStyle
 import { useState } from "react";
 
 const newQuestion = () => {
+  // ! Input onChange 마다 렌더링 되고 있음. 개선 필수
+  // console.log("rendering...");
   const [questionTitle, setQuestionTitle] = useState("");
   const [tags, setTags] = useState([]);
-  console.log(tags);
 
   return (
     <AppLayout>
