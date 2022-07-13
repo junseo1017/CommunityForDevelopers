@@ -6,8 +6,6 @@ import TopButton from "../TopButton";
 import { ColFlexBox } from "../styles/QuestionStyle";
 
 const QuestionsList = ({ questions }) => {
-  console.log(questions);
-
   return (
     <>
       <div css={ColFlexBox}>

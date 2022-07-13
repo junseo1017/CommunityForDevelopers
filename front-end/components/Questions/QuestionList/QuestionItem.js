@@ -10,7 +10,6 @@ import dynamic from "next/dynamic";
 const Output = dynamic(() => import("editorjs-react-renderer"), { ssr: false });
 
 const QuestionItem = ({ _id, title, recommends, tags, user, date }) => {
-  console.log(_id, title, recommends, tags, user, date);
   const formattedDate = `${new Date(date).getFullYear()}년 ${
     new Date(date).getMonth() + 1
   }월 ${new Date(date).getDate()}일`;

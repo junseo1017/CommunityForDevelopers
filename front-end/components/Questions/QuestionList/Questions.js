@@ -9,7 +9,6 @@ import Link from "next/link";
 const Questions = ({ questions }) => {
   const [query, setQuery] = useState("");
   const [questionsList, setQuestionsList] = useState([...questions]);
-  console.log(questions);
 
   const searchQuestions = () => {
     // e.preventDefault();
@@ -20,9 +19,15 @@ const Questions = ({ questions }) => {
     } else {
       // 검색
       const filteredQuestionList = questions.filter((question) => {
+        const filteredBlocks = JSON.parse(question.contents).blocks.map(({ type, data }) => {
+          return type === "paragraph" || type === "header" ? data : "";
+        });
+
+        const texts = filteredBlocks.map((block) => block.text).join(" ");
+
         return (
-          question.title.toLowerCase().includes(query) ||
-          question.contents.toLowerCase().includes(query)
+          question.title.toLowerCase().includes(query.toLowerCase()) ||
+          texts.toLowerCase().includes(query.toLowerCase())
         );
       });
       setQuestionsList(filteredQuestionList);

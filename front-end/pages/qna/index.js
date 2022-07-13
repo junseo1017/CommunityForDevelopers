@@ -7,18 +7,19 @@ import axios from "axios";
 // import { qnaActions, getQnaData } from "../../reducers/qna";
 
 const questions = ({ qnas }) => {
-  const [filterdQuestions, setFilterdQuestions] = useState([]);
+  qnas = qnas.filter((qna) => !qna.isAnswer);
+  // const [filterdQuestions, setFilterdQuestions] = useState([]);
 
-  useEffect(() => {
-    setFilterdQuestions(qnas.filter((qna) => !qna.isAnswer));
-  }, [qnas]);
+  // useEffect(() => {
+  //   setFilterdQuestions(qnas.filter((qna) => !qna.isAnswer));
+  // }, [qnas]);
 
   return (
     <AppLayout>
       <Head>
         <title>모든 질문</title>
       </Head>
-      <Questions questions={filterdQuestions} />
+      <Questions questions={qnas} />
     </AppLayout>
   );
 };
