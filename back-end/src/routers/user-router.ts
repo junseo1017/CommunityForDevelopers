@@ -1,23 +1,29 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { userService } from "../services";
 import { extendReq, loginRequired } from "../middlewares";
+import {
+  userCreateJoiSchema,
+  userUpdateJoiSchema,
+} from "../db/schemas/joi-schemas";
 
 const userRouter = Router();
 
-// 회원가입
 userRouter.post(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
-    const { nickname, email, password, job, imgUrl, skills } = req.body;
-    console.log(req.body);
+    const { nickname, email, password } = req.body;
+
     try {
+      await userCreateJoiSchema.validateAsync({
+        email,
+        nickname,
+        password,
+      });
+
       const newUser = await userService.addUser({
         nickname,
         email,
         password,
-        job,
-        imgUrl,
-        skills,
       });
 
       res.status(201).json(newUser);
@@ -27,7 +33,6 @@ userRouter.post(
   }
 );
 
-// 로그인
 userRouter.post(
   "/login",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -42,21 +47,14 @@ userRouter.post(
   }
 );
 
-// 전체 유저 목록
-userRouter.get(
-  "/",
-  loginRequired,
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const users = await userService.getUsers();
-      res.status(200).json(users);
-    } catch (error) {
-      next(error);
-    }
+userRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    res.status(200).json(await userService.getUsers());
+  } catch (error) {
+    next(error);
   }
-);
+});
 
-// id로 유저 정보 불러오기 (token decoded)
 userRouter.get(
   "/token",
   loginRequired,
@@ -75,31 +73,44 @@ userRouter.get(
 );
 
 userRouter.patch(
-  "/:userId",
+  "/info",
   loginRequired,
-  async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.params.userId;
-    console.log(req.body);
-    const { nickname, email, password, job, imgUrl, skills } = req.body;
-    const currentPassword = req.body.currentPassword;
-
-    if (!currentPassword) {
-      throw new Error("정보를 변경하려면, 현재의 비밀번호가 필요합니다");
-    }
+  async (req: extendReq, res: Response, next: NextFunction) => {
+    const userId = req.currentUserId || "";
+    const { nickname, job, imgUrl, skills } = req.body;
 
     const toUpdate = {
       nickname,
-      email,
-      password,
       job,
       imgUrl,
       skills,
     };
 
     try {
-      const updatedUserInfo = await userService.setUser(
+      await userUpdateJoiSchema.validateAsync({ nickname });
+      const updatedUserInfo = await userService.setUser(userId, toUpdate);
+      res.status(200).json(updatedUserInfo);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+userRouter.patch(
+  "/password",
+  loginRequired,
+  async (req: extendReq, res: Response, next: NextFunction) => {
+    const userId = req.currentUserId || "";
+    const { password, currentPassword } = req.body;
+
+    if (!currentPassword) {
+      throw new Error("정보를 변경하려면, 현재의 비밀번호가 필요합니다");
+    }
+
+    try {
+      const updatedUserInfo = await userService.setPassword(
         { userId, currentPassword },
-        toUpdate
+        password
       );
 
       res.status(200).json(updatedUserInfo);
@@ -110,10 +121,10 @@ userRouter.patch(
 );
 
 userRouter.delete(
-  "/:userId",
+  "/",
   loginRequired,
-  async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.params.userId;
+  async (req: extendReq, res: Response, next: NextFunction) => {
+    const userId = req.currentUserId || "";
     const currentPassword = req.body.currentPassword;
 
     if (!currentPassword) {

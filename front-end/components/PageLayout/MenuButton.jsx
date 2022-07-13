@@ -59,7 +59,7 @@ const MenuButton = () => {
           <Link href="/">
             <a>포트폴리오</a>
           </Link>
-          <Link href="/questions">
+          <Link href="/qna">
             <a>Q&A</a>
           </Link>
           <a>Magazine</a>

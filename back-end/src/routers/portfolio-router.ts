@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { portfolioService } from "../services/portfolio-service";
 import { extendReq, loginRequired } from "../middlewares/login-required";
-import { portfolioJoiSchema } from "../db/schemas/joi-schemas/portfolio-schema";
+import { portfolioJoiSchema } from "../db/schemas/joi-schemas";
 const portfolioRouter = Router();
 
 portfolioRouter.get(
