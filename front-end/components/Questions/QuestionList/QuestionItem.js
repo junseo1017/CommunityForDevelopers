@@ -42,7 +42,7 @@ const QuestionItem = ({ _id, title, recommends, contents, tags, user, date, answ
         </div>
         <div>
           <StarOutlined />
-          <span>{`  ${recommends}명이 이 질문에 추천함.  `}</span>
+          <span>{`  ${recommends}명이 이 질문을 추천함.`}</span>
           <span>{`(${user.nickname}가 ${formattedDate}에 질문함)`}</span>
         </div>
       </div>

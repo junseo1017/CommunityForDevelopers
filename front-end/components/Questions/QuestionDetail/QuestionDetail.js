@@ -6,43 +6,62 @@ import Router, { useRouter } from "next/router";
 import Comments from "./Comments";
 import TopButton from "../TopButton";
 import { Button, Badge, Tag, Divider, Collapse, Input } from "antd";
-import { LikeOutlined, MessageOutlined } from "@ant-design/icons";
-import {
-  DetailContainer,
-  DetailQuestionContainer,
-  TextContainer,
-  EditorContainer,
-  DetailAnswerContainer,
-  CommentsContainer,
-} from "../styles/QuestionStyle";
+import { DetailContainer, DetailQuestionContainer, EditorContainer } from "../styles/QuestionStyle";
 import Link from "next/link";
 import AddEditor from "../Editor/AddEditor";
 import Like from "../Like";
 import Answers from "./Answers";
 import Output from "editorjs-react-renderer";
+import axios from "axios";
 
 const QuestionDetail = ({ qna, answers }) => {
+  // qna의 id 가져오기
   const router = useRouter();
-  const likeId = router.query._id;
-  console.log("지금 보는 페이지", likeId);
+  const qnaId = router.query._id;
+
+  // user 정보 가져오기
+  const { me } = useSelector((state) => state.user);
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [answerTitle, setAnswerTItle] = useState("");
+
   const formattingDate = (date) => {
     return `${new Date(date).getFullYear()}년 ${new Date(date).getMonth() + 1}월 ${new Date(
       date,
     ).getDate()}일`;
   };
 
-  // 유저 id 가져오기
-  const { userInfo } = useSelector((state) => state.user);
-  const userId = userInfo._id;
-  console.log(userInfo);
+  const [recommendData, setRecommendData] = useState({
+    isRecommended: false,
+    numberOfRecommends: 0,
+  });
+
+  const [isChanged, setIsChanged] = useState(false);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await axios.get(`/api/qnas/${qnaId}`);
+        const qna = response.data;
+
+        const numberOfRecommends = qna.recommends.length;
+        const isRecommended = qna.recommends.map((user) => user._id).includes(me._id);
+
+        setRecommendData({ isRecommended, numberOfRecommends });
+        console.log(recommendData);
+        setIsChanged(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getData();
+  }, [isChanged]);
 
   return (
     <div css={DetailContainer}>
       <div css={DetailQuestionContainer}>
-        <Like qnaId={qna._id} userId={userId} />
+        <Like qnaId={qna._id} recommendData={recommendData} setIsChanged={setIsChanged} />
         <h1>{qna.title}</h1>
         <div className="tag-container">
           {qna.tags.map((tag, index) => (
@@ -83,7 +102,7 @@ const QuestionDetail = ({ qna, answers }) => {
         <div></div>
       </div>
       <Divider plain />
-      <Answers answers={answers} userId={userId} user={userInfo} />
+      <Answers answers={answers} userId={me._id} user={me} />
       <TopButton />
     </div>
   );

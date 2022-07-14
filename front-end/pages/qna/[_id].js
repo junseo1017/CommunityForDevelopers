@@ -3,6 +3,8 @@ import AppLayout from "../../components/AppLayout";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import axios from "axios";
+import wrapper from "../../store";
+import { myinfo } from "../../actions/user";
 
 const QuestionDetail = dynamic(
   () => {
@@ -21,7 +23,15 @@ const QuestionDetailPage = ({ qna, answers }) => {
 
 export default QuestionDetailPage;
 
-export async function getServerSideProps({ query }) {
+// SSR (프론트 서버에서 실행)
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, query }) => {
+  const cookie = req?.headers.cookie; // req가 있다면 cookie에 요청에 담겨진 cookie를 할당한다.
+  axios.defaults.headers.Cookie = ""; // 요청이 들어올 때마다 초기화 시켜주는 것이다. 여기는 클라이언트 서버에서 실행되므로 이전 요청이 남아있을 수 있기 때문이다
+  if (req && cookie) {
+    axios.defaults.headers.Cookie = cookie;
+  }
+  await store.dispatch(myinfo());
+
   try {
     const _id = query._id;
 
@@ -30,7 +40,6 @@ export async function getServerSideProps({ query }) {
 
     const answer_response = await axios.get("/api/qnas");
     const answers = answer_response.data.filter((answer) => answer.parentQnaId === _id);
-    console.log("SSR detail", qna, answers);
 
     return {
       props: {
@@ -41,4 +50,4 @@ export async function getServerSideProps({ query }) {
   } catch (error) {
     console.log(error);
   }
-}
+});
