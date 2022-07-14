@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 const app: Express = express();
 
 // CORS 에러 방지
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
 // cookie
 app.use(cookieParser(process.env.COOKIE_SECRET));

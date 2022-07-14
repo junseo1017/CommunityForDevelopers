@@ -57,9 +57,7 @@ const userSlice = createSlice({
         state.loginError = null;
       })
       .addCase(login.fulfilled, (state, action) => {
-        console.log("fullfilled", action.payload);
         state.loginLoading = false;
-        state.isLoggedin = action.payload.token;
         state.loginDone = true;
       })
       .addCase(login.rejected, (state, action) => {
@@ -93,7 +91,7 @@ const userSlice = createSlice({
       })
       .addCase(myinfo.rejected, (state, action) => {
         state.loadMyInfoLoading = false;
-        state.loadMyInfoError = action.payload;
+        state.loadMyInfoError = action.error.message;
       })
       .addCase(patchUserinfo.pending, (state) => {
         state.patchUserLoading = true;

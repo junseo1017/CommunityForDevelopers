@@ -16,27 +16,20 @@ const LoggedinMenu = () => {
   return (
     <>
       {me ? (
-        me ? (
-          <>
-            <Link href={`/profile/${me._id}`}>
-              <a>내 정보</a>
-            </Link>
-            <a onClick={logoutHandler}>로그아웃</a>
-          </>
-        ) : (
-          <>
-            <Link href={"/login"}>
-              <a>로그인</a>
-            </Link>
-            <Link href="/signup">
-              <a>회원가입</a>
-            </Link>
-          </>
-        )
+        <>
+          <Link href={`/profile/${me._id}`}>
+            <a>내 정보</a>
+          </Link>
+          <a onClick={logoutHandler}>로그아웃</a>
+        </>
       ) : (
         <>
-          <a style={{ width: "50px", backgroundColor: "white" }}></a>
-          <a style={{ width: "50px", backgroundColor: "white" }}></a>
+          <Link href={"/login"}>
+            <a>로그인</a>
+          </Link>
+          <Link href="/signup">
+            <a>회원가입</a>
+          </Link>
         </>
       )}
     </>
@@ -44,3 +37,9 @@ const LoggedinMenu = () => {
 };
 
 export default LoggedinMenu;
+{
+  /* <>
+<a style={{ width: "50px", backgroundColor: "white" }}></a>
+<a style={{ width: "50px", backgroundColor: "white" }}></a>
+</> */
+}

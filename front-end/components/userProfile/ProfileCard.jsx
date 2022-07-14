@@ -14,7 +14,6 @@ import { useEffect } from "react";
 import { useState } from "react";
 
 const ProfileCard = ({ me }) => {
-  console.log(me);
   const [showresUI, setShowresUI] = useState(false);
   const isresponsive = useMediaQuery({
     query: "(max-width:768px)",

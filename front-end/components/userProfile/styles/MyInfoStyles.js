@@ -144,3 +144,21 @@ export const portfolioStyle = css`
     }
   }
 `;
+
+export const qnaContainer = css`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+export const qnaNavStyle = css`
+  display: flex;
+  gap: 1.5vw;
+  padding: 10px;
+  border-bottom: 1px solid rgb(220, 220, 220);
+  h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+  }
+`;

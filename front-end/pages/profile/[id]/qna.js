@@ -15,7 +15,6 @@ const ProfileCQnA = () => {
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
   const { qnabyUserId } = useSelector((state) => state.qna);
-
   useEffect(() => {
     // 로그인 여부 확인
     dispatch(myinfo());

@@ -5,10 +5,11 @@ import { backendUrl } from "../config/config";
 axios.defaults.baseURL = backendUrl;
 
 export const getqnabyuserid = createAsyncThunk(
-  "user/userinfo",
+  "user/userqna",
   async (data, { rejectWithValue }) => {
     try {
       const response = await axios.get(`api/qnas/user/${data}`);
+      console.log(data);
       console.log(response.data);
       return response.data;
     } catch (error) {
