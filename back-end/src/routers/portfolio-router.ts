@@ -2,13 +2,15 @@ import { Router, Request, Response, NextFunction } from "express";
 import { portfolioService } from "../services/portfolio-service";
 import { extendReq, loginRequired } from "../middlewares/login-required";
 import { portfolioJoiSchema } from "../db/schemas/joi-schemas";
+
 const portfolioRouter = Router();
 
 portfolioRouter.get(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const Portfolios = await portfolioService.getPortfolios();
+      const lastId = req.query.lastId as string;
+      const Portfolios = await portfolioService.getPortfolios(lastId);
       res.status(200).json(Portfolios);
     } catch (error) {
       next(error);
@@ -49,13 +51,6 @@ portfolioRouter.post(
     try {
       const author = req.currentUserId || "";
       const { title, description, skills, content } = req.body;
-      await portfolioJoiSchema.validateAsync({
-        author,
-        title,
-        description,
-        skills,
-        content,
-      });
       const newPortfolio = await portfolioService.addPortfolio({
         author,
         title,
@@ -65,6 +60,7 @@ portfolioRouter.post(
       });
       res.status(201).json(newPortfolio);
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
