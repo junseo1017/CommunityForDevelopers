@@ -24,7 +24,7 @@ const Editor = ({ imageArray, handleInitialize, data }) => {
       css={EditorSize}
       onInitialize={handleInitialize}
       tools={editorTools}
-      placeholder={`질문/답변을 작성해주세요`}
+      placeholder={`질문 혹은 답변을 작성해주세요. 상세히 작성할수록 좋습니다.`}
       data={data}
     />
   );

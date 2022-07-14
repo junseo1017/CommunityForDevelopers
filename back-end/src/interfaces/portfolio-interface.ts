@@ -1,4 +1,3 @@
-import { Schema } from "mongoose";
 export interface IPort {
   author: string;
   title: string;

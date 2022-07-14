@@ -1,11 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
+import wrapper from "../../store";
 import ProfileNav from "../../components/userProfile/ProfileNav";
 import AppLayout from "../../components/AppLayout";
 import ProfileCard from "../../components/userProfile/ProfileCard";
 import ProfileMyInfo from "../../components/userProfile/ProfileMyInfo";
 import { ProfileContentContainer } from "./profileStyle";
-import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 const Profile = () => {
   return (
     <AppLayout>
@@ -17,4 +18,5 @@ const Profile = () => {
     </AppLayout>
   );
 };
+
 export default Profile;

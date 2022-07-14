@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import { Card, Button, Tag } from "antd";
+import { Card, Button, Tag, message } from "antd";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -17,7 +17,8 @@ import {
 
 const ProfileMyInfo = () => {
   const [skills, setSkills] = useState([]);
-  const { userInfo } = useSelector((state) => state.user);
+  const [action, setAction] = useState(false);
+  const { userInfo, patchUserDone, patchUserError } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const { register, handleSubmit, reset } = useForm({ defaultValues: userInfo });
 
@@ -26,15 +27,29 @@ const ProfileMyInfo = () => {
     setSkills(userInfo.skills);
   }, [userInfo]);
 
+  useEffect(() => {
+    if (action) {
+      if (patchUserDone) {
+        message.success("회원님의 정보가 변경되었습니다.");
+      }
+      if (patchUserError) {
+        message.error("정보 변경 중 에러가 발생했습니다.");
+      }
+    }
+  }, [patchUserDone, patchUserError]);
+
   const onSubmit = (data) => {
-    // dispatch(
-    //   patchUserinfo({
-    //     email: userInfo.email,
-    //     nickname: data.nickname,
-    //     job: data.job,
-    //     skills,
-    //   }),
-    // );
+    dispatch(
+      patchUserinfo({
+        userId: userInfo._id,
+        nickname: data.nickname,
+        job: data.job,
+        imgUrl: data.imgUrl,
+        skills,
+      }),
+    );
+    setAction(true);
+
     console.log({
       email: userInfo.email,
       nickname: data.nickname,
