@@ -36,6 +36,8 @@ const QuestionDetail = ({ qna, answers }) => {
     numberOfRecommends: 0,
   });
 
+  console.log(recommendData);
+
   const [isChanged, setIsChanged] = useState(false);
 
   useEffect(() => {
@@ -44,11 +46,10 @@ const QuestionDetail = ({ qna, answers }) => {
         const response = await axios.get(`/api/qnas/${qnaId}`);
         const qna = response.data;
 
-        const numberOfRecommends = qna.recommends.length;
         const isRecommended = qna.recommends.map((user) => user._id).includes(me._id);
+        const numberOfRecommends = qna.recommends.length;
 
         setRecommendData({ isRecommended, numberOfRecommends });
-        console.log(recommendData);
         setIsChanged(false);
       } catch (error) {
         console.log(error);
@@ -102,7 +103,7 @@ const QuestionDetail = ({ qna, answers }) => {
         <div></div>
       </div>
       <Divider plain />
-      <Answers answers={answers} userId={me._id} user={me} />
+      <Answers answers={answers} me={me} />
       <TopButton />
     </div>
   );

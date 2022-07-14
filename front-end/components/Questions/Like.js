@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Badge } from "antd";
 import { LikeOutlined, LikeFilled } from "@ant-design/icons";
 import axios from "axios";
@@ -6,6 +6,8 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 
 const Like = ({ qnaId, recommendData, setIsChanged }) => {
+  console.log(recommendData);
+
   const handleLikeClick = async () => {
     try {
       const res = await axios.put(
