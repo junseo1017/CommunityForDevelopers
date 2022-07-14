@@ -40,6 +40,16 @@ userRouter.post(
 
     try {
       const userToken = await userService.getUserToken({ email, password });
+
+      if (req.cookies)
+        console.log("쿠키:", req.cookies, "\n인증쿠키:", req.signedCookies);
+
+      res.cookie("userinfo", userToken, {
+        expires: new Date(Date.now() + 60000 * 1440), //24시간
+        httpOnly: true,
+        signed: true,
+      });
+
       res.status(200).json(userToken);
     } catch (error) {
       next(error);

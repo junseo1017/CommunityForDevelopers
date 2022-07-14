@@ -31,10 +31,13 @@ const QnaSchema = new Schema(
       required: false,
       default: "",
     },
-    recommends: {
-      type: [String],
-      required: false,
-    },
+    recommends: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "users",
+        required: false,
+      },
+    ],
     tags: {
       type: [String],
       required: false,

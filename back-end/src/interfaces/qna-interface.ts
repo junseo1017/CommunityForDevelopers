@@ -1,9 +1,8 @@
-import { Types } from "mongoose";
 export interface Qna {
   qnaId: string;
   title: string;
   contents: string;
-  userId: string;
+  author: string;
   imgUrl: string;
   recommends: string[];
   tags: string[];
