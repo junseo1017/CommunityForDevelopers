@@ -160,7 +160,10 @@ export const CommentsContainer = css`
   & .mentions {
     font-weight: bold;
     color: #1890ff;
-    // background-color: rgb(24, 144, 255, 0.25);
+  }
+
+  & .focused {
+    background-color: rgb(24, 144, 255, 0.25);
   }
 `;
 

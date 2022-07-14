@@ -19,12 +19,12 @@ const CommentsEditor = ({ comment, handleChange, userList, handleSubmit }) => {
         a11ySuggestionsListLabel={"Suggested mentions"}>
         <Mention
           className="mentions"
+          markup="@__display__"
           trigger="@"
           data={userList}
           renderSuggestion={(suggestion, search, highlightedDisplay, index, focused) => (
             <div className={`user ${focused ? "focused" : ""}`}>{highlightedDisplay}</div>
           )}
-          markup="@__display__"
           style={{ backgroundColor: "rgb(24, 144, 255, 0.25)" }}
         />
       </MentionsInput>
@@ -38,12 +38,15 @@ const CommentsEditor = ({ comment, handleChange, userList, handleSubmit }) => {
 const Comments = ({ contentId, user }) => {
   console.log(user);
   const [userList, setUserList] = useState([]);
+  const [comment, setComment] = useState("");
+  const [comments, setComments] = useState([]);
+  console.log(comments);
 
   useEffect(() => {
     const getCurrentComments = async () => {
       try {
         const response = await axios.get(`/api/qnas/${contentId}`);
-        console.log(response);
+        console.log("댓글", response);
         setComments(response.data.comments);
       } catch (error) {
         console.log(error);
@@ -58,11 +61,6 @@ const Comments = ({ contentId, user }) => {
     const getUsers = async () => {
       try {
         const response = await axios.get("/api/users");
-        // {
-        //   headers: {
-        //     Authorization: `Bearer ${localStorage.getItem("token")}`,
-        //   },
-        // }
 
         // 데이터 변환
         const users = response.data.map((user) => {
@@ -77,9 +75,6 @@ const Comments = ({ contentId, user }) => {
 
     getUsers();
   }, []);
-
-  const [comment, setComment] = useState("");
-  const [comments, setComments] = useState([]);
 
   const handleChange = (e) => {
     e.target.value && setComment(e.target.value);
@@ -118,7 +113,7 @@ const Comments = ({ contentId, user }) => {
               author={<p>{user.nickname}</p>}
               avatar={<Avatar src={user.imgUrl} alt={userList.nickname} />}
               css={CommentStyle}
-              content={<p>{comment}</p>}
+              content={<p>{comment.content}</p>}
               datetime={<span>{moment().fromNow()}</span>}
             />
           )}
