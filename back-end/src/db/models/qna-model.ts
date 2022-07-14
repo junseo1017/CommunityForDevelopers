@@ -19,6 +19,10 @@ export class QnaModel {
         select: "nickname",
       },
       {
+        path: "recommends",
+        select: "nickname",
+      },
+      {
         path: "comments",
         populate: {
           path: "author",
@@ -47,12 +51,31 @@ export class QnaModel {
   }
 
   async updateComment(qnaId: string, commentId: Types.ObjectId) {
-    const filter = { qnaId };
+    const filter = { _id: qnaId };
     const option = { returnOriginal: false };
-
     return await Qna.findOneAndUpdate(
       filter,
       { $addToSet: { comments: commentId } },
+      option
+    );
+  }
+
+  async addRecommend(qnaId: string, userId: string) {
+    const filter = { _id: qnaId };
+    const option = { returnOriginal: false };
+    return await Qna.findOneAndUpdate(
+      filter,
+      { $addToSet: { recommends: userId } },
+      option
+    );
+  }
+
+  async deleteRecommend(qnaId: string, userId: string) {
+    const filter = { _id: qnaId };
+    const option = { returnOriginal: false };
+    return await Qna.findOneAndUpdate(
+      filter,
+      { $pull: { recommends: userId } },
       option
     );
   }
