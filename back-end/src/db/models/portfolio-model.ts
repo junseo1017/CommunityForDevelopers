@@ -47,6 +47,26 @@ export class PortfolioModel {
         select: "nickname",
       });
   }
+  async findBySearchInit(options: Array<any>, orderBy: string) {
+    return await Portfolio.find({ $or: options })
+      .sort({ [orderBy]: -1 })
+      .limit(20)
+      .populate({
+        path: "author",
+        select: "nickname",
+      });
+  }
+
+  // async findBySearch(options: Array<any>, orderBy: string, lastId: string) {
+  //   const id = new Types.ObjectId(lastId);
+  //   return await Portfolio.find([{ _id: { $lt: id } }, { $or: options }])
+  //     .sort({ [orderBy]: -1 })
+  //     .limit(20)
+  //     .populate({
+  //       path: "author",
+  //       select: "nickname",
+  //     });
+  // }
 
   async create(portInfo: IPort) {
     return await Portfolio.create(portInfo);
