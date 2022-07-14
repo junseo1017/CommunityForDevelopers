@@ -6,7 +6,7 @@ import {
   SearchInfo,
 } from "../interfaces/user-interface";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import { jwtUtil } from "../utils/jwt-util";
 
 class UserService {
   userModel;
@@ -61,10 +61,10 @@ class UserService {
       );
     }
 
-    const secretKey = process.env.JWT_SECRET_KEY || "secret-key";
-    const token = jwt.sign({ userId: user._id, role: user.role }, secretKey);
+    const accessToken = jwtUtil.access(user);
+    const refreshToken = jwtUtil.refresh();
 
-    return { token };
+    return { accessToken, refreshToken };
   }
 
   async getUsers() {
