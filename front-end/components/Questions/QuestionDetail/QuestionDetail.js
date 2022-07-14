@@ -16,6 +16,7 @@ import {
 import Link from "next/link";
 import AddEditor from "../Editor/AddEditor";
 import Output from "editorjs-react-renderer";
+import Answers from "./Answers";
 // const Output = dynamic(async () => await import("editorjs-react-renderer"), { ssr: false });
 
 const QuestionDetail = ({ qna, answers, users }) => {
@@ -75,34 +76,7 @@ const QuestionDetail = ({ qna, answers, users }) => {
         <div></div>
       </div>
       <Divider plain />
-      {answers.length === 0 && (
-        <div css={TextContainer}>
-          <h2>아직 답변이 없습니다. 당신의 지식을 공유해 보세요!</h2>
-        </div>
-      )}
-      {answers &&
-        answers.map((answer) => {
-          return (
-            <div css={DetailAnswerContainer} key={answer._id}>
-              <div className="answer-title">
-                <MessageOutlined style={{ fontSize: "2em" }} />
-                <h2>{answer.title}</h2>
-                <Button type="text">
-                  <Badge count={answer.recommends.length}>
-                    <LikeOutlined style={{ fontSize: "2em" }} />
-                  </Badge>
-                </Button>
-              </div>
-              <Output data={JSON.parse(answer.contents)} />
-              <Collapse>
-                <Collapse.Panel header="댓글 보기">
-                  <Comments contentId={answer._id} />
-                </Collapse.Panel>
-              </Collapse>
-              <Divider plain />
-            </div>
-          );
-        })}
+      <Answers answers={answers} userId={userId} user={userInfo} />
       <TopButton />
     </div>
   );
