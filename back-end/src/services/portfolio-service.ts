@@ -11,8 +11,15 @@ class PortfolioService {
     return await this.portfolioModel.create(newPortInfo);
   }
 
-  async getPortfolios() {
-    const portfolios = await this.portfolioModel.findAll();
+  async getPortfolios(lastId?: string) {
+    if (lastId) {
+      const portfolios = await this.portfolioModel.findPortfolios(lastId);
+      if (!portfolios) {
+        throw new Error("포토폴리오 목록이 존재하지 않습니다.");
+      }
+      return portfolios;
+    }
+    const portfolios = await this.portfolioModel.findPortfoliosInit();
     if (!portfolios) {
       throw new Error("포토폴리오 목록이 존재하지 않습니다.");
     }

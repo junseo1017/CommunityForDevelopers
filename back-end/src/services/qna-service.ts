@@ -62,6 +62,16 @@ class QnaService {
     }
     return await this.qnaModel.updateComment(qnaId, commentId);
   }
+  async recommendQna(qnaId: string, userId: string, recommended: boolean) {
+    const QnA = await this.qnaModel.findById(qnaId);
+    if (!QnA) {
+      throw new Error("QnA정보가 없습니다.");
+    }
+    if (recommended) {
+      return await this.qnaModel.addRecommend(qnaId, userId);
+    }
+    return await this.qnaModel.deleteRecommend(qnaId, userId);
+  }
 
   async deleteQna(qnaId: string, userId: string) {
     const QnA = await this.qnaModel.deleteById(qnaId);
