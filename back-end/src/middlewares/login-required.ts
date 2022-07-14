@@ -1,12 +1,15 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import { jwtUtil } from "../utils";
 
 export interface extendReq extends Request {
   currentUserId?: string;
 }
 
 function loginRequired(req: extendReq, res: Response, next: NextFunction) {
-  const userToken = req.headers["authorization"]?.split(" ")[1];
+  // const userToken = req.headers["authorization"]?.split(" ")[1];
+  const userToken = req.signedCookies.userinfo;
+
+  console.log("쿠키 토큰 : ", userToken);
 
   if (!userToken || userToken === "null") {
     console.log("서비스 사용 요청이 있습니다.하지만, Authorization 토큰: 없음");
@@ -19,12 +22,14 @@ function loginRequired(req: extendReq, res: Response, next: NextFunction) {
   }
 
   try {
-    const secretKey = process.env.JWT_SECRET_KEY || "secret-key";
-    const jwtDecoded = jwt.verify(userToken, secretKey);
+    //검증...ㅁㄴㅇㄻㄴㅇㄹ
+    //access token verify
+    const accessAuth = jwtUtil.verify(userToken.accessToken);
+    // if (!accessAuth?.ok) {
 
-    if (typeof jwtDecoded !== "string") {
-      req.currentUserId = jwtDecoded.userId;
-    }
+    // }
+
+    req.currentUserId = accessAuth?.userId;
 
     next();
   } catch (error) {
