@@ -75,6 +75,7 @@ userRouter.get(
       if (userId !== undefined) {
         const users = await userService.getUserInfo(userId);
         res.send(users);
+        // res.send(users);
       }
     } catch (error) {
       next(error);

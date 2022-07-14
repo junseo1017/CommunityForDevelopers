@@ -6,11 +6,11 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 
 const addButtonStyle = css`
   & div {
-    background-color: #aca3a37b;
-    transition: 0.4s;
-    color: white;
+    background-color: rgb(220, 220, 220);
+    transition: 400ms;
+    color: black;
     border-radius: 10px;
-    width: 100px;
+    width: 60px;
     height: 40px;
     display: flex;
     justify-content: center;
@@ -18,6 +18,7 @@ const addButtonStyle = css`
   }
   & div:hover {
     background-color: black;
+    color: white;
   }
   @media (max-width: 768px) {
     & div {

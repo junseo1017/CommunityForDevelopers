@@ -9,12 +9,13 @@ import {
   loadHashtagPortfolios,
   loadPortfolio,
   loadPortfolios,
-  loadUserPortfolios,
   removePortfolio,
   retweet,
   unlikePortfolio,
   updatePortfolio,
   uploadImages,
+  loadUserPortfolios,
+  loadMyPortfolios,
 } from "../actions/portfolio";
 //수정중
 const initialState = {
@@ -42,6 +43,10 @@ const initialState = {
   uploadImagesLoading: false,
   uploadImagesDone: false,
   uploadImagesError: null,
+  myPortfolios: null,
+  loadMyPortfoliosLoading: false,
+  loadMyPortfoliosDone: false,
+  loadMyPortfoliosError: false,
   singlePortfolio: {
     title: "",
     skills: [],
@@ -94,21 +99,21 @@ const portfolioSlice = createSlice({
         state.loadPortfoliosError = action.error.message;
       })
       // loadUserPortfolios
-      .addCase(loadUserPortfolios.pending, (state) => {
-        state.loadPortfoliosLoading = true;
-        state.loadPortfoliosDone = false;
-        state.loadPortfoliosError = null;
-      })
-      .addCase(loadUserPortfolios.fulfilled, (state, action) => {
-        state.loadPortfoliosLoading = false;
-        state.loadPortfoliosDone = true;
-        state.mainPortfolios = _concat(state.mainPortfolios, action.payload);
-        state.hasMorePortfolios = action.payload.length === 10;
-      })
-      .addCase(loadUserPortfolios.rejected, (state, action) => {
-        state.loadPortfoliosLoading = false;
-        state.loadPortfoliosError = action.error.message;
-      })
+      // .addCase(loadUserPortfolios.pending, (state) => {
+      //   state.loadPortfoliosLoading = true;
+      //   state.loadPortfoliosDone = false;
+      //   state.loadPortfoliosError = null;
+      // })
+      // .addCase(loadUserPortfolios.fulfilled, (state, action) => {
+      //   state.loadPortfoliosLoading = false;
+      //   state.loadPortfoliosDone = true;
+      //   state.mainPortfolios = _concat(state.mainPortfolios, action.payload);
+      //   state.hasMorePortfolios = action.payload.length === 10;
+      // })
+      // .addCase(loadUserPortfolios.rejected, (state, action) => {
+      //   state.loadPortfoliosLoading = false;
+      //   state.loadPortfoliosError = action.error.message;
+      // })
       // addPortfolio
       .addCase(addPortfolio.pending, (state) => {
         state.addPortfolioLoading = true;
@@ -249,6 +254,23 @@ const portfolioSlice = createSlice({
       .addCase(loadPortfolio.rejected, (state, action) => {
         state.loadPortfoliosLoading = false;
         state.loadPortfoliosError = action.error.message;
+      })
+      // loadUserPortfolios
+      .addCase(loadMyPortfolios.pending, (state) => {
+        console.log("pending");
+        state.loadMyPortfoliosLoading = true;
+        state.loadMyPortfoliosDone = false;
+        state.loadMyPortfoliosError = null;
+      })
+      .addCase(loadMyPortfolios.fulfilled, (state, action) => {
+        console.log("fulfilled");
+        state.loadMyPortfoliosLoading = false;
+        state.loadMyPortfoliosDone = true;
+        state.myPortfolios = action.payload;
+      })
+      .addCase(loadMyPortfolios.rejected, (state, action) => {
+        state.loadMyPortfoliosLoading = false;
+        state.loadMyPortfoliosError = action.payload;
       })
       .addDefaultCase((state) => state),
 });

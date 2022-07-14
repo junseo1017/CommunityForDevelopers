@@ -1,12 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import AppLayout from "../components/AppLayout";
 import React, { useMemo } from "react";
+import wrapper from "../store";
 import { List, Select, Divider } from "antd";
 import { BackTop } from "antd";
 import PortfolioCard from "../components/Portfolo/PortfolioCard";
 import PorfolioSearch from "../components/Portfolo/PorfolioSearch";
-import { loadPortfolios } from "../actions/portfolio";
-
+import { myinfo } from "../actions/user";
+import axios from "axios";
 const tagsOptions = [
   {
     value: "gold",
@@ -166,13 +167,16 @@ const Home = () => {
 };
 
 // SSR (프론트 서버에서 실행)
-// export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
-//   await context.store.dispatch(loadPortfolios());
-//   await context.store.dispatch(loadMyInfo());
-
-//   return {
-//     props: {},
-//   };
-// });
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, query }) => {
+  const cookie = req?.headers.cookie; // req가 있다면 cookie에 요청에 담겨진 cookie를 할당한다.
+  axios.defaults.headers.Cookie = ""; // 요청이 들어올 때마다 초기화 시켜주는 것이다. 여기는 클라이언트 서버에서 실행되므로 이전 요청이 남아있을 수 있기 때문이다
+  if (req && cookie) {
+    axios.defaults.headers.Cookie = cookie;
+  }
+  await store.dispatch(myinfo());
+  return {
+    props: {},
+  };
+});
 
 export default Home;

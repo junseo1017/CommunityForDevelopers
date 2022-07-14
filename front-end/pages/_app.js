@@ -4,32 +4,15 @@ import "../styles/globals.css";
 import "antd/dist/antd.css";
 import { useEffect } from "react";
 import wrapper from "../store/index";
-import { useSelector, useDispatch } from "react-redux";
-import { userinfo } from "../actions/user";
-import userSlice from "../reducers/user";
-import { useCallback } from "react";
+import { useDispatch } from "react-redux";
+import { myinfo } from "../actions/user";
+
 const MyApp = ({ Component, pageProps }) => {
   const dispatch = useDispatch();
-  const { isLoggedin } = useSelector((state) => state.user);
-  const getuserInfo = useCallback(() => {
-    dispatch(userinfo());
-  }, []);
-
-  // 로그인 여부 확인
-  const checkLoginStatus = useCallback(() => {
-    dispatch(userSlice.actions.checkLoggedin());
-    const checkStorage = localStorage.getItem("token");
-    if (!checkStorage) {
-      return;
-    }
-    dispatch(userSlice.actions.addLoginStatus(checkStorage));
-    getuserInfo();
-  }, [isLoggedin]);
-
   useEffect(() => {
-    checkLoginStatus();
-  }, [isLoggedin]);
-
+    // 로그인 여부 확인
+    dispatch(myinfo());
+  }, []);
   return (
     <>
       <Head>

@@ -10,19 +10,27 @@ import {
 } from "./styles/ProfileCardStyles";
 import { useMediaQuery } from "react-responsive";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useState } from "react";
 
-const ProfileCard = () => {
-  const { userInfo } = useSelector((state) => state.user);
-  const { nickname } = userInfo;
+const ProfileCard = ({ me }) => {
+  const [showresUI, setShowresUI] = useState(false);
   const isresponsive = useMediaQuery({
     query: "(max-width:768px)",
   });
+
+  useEffect(() => {
+    if (isresponsive) {
+      setShowresUI(true);
+    } else setShowresUI(false);
+  }, [isresponsive]);
+
   return (
     <Card css={ProfileCardContainer}>
       <div>
         <div css={CardProfile}>
-          <Avatar size={isresponsive ? 100 : 150} src="https://joeschmoe.io/api/v1/random" />
-          {nickname ? <p>{nickname}</p> : <p></p>}
+          <Avatar size={showresUI ? 100 : 150} src="https://joeschmoe.io/api/v1/random" />
+          {me ? <p>{me.nickname}</p> : <p></p>}
         </div>
         <div css={ProfileCardContent}>
           <div>

@@ -2,30 +2,30 @@
 import { css, jsx } from "@emotion/react";
 import { Card, Button, Tag, message } from "antd";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { useState } from "react";
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { patchUserinfo } from "../../actions/user";
 import {
-  myInfoCardContainer,
+  profileContentCardContainer,
   myInfoSubmitBtnStyle,
   myInfoFormStyle,
   myInfoSkills,
 } from "./styles/MyInfoStyles";
+import Image from "next/image";
 
-const ProfileMyInfo = () => {
+const ProfileMyInfo = ({ me }) => {
   const [skills, setSkills] = useState([]);
   const [action, setAction] = useState(false);
-  const { userInfo, patchUserDone, patchUserError } = useSelector((state) => state.user);
+  const { patchUserDone, patchUserError } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const { register, handleSubmit, reset } = useForm({ defaultValues: userInfo });
+  const { register, handleSubmit, reset } = useForm({ defaultValues: me });
 
   useEffect(() => {
-    reset(userInfo);
-    setSkills(userInfo.skills);
-  }, [userInfo]);
+    reset(me);
+    setSkills(me.skills);
+  }, [me]);
 
   useEffect(() => {
     if (action) {
@@ -41,7 +41,7 @@ const ProfileMyInfo = () => {
   const onSubmit = (data) => {
     dispatch(
       patchUserinfo({
-        userId: userInfo._id,
+        userId: me._id,
         nickname: data.nickname,
         job: data.job,
         imgUrl: data.imgUrl,
@@ -49,13 +49,6 @@ const ProfileMyInfo = () => {
       }),
     );
     setAction(true);
-
-    console.log({
-      email: userInfo.email,
-      nickname: data.nickname,
-      job: data.job,
-      skills,
-    });
   };
 
   const checkKeyDown = useCallback((e) => {
@@ -76,21 +69,34 @@ const ProfileMyInfo = () => {
   };
 
   return (
-    <Card css={myInfoCardContainer}>
+    <Card css={profileContentCardContainer}>
       <form css={myInfoFormStyle} onSubmit={handleSubmit(onSubmit)} onKeyDown={checkKeyDown}>
         <label>{"이메일"}</label>
         <input
           style={{ backgroundColor: "rgb(220,220,220)" }}
-          value={userInfo.email || ""}
+          value={me.email || ""}
           {...register("email")}
         />
 
-        <label>{"별명"}</label>
+        <label>{"별명 *"}</label>
         <input autoComplete="off" {...register("nickname", { required: true })} />
 
         <label>{"프로필 사진"}</label>
-        <input autoComplete="off" {...register("imgUrl")} />
-
+        <button></button>
+        <input
+          style={{ visibility: "hidden" }}
+          type="file"
+          autoComplete="off"
+          {...register("imgUrl")}
+        />
+        {/* <div style={{ width: "150px" }}>
+          <Image
+            src={"/image/profile_image_default.jpg"}
+            layout="responsive"
+            width="100px"
+            height="100px"
+          />
+        </div> */}
         <label>{"직업"}</label>
         <input {...register("job")} list="list" autoComplete="off" />
         <datalist id="list">
