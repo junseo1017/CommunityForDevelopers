@@ -264,8 +264,6 @@ const portfolioSlice = createSlice({
       })
       .addCase(loadMyPortfolios.fulfilled, (state, action) => {
         console.log("fulfilled");
-
-        console.log(action.payload);
         state.loadMyPortfoliosLoading = false;
         state.loadMyPortfoliosDone = true;
         state.myPortfolios = action.payload;

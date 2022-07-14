@@ -6,9 +6,9 @@ import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { profileContentCardContainer } from "./styles/MyInfoStyles";
 
-const ProfileScrap = () => {
+const ProfileQnA = () => {
   const router = useRouter();
 
   return <Card css={profileContentCardContainer}></Card>;
 };
-export default ProfileScrap;
+export default ProfileQnA;

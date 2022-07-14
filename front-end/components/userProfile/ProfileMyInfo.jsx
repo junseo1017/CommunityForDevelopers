@@ -9,16 +9,16 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { patchUserinfo } from "../../actions/user";
 import {
-  myInfoCardContainer,
+  profileContentCardContainer,
   myInfoSubmitBtnStyle,
   myInfoFormStyle,
   myInfoSkills,
 } from "./styles/MyInfoStyles";
 
-const ProfileMyInfo = () => {
+const ProfileMyInfo = ({ me }) => {
   const [skills, setSkills] = useState([]);
   const [action, setAction] = useState(false);
-  const { me, patchUserDone, patchUserError } = useSelector((state) => state.user);
+  const { patchUserDone, patchUserError } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const { register, handleSubmit, reset } = useForm({ defaultValues: me });
 
@@ -69,7 +69,7 @@ const ProfileMyInfo = () => {
   };
 
   return (
-    <Card css={myInfoCardContainer}>
+    <Card css={profileContentCardContainer}>
       <form css={myInfoFormStyle} onSubmit={handleSubmit(onSubmit)} onKeyDown={checkKeyDown}>
         <label>{"이메일"}</label>
         <input

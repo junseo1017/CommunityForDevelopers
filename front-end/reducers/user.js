@@ -4,10 +4,6 @@ import { signup, login, userinfo, patchUserinfo, myinfo } from "../actions/user"
 const initialState = {
   // 내 정보
   me: false,
-  // 로그인 여부
-  isLoggedin: false,
-  // 새로고침 발생할 경우 로그인 여부 체크
-  isLoggedinCheck: false,
   // 유저 정보
   userInfo: false,
   // 회원가입
@@ -38,7 +34,6 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     logout(state) {
-      state.isLoggedin = false;
       state.me = false;
     },
     addLoginStatus(state, action) {

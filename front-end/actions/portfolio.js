@@ -154,7 +154,6 @@ export const loadMyPortfolios = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await axios.get(`api/portfolios/user/${data}`);
-      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
