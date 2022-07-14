@@ -8,11 +8,7 @@ export const getqnabyuserid = createAsyncThunk(
   "user/userinfo",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/api/qnas/user/list", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.get(`api/qnas/user/${data}`);
       console.log(response.data);
       return response.data;
     } catch (error) {

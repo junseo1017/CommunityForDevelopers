@@ -2,9 +2,8 @@
 import { css, jsx } from "@emotion/react";
 import { Card, Button, Tag, message } from "antd";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { useState } from "react";
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { patchUserinfo } from "../../actions/user";
@@ -14,6 +13,7 @@ import {
   myInfoFormStyle,
   myInfoSkills,
 } from "./styles/MyInfoStyles";
+import Image from "next/image";
 
 const ProfileMyInfo = ({ me }) => {
   const [skills, setSkills] = useState([]);
@@ -82,8 +82,21 @@ const ProfileMyInfo = ({ me }) => {
         <input autoComplete="off" {...register("nickname", { required: true })} />
 
         <label>{"프로필 사진"}</label>
-        <input autoComplete="off" {...register("imgUrl")} />
-
+        <button></button>
+        <input
+          style={{ visibility: "hidden" }}
+          type="file"
+          autoComplete="off"
+          {...register("imgUrl")}
+        />
+        {/* <div style={{ width: "150px" }}>
+          <Image
+            src={"/image/profile_image_default.jpg"}
+            layout="responsive"
+            width="100px"
+            height="100px"
+          />
+        </div> */}
         <label>{"직업"}</label>
         <input {...register("job")} list="list" autoComplete="off" />
         <datalist id="list">

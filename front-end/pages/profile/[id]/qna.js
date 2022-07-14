@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
+import wrapper from "../../../store/index";
 import ProfileNav from "../../../components/userProfile/ProfileNav";
 import AppLayout from "../../../components/AppLayout";
 import ProfileCard from "../../../components/userProfile/ProfileCard";
@@ -18,8 +19,8 @@ const ProfileCQnA = () => {
   useEffect(() => {
     // 로그인 여부 확인
     dispatch(myinfo());
-    dispatch(getqnabyuserid());
   }, []);
+
   return (
     <AppLayout>
       <ProfileNav />
@@ -31,11 +32,11 @@ const ProfileCQnA = () => {
   );
 };
 
-// export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ query }) => {
-//   await store.dispatch(loadMyPortfolios(query.id));
-//   return {
-//     props: {},
-//   };
-// });
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ query }) => {
+  await store.dispatch(getqnabyuserid(query.id));
+  return {
+    props: {},
+  };
+});
 
 export default ProfileCQnA;
