@@ -1,6 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import Router, { useRouter } from "next/router";
 import Comments from "./Comments";
 import TopButton from "../TopButton";
 import { Button, Badge, Tag, Divider, Collapse, Input } from "antd";
@@ -15,33 +17,38 @@ import {
 } from "../styles/QuestionStyle";
 import Link from "next/link";
 import AddEditor from "../Editor/AddEditor";
-import Output from "editorjs-react-renderer";
+import Like from "../Like";
 import Answers from "./Answers";
-// const Output = dynamic(async () => await import("editorjs-react-renderer"), { ssr: false });
+import Output from "editorjs-react-renderer";
 
-const QuestionDetail = ({ qna, answers, users }) => {
+const QuestionDetail = ({ qna, answers }) => {
+  const router = useRouter();
+  const likeId = router.query._id;
+  console.log("지금 보는 페이지", likeId);
+
   const [isEditMode, setIsEditMode] = useState(false);
   const [answerTitle, setAnswerTItle] = useState("");
-
   const formattingDate = (date) => {
     return `${new Date(date).getFullYear()}년 ${new Date(date).getMonth() + 1}월 ${new Date(
       date,
     ).getDate()}일`;
   };
 
+  // 유저 id 가져오기
+  const { userInfo } = useSelector((state) => state.user);
+  const userId = userInfo._id;
+  console.log(userInfo);
+
   return (
     <div css={DetailContainer}>
       <div css={DetailQuestionContainer}>
-        <div className="badge-container">
-          <Badge count={qna.recommends.length}>
-            <LikeOutlined style={{ fontSize: "2em" }} />
-          </Badge>
-        </div>
+        <Like qnaId={qna._id} userId={userId} />
         <h1>{qna.title}</h1>
         <div className="tag-container">
           {qna.tags.map((tag, index) => (
             <Tag key={index}>{tag}</Tag>
           ))}
+          <p>질문자: {qna.author.nickname}</p>
           <p>질문일: {formattingDate(qna.createdAt)}</p>
           <p>최근 수정일: {formattingDate(qna.updatedAt)}</p>
         </div>
