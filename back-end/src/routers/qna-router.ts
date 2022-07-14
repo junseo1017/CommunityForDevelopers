@@ -62,7 +62,7 @@ qnaRouter.post(
   }
 );
 
-qnaRouter.patch(
+qnaRouter.put(
   "/:qnaId",
   loginRequired,
   async (req: extendReq, res: Response, next: NextFunction) => {
@@ -86,6 +86,25 @@ qnaRouter.patch(
   }
 );
 
+qnaRouter.put(
+  "/:qnaId/recommendation",
+  loginRequired,
+  async (req: extendReq, res: Response, next: NextFunction) => {
+    try {
+      const qnaId = req.params.qnaId;
+      const userId = req.currentUserId || "";
+      const recommended = req.query.recommended === "true";
+      const updatedQnA = await qnaService.recommendQna(
+        qnaId,
+        userId,
+        recommended
+      );
+      res.status(200).json(updatedQnA);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 qnaRouter.delete(
   "/:qnaId",
   loginRequired,
