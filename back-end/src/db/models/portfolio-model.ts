@@ -25,11 +25,27 @@ export class PortfolioModel {
   }
 
   async findByUserId(userId: string) {
-    return await Portfolio.find({ author: userId });
+    return await Portfolio.find({ author: userId }).populate({
+      path: "author",
+      select: "nickname",
+    });
   }
 
-  async findAll() {
-    return await Portfolio.find({});
+  async findPortfoliosInit() {
+    return await Portfolio.find({}).sort({ _id: -1 }).limit(12).populate({
+      path: "author",
+      select: "nickname",
+    });
+  }
+  async findPortfolios(lastId: string) {
+    const id = new Types.ObjectId(lastId);
+    return await Portfolio.find({ _id: { $lt: id } })
+      .sort({ _id: -1 })
+      .limit(12)
+      .populate({
+        path: "author",
+        select: "nickname",
+      });
   }
 
   async create(portInfo: IPort) {
@@ -44,7 +60,7 @@ export class PortfolioModel {
   }
 
   async updateComment(portId: string, commentId: Types.ObjectId) {
-    const filter = { portId };
+    const filter = { _id: portId };
     const option = { returnOriginal: false };
 
     return await Portfolio.findOneAndUpdate(

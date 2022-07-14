@@ -7,33 +7,36 @@ import axios from "axios";
 // import { qnaActions, getQnaData } from "../../reducers/qna";
 
 const questions = ({ qnas }) => {
-  // const dispatch = useDispatch();
-  // const qnas = useSelector((state) => state.qnas);
+  qnas = qnas.filter((qna) => !qna.isAnswer);
+  // const [filterdQuestions, setFilterdQuestions] = useState([]);
 
   // useEffect(() => {
-  //   dispatch(getQnaData());
-  // }, [dispatch]);
-
-  // console.log(qnas);
-
-  const filterdQuestions = qnas.filter((qna) => !qna.isAnswer);
+  //   setFilterdQuestions(qnas.filter((qna) => !qna.isAnswer));
+  // }, [qnas]);
 
   return (
     <AppLayout>
       <Head>
         <title>모든 질문</title>
       </Head>
-      <Questions questions={filterdQuestions} />
+      <Questions questions={qnas} />
     </AppLayout>
   );
 };
 
 export default questions;
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
   try {
     const response = await axios.get("/api/qnas");
-    const qnas = response.data;
+
+    // if (!response) {
+    //   return {
+    //     notFound: true,
+    //   };
+    // }
+    console.log("response", response.data);
+    const qnas = response.data || [];
 
     return {
       props: {
@@ -41,6 +44,10 @@ export async function getServerSideProps(context) {
       },
     };
   } catch (error) {
-    console.log(error);
+    return {
+      redirect: {
+        destination: "/",
+      },
+    };
   }
 }

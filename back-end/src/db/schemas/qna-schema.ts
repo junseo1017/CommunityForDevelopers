@@ -5,7 +5,7 @@ export interface QnaType extends Document {
   author: Types.ObjectId;
   imgUrl: string;
   recommends: string[];
-  tage: string[];
+  tages: string[];
   isAnswer: boolean;
   parentQnaId: string;
   comments: Types.ObjectId[];
@@ -31,10 +31,13 @@ const QnaSchema = new Schema(
       required: false,
       default: "",
     },
-    recommends: {
-      type: [String],
-      required: false,
-    },
+    recommends: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "users",
+        required: false,
+      },
+    ],
     tags: {
       type: [String],
       required: false,

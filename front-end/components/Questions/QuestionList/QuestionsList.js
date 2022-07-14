@@ -11,9 +11,9 @@ const QuestionsList = ({ questions }) => {
       <div css={ColFlexBox}>
         {questions.map((questions) => {
           return (
-            <div key={questions.qnaId}>
+            <div key={questions._id}>
               <QuestionItem
-                qnaId={questions.qnaId}
+                _id={questions._id}
                 title={questions.title}
                 recommends={questions.recommends.length}
                 tags={questions.tags}

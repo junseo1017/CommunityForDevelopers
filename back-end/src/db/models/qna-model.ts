@@ -6,13 +6,20 @@ const Qna = model<QnaType & Document>("qnas", QnaSchema);
 
 export class QnaModel {
   async findAll() {
-    return await Qna.find({});
+    return await Qna.find({}).populate({
+      path: "author",
+      select: "nickname",
+    });
   }
 
   async findById(qnaId: string) {
     return await Qna.findOne({ _id: qnaId }).populate([
       {
         path: "author",
+        select: "nickname",
+      },
+      {
+        path: "recommends",
         select: "nickname",
       },
       {
@@ -26,7 +33,10 @@ export class QnaModel {
   }
 
   async findByUserId(userId: string) {
-    return await Qna.find({ userId });
+    return await Qna.find({ author: userId }).populate({
+      path: "author",
+      select: "nickname",
+    });
   }
 
   async create(qnaInfo: QnaInputDTO) {
@@ -41,15 +51,35 @@ export class QnaModel {
   }
 
   async updateComment(qnaId: string, commentId: Types.ObjectId) {
-    const filter = { qnaId };
+    const filter = { _id: qnaId };
     const option = { returnOriginal: false };
-
     return await Qna.findOneAndUpdate(
       filter,
       { $addToSet: { comments: commentId } },
       option
     );
   }
+
+  async addRecommend(qnaId: string, userId: string) {
+    const filter = { _id: qnaId };
+    const option = { returnOriginal: false };
+    return await Qna.findOneAndUpdate(
+      filter,
+      { $addToSet: { recommends: userId } },
+      option
+    );
+  }
+
+  async deleteRecommend(qnaId: string, userId: string) {
+    const filter = { _id: qnaId };
+    const option = { returnOriginal: false };
+    return await Qna.findOneAndUpdate(
+      filter,
+      { $pull: { recommends: userId } },
+      option
+    );
+  }
+
   async deleteById(qnaId: string) {
     return await Qna.findOneAndDelete({ _id: qnaId });
   }
