@@ -8,6 +8,8 @@ import Icon, {
 } from "@ant-design/icons";
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
+import Link from "next/link";
+import Router from "next/router";
 import {
   CardCss,
   ScrollDiv,
@@ -20,19 +22,32 @@ import {
 import millify from "millify";
 import styled from "@emotion/styled";
 import { Avatar, Card, Tag, Space, Col, Row } from "antd";
-import React from "react";
+import React, { useCallback } from "react";
 const { Meta } = Card;
 
-const PortfolioCard = ({ title, description, image, skills, author, comments, recommends }) => {
+const PortfolioCard = ({
+  title,
+  description,
+  image,
+  skills,
+  author,
+  comments,
+  recommends,
+  _id,
+}) => {
   const IconText = ({ icon, text }) => (
     <Space>
       {React.createElement(icon)}
       {text}
     </Space>
   );
+  const goDetailPortfolio = useCallback(() => {
+    Router.push(`/portfolio/${_id}`).then();
+  }, []);
 
   return (
     <Card
+      onClick={goDetailPortfolio}
       css={CardCss}
       hoverable
       cover={

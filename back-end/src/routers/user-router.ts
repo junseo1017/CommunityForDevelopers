@@ -60,10 +60,12 @@ userRouter.get(
   loginRequired,
   async (req: extendReq, res: Response, next: NextFunction) => {
     try {
+      console.log(req);
       const userId = req.currentUserId;
 
       if (userId !== undefined) {
         const users = await userService.getUserInfo(userId);
+        console.log(users);
         res.send(users);
       }
     } catch (error) {

@@ -6,7 +6,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import { SearchButton, CheckboxButton } from "./styles/PorfolioSearchStyle";
 import useSelects from "../../hooks/useSelects";
 
-const PorfolioSearch = ({ checkboxOptions, orderBys, tagsOptions }) => {
+const PorfolioSearch = ({ checkboxOptions, orderBys }) => {
   const [items, name, onNameChange, addItem] = useSelects();
   const { Search } = Input;
   const OrderBySelectStyle = useMemo(() => ({ width: 100, textAlign: "end" }), []);

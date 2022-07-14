@@ -48,6 +48,8 @@ const initialState = {
     description: "",
     image: {},
     content: "",
+    comments: [],
+    contentTexts: "",
   },
 };
 
@@ -71,7 +73,7 @@ const portfolioSlice = createSlice({
         state.loadPortfoliosLoading = false;
         state.loadPortfoliosDone = true;
         state.mainPortfolios = _concat(state.mainPortfolios, action.payload);
-        state.hasMorePortfolios = action.payload.length === 10;
+        state.hasMorePortfolios = action.payload.length === 12;
       })
       .addCase(loadPortfolios.rejected, (state, action) => {
         state.loadPortfoliosLoading = false;
@@ -147,10 +149,10 @@ const portfolioSlice = createSlice({
         state.addCommentError = null;
       })
       .addCase(addComment.fulfilled, (state, action) => {
-        const portfolio = _find(state.mainPortfolios, { id: action.payload.PortfolioId });
+        //const portfolio = _find(state.mainPortfolios, { _id: action.payload.portfolioId });
         state.addCommentLoading = false;
         state.addCommentDone = true;
-        portfolio.Comments.unshift(action.payload);
+        state.singlePortfolio.comments.unshift(action.payload);
       })
       .addCase(addComment.rejected, (state, action) => {
         state.addCommentLoading = false;
@@ -178,10 +180,10 @@ const portfolioSlice = createSlice({
         state.likePortfolioError = null;
       })
       .addCase(likePortfolio.fulfilled, (state, action) => {
-        const portfolio = _find(state.mainPortfolios, { id: action.payload.PortfolioId });
+        //const portfolio = _find(state.mainPortfolios, { id: action.payload.PortfolioId });
         state.likePortfolioLoading = false;
         state.likePortfolioDone = true;
-        portfolio.Likers.push({ id: action.payload.UserId });
+        state.singlePortfolio.Likers.push({ id: action.payload.UserId });
       })
       .addCase(likePortfolio.rejected, (state, action) => {
         state.likePortfolioLoading = false;
@@ -194,10 +196,10 @@ const portfolioSlice = createSlice({
         state.likePortfolioError = null;
       })
       .addCase(unlikePortfolio.fulfilled, (state, action) => {
-        const portfolio = _find(state.mainPortfolios, { id: action.payload.PortfolioId });
+        //const portfolio = _find(state.mainPortfolios, { id: action.payload.PortfolioId });
         state.likePortfolioLoading = false;
         state.likePortfolioDone = true;
-        _remove(portfolio.Likers, { id: action.payload.UserId });
+        _remove(state.singlePortfolio.Likers, { id: action.payload.UserId });
       })
       .addCase(unlikePortfolio.rejected, (state, action) => {
         state.likePortfolioLoading = false;

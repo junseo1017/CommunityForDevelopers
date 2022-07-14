@@ -6,7 +6,6 @@ import SignInForm from "../../components/Sign/SignInForm";
 import LoginLogo from "../../components/Sign/LoginLogo";
 import { LoginPageContainer } from "./loginstyle";
 import OAuthSign from "../../components/Sign/OAuthSign";
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import Router from "next/router";
 const Login = () => {
