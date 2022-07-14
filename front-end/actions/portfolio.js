@@ -149,11 +149,11 @@ export const loadHashtagPortfolios = createAsyncThunk(
   },
 );
 
-export const loadUserPortfolios = createAsyncThunk(
+export const loadMyPortfolios = createAsyncThunk(
   "user/loadUserPortfolios",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/user/${data.userId}/portfolios?last=${data?.lastId || 0}`);
+      const response = await axios.get(`api/portfolios/user/${data}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

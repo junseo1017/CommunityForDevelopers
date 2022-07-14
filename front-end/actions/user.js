@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { backendUrl } from "../config/config";
 
 axios.defaults.baseURL = backendUrl;
-// axios.defaults.withCredentials = true; // front, backend 간 쿠키공유
+axios.defaults.withCredentials = true; // front, backend 간 쿠키공유
 
 export const signup = createAsyncThunk("user/signup", async (data, { rejectWithValue }) => {
   try {
@@ -19,20 +19,16 @@ export const login = createAsyncThunk("user/login", async (data, { rejectWithVal
   try {
     console.log(`%c 로그인 요청: ${Object.values(data)} `, "color: green;");
     const response = await axios.post("/api/users/login", data);
+    console.log(response);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);
   }
 });
 
-export const userinfo = createAsyncThunk("user/userinfo", async (data, { rejectWithValue }) => {
+export const myinfo = createAsyncThunk("user/userinfo", async (data, { rejectWithValue }) => {
   try {
-    const response = await axios.get("/api/users/token", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    console.log(response.data);
+    const response = await axios.get("/api/users/token");
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);

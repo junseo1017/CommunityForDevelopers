@@ -87,6 +87,7 @@ export const CardProfile = css`
     font-size: 26px;
     font-weight: 900;
     padding: 20px 0 0 0;
+    text-align: center;
     @media (max-width: 768px) {
       width: 130px;
       font-size: 16px;

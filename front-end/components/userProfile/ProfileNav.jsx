@@ -5,27 +5,27 @@ import { profileNavContainer, profileNavStyle } from "./styles/ProfileNavStyles"
 import { useSelector } from "react-redux";
 
 const ProfileNav = () => {
-  const { userInfo } = useSelector((state) => state.user);
+  const { me } = useSelector((state) => state.user);
   return (
     <div css={profileNavContainer}>
       <ul css={profileNavStyle}>
         <li>
-          <Link href={`/profile/${userInfo.email}`}>
+          <Link href={`/profile/${me && me._id}`}>
             <a>프로필</a>
           </Link>
         </li>
         <li>
-          <Link href={`/profile/portfolio/${userInfo.email}`}>
+          <Link href={`/profile/${me && me._id}/portfolio`}>
             <a>포트폴리오</a>
           </Link>
         </li>
         <li>
-          <Link href={`/profile/scrap/${userInfo.email}`}>
+          <Link href={`/profile/${me && me._id}/scrap`}>
             <a>스크랩북</a>
           </Link>
         </li>
         <li>
-          <Link href="/profile/scrap/3">
+          <Link href={`/profile/${me && me._id}/qna`}>
             <a>질문&답변</a>
           </Link>
         </li>
