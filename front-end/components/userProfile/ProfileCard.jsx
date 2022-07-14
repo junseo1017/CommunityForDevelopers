@@ -18,7 +18,6 @@ const ProfileCard = ({ me }) => {
   const isresponsive = useMediaQuery({
     query: "(max-width:768px)",
   });
-
   useEffect(() => {
     if (isresponsive) {
       setShowresUI(true);
@@ -30,7 +29,7 @@ const ProfileCard = ({ me }) => {
       <div>
         <div css={CardProfile}>
           <Avatar size={showresUI ? 100 : 150} src="https://joeschmoe.io/api/v1/random" />
-          {me ? <p>{me.nickname}</p> : <p></p>}
+          {me && <p>{me.nickname}</p>}
         </div>
         <div css={ProfileCardContent}>
           <div>

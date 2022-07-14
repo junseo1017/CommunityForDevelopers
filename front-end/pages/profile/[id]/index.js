@@ -9,15 +9,10 @@ import { ProfileContentContainer } from "../profileStyle";
 import { myinfo } from "../../../actions/user";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import axios from "axios";
 
 const Profile = () => {
   const { me } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-  console.log(me);
-  useEffect(() => {
-    // 로그인 여부 확인
-    dispatch(myinfo());
-  }, []);
 
   return (
     <AppLayout>
@@ -30,11 +25,16 @@ const Profile = () => {
   );
 };
 
-// export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
-//   await store.dispatch(myinfo());
-//   return {
-//     props: {},
-//   };
-// });
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req }) => {
+  const cookie = req?.headers.cookie;
+  axios.defaults.headers.Cookie = "";
+  if (req && cookie) {
+    axios.defaults.headers.Cookie = cookie;
+  }
+  await store.dispatch(myinfo());
+  return {
+    props: {},
+  };
+});
 
 export default Profile;

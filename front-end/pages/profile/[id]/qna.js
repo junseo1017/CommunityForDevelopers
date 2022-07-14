@@ -6,19 +6,13 @@ import AppLayout from "../../../components/AppLayout";
 import ProfileCard from "../../../components/userProfile/ProfileCard";
 import ProfileQnA from "../../../components/userProfile/ProfileQnA";
 import { ProfileContentContainer } from "../profileStyle";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { myinfo } from "../../../actions/user";
 import { getqnabyuserid } from "../../../actions/qna";
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 const ProfileCQnA = () => {
-  const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
   const { qnabyUserId } = useSelector((state) => state.qna);
-  useEffect(() => {
-    // 로그인 여부 확인
-    dispatch(myinfo());
-  }, []);
 
   return (
     <AppLayout>
@@ -31,7 +25,13 @@ const ProfileCQnA = () => {
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ query }) => {
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ query, req }) => {
+  const cookie = req?.headers.cookie;
+  axios.defaults.headers.Cookie = "";
+  if (req && cookie) {
+    axios.defaults.headers.Cookie = cookie;
+  }
+  await store.dispatch(myinfo());
   await store.dispatch(getqnabyuserid(query.id));
   return {
     props: {},

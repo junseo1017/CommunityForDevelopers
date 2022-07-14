@@ -16,6 +16,7 @@ import {
 import Image from "next/image";
 
 const ProfileMyInfo = ({ me }) => {
+  const imageinputRef = useRef();
   const [skills, setSkills] = useState([]);
   const [action, setAction] = useState(false);
   const { patchUserDone, patchUserError } = useSelector((state) => state.user);
@@ -68,6 +69,11 @@ const ProfileMyInfo = ({ me }) => {
     setSkills(skills.filter((elem) => elem != e.target.id));
   };
 
+  const addImageHandler = () => {
+    console.log(imageinputRef.current);
+    // imageinputRef.current.click();
+  };
+
   return (
     <Card css={profileContentCardContainer}>
       <form css={myInfoFormStyle} onSubmit={handleSubmit(onSubmit)} onKeyDown={checkKeyDown}>
@@ -82,21 +88,24 @@ const ProfileMyInfo = ({ me }) => {
         <input autoComplete="off" {...register("nickname", { required: true })} />
 
         <label>{"프로필 사진"}</label>
-        <button></button>
+        <button onClick={addImageHandler} type="button">
+          사진 등록하기
+        </button>
         <input
-          style={{ visibility: "hidden" }}
+          ref={imageinputRef}
+          style={{ display: "none" }}
           type="file"
           autoComplete="off"
           {...register("imgUrl")}
         />
-        {/* <div style={{ width: "150px" }}>
+        <div style={{ width: "150px" }}>
           <Image
             src={"/image/profile_image_default.jpg"}
             layout="responsive"
             width="100px"
             height="100px"
           />
-        </div> */}
+        </div>
         <label>{"직업"}</label>
         <input {...register("job")} list="list" autoComplete="off" />
         <datalist id="list">

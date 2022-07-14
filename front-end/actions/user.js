@@ -40,11 +40,7 @@ export const patchUserinfo = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       console.log(`%c 유저 정보 수정 요청: ${Object.values(data)} `, "color: green;");
-      const response = await axios.patch(`/api/users/info`, data, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.patch(`/api/users/info`, data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

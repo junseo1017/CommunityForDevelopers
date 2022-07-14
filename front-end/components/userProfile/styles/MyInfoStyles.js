@@ -26,6 +26,17 @@ export const myInfoFormStyle = css`
     padding-left: 10px;
     font-weight: 500;
   }
+  & button {
+    background-color: white;
+    height: 40px;
+    width: 50%;
+    border: 2px solid #aca3a37b;
+    box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
+    transition: 100ms linear;
+    &:hover {
+      box-shadow: none;
+    }
+  }
 
   @media (max-width: 768px) {
     display: flex;
