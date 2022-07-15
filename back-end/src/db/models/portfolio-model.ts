@@ -67,10 +67,29 @@ export class PortfolioModel {
     return await Portfolio.findOneAndUpdate(filter, update, option);
   }
 
+  async addUserInField(portId: string, userId: string, field: string) {
+    const filter = { _id: portId };
+    const option = { returnOriginal: false };
+    return await Portfolio.findOneAndUpdate(
+      filter,
+      { $addToSet: { [field]: userId } },
+      option
+    );
+  }
+
+  async deleteUserInField(portId: string, userId: string, field: string) {
+    const filter = { _id: portId };
+    const option = { returnOriginal: false };
+    return await Portfolio.findOneAndUpdate(
+      filter,
+      { $pull: { [field]: userId } },
+      option
+    );
+  }
+
   async updateComment(portId: string, commentId: Types.ObjectId) {
     const filter = { _id: portId };
     const option = { returnOriginal: false };
-
     return await Portfolio.findOneAndUpdate(
       filter,
       { $addToSet: { comments: commentId } },

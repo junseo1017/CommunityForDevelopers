@@ -72,6 +72,23 @@ class PortfolioService {
     }
     return await this.portfolioModel.update(portId, portInfo);
   }
+
+  async setField(
+    portId: string,
+    userId: string,
+    field: string,
+    adding: boolean
+  ) {
+    const portfolio = await this.portfolioModel.findById(portId);
+    if (!portfolio) {
+      throw new Error("포토폴리오 정보가 없습니다.");
+    }
+    if (adding) {
+      return await this.portfolioModel.addUserInField(portId, userId, field);
+    }
+    return await this.portfolioModel.deleteUserInField(portId, userId, field);
+  }
+
   async setPortfolioComment(portId: string, commentId: Types.ObjectId) {
     const portfolio = await this.portfolioModel.findById(portId);
     if (!portfolio) {
