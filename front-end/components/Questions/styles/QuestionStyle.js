@@ -75,15 +75,21 @@ export const DescriptionContainer = css`
   flex-direction: column;
   margin-top: 1em;
 
-  & div:first-of-type {
+  & span.descriptions {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  & div:last-of-type {
-    opacity: 0.75;
-    align-self: flex-end;
+  & div.tag-container {
+    margin-top: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & > span {
+      opacity: 0.75;
+    }
   }
 `;
 
