@@ -2,22 +2,27 @@
 import { css, jsx } from "@emotion/react";
 
 export const SearchBarContainer = css`
-  display: flex;
-  width: 100%;
-  padding: 0 1em;
-  margin: 1em;
-  gap: 2em;
+  width: 75%;
 
-  align-items: center;
+  & input {
+    width: 100%;
+    height: 3em;
+    padding: 0 1em;
+    margin: 0 auto;
 
-  & span.ant-input-affix-wrapper,
-  button.ant-input-search-button {
-    height: 10vh;
-  }
+    font-size: 1.5em;
 
-  & button.ant-input-search-button,
-  input.ant-input {
-    font-size: 2em;
+    border: 2px solid gray;
+    border-radius: 0.5em;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+    opacity: 0.75;
+    outline: none;
+
+    &:focus {
+      box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+      border: 2px solid black;
+      color: black;
+    }
   }
 `;
 

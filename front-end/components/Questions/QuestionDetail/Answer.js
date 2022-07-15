@@ -15,8 +15,6 @@ const Answer = ({ answer, me }) => {
     numberOfRecommends: 0,
   });
 
-  console.log(recommendData);
-
   const [isChanged, setIsChanged] = useState(false);
 
   useEffect(() => {
@@ -37,9 +35,9 @@ const Answer = ({ answer, me }) => {
 
     getData();
   }, [isChanged]);
-  console.log("answers", answer);
   return (
     <div css={DetailAnswerContainer} key={answer._id}>
+      <Divider plain />
       <div className="answer-title">
         <MessageOutlined style={{ fontSize: "2em" }} />
         <h2>{answer.title}</h2>
@@ -51,7 +49,6 @@ const Answer = ({ answer, me }) => {
           <Comments contentId={answer._id} user={me} />
         </Collapse.Panel>
       </Collapse>
-      <Divider plain />
     </div>
   );
 };
