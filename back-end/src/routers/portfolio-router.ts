@@ -31,27 +31,18 @@ portfolioRouter.get(
 );
 
 portfolioRouter.get(
-  "/",
+  "/search/list",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      let options = [];
-      const skillList = req.query.skill as string[];
-      const search = req.query.search as string;
-      if (search) {
-        if (typeof req.query.option === "string") {
-          options.push({ [req.query.option as string]: new RegExp(search) });
-        } else {
-          const optionList = req.query.option as string[];
-          optionList.map((option) => {
-            options.push({ [option]: new RegExp(search) });
-          });
-        }
-      }
-      options.push({ skills: { $in: skillList } });
+      const options = req.query.option as string[];
+      const value = req.query.value as string;
       const orderBy = req.query.orderBy as string;
+      const skills = req.query.skill as string[];
+      const searchInfo = { options, value, orderBy, skills };
+      const page = parseInt(req.query.page as string);
       const Portfolios = await portfolioService.getPortfoliosBySearch(
-        options,
-        orderBy
+        searchInfo,
+        page
       );
       res.status(200).json(Portfolios);
     } catch (error) {
