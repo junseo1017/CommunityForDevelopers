@@ -5,20 +5,22 @@ import QuestionItem from "./QuestionItem";
 import TopButton from "../TopButton";
 import { ColFlexBox } from "../styles/QuestionStyle";
 
-const QuestionsList = ({ questions }) => {
+const QuestionsList = ({ questions, answers }) => {
   return (
     <>
       <div css={ColFlexBox}>
-        {questions.map((questions) => {
+        {questions.map((question) => {
           return (
-            <div key={questions._id}>
+            <div key={question._id}>
               <QuestionItem
-                _id={questions._id}
-                title={questions.title}
-                recommends={questions.recommends.length}
-                tags={questions.tags}
-                user={questions.userId}
-                date={questions.createdAt}
+                _id={question._id}
+                title={question.title}
+                recommends={question.recommends.length}
+                contents={question.contents}
+                tags={question.tags}
+                user={question.author}
+                date={question.createdAt}
+                answers={answers}
               />
               <Divider plain />
             </div>

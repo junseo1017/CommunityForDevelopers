@@ -5,6 +5,7 @@ export interface PortfolioType extends Document {
   description: string;
   skills: string;
   content: string;
+  contentText: string;
   recommends: string;
   comments: Types.ObjectId[];
 }
@@ -29,6 +30,10 @@ const PortfolioSchema = new Schema(
       required: true,
     },
     content: {
+      type: String,
+      required: true,
+    },
+    contentText: {
       type: String,
       required: true,
     },

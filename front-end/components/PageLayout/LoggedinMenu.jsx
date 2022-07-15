@@ -8,9 +8,7 @@ const LoggedinMenu = () => {
   const { me } = useSelector((state) => state.user);
 
   const logoutHandler = () => {
-    localStorage.removeItem("token");
-    dispatch(userSlice.actions.logout());
-    message.success("정상적으로 로그아웃 되었습니다.");
+    message.success("로그아웃 기능 구현중입니다.");
   };
 
   return (
@@ -37,9 +35,3 @@ const LoggedinMenu = () => {
 };
 
 export default LoggedinMenu;
-{
-  /* <>
-<a style={{ width: "50px", backgroundColor: "white" }}></a>
-<a style={{ width: "50px", backgroundColor: "white" }}></a>
-</> */
-}

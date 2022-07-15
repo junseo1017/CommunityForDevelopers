@@ -6,7 +6,7 @@ import QuestionsList from "./QuestionsList";
 import { SearchBarContainer } from "../styles/QuestionStyle";
 import Link from "next/link";
 
-const Questions = ({ questions }) => {
+const Questions = ({ questions, answers }) => {
   const [query, setQuery] = useState("");
   const [questionsList, setQuestionsList] = useState([...questions]);
 
@@ -61,7 +61,7 @@ const Questions = ({ questions }) => {
       </div>
       <Divider plain />
       {questions ? (
-        <QuestionsList questions={questionsList} />
+        <QuestionsList questions={questionsList} answers={answers} />
       ) : (
         <h1>아직 질문이 없습니다. 궁금한 질문을 남겨주세요.</h1>
       )}

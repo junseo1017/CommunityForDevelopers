@@ -20,15 +20,15 @@ cd community-for-developers/back-end
 <!-- 회원정보 변경 (patch api 만들기) -> req.body 수정 용민님께 요청 (현재 비밀번호 x / 비밀번호 변경은 항목 따로 만들기) -->
 <!-- 로그인 된 상태로 로그인 시 리다이렉팅 -->
 <!-- reducer 리팩토링 -->
-
 <!-- 포트폴리오 긁어오기 -->
 <!-- 폴더구조 변경 id > portfolio,scrap,index 파일 관리하기 쉽다. -->
 <!-- 포트폴리오 css -->
 <!-- userid로 qna 긁어오기 api 구현 -->
 
-포트폴리오 썸네일도 반환하도록 요청
+<!-- 로그인 확인 app 말고 getserversideprops로 변경하기(모든 페이지 적용) -->
+<!-- 서버에서 토큰을 쿠키로 넣어줘야 함 -->
 
-로그인 확인 app 말고 getserversideprops로 변경하기
+포트폴리오 썸네일도 반환하도록 요청
 
 유저정보 serversideprops하기
 
@@ -41,7 +41,5 @@ redux apis 이름 바꾸기 (myinfo > userinfo 하나로 관리하기)
 프로필 사진 없을 경우, 기본 이미지로 적용
 
 간편로그인 api 연동
-
-서버에서 토큰을 쿠키로 넣어줘야 함
 
 스크랩북 긁어오기 (아직 api 없음)
