@@ -4,7 +4,7 @@ import wrapper from "../../../store";
 import ProfileNav from "../../../components/userProfile/ProfileNav";
 import AppLayout from "../../../components/AppLayout";
 import ProfileCard from "../../../components/userProfile/ProfileCard";
-import ProfileMyInfo from "../../../components/userProfile/ProfileMyInfo";
+import ProfileUserInfo from "../../../components/userProfile/ProfileUserInfo";
 import { ProfileContentContainer } from "../profileStyle";
 import { myinfo, userinfo } from "../../../actions/user";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,13 +12,13 @@ import { useEffect } from "react";
 import axios from "axios";
 
 const Profile = () => {
-  const { userInfo } = useSelector((state) => state.user);
+  const { userInfo, me } = useSelector((state) => state.user);
   return (
     <AppLayout>
       <ProfileNav />
       <div css={ProfileContentContainer}>
         <ProfileCard userInfo={userInfo} />
-        <ProfileMyInfo userInfo={userInfo} />
+        <ProfileUserInfo />
       </div>
     </AppLayout>
   );
