@@ -7,6 +7,7 @@ class PortfolioService {
   }
   async addPortfolio(portInfo: IPort) {
     const { author, title, description, skills, content } = portInfo;
+    console.log(title);
     const newPortInfo = { author, title, description, skills, content };
     return await this.portfolioModel.create(newPortInfo);
   }

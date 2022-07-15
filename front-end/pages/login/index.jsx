@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
 import { Divider } from "antd";
+import { useEffect } from "react";
 import Link from "next/link";
 import SignInForm from "../../components/Sign/SignInForm";
 import LoginLogo from "../../components/Sign/LoginLogo";
 import { LoginPageContainer } from "./loginstyle";
 import OAuthSign from "../../components/Sign/OAuthSign";
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import Router from "next/router";
 const Login = () => {

@@ -24,6 +24,7 @@ portfolioRouter.get(
     try {
       const portId = req.params.portId;
       const Portfolio = await portfolioService.getPortfolio(portId);
+      console.log("wow", Portfolio);
       res.status(200).json(Portfolio);
     } catch (error) {
       next(error);
