@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import moment from "moment";
+
 import { addComment } from "../actions/portfolio";
 import { useDispatch } from "react-redux";
 

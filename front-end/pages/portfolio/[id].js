@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
 import AppLayout from "../../components/AppLayout";
+import { useCallback } from "react";
 import dynamic from "next/dynamic";
 import { Affix, Button, Avatar, Comment, Form, Input, List } from "antd";
 import { loadPortfolio } from "../../actions/portfolio";
@@ -9,6 +10,9 @@ import { useSelector } from "react-redux";
 import CommentEditor from "../../components/Portfolo/CommentEditor";
 import CommentList from "../../components/Portfolo/CommentList";
 import useComment from "../../hooks/useComment";
+import { LikeTwoTone, StarTwoTone } from "@ant-design/icons";
+import moment from "moment";
+import { likePortfolio, unlikePortfolio } from "../../actions/portfolio";
 const { TextArea } = Input;
 
 const Output = dynamic(async () => (await import("editorjs-react-renderer")).default, {
@@ -21,12 +25,66 @@ const Output = dynamic(async () => (await import("editorjs-react-renderer")).def
 const Portfolio = () => {
   const { singlePortfolio } = useSelector((state) => state.portfolio);
   const { me } = useSelector((state) => state.user);
-  console.log(singlePortfolio);
+  console.log(me);
+  const onLikePortfolio = useCallback(() => {
+    // if (!id) {
+    //   message.warn("로그인이 필요합니다.").then();
+    //   return;
+    // }
+    dispatch(
+      likePortfolio({
+        portfolioId: singlePortfolio._id,
+      }),
+    );
+  }, []);
+  const onUnlikePortfolio = useCallback(() => {
+    // if (!id) {
+    //   message.warn("로그인이 필요합니다.").then();
+    //   return;
+    // }
+    dispatch(
+      unlikePortfolio({
+        portfolioId: singlePortfolio._id,
+      }),
+    );
+  }, []);
   const affixCss = css`
-    .ant-affix {
-      right: 200px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    right: 30%;
+    bottom: 50%;
+    z-index: 99;
+    button + button {
+      margin-top: 5px;
+    }
+    @media (max-width: 2390px) {
+      right: 20%;
+    }
+    @media (max-width: 1612px) {
+      right: 10%;
+    }
+    @media (max-width: 1200px) {
+      right: 3%;
+    }
+    @media (max-width: 1022px) {
+      position: fixed;
+
+      bottom: 30px;
+      right: 30px;
     }
   `;
+
+  const comments = singlePortfolio.comments.map((data, index) => {
+    const newData = {
+      author: data.author?.nickname,
+      avatar: "https://joeschmoe.io/api/v1/random",
+      content: data.content,
+      datetime: moment(data.createdAt).fromNow(),
+    };
+    return newData;
+  });
+
   const [submitting, handleChange, handleSubmit, value] = useComment({
     ...me,
     imgUrl: "https://joeschmoe.io/api/v1/random",
@@ -44,11 +102,10 @@ const Portfolio = () => {
 
   return (
     <AppLayout>
-      <Affix offsetTop={240} css={affixCss}>
-        <Button type="primary" onClick={() => {}}>
-          Affix top
-        </Button>
-      </Affix>
+      <div css={affixCss}>
+        <Button size="large" shape="circle" icon={<LikeTwoTone />} />
+        <Button size="large" shape="circle" icon={<StarTwoTone />} />
+      </div>
 
       <div style={{ marginBottom: "3rem" }}>{}</div>
 
@@ -60,7 +117,7 @@ const Portfolio = () => {
         )}
       </div>
       <div style={{ width: "100%" }}>
-        {singlePortfolio.comments.length > 0 && <CommentList comments={singlePortfolio.comments} />}
+        {comments.length > 0 && <CommentList comments={comments} />}
         <Comment
           avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
           content={

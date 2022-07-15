@@ -58,5 +58,5 @@ export const rowCss = css`
 
 export const colCss = css`
   display: flex;
-  alignitems: flex-end;
+  align-items: flex-end;
 `;

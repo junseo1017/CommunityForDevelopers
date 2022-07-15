@@ -81,7 +81,7 @@ const PortfolioCard = ({
       <Row justify="space-between" align="bottom" css={rowCss}>
         <Col span={8} css={colCss}>
           <Avatar src="https://joeschmoe.io/api/v1/random" />
-          <div css={authorCss}>{author || "에릭지이이"}</div>
+          <div css={authorCss}>{author?.nickname || "에릭지이이"}</div>
         </Col>
         <Col span={16} css={IconCss}>
           <IconText icon={StarOutlined} text={millify(111155)} key="list-vertical-star-o" />

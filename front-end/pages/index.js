@@ -18,6 +18,7 @@ const Home = () => {
   );
   console.log(me);
   console.log(mainPortfolios);
+
   const { Option } = Select;
 
   const portfolioSearchObjects = useMemo(() => {
