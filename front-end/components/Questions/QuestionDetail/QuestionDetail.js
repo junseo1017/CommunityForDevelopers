@@ -1,24 +1,27 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import Router, { useRouter } from "next/router";
 import Comments from "./Comments";
 import TopButton from "../TopButton";
 import { Button, Badge, Tag, Divider, Collapse, Input } from "antd";
-import { LikeOutlined, MessageOutlined } from "@ant-design/icons";
-import {
-  DetailContainer,
-  DetailQuestionContainer,
-  TextContainer,
-  EditorContainer,
-  DetailAnswerContainer,
-  CommentsContainer,
-} from "../styles/QuestionStyle";
+import { DetailContainer, DetailQuestionContainer, EditorContainer } from "../styles/QuestionStyle";
 import Link from "next/link";
 import AddEditor from "../Editor/AddEditor";
+import Like from "../Like";
+import Answers from "./Answers";
 import Output from "editorjs-react-renderer";
-// const Output = dynamic(async () => await import("editorjs-react-renderer"), { ssr: false });
+import axios from "axios";
 
-const QuestionDetail = ({ qna, answers, users }) => {
+const QuestionDetail = ({ qna, answers }) => {
+  // qna의 id 가져오기
+  const router = useRouter();
+  const qnaId = router.query._id;
+
+  // user 정보 가져오기
+  const { me } = useSelector((state) => state.user);
+
   const [isEditMode, setIsEditMode] = useState(false);
   const [answerTitle, setAnswerTItle] = useState("");
 
@@ -28,19 +31,44 @@ const QuestionDetail = ({ qna, answers, users }) => {
     ).getDate()}일`;
   };
 
+  const [recommendData, setRecommendData] = useState({
+    isRecommended: false,
+    numberOfRecommends: 0,
+  });
+
+  console.log(recommendData);
+
+  const [isChanged, setIsChanged] = useState(false);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await axios.get(`/api/qnas/${qnaId}`);
+        const qna = response.data;
+
+        const isRecommended = qna.recommends.map((user) => user._id).includes(me._id);
+        const numberOfRecommends = qna.recommends.length;
+
+        setRecommendData({ isRecommended, numberOfRecommends });
+        setIsChanged(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getData();
+  }, [isChanged]);
+
   return (
     <div css={DetailContainer}>
       <div css={DetailQuestionContainer}>
-        <div className="badge-container">
-          <Badge count={qna.recommends.length}>
-            <LikeOutlined style={{ fontSize: "2em" }} />
-          </Badge>
-        </div>
+        <Like qnaId={qna._id} recommendData={recommendData} setIsChanged={setIsChanged} />
         <h1>{qna.title}</h1>
         <div className="tag-container">
           {qna.tags.map((tag, index) => (
             <Tag key={index}>{tag}</Tag>
           ))}
+          <p>질문자: {qna.author.nickname}</p>
           <p>질문일: {formattingDate(qna.createdAt)}</p>
           <p>최근 수정일: {formattingDate(qna.updatedAt)}</p>
         </div>
@@ -75,34 +103,7 @@ const QuestionDetail = ({ qna, answers, users }) => {
         <div></div>
       </div>
       <Divider plain />
-      {answers.length === 0 && (
-        <div css={TextContainer}>
-          <h2>아직 답변이 없습니다. 당신의 지식을 공유해 보세요!</h2>
-        </div>
-      )}
-      {answers &&
-        answers.map((answer) => {
-          return (
-            <div css={DetailAnswerContainer} key={answer._id}>
-              <div className="answer-title">
-                <MessageOutlined style={{ fontSize: "2em" }} />
-                <h2>{answer.title}</h2>
-                <Button type="text">
-                  <Badge count={answer.recommends.length}>
-                    <LikeOutlined style={{ fontSize: "2em" }} />
-                  </Badge>
-                </Button>
-              </div>
-              <Output data={JSON.parse(answer.contents)} />
-              <Collapse>
-                <Collapse.Panel header="댓글 보기">
-                  <Comments contentId={answer._id} />
-                </Collapse.Panel>
-              </Collapse>
-              <Divider plain />
-            </div>
-          );
-        })}
+      <Answers answers={answers} me={me} />
       <TopButton />
     </div>
   );

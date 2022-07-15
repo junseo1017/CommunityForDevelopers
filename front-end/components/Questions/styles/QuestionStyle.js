@@ -137,8 +137,34 @@ export const DetailAnswerContainer = css`
 export const CommentsContainer = css`
   display: flex;
   flex-direction: column;
-  width: 50%;
-  padding: 0 2em;
+
+  & div.ant-comment {
+    margin: 0.5em 0;
+    height: auto;
+  }
+
+  & div.ant-comment-content-detail {
+    display: flex;
+    flex-direction: column;
+
+    & > div {
+      height: 5em;
+    }
+
+    & button {
+      align-self: flex-end;
+      margin: 1em 0;
+    }
+  }
+
+  & .mentions {
+    font-weight: bold;
+    color: #1890ff;
+  }
+
+  & .focused {
+    background-color: rgb(24, 144, 255, 0.25);
+  }
 `;
 
 export const CommentStyle = css`
