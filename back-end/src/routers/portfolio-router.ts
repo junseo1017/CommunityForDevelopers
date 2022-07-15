@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { portfolioService } from "../services/portfolio-service";
-import { extendReq, loginRequired } from "../middlewares/login-required";
+import { ExtendReq, loginRequired } from "../middlewares/login-required";
 import { portfolioJoiSchema } from "../db/schemas/joi-schemas";
 
 const portfolioRouter = Router();
@@ -24,6 +24,7 @@ portfolioRouter.get(
     try {
       const portId = req.params.portId;
       const Portfolio = await portfolioService.getPortfolio(portId);
+      console.log("wow", Portfolio);
       res.status(200).json(Portfolio);
     } catch (error) {
       next(error);
@@ -63,7 +64,7 @@ portfolioRouter.get(
 
 portfolioRouter.get(
   "/user/:userId",
-  async (req: extendReq, res: Response, next: NextFunction) => {
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const userId = req.params.userId;
       const Portfolio = await portfolioService.getUserPortfolio(userId);
@@ -77,7 +78,7 @@ portfolioRouter.get(
 portfolioRouter.post(
   "/",
   loginRequired,
-  async (req: extendReq, res: Response, next: NextFunction) => {
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const author = req.currentUserId || "";
       const { title, description, skills, content, contentText } = req.body;
@@ -99,7 +100,7 @@ portfolioRouter.post(
 portfolioRouter.put(
   "/:portId",
   loginRequired,
-  async (req: extendReq, res: Response, next: NextFunction) => {
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const portId = req.params.portId;
       const author = req.currentUserId || "";
@@ -126,7 +127,7 @@ portfolioRouter.put(
 portfolioRouter.delete(
   "/:portId",
   loginRequired,
-  async (req: extendReq, res: Response, next: NextFunction) => {
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const portId = req.params.portId;
       const author = req.currentUserId || "";

@@ -8,44 +8,46 @@ import Icon, {
 } from "@ant-design/icons";
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
+import Link from "next/link";
+import Router from "next/router";
+import {
+  CardCss,
+  ScrollDiv,
+  IconCss,
+  authorCss,
+  skillsCss,
+  colCss,
+  rowCss,
+} from "./styles/PortfolioCardStyle";
+import millify from "millify";
 import styled from "@emotion/styled";
-import { Avatar, Card, Tag, Space, Badge } from "antd";
-import React from "react";
+import { Avatar, Card, Tag, Space, Col, Row } from "antd";
+import React, { useCallback } from "react";
 const { Meta } = Card;
-export const CardCss = css`
-  .ant-card-actions {
-    border: none;
-  }
-  .ant-card-body {
-    padding: 22px;
-  }
-`;
 
-const ScrollDiv = styled.div`
-  overflow-x: auto;
-  white-space: nowrap;
-  &::-webkit-scrollbar {
-    width: 4px;
-    height: 5px;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 2px;
-    background: #ddd;
-  }
-`;
-
-const HeartIcon = (props) => <Icon component={HeartSvg} {...props} />;
-
-const PortfolioCard = ({ title, description, image, skills }) => {
+const PortfolioCard = ({
+  title,
+  description,
+  image,
+  skills,
+  author,
+  comments,
+  recommends,
+  _id,
+}) => {
   const IconText = ({ icon, text }) => (
     <Space>
       {React.createElement(icon)}
       {text}
     </Space>
   );
+  const goDetailPortfolio = useCallback(() => {
+    Router.push(`/portfolio/${_id}`).then();
+  }, []);
 
   return (
     <Card
+      onClick={goDetailPortfolio}
       css={CardCss}
       hoverable
       cover={
@@ -63,14 +65,7 @@ const PortfolioCard = ({ title, description, image, skills }) => {
           </div>
         }
       />
-      <div
-        style={{
-          paddingTop: 20,
-          display: "flex",
-          alignContent: "center",
-          justifyContent: "flex-start",
-          marginBottom: 5,
-        }}>
+      <div css={skillsCss}>
         <ScrollDiv>
           {skills ? (
             skills.map((value, index) => (
@@ -81,25 +76,25 @@ const PortfolioCard = ({ title, description, image, skills }) => {
           ) : (
             <Tag color="white">magenta</Tag>
           )}
-
-          <div style={{ verticalAlign: "middle" }}></div>
         </ScrollDiv>
       </div>
-      <div style={{ display: "flex", justifyContent: "space-between", paddingTop: 15 }}>
-        <div style={{ display: "flex", alignItems: "center" }}>
+      <Row justify="space-between" align="bottom" css={rowCss}>
+        <Col span={8} css={colCss}>
           <Avatar src="https://joeschmoe.io/api/v1/random" />
-          <div style={{ paddingLeft: 3 }}>에릭지</div>
-        </div>
-        <Space>
-          <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />
-          <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />
-          <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />
-        </Space>
-      </div>
+          <div css={authorCss}>{author?.nickname || "에릭지이이"}</div>
+        </Col>
+        <Col span={16} css={IconCss}>
+          <IconText icon={StarOutlined} text={millify(111155)} key="list-vertical-star-o" />
+          <IconText icon={LikeOutlined} text={recommends || 0} key="list-vertical-like-o" />
+          <IconText
+            icon={MessageOutlined}
+            text={comments?.length || 0}
+            key="list-vertical-message"
+          />
+        </Col>
+      </Row>
     </Card>
   );
 };
 
 export default PortfolioCard;
-
-// avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}

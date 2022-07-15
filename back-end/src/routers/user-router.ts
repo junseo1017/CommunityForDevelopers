@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { userService } from "../services";
-import { extendReq, loginRequired } from "../middlewares";
+import { ExtendReq, loginRequired } from "../middlewares";
 import {
   userCreateJoiSchema,
   userUpdateJoiSchema,
@@ -40,7 +40,32 @@ userRouter.post(
 
     try {
       const userToken = await userService.getUserToken({ email, password });
+
+      if (req.cookies)
+        console.log("쿠키:", req.cookies, "\n인증쿠키:", req.signedCookies);
+
+      res.cookie("userinfo", userToken, {
+        expires: new Date(Date.now() + 60000 * 1440), //24시간
+        httpOnly: true,
+        signed: true,
+      });
+
       res.status(200).json(userToken);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+userRouter.get(
+  "/logout",
+  loginRequired,
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
+    try {
+      if (req.currentUserId) {
+        res.clearCookie("userinfo");
+        res.status(200).json({ logout: "succeed" });
+      }
     } catch (error) {
       next(error);
     }
@@ -58,13 +83,16 @@ userRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
 userRouter.get(
   "/token",
   loginRequired,
-  async (req: extendReq, res: Response, next: NextFunction) => {
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
+      console.log(req);
       const userId = req.currentUserId;
 
       if (userId !== undefined) {
         const users = await userService.getUserInfo(userId);
+        console.log(users);
         res.send(users);
+        // res.send(users);
       }
     } catch (error) {
       next(error);
@@ -72,10 +100,22 @@ userRouter.get(
   }
 );
 
-userRouter.patch(
+userRouter.get(
+  "/:userId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.params.userId;
+    try {
+      res.send(await userService.getUserInfo(userId));
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+userRouter.put(
   "/info",
   loginRequired,
-  async (req: extendReq, res: Response, next: NextFunction) => {
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
     const { nickname, job, imgUrl, skills } = req.body;
 
@@ -96,10 +136,10 @@ userRouter.patch(
   }
 );
 
-userRouter.patch(
+userRouter.put(
   "/password",
   loginRequired,
-  async (req: extendReq, res: Response, next: NextFunction) => {
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
     const { password, currentPassword } = req.body;
 
@@ -123,7 +163,7 @@ userRouter.patch(
 userRouter.delete(
   "/",
   loginRequired,
-  async (req: extendReq, res: Response, next: NextFunction) => {
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
     const currentPassword = req.body.currentPassword;
 

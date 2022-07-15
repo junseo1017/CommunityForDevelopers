@@ -52,17 +52,6 @@ class PortfolioService {
   }
 
   async getPortfoliosBySearch(options: Array<any>, orderBy: string) {
-    // if (lastId) {
-    //   const portfolios = await this.portfolioModel.findBySearch(
-    //     options,
-    //     orderBy,
-    //     lastId
-    //   );
-    //   if (!portfolios) {
-    //     throw new Error("포토폴리오 목록이 존재하지 않습니다.");
-    //   }
-    //   return portfolios;
-    // }
     const portfolios = await this.portfolioModel.findBySearchInit(
       options,
       orderBy
