@@ -1,5 +1,5 @@
 import { Router, Response, NextFunction } from "express";
-import { extendReq, loginRequired } from "../middlewares/login-required";
+import { ExtendReq, loginRequired } from "../middlewares/login-required";
 import { commentService, portfolioService, qnaService } from "../services";
 
 const commentRouter = Router();
@@ -7,7 +7,7 @@ const commentRouter = Router();
 commentRouter.post(
   "/portfolio/:id",
   loginRequired,
-  async (req: extendReq, res: Response, next: NextFunction) => {
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const postId = req.params.id;
       const content = req.body.content;
@@ -28,7 +28,7 @@ commentRouter.post(
 commentRouter.post(
   "/qna/:id",
   loginRequired,
-  async (req: extendReq, res: Response, next: NextFunction) => {
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const postId = req.params.id;
       const content = req.body.content;
@@ -49,7 +49,7 @@ commentRouter.post(
 commentRouter.put(
   "/:commentId",
   loginRequired,
-  async (req: extendReq, res: Response, next: NextFunction) => {
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const commentId = req.params.commentId;
       const userId = req.currentUserId || "";
@@ -70,7 +70,7 @@ commentRouter.put(
 commentRouter.delete(
   "/:commentId",
   loginRequired,
-  async (req: extendReq, res: Response, next: NextFunction) => {
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const commentId = req.params.commentId;
       const userId = req.currentUserId || "";

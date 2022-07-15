@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { qnaService } from "../services/qna-service";
-import { extendReq, loginRequired } from "../middlewares/login-required";
+import { ExtendReq, loginRequired } from "../middlewares/login-required";
 
 const qnaRouter = Router();
 
@@ -28,7 +28,7 @@ qnaRouter.get(
 
 qnaRouter.get(
   "/user/:userId",
-  async (req: extendReq, res: Response, next: NextFunction) => {
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const userId = req.params.userId;
       const QnA = await qnaService.getQnaByUserId(userId);
@@ -42,7 +42,7 @@ qnaRouter.get(
 qnaRouter.post(
   "/",
   loginRequired,
-  async (req: extendReq, res: Response, next: NextFunction) => {
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const author = req.currentUserId || "";
       const { title, contents, imgUrl, tags, isAnswer, parentQnaId } = req.body;
@@ -65,7 +65,7 @@ qnaRouter.post(
 qnaRouter.put(
   "/:qnaId",
   loginRequired,
-  async (req: extendReq, res: Response, next: NextFunction) => {
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const qnaId = req.params.qnaId;
       const author = req.currentUserId || "";
@@ -98,7 +98,7 @@ qnaRouter.put(
 qnaRouter.put(
   "/:qnaId/recommendation",
   loginRequired,
-  async (req: extendReq, res: Response, next: NextFunction) => {
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const qnaId = req.params.qnaId;
       const userId = req.currentUserId || "";
@@ -117,7 +117,7 @@ qnaRouter.put(
 qnaRouter.delete(
   "/:qnaId",
   loginRequired,
-  async (req: extendReq, res: Response, next: NextFunction) => {
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const qnaId = req.params.qnaId;
       const userId = req.currentUserId || "";
