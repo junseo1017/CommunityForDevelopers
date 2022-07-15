@@ -5,38 +5,29 @@ import { message } from "antd";
 import { useCallback } from "react";
 const LoggedinMenu = () => {
   const dispatch = useDispatch();
-  const { isLoggedin, isLoggedinCheck, me } = useSelector((state) => state.user);
+  const { me } = useSelector((state) => state.user);
 
   const logoutHandler = () => {
-    localStorage.removeItem("token");
-    dispatch(userSlice.actions.logout());
-    message.success("정상적으로 로그아웃 되었습니다.");
+    message.success("로그아웃 기능 구현중입니다.");
   };
 
   return (
     <>
-      {isLoggedinCheck ? (
-        me ? (
-          <>
-            <Link href={`/profile/${me.email}`}>
-              <a>내 정보</a>
-            </Link>
-            <a onClick={logoutHandler}>로그아웃</a>
-          </>
-        ) : (
-          <>
-            <Link href={"/login"}>
-              <a>로그인</a>
-            </Link>
-            <Link href="/signup">
-              <a>회원가입</a>
-            </Link>
-          </>
-        )
+      {me ? (
+        <>
+          <Link href={`/profile/${me._id}`}>
+            <a>내 정보</a>
+          </Link>
+          <a onClick={logoutHandler}>로그아웃</a>
+        </>
       ) : (
         <>
-          <a style={{ width: "50px", backgroundColor: "white" }}></a>
-          <a style={{ width: "50px", backgroundColor: "white" }}></a>
+          <Link href={"/login"}>
+            <a>로그인</a>
+          </Link>
+          <Link href="/signup">
+            <a>회원가입</a>
+          </Link>
         </>
       )}
     </>

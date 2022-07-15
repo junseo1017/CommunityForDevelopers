@@ -2,30 +2,36 @@
 import { css, jsx } from "@emotion/react";
 import { Card, Button, Tag, message } from "antd";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { useState } from "react";
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { patchUserinfo } from "../../actions/user";
 import {
-  myInfoCardContainer,
+  profileContentCardContainer,
   myInfoSubmitBtnStyle,
   myInfoFormStyle,
   myInfoSkills,
 } from "./styles/MyInfoStyles";
+import Image from "next/image";
 
-const ProfileMyInfo = () => {
+const ProfileMyInfo = ({ userInfo }) => {
+  const imageinputRef = useRef();
   const [skills, setSkills] = useState([]);
   const [action, setAction] = useState(false);
-  const { me, patchUserDone, patchUserError } = useSelector((state) => state.user);
+  const [inputImage, setInputImage] = useState("/image/profile_image_default.jpg");
+  const { patchUserDone, patchUserError } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const { register, handleSubmit, reset } = useForm({ defaultValues: me });
+  const { register, handleSubmit, reset } = useForm({ defaultValues: userInfo });
+  const { ref, ...rest } = register("imgUrl");
 
   useEffect(() => {
-    reset(me);
-    setSkills(me.skills);
-  }, [me]);
+    reset(userInfo);
+    setSkills(userInfo.skills);
+    if (userInfo.imgUrl) {
+      setInputImage(userInfo.imgUrl);
+    }
+  }, []);
 
   useEffect(() => {
     if (action) {
@@ -36,12 +42,14 @@ const ProfileMyInfo = () => {
         message.error("정보 변경 중 에러가 발생했습니다.");
       }
     }
+    setAction(false);
   }, [patchUserDone, patchUserError]);
 
   const onSubmit = (data) => {
+    console.log(data);
     dispatch(
       patchUserinfo({
-        userId: me._id,
+        userId: userInfo._id,
         nickname: data.nickname,
         job: data.job,
         imgUrl: data.imgUrl,
@@ -58,7 +66,6 @@ const ProfileMyInfo = () => {
   const onKeyPress = (e) => {
     if (!e.target.value) return;
     if (e.key === "Enter") {
-      console.log(e.target.value);
       setSkills([...skills, e.target.value]);
       e.target.value = "";
     }
@@ -68,13 +75,22 @@ const ProfileMyInfo = () => {
     setSkills(skills.filter((elem) => elem != e.target.id));
   };
 
+  const imageBtnClickHandler = () => {
+    imageinputRef.current.click();
+  };
+
+  const addImageHandler = (e) => {
+    setInputImage(e.target.value);
+    console.log(e.target.value);
+  };
+
   return (
-    <Card css={myInfoCardContainer}>
+    <Card css={profileContentCardContainer}>
       <form css={myInfoFormStyle} onSubmit={handleSubmit(onSubmit)} onKeyDown={checkKeyDown}>
         <label>{"이메일"}</label>
         <input
           style={{ backgroundColor: "rgb(220,220,220)" }}
-          value={me.email || ""}
+          value={(userInfo && userInfo.email) || ""}
           {...register("email")}
         />
 
@@ -82,8 +98,28 @@ const ProfileMyInfo = () => {
         <input autoComplete="off" {...register("nickname", { required: true })} />
 
         <label>{"프로필 사진"}</label>
-        <input autoComplete="off" {...register("imgUrl")} />
-
+        <button onClick={imageBtnClickHandler} type="button">
+          사진 등록하기
+        </button>
+        <input
+          {...rest}
+          ref={(e) => {
+            ref(e);
+            imageinputRef.current = e;
+          }}
+          style={{ display: "none" }}
+          type="file"
+          autoComplete="off"
+          onChange={addImageHandler}
+        />
+        <div style={{ width: "150px" }}>
+          <Image
+            src={"/image/profile_image_default.jpg"}
+            layout="responsive"
+            width="100%"
+            height="100%"
+          />
+        </div>
         <label>{"직업"}</label>
         <input {...register("job")} list="list" autoComplete="off" />
         <datalist id="list">
@@ -103,7 +139,7 @@ const ProfileMyInfo = () => {
         <div css={myInfoSkills}>
           <input autoComplete="off" onKeyDown={onKeyPress} />
           <div>
-            {me &&
+            {skills &&
               skills.map((e, i) => {
                 return (
                   <Tag id={e} onClick={deleteTagHandler} key={`e+${i}`} color="default">
