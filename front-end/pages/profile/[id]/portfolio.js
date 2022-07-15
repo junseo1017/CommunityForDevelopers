@@ -6,29 +6,33 @@ import ProfileCard from "../../../components/userProfile/ProfileCard";
 import ProfilePortfolio from "../../../components/userProfile/ProfilePortfolio";
 import wrapper from "../../../store";
 import { ProfileContentContainer } from "../profileStyle";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { loadMyPortfolios } from "../../../actions/portfolio";
-import { useEffect } from "react";
-import { myinfo } from "../../../actions/user";
-const ProfileCPortfolio = () => {
-  const dispatch = useDispatch();
-  const { myPortfolios, me } = useSelector((state) => state.portfolio);
+import { myinfo, userinfo } from "../../../actions/user";
+import axios from "axios";
 
-  useEffect(() => {
-    dispatch(myinfo());
-  }, []);
+const ProfileCPortfolio = () => {
+  const { myPortfolios } = useSelector((state) => state.portfolio);
+  const { userInfo } = useSelector((state) => state.user);
   return (
     <AppLayout>
       <ProfileNav />
       <div css={ProfileContentContainer}>
-        <ProfileCard me={me} />
+        <ProfileCard userInfo={userInfo} />
         <ProfilePortfolio myPortfolios={myPortfolios} />
       </div>
     </AppLayout>
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ query }) => {
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ query, req }) => {
+  const cookie = req?.headers.cookie;
+  axios.defaults.headers.Cookie = "";
+  if (req && cookie) {
+    axios.defaults.headers.Cookie = cookie;
+  }
+  await store.dispatch(myinfo());
+  await store.dispatch(userinfo(query.id));
   await store.dispatch(loadMyPortfolios(query.id));
   return {
     props: {},

@@ -13,7 +13,7 @@ const ProfilePortfolio = ({ myPortfolios }) => {
   return (
     <Card css={profileContentCardContainer}>
       <div css={portfolioContainer}>
-        {myPortfolios ? (
+        {myPortfolios &&
           myPortfolios.map((e) => {
             return (
               <div id="check" css={portfolioStyle} key={e._id}>
@@ -54,10 +54,7 @@ const ProfilePortfolio = ({ myPortfolios }) => {
                 </div>
               </div>
             );
-          })
-        ) : (
-          <p></p>
-        )}
+          })}
       </div>
     </Card>
   );
