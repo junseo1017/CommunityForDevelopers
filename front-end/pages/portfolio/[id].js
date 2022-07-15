@@ -25,7 +25,7 @@ const Output = dynamic(async () => (await import("editorjs-react-renderer")).def
 const Portfolio = () => {
   const { singlePortfolio } = useSelector((state) => state.portfolio);
   const { me } = useSelector((state) => state.user);
-  console.log(me);
+  console.log(singlePortfolio);
   const onLikePortfolio = useCallback(() => {
     // if (!id) {
     //   message.warn("로그인이 필요합니다.").then();

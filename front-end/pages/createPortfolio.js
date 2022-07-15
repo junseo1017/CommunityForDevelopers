@@ -23,11 +23,12 @@ const createPortfolio = () => {
   const { imagePaths, addPortfolioLoading, addPortfolioDone, addPortfolioError } = useSelector(
     (state) => state.portfolio,
   );
-  const { userInfo } = useSelector((state) => state.user);
-  console.log(userInfo.email);
+  const { me } = useSelector((state) => state.user);
+
   const dispatch = useDispatch();
   const dispatchAddPortfolio = useCallback((data) => {
-    dispatch(addPortfolio(data));
+    const newData = { ...data, contentText: "text" };
+    dispatch(addPortfolio(newData));
   }, []);
 
   const [current, setCurrent] = useState(0);
