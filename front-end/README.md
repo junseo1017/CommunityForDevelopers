@@ -28,17 +28,16 @@ cd community-for-developers/back-end
 <!-- 로그인 확인 app 말고 getserversideprops로 변경하기(모든 페이지 적용) -->
 <!-- 서버에서 토큰을 쿠키로 넣어줘야 함 -->
 
+<!-- 유저정보 serversideprops하기 -->
+<!--
+다른 사람도 프로필 페이지 볼 수 있게 하기 (api 변경 / hidden할 컴포넌트 설정) -->
+<!-- redux apis 이름 바꾸기 (myinfo > userinfo 하나로 관리하기) -->
+<!-- 프로필 사진 없을 경우, 기본 이미지로 적용 -->
+<!-- 로그아웃 api 구현 -->
+
 포트폴리오 썸네일도 반환하도록 요청
 
-유저정보 serversideprops하기
-
-다른 사람도 프로필 페이지 볼 수 있게 하기 (api 변경 / hidden할 컴포넌트 설정)
-
-redux apis 이름 바꾸기 (myinfo > userinfo 하나로 관리하기)
-
 포트폴리오 링크 달기
-
-프로필 사진 없을 경우, 기본 이미지로 적용
 
 간편로그인 api 연동
 

@@ -19,7 +19,16 @@ export const login = createAsyncThunk("user/login", async (data, { rejectWithVal
   try {
     console.log(`%c 로그인 요청: ${Object.values(data)} `, "color: green;");
     const response = await axios.post("/api/users/login", data);
-    console.log(response);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+});
+
+export const logout = createAsyncThunk("user/logout", async (data, { rejectWithValue }) => {
+  try {
+    console.log(`%c 로그아웃 요청`, "color: green;");
+    const response = await axios.get("/api/users/logout");
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);
