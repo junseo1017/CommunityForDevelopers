@@ -7,9 +7,6 @@ import {
   LeftCard,
   RightCard,
 } from "./styles/CreatePortfolioCardStyle";
-// import React, { useEffect, useState } from "react";
-// import { useSelector, useDispatch } from "react-redux";
-// import { portfolioActions } from "../../reducers/portfolio";
 import { UploadOutlined } from "@ant-design/icons";
 import TagRender from "./TagRender";
 import useSelects from "../../hooks/useSelects";
@@ -42,9 +39,6 @@ const CreatePortfolioCard = ({ setPortfCardValue }) => {
     console.log("onChange:", current);
     setCurrent(value);
   };
-  // useEffect(() => {
-  //   console.log(portfolioValue);
-  // }, [portfolioValue]);
 
   const normFile = (e) => {
     console.log("Upload event:", e);

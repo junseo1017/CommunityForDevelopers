@@ -4,6 +4,7 @@ export interface IPort {
   description: string;
   skills: string[];
   content: string;
+  contentText: string;
 }
 
 export interface IPortInputDTO {
@@ -11,4 +12,6 @@ export interface IPortInputDTO {
   description: string;
   skills: string[];
   content: string;
+  contentText: string;
 }
+

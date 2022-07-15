@@ -47,6 +47,14 @@ export class PortfolioModel {
         select: "nickname",
       });
   }
+  async findBySearchInit(options: Array<any>, orderBy: string) {
+    return await Portfolio.find({ $or: options })
+      .sort({ [orderBy]: -1 })
+      .populate({
+        path: "author",
+        select: "nickname",
+      });
+  }
 
   async create(portInfo: IPort) {
     return await Portfolio.create(portInfo);
