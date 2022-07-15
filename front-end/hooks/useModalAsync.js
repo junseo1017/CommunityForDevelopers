@@ -23,6 +23,8 @@ const useModalAsync = (asyncCallback, modalDescription, next, dispatchFunc) => {
       if (dispatchFunc) {
         const response = dispatchFunc(data);
         console.log(response);
+      } else {
+        return;
       }
       next();
       message.success("Processing complete!");

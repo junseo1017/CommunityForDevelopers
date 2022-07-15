@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Questions from "../../components/Questions/QuestionList/Questions";
 import AppLayout from "../../components/AppLayout";
 import Head from "next/head";
 import axios from "axios";
+import { useEffect } from "react";
 // import { useDispatch, useSelector } from "react-redux";
 // import { qnaActions, getQnaData } from "../../reducers/qna";
 
 const questions = ({ qnas }) => {
+  const answers = qnas.filter((qna) => qna.isAnswer);
   qnas = qnas.filter((qna) => !qna.isAnswer);
-  // const [filterdQuestions, setFilterdQuestions] = useState([]);
 
   // useEffect(() => {
-  //   setFilterdQuestions(qnas.filter((qna) => !qna.isAnswer));
+  //   qnas = qnas.filter((qna) => !qna.isAnswer);
+  //   answers = qnas.filter((qna) => qna.isAnswer);
   // }, [qnas]);
 
   return (
@@ -19,7 +21,7 @@ const questions = ({ qnas }) => {
       <Head>
         <title>모든 질문</title>
       </Head>
-      <Questions questions={qnas} />
+      <Questions questions={qnas} answers={answers} />
     </AppLayout>
   );
 };

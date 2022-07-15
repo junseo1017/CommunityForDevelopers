@@ -26,7 +26,7 @@ export const login = createAsyncThunk("user/login", async (data, { rejectWithVal
   }
 });
 
-export const myinfo = createAsyncThunk("user/userinfo", async (data, { rejectWithValue }) => {
+export const myinfo = createAsyncThunk("user/myinfo", async (data, { rejectWithValue }) => {
   try {
     const response = await axios.get("/api/users/token");
     return response.data;
@@ -40,14 +40,20 @@ export const patchUserinfo = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       console.log(`%c 유저 정보 수정 요청: ${Object.values(data)} `, "color: green;");
-      const response = await axios.patch(`/api/users/info`, data, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.put(`/api/users/info`, data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
   },
 );
+
+export const userinfo = createAsyncThunk("user/userinfo", async (data, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`/api/users/${data}`);
+
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+});

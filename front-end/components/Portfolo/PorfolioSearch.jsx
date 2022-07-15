@@ -1,12 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import React, { useMemo } from "react";
 import TagRender from "./TagRender";
-import { Row, Col, Checkbox, Select, Input } from "antd";
+import { Row, Col, Checkbox, Select, Input, Divider, Space, Typography } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import { SearchButton, CheckboxButton } from "./styles/PorfolioSearchStyle";
+import useSelects from "../../hooks/useSelects";
 
-const PorfolioSearch = ({ checkboxOptions, orderBys, tagsOptions }) => {
+const PorfolioSearch = ({ checkboxOptions, orderBys }) => {
+  const [items, name, onNameChange, addItem] = useSelects();
   const { Search } = Input;
   const OrderBySelectStyle = useMemo(() => ({ width: 100, textAlign: "end" }), []);
+  const { Option } = Select;
 
   return (
     <>
@@ -24,7 +28,7 @@ const PorfolioSearch = ({ checkboxOptions, orderBys, tagsOptions }) => {
         <Col flex="0 0 auto">
           <Checkbox.Group
             options={checkboxOptions}
-            defaultValue={["Pear"]}
+            defaultValue={["제목", "내용", "유저"]}
             onChange={() => {}}
             css={CheckboxButton}
           />
@@ -43,14 +47,46 @@ const PorfolioSearch = ({ checkboxOptions, orderBys, tagsOptions }) => {
       <Row align="end">
         <Col flex="0 0 auto">
           <Select
+            placement="bottomRight"
             size="large"
+            style={{
+              minWidth: "200px",
+            }}
+            bordered={false}
             mode="multiple"
             showArrow
-            bordered={false}
             tagRender={TagRender}
-            defaultValue={["gold", "cyan"]}
-            options={tagsOptions}
-          />
+            placeholder="skills를 선택해주세요."
+            //defaultValue={["gold", "cyan"]}
+            options={items}
+            dropdownRender={(menu) => (
+              <div>
+                {menu}
+                <Divider
+                  style={{
+                    margin: "8px 0",
+                  }}
+                />
+                <Space
+                  align="center"
+                  style={{
+                    padding: "0 8px 4px",
+                  }}>
+                  <Input placeholder="Please enter item" value={name} onChange={onNameChange} />
+                  <Typography.Link
+                    onClick={addItem}
+                    style={{
+                      whiteSpace: "nowrap",
+                    }}>
+                    <PlusOutlined /> Add item
+                  </Typography.Link>
+                </Space>
+              </div>
+            )}>
+            {items.map((item) => (
+              <Option key={item}>{item}</Option>
+            ))}
+          </Select>
         </Col>
       </Row>
     </>

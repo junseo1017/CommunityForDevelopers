@@ -1,13 +1,22 @@
 import { Types } from "mongoose";
 import { portfolioModel, PortfolioModel } from "../db/models/portfolio-model";
 import { IPortInputDTO, IPort } from "../interfaces/portfolio-interface";
+
 class PortfolioService {
   constructor(private portfolioModel: PortfolioModel) {
     this.portfolioModel = portfolioModel;
   }
   async addPortfolio(portInfo: IPort) {
-    const { author, title, description, skills, content } = portInfo;
-    const newPortInfo = { author, title, description, skills, content };
+    const { author, title, description, skills, content, contentText } =
+      portInfo;
+    const newPortInfo = {
+      author,
+      title,
+      description,
+      skills,
+      content,
+      contentText,
+    };
     return await this.portfolioModel.create(newPortInfo);
   }
 
@@ -40,6 +49,17 @@ class PortfolioService {
       throw new Error("포토폴리오가 존재하지 않습니다.");
     }
     return portfolio;
+  }
+
+  async getPortfoliosBySearch(options: Array<any>, orderBy: string) {
+    const portfolios = await this.portfolioModel.findBySearchInit(
+      options,
+      orderBy
+    );
+    if (!portfolios) {
+      throw new Error("포토폴리오가 존재하지 않습니다.");
+    }
+    return portfolios;
   }
 
   async setPortfolio(portId: string, userId: string, portInfo: IPortInputDTO) {

@@ -1,7 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
 import AppLayout from "../../components/AppLayout";
+import { useCallback } from "react";
 import dynamic from "next/dynamic";
+import { Affix, Button, Avatar, Comment, Form, Input, List } from "antd";
+import { loadPortfolio } from "../../actions/portfolio";
+import wrapper from "../../store";
+import { useSelector } from "react-redux";
+import CommentEditor from "../../components/Portfolo/CommentEditor";
+import CommentList from "../../components/Portfolo/CommentList";
+import useComment from "../../hooks/useComment";
+import { LikeTwoTone, StarTwoTone } from "@ant-design/icons";
+import moment from "moment";
+import { likePortfolio, unlikePortfolio } from "../../actions/portfolio";
+const { TextArea } = Input;
 
 const Output = dynamic(async () => (await import("editorjs-react-renderer")).default, {
   ssr: false,
@@ -10,136 +22,131 @@ const Output = dynamic(async () => (await import("editorjs-react-renderer")).def
 //   ssr: false,
 // });
 
-const Portfolio = (props) => {
-  const { data, error } = props;
-  if (error) {
-    console.log(error);
-    return null;
-  }
+const Portfolio = () => {
+  const { singlePortfolio } = useSelector((state) => state.portfolio);
+  const { me } = useSelector((state) => state.user);
+  console.log(me);
+  const onLikePortfolio = useCallback(() => {
+    // if (!id) {
+    //   message.warn("로그인이 필요합니다.").then();
+    //   return;
+    // }
+    dispatch(
+      likePortfolio({
+        portfolioId: singlePortfolio._id,
+      }),
+    );
+  }, []);
+  const onUnlikePortfolio = useCallback(() => {
+    // if (!id) {
+    //   message.warn("로그인이 필요합니다.").then();
+    //   return;
+    // }
+    dispatch(
+      unlikePortfolio({
+        portfolioId: singlePortfolio._id,
+      }),
+    );
+  }, []);
+  const affixCss = css`
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    right: 30%;
+    bottom: 50%;
+    z-index: 99;
+    button + button {
+      margin-top: 5px;
+    }
+    @media (max-width: 2390px) {
+      right: 20%;
+    }
+    @media (max-width: 1612px) {
+      right: 10%;
+    }
+    @media (max-width: 1200px) {
+      right: 3%;
+    }
+    @media (max-width: 1022px) {
+      position: fixed;
 
-  console.log(data.content);
-  //const data = {...data.content, }
+      bottom: 30px;
+      right: 30px;
+    }
+  `;
+
+  const comments = singlePortfolio.comments.map((data, index) => {
+    const newData = {
+      author: data.author?.nickname,
+      avatar: "https://joeschmoe.io/api/v1/random",
+      content: data.content,
+      datetime: moment(data.createdAt).fromNow(),
+    };
+    return newData;
+  });
+
+  const [submitting, handleChange, handleSubmit, value] = useComment({
+    ...me,
+    imgUrl: "https://joeschmoe.io/api/v1/random",
+    _id: singlePortfolio._id,
+  });
+
+  const isJsonString = (str) => {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  };
+
   return (
     <AppLayout>
-      <h1>{data.title}</h1>
+      <div css={affixCss}>
+        <Button size="large" shape="circle" icon={<LikeTwoTone />} />
+        <Button size="large" shape="circle" icon={<StarTwoTone />} />
+      </div>
 
-      <div style={{ marginBottom: "3rem" }}>{data.description}</div>
+      <div style={{ marginBottom: "3rem" }}>{}</div>
 
       <div style={{ maxWidth: "800px", margin: "0 auto", height: "100%" }}>
-        <Output data={data.content} />
+        {isJsonString(singlePortfolio.content) ? (
+          <Output data={JSON.parse(singlePortfolio.content)} />
+        ) : (
+          <div>{singlePortfolio.content}</div>
+        )}
+      </div>
+      <div style={{ width: "100%" }}>
+        {comments.length > 0 && <CommentList comments={comments} />}
+        <Comment
+          avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
+          content={
+            <CommentEditor
+              onChange={handleChange}
+              onSubmit={handleSubmit}
+              submitting={submitting}
+              value={value}
+            />
+          }
+        />
       </div>
     </AppLayout>
   );
 };
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ params }) => {
+  // const cookie = context.req ? context.req.headers.cookie : "";
+  // axios.defaults.headers.Cookie = "";
+  // // 쿠키가 브라우저에 있는경우만 넣어서 실행
+  // // (주의, 아래 조건이 없다면 다른 사람으로 로그인 될 수도 있음)
+  // if (context.req && cookie) {
+  //   axios.defaults.headers.Cookie = cookie;
+  // }
+  await store.dispatch(loadPortfolio({ portfolioId: params.id }));
+  //await store.dispatch(loadMyInfo());
 
-export async function getServerSideProps({ query }) {
-  const { id } = query;
-  //make an ajax call to get your portfolio 서버에서 데이터 받아오기
   return {
-    props: {
-      data: {
-        //return your portfolio data saved through editor.js //데이터는 받아올떄 Json.parse해야하지않을까
-        description: "def",
-        image: "tempURL",
-        skills: ["React", "Next js", "Redux"],
-        title: "abcd",
-        content: {
-          time: 1657550080666,
-          blocks: [
-            { id: "sheNwCUP5A", type: "header", data: { text: "Editor.js", level: 2 } },
-            {
-              id: "ghWhkL-seZ",
-              type: "codeBox",
-              data: {
-                code: '<span class="hljs-meta"><span class="hljs-meta">&lt;!DOCTYPE </span><span class="hljs-meta-keyword"><span class="hljs-meta"><span class="hljs-meta-keyword">html</span></span></span><span class="hljs-meta">&gt;</span></span>\n<span class="hljs-tag"><span class="hljs-tag">&lt;</span><span class="hljs-name"><span class="hljs-tag"><span class="hljs-name">html</span></span></span><span class="hljs-tag">&gt;</span></span>\n<span class="hljs-tag"><span class="hljs-tag">&lt;</span><span class="hljs-name"><span class="hljs-tag"><span class="hljs-name">body</span></span></span><span class="hljs-tag">&gt;</span></span>\n\n<span class="hljs-tag"><span class="hljs-tag">&lt;</span><span class="hljs-name"><span class="hljs-tag"><span class="hljs-name">h2</span></span></span><span class="hljs-tag">&gt;</span></span>JavaScript Variables<span class="hljs-tag"><span class="hljs-tag">&lt;/</span><span class="hljs-name"><span class="hljs-tag"><span class="hljs-name">h2</span></span></span><span class="hljs-tag">&gt;</span></span>\n\n<span class="hljs-tag"><span class="hljs-tag">&lt;</span><span class="hljs-name"><span class="hljs-tag"><span class="hljs-name">p</span></span></span><span class="hljs-tag"> </span><span class="hljs-attr"><span class="hljs-tag"><span class="hljs-attr">id</span></span></span><span class="hljs-tag">=</span><span class="hljs-string"><span class="hljs-tag"><span class="hljs-string">"demo"</span></span></span><span class="hljs-tag">&gt;</span></span><span class="hljs-tag"><span class="hljs-tag">&lt;/</span><span class="hljs-name"><span class="hljs-tag"><span class="hljs-name">p</span></span></span><span class="hljs-tag">&gt;</span></span>\n\n<span class="hljs-tag"><span class="hljs-tag">&lt;</span><span class="hljs-name"><span class="hljs-tag"><span class="hljs-name">script</span></span></span><span class="hljs-tag">&gt;</span></span><span class="javascript"><span class="javascript">\n</span><span class="hljs-comment"><span class="javascript"><span class="hljs-comment">// Create and display a variable:</span></span></span><span class="javascript">\n</span><span class="hljs-keyword"><span class="javascript"><span class="hljs-keyword">let</span></span></span><span class="javascript"> car = </span><span class="hljs-string"><span class="javascript"><span class="hljs-string">"Fiat"</span></span></span><span class="javascript">;\n</span><span class="hljs-built_in"><span class="javascript"><span class="hljs-built_in">document</span></span></span><span class="javascript">.getElementById(</span><span class="hljs-string"><span class="javascript"><span class="hljs-string">"demo"</span></span></span><span class="javascript">).innerHTML = car;\n</span></span><span class="hljs-tag"><span class="hljs-tag">&lt;/</span><span class="hljs-name"><span class="hljs-tag"><span class="hljs-name">script</span></span></span><span class="hljs-tag">&gt;</span></span>\n\n<span class="hljs-tag"><span class="hljs-tag">&lt;/</span><span class="hljs-name"><span class="hljs-tag"><span class="hljs-name">body</span></span></span><span class="hljs-tag">&gt;</span></span>\n<span class="hljs-tag"><span class="hljs-tag">&lt;/</span><span class="hljs-name"><span class="hljs-tag"><span class="hljs-name">html</span></span></span><span class="hljs-tag">&gt;</span></span>\n<div><br></div>',
-                language: "Auto-detect",
-                theme:
-                  "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/dracula.min.css",
-              },
-            },
-            { id: "fvZGuFXHmK", type: "header", data: { text: "Key features", level: 3 } },
-            {
-              id: "xnPuiC9Z8M",
-              type: "list",
-              data: {
-                style: "unordered",
-                items: [
-                  "It is a block-styled editor",
-                  "It returns clean data output in JSON",
-                  "Designed to be extendable and pluggable with a simple API",
-                ],
-              },
-            },
-            {
-              id: "-MhwnSs3Dw",
-              type: "header",
-              data: { text: "What does it mean «block-styled editor»", level: 3 },
-            },
-            {
-              id: "Ptb9oEioJn",
-              type: "paragraph",
-              data: {
-                text: 'Workspace in classic editors is made of a single contenteditable element, used to create different HTML markups. Editor.js <mark class="cdx-marker">workspace consists of separate Blocks: paragraphs, headings, images, lists, quotes, etc</mark>. Each of them is an independent contenteditable element (or more complex structure) provided by Plugin and united by Editor\'s Core.',
-              },
-            },
-            {
-              id: "-J7nt-Ksnw",
-              type: "paragraph",
-              data: {
-                text: 'There are dozens of <a href="https://github.com/editor-js">ready-to-use Blocks</a> and the <a href="https://editorjs.io/creating-a-block-tool">simple API</a> for creation any Block you need. For example, you can implement Blocks for Tweets, Instagram posts, surveys and polls, CTA-buttons and even games.',
-              },
-            },
-            {
-              id: "SzwhuyoFq6",
-              type: "header",
-              data: { text: "What does it mean clean data output", level: 3 },
-            },
-            {
-              id: "x_p-xddPzV",
-              type: "paragraph",
-              data: {
-                text: "Classic WYSIWYG-editors produce raw HTML-markup with both content data and content appearance. On the contrary, Editor.js outputs JSON object with data of each Block. You can see an example below",
-              },
-            },
-            {
-              id: "6W5e6lkub-",
-              type: "paragraph",
-              data: {
-                text: 'Given data can be used as you want: render with HTML for <code class="inline-code">Web clients</code>, render natively for <code class="inline-code">mobile apps</code>, create markup for <code class="inline-code">Facebook Instant Articles</code> or <code class="inline-code">Google AMP</code>, generate an <code class="inline-code">audio version</code> and so on.',
-              },
-            },
-            {
-              id: "eD2kuEfvgm",
-              type: "paragraph",
-              data: {
-                text: "Clean data is useful to sanitize, validate and process on the backend.",
-              },
-            },
-            { id: "N8bOHTfUCN", type: "delimiter", data: {} },
-            {
-              id: "IpKh1dMyC6",
-              type: "paragraph",
-              data: {
-                text: "We have been working on this project more than three years. Several large media projects help us to test and debug the Editor, to make it's core more stable. At the same time we significantly improved the API. Now, it can be used to create any plugin for any task. Hope you enjoy. 😏",
-              },
-            },
-            {
-              id: "FF1iyF3VwN",
-              type: "image",
-              data: {
-                file: { url: "https://codex.so/public/app/img/external/codex2x.png" },
-                caption: "",
-                withBorder: false,
-                stretched: false,
-                withBackground: false,
-              },
-            },
-          ],
-          version: "2.25.0",
-        },
-      },
-    },
+    props: {},
   };
-}
+});
 
 export default Portfolio;

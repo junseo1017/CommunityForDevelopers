@@ -9,7 +9,8 @@ axios.defaults.baseURL = backendUrl;
 export const loadPortfolios = createAsyncThunk(
   "portfolio/loadPortfolios",
   async (data) => {
-    const response = await axios.get(`/portfolios?lastId=${data?.lastId || 0}`);
+    //const response = await axios.get(`/portfolios?lastId=${data?.lastId || 0}`);
+    const response = await axios.get(`/api/portfolios`);
     return response.data;
   },
   {
@@ -57,9 +58,14 @@ export const addComment = createAsyncThunk(
   "portfolio/addComment",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`/portfolio/${data.portfolioId}/comment`, data); // POST /portfolio/1/comment
+      const response = await axios.post(`/api/comments/portfolio/${data.portfolioId}`, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }); // POST /portfolio/1
       return response.data;
     } catch (error) {
+      console.log(error);
       return rejectWithValue(error.response.data);
     }
   },
@@ -82,10 +88,10 @@ export const loadPortfolio = createAsyncThunk(
   "portfolio/loadPortfolio",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/portfolio/${data.portfolioId}`);
+      const response = await axios.get(`/api/portfolios/${data.portfolioId}`);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue("wow", error.response.data);
     }
   },
 );
