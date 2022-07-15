@@ -8,17 +8,17 @@ import wrapper from "../../../store";
 import { ProfileContentContainer } from "../profileStyle";
 import { useSelector } from "react-redux";
 import { loadMyPortfolios } from "../../../actions/portfolio";
-import { myinfo } from "../../../actions/user";
+import { myinfo, userinfo } from "../../../actions/user";
 import axios from "axios";
 
 const ProfileCPortfolio = () => {
   const { myPortfolios } = useSelector((state) => state.portfolio);
-  const { me } = useSelector((state) => state.user);
+  const { userInfo } = useSelector((state) => state.user);
   return (
     <AppLayout>
       <ProfileNav />
       <div css={ProfileContentContainer}>
-        <ProfileCard me={me} />
+        <ProfileCard userInfo={userInfo} />
         <ProfilePortfolio myPortfolios={myPortfolios} />
       </div>
     </AppLayout>
@@ -32,6 +32,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
     axios.defaults.headers.Cookie = cookie;
   }
   await store.dispatch(myinfo());
+  await store.dispatch(userinfo(query.id));
   await store.dispatch(loadMyPortfolios(query.id));
   return {
     props: {},

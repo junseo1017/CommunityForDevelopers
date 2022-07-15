@@ -12,10 +12,11 @@ export const profileContentCardContainer = css`
 export const myInfoFormStyle = css`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
   width: 60%;
   & label {
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 700;
   }
   & input {
     border: 1px solid #aca3a37b;
@@ -31,7 +32,9 @@ export const myInfoFormStyle = css`
     height: 40px;
     width: 50%;
     border: 2px solid #aca3a37b;
-    box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    font-size: 14px;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.3);
     transition: 100ms linear;
     &:hover {
       box-shadow: none;
@@ -171,5 +174,6 @@ export const qnaNavStyle = css`
     font-size: 22px;
     font-weight: 700;
     margin: 0;
+    cursor: pointer;
   }
 `;

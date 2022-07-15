@@ -6,31 +6,31 @@ import AppLayout from "../../../components/AppLayout";
 import ProfileCard from "../../../components/userProfile/ProfileCard";
 import ProfileMyInfo from "../../../components/userProfile/ProfileMyInfo";
 import { ProfileContentContainer } from "../profileStyle";
-import { myinfo } from "../../../actions/user";
+import { myinfo, userinfo } from "../../../actions/user";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import axios from "axios";
 
 const Profile = () => {
-  const { me } = useSelector((state) => state.user);
-
+  const { userInfo } = useSelector((state) => state.user);
   return (
     <AppLayout>
       <ProfileNav />
       <div css={ProfileContentContainer}>
-        <ProfileCard me={me} />
-        <ProfileMyInfo me={me} />
+        <ProfileCard userInfo={userInfo} />
+        <ProfileMyInfo userInfo={userInfo} />
       </div>
     </AppLayout>
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req }) => {
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, query }) => {
   const cookie = req?.headers.cookie;
   axios.defaults.headers.Cookie = "";
   if (req && cookie) {
     axios.defaults.headers.Cookie = cookie;
   }
+  await store.dispatch(userinfo(query.id));
   await store.dispatch(myinfo());
   return {
     props: {},

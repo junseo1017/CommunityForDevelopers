@@ -6,19 +6,19 @@ import AppLayout from "../../../components/AppLayout";
 import ProfileCard from "../../../components/userProfile/ProfileCard";
 import ProfileQnA from "../../../components/userProfile/ProfileQnA";
 import { ProfileContentContainer } from "../profileStyle";
-import { myinfo } from "../../../actions/user";
+import { myinfo, userinfo } from "../../../actions/user";
 import { getqnabyuserid } from "../../../actions/qna";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 const ProfileCQnA = () => {
-  const { me } = useSelector((state) => state.user);
+  const { userInfo } = useSelector((state) => state.user);
   const { qnabyUserId } = useSelector((state) => state.qna);
 
   return (
     <AppLayout>
       <ProfileNav />
       <div css={ProfileContentContainer}>
-        <ProfileCard me={me} />
+        <ProfileCard userInfo={userInfo} />
         <ProfileQnA qnabyUserId={qnabyUserId} />
       </div>
     </AppLayout>
@@ -32,6 +32,8 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
     axios.defaults.headers.Cookie = cookie;
   }
   await store.dispatch(myinfo());
+  await store.dispatch(userinfo(query.id));
+
   await store.dispatch(getqnabyuserid(query.id));
   return {
     props: {},
