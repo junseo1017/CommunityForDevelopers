@@ -62,7 +62,7 @@ const QuestionDetail = ({ qna, answers }) => {
   return (
     <div css={DetailContainer}>
       <div css={DetailQuestionContainer}>
-        <Like qnaId={qna._id} recommendData={recommendData} setIsChanged={setIsChanged} />
+        {/* <Like qnaId={qna._id} recommendData={recommendData} setIsChanged={setIsChanged} /> */}
         <h1>{qna.title}</h1>
         <div className="tag-container">
           {qna.tags.map((tag, index) => (
@@ -73,7 +73,7 @@ const QuestionDetail = ({ qna, answers }) => {
           <p>최근 수정일: {formattingDate(qna.updatedAt)}</p>
         </div>
         <div>
-          <Link href="/qna">
+          {/* <Link href="/qna">
             <Button size="large" type="text">
               목록으로 가기
             </Button>
@@ -82,15 +82,16 @@ const QuestionDetail = ({ qna, answers }) => {
             <Button size="large" type="primary">
               다른 질문하기
             </Button>
-          </Link>
+          </Link> */}
+          <Button size="large" type="primary" onClick={() => setIsEditMode(!isEditMode)}>
+            답변하기
+          </Button>
         </div>
         <Divider plain />
         <Output data={JSON.parse(qna.contents)} />
-        <Button size="large" type="primary" onClick={() => setIsEditMode(!isEditMode)}>
-          답변하기
-        </Button>
         {isEditMode && (
           <div css={EditorContainer}>
+            <Divider plain />
             <h2>답변하기</h2>
             <Input
               size="large"
@@ -102,7 +103,6 @@ const QuestionDetail = ({ qna, answers }) => {
         )}
         <div></div>
       </div>
-      <Divider plain />
       <Answers answers={answers} me={me} />
       <TopButton />
     </div>
