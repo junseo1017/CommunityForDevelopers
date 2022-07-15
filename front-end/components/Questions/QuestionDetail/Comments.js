@@ -77,7 +77,8 @@ const Comments = ({ contentId, user }) => {
   }, []);
 
   const handleChange = (e) => {
-    e.target.value && setComment(e.target.value);
+    setComment(e.target.value);
+    console.log(e.target.value);
   };
 
   const handleSubmit = async () => {
@@ -113,7 +114,7 @@ const Comments = ({ contentId, user }) => {
               author={<p>{user.nickname}</p>}
               avatar={<Avatar src={user.imgUrl} alt={userList.nickname} />}
               css={CommentStyle}
-              content={<p>{comment.content}</p>}
+              content={<p>{comment.content || comment}</p>}
               datetime={<span>{moment().fromNow()}</span>}
             />
           )}
