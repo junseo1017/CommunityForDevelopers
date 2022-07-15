@@ -33,6 +33,36 @@ portfolioRouter.get(
 );
 
 portfolioRouter.get(
+  "/",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      let options = [];
+      const skillList = req.query.skill as string[];
+      const search = req.query.search as string;
+      if (search) {
+        if (typeof req.query.option === "string") {
+          options.push({ [req.query.option as string]: new RegExp(search) });
+        } else {
+          const optionList = req.query.option as string[];
+          optionList.map((option) => {
+            options.push({ [option]: new RegExp(search) });
+          });
+        }
+      }
+      options.push({ skills: { $in: skillList } });
+      const orderBy = req.query.orderBy as string;
+      const Portfolios = await portfolioService.getPortfoliosBySearch(
+        options,
+        orderBy
+      );
+      res.status(200).json(Portfolios);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+portfolioRouter.get(
   "/user/:userId",
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
@@ -51,17 +81,17 @@ portfolioRouter.post(
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const author = req.currentUserId || "";
-      const { title, description, skills, content } = req.body;
+      const { title, description, skills, content, contentText } = req.body;
       const newPortfolio = await portfolioService.addPortfolio({
         author,
         title,
         description,
         skills,
         content,
+        contentText,
       });
       res.status(201).json(newPortfolio);
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
@@ -74,19 +104,13 @@ portfolioRouter.put(
     try {
       const portId = req.params.portId;
       const author = req.currentUserId || "";
-      const { title, description, skills, content } = req.body;
-      await portfolioJoiSchema.validateAsync({
-        author,
-        title,
-        description,
-        skills,
-        content,
-      });
+      const { title, description, skills, content, contentText} = req.body;
       const toUpdate = {
         ...(title && { title }),
         ...(description && { description }),
         ...(skills && { skills }),
         ...(content && { content }),
+        ...(contentText && { contentText }),
       };
       const updatedPortfolioInfo = await portfolioService.setPortfolio(
         portId,
