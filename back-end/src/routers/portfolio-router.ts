@@ -1,7 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { portfolioService } from "../services/portfolio-service";
 import { ExtendReq, loginRequired } from "../middlewares/login-required";
-import db from "mongoose"
 
 const portfolioRouter = Router();
 
@@ -16,7 +15,6 @@ portfolioRouter.get(
       next(error);
     }
   }
-
 );
 
 portfolioRouter.get(
@@ -33,7 +31,7 @@ portfolioRouter.get(
 );
 
 portfolioRouter.get(
-  "/search/aa",
+  "/search/list",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const options = req.query.option as string[];

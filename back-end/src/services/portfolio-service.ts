@@ -1,6 +1,10 @@
 import { Types } from "mongoose";
 import { portfolioModel, PortfolioModel } from "../db/models/portfolio-model";
-import { InputDTO, UpdateInfo, SearchInfo } from "../interfaces/portfolio-interface";
+import {
+  InputDTO,
+  UpdateInfo,
+  SearchInfo,
+} from "../interfaces/portfolio-interface";
 
 class PortfolioService {
   constructor(private portfolioModel: PortfolioModel) {
