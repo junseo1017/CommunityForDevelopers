@@ -1,6 +1,10 @@
 import { model, Types, Document } from "mongoose";
 import { PortfolioSchema, PortfolioType } from "../schemas/portfolio-schema";
-import { IPort, IPortInputDTO } from "../../interfaces/portfolio-interface";
+import {
+  UpdateInfo,
+  InputDTO,
+  SearchInfo,
+} from "../../interfaces/portfolio-interface";
 
 // const Portfolio = model("portofolios", PortfolioSchema);
 const Portfolio = model<PortfolioType & Document>(
@@ -47,20 +51,34 @@ export class PortfolioModel {
         select: "nickname",
       });
   }
-  async findBySearchInit(options: Array<any>, orderBy: string) {
-    return await Portfolio.find({ $or: options })
-      .sort({ [orderBy]: -1 })
-      .populate({
-        path: "author",
-        select: "nickname",
-      });
+  async findBySearch(searchInfo: SearchInfo, page: number) {
+    return await Portfolio.aggregate([
+      {
+        $search: {
+          index: "searchIndex",
+          text: {
+            query: searchInfo.value,
+            path: searchInfo.options,
+          },
+        },
+      },
+      {
+        $match: {
+          skills: {
+            $in: searchInfo.skills,
+          },
+        },
+      },
+      { $sort: { [searchInfo.orderBy]: -1 } },
+      { $skip: (page - 1) * 12 },
+      { $limit: 12 },
+    ]);
   }
-
-  async create(portInfo: IPort) {
+  async create(portInfo: InputDTO) {
     return await Portfolio.create(portInfo);
   }
 
-  async update(portId: string, update: IPortInputDTO) {
+  async update(portId: string, update: UpdateInfo) {
     const filter = { portId };
     const option = { returnOriginal: false };
 
