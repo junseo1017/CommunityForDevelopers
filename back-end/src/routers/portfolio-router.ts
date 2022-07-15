@@ -32,7 +32,7 @@ portfolioRouter.get(
 );
 
 portfolioRouter.get(
-  "/search/aa",
+  "/",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       let options = [];
@@ -50,7 +50,6 @@ portfolioRouter.get(
       }
       options.push({ skills: { $in: skillList } });
       const orderBy = req.query.orderBy as string;
-      // const lastId = req.query.lastId as string;
       const Portfolios = await portfolioService.getPortfoliosBySearch(
         options,
         orderBy
@@ -92,7 +91,6 @@ portfolioRouter.post(
       });
       res.status(201).json(newPortfolio);
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
@@ -106,13 +104,6 @@ portfolioRouter.put(
       const portId = req.params.portId;
       const author = req.currentUserId || "";
       const { title, description, skills, content, contentText} = req.body;
-      // await portfolioJoiSchema.validateAsync({
-      //   author,
-      //   title,
-      //   description,
-      //   skills,
-      //   content,
-      // });
       const toUpdate = {
         ...(title && { title }),
         ...(description && { description }),
