@@ -62,7 +62,7 @@ class UserService {
     }
 
     const accessToken = jwtUtil.access(user);
-    const refreshToken = jwtUtil.refresh();
+    const refreshToken = jwtUtil.refresh(user);
 
     return { accessToken, refreshToken };
   }

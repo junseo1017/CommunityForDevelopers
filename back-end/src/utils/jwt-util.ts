@@ -12,50 +12,51 @@ export const jwtUtil = {
 
     return jwt.sign(payload, secretKey, {
       algorithm: "HS256",
+      // expiresIn: "10000ms",
       expiresIn: "7d",
     });
   },
 
-  refresh: () => {
-    return jwt.sign({}, secretKey, {
+  refresh: (user: UserType) => {
+    const payload = {
+      userId: user._id,
+    };
+    return jwt.sign(payload, secretKey, {
       algorithm: "HS256",
       expiresIn: "30d",
     });
   },
 
-  verify: (access: string) => {
-    const accessDecoded = jwt.verify(access, secretKey);
+  decoded: (token: string) => {
+    return jwt.decode(token);
+  },
 
+  verify: (access: string) => {
     try {
+      const accessDecoded = jwt.verify(access, secretKey);
+
       if (typeof accessDecoded !== "string") {
         return {
-          ok: true,
           userId: accessDecoded.userId,
           role: accessDecoded.role,
         };
       }
     } catch (error) {
-      return {
-        ok: false,
-        error,
-      };
+      return { error };
     }
   },
 
   refreshVerify: (refresh: string) => {
-    const refreshDecoded = jwt.verify(refresh, secretKey);
-
     try {
+      const refreshDecoded = jwt.verify(refresh, secretKey);
+
       if (typeof refreshDecoded !== "string") {
         return {
-          ok: true,
+          userId: refreshDecoded.userId,
         };
       }
     } catch (error) {
-      return {
-        ok: false,
-        error,
-      };
+      return { error };
     }
   },
 };
