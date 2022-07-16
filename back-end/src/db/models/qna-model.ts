@@ -44,7 +44,7 @@ export class QnaModel {
   }
 
   async update(qnaId: string, update: QnaInputDTO) {
-    const filter = { qnaId };
+    const filter = { _id: qnaId };
     const option = { returnOriginal: false };
 
     return await Qna.findOneAndUpdate(filter, update, option);
