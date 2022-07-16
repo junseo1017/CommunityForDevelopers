@@ -53,19 +53,24 @@ const Answer = ({ answer, me }) => {
       <div className="answer-title">
         <MessageOutlined style={{ fontSize: "2em" }} />
         <h2>{answer.title}</h2>
-        <Like qnaId={answer._id} recommendData={recommendData} setIsChanged={setIsChanged} />
+        <Like
+          className="answer-like"
+          qnaId={answer._id}
+          recommendData={recommendData}
+          setIsChanged={setIsChanged}
+        />
+        {isAnswerDeleteMode && (
+          <div className="answer-mode">
+            <EditOutlined style={{ fontSize: "2em" }} />
+            <DeleteOutlined
+              style={{ fontSize: "2em" }}
+              onClick={() => {
+                handleDelete(answer._id);
+              }}
+            />
+          </div>
+        )}
       </div>
-      {isAnswerDeleteMode && (
-        <div>
-          <EditOutlined style={{ fontSize: "2em" }} />
-          <DeleteOutlined
-            style={{ fontSize: "2em" }}
-            onClick={() => {
-              handleDelete(answer._id);
-            }}
-          />
-        </div>
-      )}
       <Output data={JSON.parse(answer.contents)} />
       <Collapse>
         <Collapse.Panel header="댓글 보기">

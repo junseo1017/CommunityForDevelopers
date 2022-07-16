@@ -134,14 +134,27 @@ export const DetailAnswerContainer = css`
     display: flex;
     flex-direction: row;
     gap: 1em;
+    justify-content: space-between;
+    align-items: center;
 
-    & h2 {
+    & > h2 {
+      width: 100%;
       font-weight: 700;
+      margin: 0;
+    }
+
+    & div.answer-mode {
+      display: flex;
+      gap: 1em;
     }
   }
 
   & div.ant-collapse {
     background-color: #fff;
+  }
+
+  & div.badge-container {
+    justify-content: flex-end;
   }
 `;
 
