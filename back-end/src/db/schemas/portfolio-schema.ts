@@ -6,7 +6,8 @@ export interface PortfolioType extends Document {
   skills: string;
   content: string;
   contentText: string;
-  recommends: string;
+  scraps: Types.ObjectId[];
+  recommends: Types.ObjectId[];
   comments: Types.ObjectId[];
 }
 
@@ -37,15 +38,24 @@ const PortfolioSchema = new Schema(
       type: String,
       required: true,
     },
-    recommends: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
+    scraps: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "users",
+        required: false,
+      },
+    ],
+    recommends: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "users",
+        required: false,
+      },
+    ],
     comments: [
       {
         type: Schema.Types.ObjectId,
-        ref: "comments",
+        ref: "users",
         required: false,
       },
     ],

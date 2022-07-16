@@ -57,16 +57,19 @@ const qnaSlice = createSlice({
       })
       // getCommentByUserId
       .addCase(getqnabyuserid.pending, (state, action) => {
+        console.log("pending");
         state.getQnAByUserIdLoading = true;
         state.getQnAByUserIdDone = false;
         state.getQnAByUserIdError = false;
       })
       .addCase(getqnabyuserid.fulfilled, (state, action) => {
+        console.log("fulfilled");
         state.getQnAByUserIdLoading = false;
         state.getQnAByUserIdDone = true;
         state.qnabyUserId = action.payload;
       })
       .addCase(getqnabyuserid.rejected, (state, action) => {
+        console.log("rejected");
         state.getQnAByUserIdLoading = false;
         state.getQnAByUserIdError = action.payload;
       });

@@ -1,7 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { portfolioService } from "../services/portfolio-service";
 import { ExtendReq, loginRequired } from "../middlewares/login-required";
-import { portfolioJoiSchema } from "../db/schemas/joi-schemas";
 
 const portfolioRouter = Router();
 
@@ -24,7 +23,6 @@ portfolioRouter.get(
     try {
       const portId = req.params.portId;
       const Portfolio = await portfolioService.getPortfolio(portId);
-      console.log("wow", Portfolio);
       res.status(200).json(Portfolio);
     } catch (error) {
       next(error);
@@ -33,27 +31,18 @@ portfolioRouter.get(
 );
 
 portfolioRouter.get(
-  "/",
+  "/search/list",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      let options = [];
-      const skillList = req.query.skill as string[];
-      const search = req.query.search as string;
-      if (search) {
-        if (typeof req.query.option === "string") {
-          options.push({ [req.query.option as string]: new RegExp(search) });
-        } else {
-          const optionList = req.query.option as string[];
-          optionList.map((option) => {
-            options.push({ [option]: new RegExp(search) });
-          });
-        }
-      }
-      options.push({ skills: { $in: skillList } });
+      const options = req.query.option as string[];
+      const value = req.query.value as string;
       const orderBy = req.query.orderBy as string;
+      const skills = req.query.skill as string[];
+      const searchInfo = { options, value, orderBy, skills };
+      const page = parseInt(req.query.page as string);
       const Portfolios = await portfolioService.getPortfoliosBySearch(
-        options,
-        orderBy
+        searchInfo,
+        page
       );
       res.status(200).json(Portfolios);
     } catch (error) {
@@ -98,13 +87,35 @@ portfolioRouter.post(
 );
 
 portfolioRouter.put(
+  "/:portId/",
+  loginRequired,
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
+    try {
+      const portId = req.params.portId;
+      const userId = req.currentUserId || "";
+      const field = req.query.field as string;
+      const adding = req.query.adding === "true";
+      const updatedPortfolio = await portfolioService.setField(
+        portId,
+        userId,
+        field,
+        adding
+      );
+      res.status(200).json(updatedPortfolio);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+portfolioRouter.put(
   "/:portId",
   loginRequired,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const portId = req.params.portId;
       const author = req.currentUserId || "";
-      const { title, description, skills, content, contentText} = req.body;
+      const { title, description, skills, content, contentText } = req.body;
       const toUpdate = {
         ...(title && { title }),
         ...(description && { description }),

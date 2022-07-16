@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import { message, Tag } from "antd";
+import { Tag } from "antd";
 import { useState } from "react";
 import { useCallback, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
@@ -122,7 +122,7 @@ const ProfileMyInfoForm = ({ action, setAction }) => {
       </datalist>
       <label>{"사용 기술"}</label>
       <div css={myInfoSkills}>
-        <input autoComplete="off" onKeyDown={onKeyPress} />
+        <input placeholder="입력 후 Enter를 눌러주세요" autoComplete="off" onKeyDown={onKeyPress} />
         <div>
           {skills &&
             skills.map((e, i) => {

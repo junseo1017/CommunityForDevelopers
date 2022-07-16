@@ -18,8 +18,8 @@ const ProfileCQnA = () => {
     <AppLayout>
       <ProfileNav />
       <div css={ProfileContentContainer}>
-        <ProfileCard userInfo={userInfo} />
-        <ProfileQnA qnabyUserId={qnabyUserId} />
+        <ProfileCard />
+        <ProfileQnA />
       </div>
     </AppLayout>
   );
@@ -33,7 +33,6 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   }
   await store.dispatch(myinfo());
   await store.dispatch(userinfo(query.id));
-
   await store.dispatch(getqnabyuserid(query.id));
   return {
     props: {},

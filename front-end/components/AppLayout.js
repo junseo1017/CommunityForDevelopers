@@ -11,14 +11,15 @@ const AppLayout = ({ children }) => {
   const isresponsive = useMediaQuery({
     query: "(max-width:768px)",
   });
+
   useEffect(() => {
     setShowHeader(isresponsive);
   }, [isresponsive]);
+
   return (
     <>
       <div style={{ height: "100%", minHeight: "80vh" }}>
-        {!showHeader && <Header />}
-        {showHeader && <HeaderRes />}
+        {showHeader ? <HeaderRes /> : <Header />}
         <div css={[ContentContainer]}>{children}</div>
       </div>
       <Footer />
