@@ -1,38 +1,23 @@
 /** @jsxImportSource @emotion/react */
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import TagRender from "./TagRender";
-import { Row, Col, Checkbox, Select, Input, Divider, Space, Typography } from "antd";
+import { Row, Col, Select, Input, Divider, Space, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { SearchButton, CheckboxButton } from "./styles/PorfolioSearchStyle";
 import useSelects from "../../hooks/useSelects";
+import MainSearch from "./MainSearch";
+import { useEffect, useState } from "react";
 
-const PorfolioSearch = ({ checkboxOptions, orderBys }) => {
+const PorfolioSearch = ({ orderBys }) => {
   const [items, name, onNameChange, addItem] = useSelects();
-  const { Search } = Input;
-  const OrderBySelectStyle = useMemo(() => ({ width: 100, textAlign: "end" }), []);
+  const OrderBySelectStyle = useMemo(() => ({ width: 106, textAlign: "end" }), []);
   const { Option } = Select;
 
   return (
     <>
-      <Row align="middle" gutter={[16, 16]} justify="end">
-        <Col flex="1 1 200px">
-          <Search
-            placeholder="input search text"
-            allowClear
-            enterButton
-            css={SearchButton}
-            size="large"
-            onSearch={() => {}}
-          />
-        </Col>
-        <Col flex="0 0 auto">
-          <Checkbox.Group
-            options={checkboxOptions}
-            defaultValue={["제목", "내용", "유저"]}
-            onChange={() => {}}
-            css={CheckboxButton}
-          />
-        </Col>
+      <Row>
+        <MainSearch />
+      </Row>
+      <Row align="space-between" style={{ paddingTop: "10px" }}>
         <Col flex="0 0 auto">
           <Select
             bordered={false}
@@ -43,8 +28,6 @@ const PorfolioSearch = ({ checkboxOptions, orderBys }) => {
             {orderBys}
           </Select>
         </Col>
-      </Row>
-      <Row align="end">
         <Col flex="0 0 auto">
           <Select
             placement="bottomRight"
@@ -57,7 +40,6 @@ const PorfolioSearch = ({ checkboxOptions, orderBys }) => {
             showArrow
             tagRender={TagRender}
             placeholder="skills를 선택해주세요."
-            //defaultValue={["gold", "cyan"]}
             options={items}
             dropdownRender={(menu) => (
               <div>
