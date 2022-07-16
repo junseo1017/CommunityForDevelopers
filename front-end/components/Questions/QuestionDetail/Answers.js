@@ -5,6 +5,10 @@ import { TextContainer, DetailAnswerContainer } from "../styles/QuestionStyle";
 import Answer from "./Answer";
 
 const Answers = ({ answers, me }) => {
+  answers.sort((a, b) => {
+    return b.recommends.length - a.recommends.length;
+  });
+
   return (
     <div>
       {answers.length === 0 && (
