@@ -272,7 +272,7 @@ const portfolioSlice = createSlice({
       })
       .addCase(loadMyPortfolios.rejected, (state, action) => {
         state.loadMyPortfoliosLoading = false;
-        state.loadMyPortfoliosError = action.payload;
+        state.loadMyPortfoliosError = action.error.message;
       })
       .addDefaultCase((state) => state),
 });

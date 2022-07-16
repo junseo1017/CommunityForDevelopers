@@ -8,6 +8,7 @@ const LoggedinMenu = () => {
   const dispatch = useDispatch();
   const { me, logoutError, logoutDone } = useSelector((state) => state.user);
 
+  // 로그아웃 알림
   useEffect(() => {
     if (!action) return;
     if (logoutError) {
@@ -18,7 +19,7 @@ const LoggedinMenu = () => {
       message.success("정상적으로 로그아웃 되었습니다.");
       return setAction(false);
     }
-  }, [action]);
+  }, [logoutDone, logoutError]);
 
   const logoutHandler = () => {
     dispatch(logout());
