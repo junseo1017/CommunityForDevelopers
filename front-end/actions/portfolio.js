@@ -4,7 +4,7 @@ import { backendUrl } from "../config/config";
 import userSlice from "../reducers/user";
 
 axios.defaults.baseURL = backendUrl;
-//axios.defaults.withCredentials = true; // front, backend 간 쿠키공유
+axios.defaults.withCredentials = true; // front, backend 간 쿠키공유
 
 export const loadPortfolios = createAsyncThunk(
   "portfolio/loadPortfolios",
@@ -28,11 +28,7 @@ export const loadPortfolios = createAsyncThunk(
 export const addPortfolio = createAsyncThunk("portfolio/addPortfolio", async (data, thunkAPI) => {
   try {
     console.log(data);
-    const response = await axios.post("/api/portfolios", data, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
+    const response = await axios.post("/api/portfolios", data);
     console.log(response);
     thunkAPI.dispatch(userSlice.actions.addPortfolioToMe(response.data.id));
     console.log(response.data);
@@ -58,11 +54,7 @@ export const addComment = createAsyncThunk(
   "portfolio/addComment",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`/api/comments/portfolio/${data.portfolioId}`, data, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }); // POST /portfolio/1
+      const response = await axios.post(`/api/comments/portfolio/${data.portfolioId}`, data); // POST /portfolio/1
       return response.data;
     } catch (error) {
       console.log(error);

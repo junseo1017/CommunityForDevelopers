@@ -22,41 +22,17 @@ const Home = () => {
   console.log(mainPortfolios);
 
   const { Option } = Select;
-
   const portfolioSearchObjects = useMemo(() => {
-    const checkboxOptions = [
-      {
-        label: "제목",
-        value: "제목",
-      },
-      {
-        label: "내용",
-        value: "내용",
-      },
-      {
-        label: "유저",
-        value: "유저",
-      },
+    const orderBys = [
+      <Option key={0}>추천 순</Option>,
+      <Option key={1}>최신 순</Option>,
+      <Option key={2}>댓글 순</Option>,
+      <Option key={3}>스크랩 순</Option>,
     ];
-    const orderBys = [];
-    orderBys.push(<Option key={0}>추천 순</Option>);
-    for (let i = 10; i < 36; i++) {
-      orderBys.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
-    }
     return {
-      checkboxOptions,
       orderBys,
     };
   }, []);
-  const mainContainer = css`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  `;
-  const dividerCss = css`
-    margin-top: 5;
-    margin-bottom: 15;
-  `;
 
   return (
     <AppLayout>
@@ -103,3 +79,9 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
 });
 
 export default Home;
+
+const mainContainer = css``;
+const dividerCss = css`
+  margin-top: 13px;
+  margin-bottom: 15;
+`;
