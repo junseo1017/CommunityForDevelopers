@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { signup, login, userinfo, patchUserinfo, myinfo } from "../actions/user";
+import { signup, login, userinfo, patchUserinfo, myinfo, logout } from "../actions/user";
 
 const initialState = {
   // 내 정보
@@ -36,15 +36,6 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    logout(state) {
-      state.me = false;
-    },
-    addLoginStatus(state, action) {
-      state.isLoggedin = action.payload;
-    },
-    checkLoggedin(state) {
-      state.isLoggedinCheck = true;
-    },
     /* By 지의신 Portfolio */
     addPortfolioToMe(state, action) {
       state.me.Portfolios.unshift({ id: action.payload });
@@ -54,7 +45,6 @@ const userSlice = createSlice({
     builder
       // login
       .addCase(login.pending, (state) => {
-        console.log("pending");
         state.loginLoading = true;
         state.loginDone = false;
         state.loginError = null;
@@ -64,10 +54,29 @@ const userSlice = createSlice({
         state.loginDone = true;
       })
       .addCase(login.rejected, (state, action) => {
-        console.log("rejected");
         state.loginLoading = false;
         state.loginError = action.payload;
       })
+
+      // logout
+      .addCase(logout.pending, (state) => {
+        console.log("pending");
+        state.logoutLoading = true;
+        state.logoutDone = false;
+        state.logoutError = null;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        console.log("fulfilled");
+        state.logoutLoading = false;
+        state.logoutDone = true;
+        state.me = null;
+      })
+      .addCase(logout.rejected, (state, action) => {
+        console.log("rejected");
+        state.loginLoading = false;
+        state.logoutError = action.payload;
+      })
+
       // signup
       .addCase(signup.pending, (state) => {
         state.signupLoading = true;

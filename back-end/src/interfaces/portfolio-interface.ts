@@ -1,4 +1,4 @@
-export interface IPort {
+export interface InputDTO {
   author: string;
   title: string;
   description: string;
@@ -7,7 +7,7 @@ export interface IPort {
   contentText: string;
 }
 
-export interface IPortInputDTO {
+export interface UpdateInfo {
   title: string;
   description: string;
   skills: string[];
@@ -15,3 +15,9 @@ export interface IPortInputDTO {
   contentText: string;
 }
 
+export interface SearchInfo {
+  options: string[];
+  value: string;
+  orderBy: string;
+  skills: string[];
+}
