@@ -1,18 +1,26 @@
 /** @jsxImportSource @emotion/react */
-import { css, jsx } from "@emotion/react";
+import { css } from "@emotion/react";
 import AppLayout from "../../components/AppLayout";
-import { useCallback } from "react";
+import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
+import axios from "axios";
 import { Affix, Button, Avatar, Comment, Form, Input, List } from "antd";
-import { loadPortfolio } from "../../actions/portfolio";
+import {
+  loadPortfolio,
+  likePortfolio,
+  scrapPortfolio,
+  unlikePortfolio,
+  unscrapPortfolio,
+} from "../../actions/portfolio";
+import { myinfo } from "../../actions/user";
 import wrapper from "../../store";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import CommentEditor from "../../components/Portfolo/CommentEditor";
 import CommentList from "../../components/Portfolo/CommentList";
 import useComment from "../../hooks/useComment";
-import { LikeTwoTone, StarTwoTone } from "@ant-design/icons";
+import { LikeTwoTone, StarTwoTone, LikeOutlined, StarOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { likePortfolio, unlikePortfolio } from "../../actions/portfolio";
+
 const { TextArea } = Input;
 
 const Output = dynamic(async () => (await import("editorjs-react-renderer")).default, {
@@ -23,31 +31,22 @@ const Output = dynamic(async () => (await import("editorjs-react-renderer")).def
 // });
 
 const Portfolio = () => {
+  const dispatch = useDispatch();
   const { singlePortfolio } = useSelector((state) => state.portfolio);
   const { me } = useSelector((state) => state.user);
   console.log(singlePortfolio);
-  const onLikePortfolio = useCallback(() => {
-    // if (!id) {
-    //   message.warn("로그인이 필요합니다.").then();
-    //   return;
-    // }
-    dispatch(
-      likePortfolio({
-        portfolioId: singlePortfolio._id,
-      }),
-    );
-  }, []);
-  const onUnlikePortfolio = useCallback(() => {
-    // if (!id) {
-    //   message.warn("로그인이 필요합니다.").then();
-    //   return;
-    // }
-    dispatch(
-      unlikePortfolio({
-        portfolioId: singlePortfolio._id,
-      }),
-    );
-  }, []);
+  console.log(me);
+  const liked = singlePortfolio.recommends?.find((v) => v === me._id);
+  const scrapped = singlePortfolio.scraps?.find((v) => v === me._id);
+  const onClickLikePort = () => {
+    if (liked) dispatch(unlikePortfolio({ portfolioId: singlePortfolio._id, UserId: me._id }));
+    else dispatch(likePortfolio({ portfolioId: singlePortfolio._id, UserId: me._id }));
+  };
+  const onClickScrapPort = () => {
+    if (scrapped) dispatch(unscrapPortfolio({ portfolioId: singlePortfolio._id, UserId: me._id }));
+    else dispatch(scrapPortfolio({ portfolioId: singlePortfolio._id, UserId: me._id }));
+  };
+
   const affixCss = css`
     display: flex;
     flex-direction: column;
@@ -103,8 +102,18 @@ const Portfolio = () => {
   return (
     <AppLayout>
       <div css={affixCss}>
-        <Button size="large" shape="circle" icon={<LikeTwoTone />} />
-        <Button size="large" shape="circle" icon={<StarTwoTone />} />
+        <Button
+          onClick={onClickLikePort}
+          size="large"
+          shape="circle"
+          icon={liked ? <LikeTwoTone /> : <LikeOutlined />}
+        />
+        <Button
+          onClick={onClickScrapPort}
+          size="large"
+          shape="circle"
+          icon={scrapped ? <StarTwoTone /> : <StarOutlined />}
+        />
       </div>
 
       <div style={{ marginBottom: "3rem" }}>{}</div>
@@ -133,16 +142,14 @@ const Portfolio = () => {
     </AppLayout>
   );
 };
-export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ params }) => {
-  // const cookie = context.req ? context.req.headers.cookie : "";
-  // axios.defaults.headers.Cookie = "";
-  // // 쿠키가 브라우저에 있는경우만 넣어서 실행
-  // // (주의, 아래 조건이 없다면 다른 사람으로 로그인 될 수도 있음)
-  // if (context.req && cookie) {
-  //   axios.defaults.headers.Cookie = cookie;
-  // }
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, params }) => {
+  const cookie = req?.headers.cookie; // req가 있다면 cookie에 요청에 담겨진 cookie를 할당한다.
+  axios.defaults.headers.Cookie = ""; // 요청이 들어올 때마다 초기화 시켜주는 것이다. 여기는 클라이언트 서버에서 실행되므로 이전 요청이 남아있을 수 있기 때문이다
+  if (req && cookie) {
+    axios.defaults.headers.Cookie = cookie;
+  }
   await store.dispatch(loadPortfolio({ portfolioId: params.id }));
-  //await store.dispatch(loadMyInfo());
+  await store.dispatch(myinfo());
 
   return {
     props: {},

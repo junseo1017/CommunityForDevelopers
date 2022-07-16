@@ -24,10 +24,10 @@ const Home = () => {
   const { Option } = Select;
   const portfolioSearchObjects = useMemo(() => {
     const orderBys = [
-      <Option key={0}>추천 순</Option>,
-      <Option key={1}>최신 순</Option>,
-      <Option key={2}>댓글 순</Option>,
-      <Option key={3}>스크랩 순</Option>,
+      <Option key={"추천 순"}>추천 순</Option>,
+      <Option key={"최신 순"}>최신 순</Option>,
+      <Option key={"댓글 순"}>댓글 순</Option>,
+      <Option key={"스크랩 순"}>스크랩 순</Option>,
     ];
     return {
       orderBys,
