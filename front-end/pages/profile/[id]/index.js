@@ -12,7 +12,7 @@ import { useEffect } from "react";
 import axios from "axios";
 
 const Profile = () => {
-  const { userInfo, me } = useSelector((state) => state.user);
+  const { userInfo } = useSelector((state) => state.user);
   return (
     <AppLayout>
       <ProfileNav />
