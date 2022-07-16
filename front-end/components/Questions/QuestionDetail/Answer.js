@@ -15,7 +15,7 @@ const Answer = ({ answer, me }) => {
     numberOfRecommends: 0,
   });
 
-  const initialMode = !!me;
+  const initialMode = !!(me._id === answer.author._id);
 
   const [isChanged, setIsChanged] = useState(false);
   const [isAnswerDeleteMode, setIsAnswerDeleteMode] = useState(initialMode);
