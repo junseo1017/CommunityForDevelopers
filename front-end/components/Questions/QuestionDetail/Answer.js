@@ -3,7 +3,7 @@ import { css, jsx } from "@emotion/react";
 import React, { useEffect, useState } from "react";
 import Comments from "./Comments";
 import { Divider, Collapse } from "antd";
-import { MessageOutlined } from "@ant-design/icons";
+import { MessageOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { DetailAnswerContainer } from "../styles/QuestionStyle";
 import Like from "../Like";
 import Output from "editorjs-react-renderer";
@@ -15,9 +15,18 @@ const Answer = ({ answer, me }) => {
     numberOfRecommends: 0,
   });
 
-  console.log(recommendData);
+  const initialMode = !!(me._id === answer.author._id);
 
   const [isChanged, setIsChanged] = useState(false);
+  const [isAnswerDeleteMode, setIsAnswerDeleteMode] = useState(initialMode);
+
+  const handleDelete = async (deleteId) => {
+    try {
+      await axios.delete(`/api/qnas/${deleteId}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -37,13 +46,30 @@ const Answer = ({ answer, me }) => {
 
     getData();
   }, [isChanged]);
-  console.log("answers", answer);
+
   return (
     <div css={DetailAnswerContainer} key={answer._id}>
+      <Divider plain />
       <div className="answer-title">
         <MessageOutlined style={{ fontSize: "2em" }} />
         <h2>{answer.title}</h2>
-        <Like qnaId={answer._id} recommendData={recommendData} setIsChanged={setIsChanged} />
+        <Like
+          className="answer-like"
+          qnaId={answer._id}
+          recommendData={recommendData}
+          setIsChanged={setIsChanged}
+        />
+        {isAnswerDeleteMode && (
+          <div className="answer-mode">
+            <EditOutlined style={{ fontSize: "2em" }} />
+            <DeleteOutlined
+              style={{ fontSize: "2em" }}
+              onClick={() => {
+                handleDelete(answer._id);
+              }}
+            />
+          </div>
+        )}
       </div>
       <Output data={JSON.parse(answer.contents)} />
       <Collapse>
@@ -51,7 +77,6 @@ const Answer = ({ answer, me }) => {
           <Comments contentId={answer._id} user={me} />
         </Collapse.Panel>
       </Collapse>
-      <Divider plain />
     </div>
   );
 };

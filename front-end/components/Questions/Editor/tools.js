@@ -40,9 +40,10 @@ const EDITOR_JS_TOOLS = {
   codeBox: {
     class: CodeBox,
     config: {
+      disableDefaultStyle: false,
       themeURL:
         "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/dracula.min.css", // Optional
-      //themeName: "atom-one-dark", // Optional
+      themeName: "atom-one-dark", // Optional
       useDefaultTheme: "light", // Optional. This also determines the background color of the language select drop-down
     },
   },
