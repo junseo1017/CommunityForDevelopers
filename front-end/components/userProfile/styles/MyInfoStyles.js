@@ -217,7 +217,7 @@ export const popoverStyle = css`
 export const qnaContainer = css`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
 `;
 
 export const qnaNavStyle = css`
@@ -225,10 +225,73 @@ export const qnaNavStyle = css`
   gap: 1.5vw;
   padding: 10px;
   border-bottom: 1px solid rgb(220, 220, 220);
+
   h3 {
     font-size: 22px;
     font-weight: 700;
     margin: 0;
     cursor: pointer;
+    color: rgb(220, 220, 220);
+  }
+`;
+
+export const QnAContentStyle = css`
+  width: 100%;
+  & > section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 730px;
+    overflow: hidden;
+    padding: 20px 0;
+    border-bottom: 1px solid rgb(190, 190, 190);
+    & * {
+      margin: 0;
+    }
+
+    & > div {
+      width: 100%;
+      h2 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1890ff;
+        @media (max-width: 768px) {
+          font-size: 18px;
+        }
+      }
+      p {
+        font-size: 14px;
+        color: rgb(150, 150, 150);
+        @media (max-width: 768px) {
+          font-size: 12px;
+        }
+      }
+      a {
+        color: black;
+      }
+    }
+    & > div:first-of-type {
+      & > a {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+    & > div:last-of-type {
+      display: flex;
+      justify-content: space-between;
+
+      @media (max-width: 768px) {
+        justify-content: start;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      & > span {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+    }
   }
 `;

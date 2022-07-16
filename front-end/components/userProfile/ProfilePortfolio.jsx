@@ -12,6 +12,7 @@ import { StarOutlined, LikeOutlined, MessageOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
+import { textLimitHandler } from "../Common/textLimit";
 const ProfilePortfolio = () => {
   const [showHeader, setShowHeader] = useState(null);
   const { myPortfolios } = useSelector((state) => state.portfolio);
@@ -23,13 +24,6 @@ const ProfilePortfolio = () => {
   useEffect(() => {
     setShowHeader(isresponsive);
   }, [isresponsive]);
-
-  const textLimitHandler = (text, limit) => {
-    if (text.length >= limit) {
-      return text.substr(0, limit) + "...";
-    }
-    return text;
-  };
 
   const skills = (list) => {
     return (
