@@ -61,8 +61,14 @@ class UserService {
       );
     }
 
-    const accessToken = jwtUtil.access(user);
-    const refreshToken = jwtUtil.refresh(user);
+    const accessToken = jwtUtil.generateAccessToken({
+      userId: user._id,
+      role: user.role,
+    });
+    const refreshToken = jwtUtil.generateRefreshToken({
+      userId: user._id,
+      role: user.role,
+    });
 
     return { accessToken, refreshToken };
   }
@@ -85,7 +91,11 @@ class UserService {
       throw new Error("가입 내역이 없습니다. 다시 한 번 확인해 주세요.");
     }
 
-    return await this.userModel.update(userId, toUpdate);
+    // 업데이트
+    await this.userModel.update(userId, toUpdate);
+
+    // 이후 조회된 쿼리 반환
+    return this.userModel.findById(userId);
   }
 
   // 비밀번호 수정
