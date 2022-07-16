@@ -3,7 +3,7 @@ import { css, jsx } from "@emotion/react";
 import React, { useEffect, useState } from "react";
 import Comments from "./Comments";
 import { Divider, Collapse } from "antd";
-import { MessageOutlined } from "@ant-design/icons";
+import { MessageOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { DetailAnswerContainer } from "../styles/QuestionStyle";
 import Like from "../Like";
 import Output from "editorjs-react-renderer";
@@ -15,7 +15,18 @@ const Answer = ({ answer, me }) => {
     numberOfRecommends: 0,
   });
 
+  const initialMode = !!me;
+
   const [isChanged, setIsChanged] = useState(false);
+  const [isAnswerDeleteMode, setIsAnswerDeleteMode] = useState(initialMode);
+
+  const handleDelete = async (deleteId) => {
+    try {
+      await axios.delete(`/api/qnas/${deleteId}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -35,6 +46,7 @@ const Answer = ({ answer, me }) => {
 
     getData();
   }, [isChanged]);
+
   return (
     <div css={DetailAnswerContainer} key={answer._id}>
       <Divider plain />
@@ -43,6 +55,17 @@ const Answer = ({ answer, me }) => {
         <h2>{answer.title}</h2>
         <Like qnaId={answer._id} recommendData={recommendData} setIsChanged={setIsChanged} />
       </div>
+      {isAnswerDeleteMode && (
+        <div>
+          <EditOutlined style={{ fontSize: "2em" }} />
+          <DeleteOutlined
+            style={{ fontSize: "2em" }}
+            onClick={() => {
+              handleDelete(answer._id);
+            }}
+          />
+        </div>
+      )}
       <Output data={JSON.parse(answer.contents)} />
       <Collapse>
         <Collapse.Panel header="댓글 보기">

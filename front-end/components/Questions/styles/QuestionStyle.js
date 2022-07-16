@@ -94,7 +94,7 @@ export const DescriptionContainer = css`
 `;
 
 export const DetailContainer = css`
-  width: 80%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
