@@ -15,13 +15,8 @@ import Answers from "./Answers";
 import Output from "editorjs-react-renderer";
 import axios from "axios";
 
-const OutputStyle = {
-  codeBox: {
-    code: { fontSize: "1em" },
-  },
-};
-
 const QuestionDetail = ({ qna, answers }) => {
+  console.log(qna);
   // qna의 id 가져오기
   const router = useRouter();
   const qnaId = router.query._id;
@@ -29,10 +24,11 @@ const QuestionDetail = ({ qna, answers }) => {
   // user 정보 가져오기
   const { me } = useSelector((state) => state.user);
 
-  const initialMode = !!(me._id === qna.author._id);
+  const initialState = !!(me._id === qna.author._id);
 
   const [isAnswerCreateMode, setIsAnswerCreateMode] = useState(false);
-  const [isAnswerDeleteMode, setIsAnswerDeleteMode] = useState(initialMode);
+  const [isAuthor, setIsAuthor] = useState(initialState);
+  const [isAnswerUpdateMode, setIsAnswerUpdateMode] = useState(false);
 
   // 수정 삭제 작업 중..
   const handleDelete = async (deleteId) => {
@@ -43,12 +39,8 @@ const QuestionDetail = ({ qna, answers }) => {
     }
   };
 
-  const handleUpdate = async (updateId) => {
-    try {
-      await axios.put(`/api/qnas/${updateId}`);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleUpdate = async () => {
+    setIsAnswerUpdateMode(!isAnswerUpdateMode);
   };
 
   const [answerTitle, setAnswerTItle] = useState("");
@@ -63,8 +55,6 @@ const QuestionDetail = ({ qna, answers }) => {
     isRecommended: false,
     numberOfRecommends: 0,
   });
-
-  console.log(recommendData);
 
   const [isChanged, setIsChanged] = useState(false);
 
@@ -92,7 +82,7 @@ const QuestionDetail = ({ qna, answers }) => {
       <div css={DetailQuestionContainer}>
         {/* <Like qnaId={qna._id} recommendData={recommendData} setIsChanged={setIsChanged} /> */}
         <h1>{qna.title}</h1>
-        {isAnswerDeleteMode && (
+        {isAuthor && (
           <div>
             <EditOutlined
               style={{ fontSize: "2em" }}
@@ -104,6 +94,7 @@ const QuestionDetail = ({ qna, answers }) => {
               style={{ fontSize: "2em" }}
               onClick={() => {
                 handleDelete(qna._id);
+                router.replace(`/qna/${router.query._id}`);
               }}
             />
           </div>
@@ -135,7 +126,17 @@ const QuestionDetail = ({ qna, answers }) => {
           </Button>
         </div>
         <Divider plain />
-        <Output data={JSON.parse(qna.contents)} style={OutputStyle} />
+        {!isAnswerUpdateMode ? (
+          <Output data={JSON.parse(qna.contents)} />
+        ) : (
+          <AddEditor
+            data={JSON.parse(qna.contents)}
+            title={answerTitle}
+            isAnswer={false}
+            qnaId={qna._id}
+            isUpdate={true}
+          />
+        )}
         {isAnswerCreateMode && (
           <div css={EditorContainer}>
             <Divider plain />

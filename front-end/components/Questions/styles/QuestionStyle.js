@@ -13,7 +13,7 @@ export const SearchBarContainer = css`
     font-size: 1.5em;
 
     border: 2px solid gray;
-    border-radius: 0.5em;
+    border-radius: 1.5em;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
     opacity: 0.75;
     outline: none;
