@@ -45,12 +45,6 @@ const QuestionDetail = ({ qna, answers }) => {
 
   const [answerTitle, setAnswerTItle] = useState("");
 
-  const formattingDate = (date) => {
-    return `${new Date(date).getFullYear()}년 ${new Date(date).getMonth() + 1}월 ${new Date(
-      date,
-    ).getDate()}일`;
-  };
-
   const [recommendData, setRecommendData] = useState({
     isRecommended: false,
     numberOfRecommends: 0,
@@ -104,8 +98,8 @@ const QuestionDetail = ({ qna, answers }) => {
             <Tag key={index}>{tag}</Tag>
           ))}
           <p>질문자: {qna.author.nickname}</p>
-          <p>질문일: {formattingDate(qna.createdAt)}</p>
-          <p>최근 수정일: {formattingDate(qna.updatedAt)}</p>
+          <p>질문일: {moment(qna.createdAt).format("YYYY월 MM월 DD일")}</p>
+          <p>최근 수정일: {moment(qna.updatedAt).format("YYYY월 MM월 DD일")}</p>
         </div>
         <div>
           {/* <Link href="/qna">
