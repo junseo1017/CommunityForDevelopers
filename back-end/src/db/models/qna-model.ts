@@ -20,7 +20,7 @@ export class QnaModel {
       },
       {
         path: "recommends",
-        select: "nickname",
+        select: ["nickname", "imgUrl"],
       },
       {
         path: "comments",
