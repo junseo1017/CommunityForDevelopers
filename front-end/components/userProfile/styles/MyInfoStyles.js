@@ -135,10 +135,11 @@ export const portfolioStyle = css`
 
     & > div:last-of-type {
       position: absolute;
-
       opacity: 0;
       top: 10px;
       right: 10px;
+      transition: 150ms;
+
       @media (max-width: 768px) {
         top: 10px;
         right: 10px;

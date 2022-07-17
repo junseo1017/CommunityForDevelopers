@@ -54,6 +54,37 @@ export const SignBtnStyle = css`
   }
 `;
 
+export const OAuthStyle = css`
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  & > * {
+    width: 100%;
+    padding: 0 !important;
+  }
+  & > h3 {
+    font-size: 14px;
+    text-align: center;
+    margin: 0;
+  }
+  & ul {
+    width: 100%;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 0;
+    padding: 0;
+  }
+  & li > a {
+    color: black;
+    z-index: 1000;
+  }
+`;
+
 export const SignUpFormStyle = css`
   margin: 0 auto;
   & * {

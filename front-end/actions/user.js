@@ -25,6 +25,19 @@ export const login = createAsyncThunk("user/login", async (data, { rejectWithVal
   }
 });
 
+export const githubLogin = createAsyncThunk(
+  "user/oauthlogin",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("/api/users/oauth/github");
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
 export const logout = createAsyncThunk("user/logout", async (data, { rejectWithValue }) => {
   try {
     console.log(`%c 로그아웃 요청`, "color: green;");
