@@ -40,7 +40,11 @@ const AddButton = () => {
           key: "1",
         },
         {
-          label: <a href="/questions/new">질문 올리기</a>,
+          label: (
+            <Link href="/qna/new">
+              <a>질문 올리기</a>
+            </Link>
+          ),
           key: "2",
         },
       ]}

@@ -41,7 +41,8 @@ const Questions = ({ questions, answers }) => {
   return (
     <>
       <div css={SearchBarContainer}>
-        <Input.Search
+        <input type="text" placeholder="검색어를 입력하세요" />
+        {/* <Input.Search
           placeholder="Search Questions"
           allowClear
           enterButton
@@ -52,12 +53,12 @@ const Questions = ({ questions, answers }) => {
           onSearch={() => {
             searchQuestions();
           }}
-        />
-        <Link href="/qna/new">
+        /> */}
+        {/* <Link href="/qna/new">
           <Button size="large" type="primary">
             질문하기
           </Button>
-        </Link>
+        </Link> */}
       </div>
       <Divider plain />
       {questions ? (

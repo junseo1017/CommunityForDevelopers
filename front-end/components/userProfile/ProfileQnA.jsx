@@ -3,11 +3,13 @@ import { css, jsx } from "@emotion/react";
 import { Card, Button, Tag } from "antd";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { profileContentCardContainer, qnaContainer, qnaNavStyle } from "./styles/MyInfoStyles";
 import ProfileQuestions from "./ProfileQuestions";
 import ProfileAnswers from "./ProfileAnswers";
-const ProfileQnA = ({ qnabyUserId }) => {
+import { useSelector } from "react-redux";
+
+const ProfileQnA = () => {
+  const { qnabyUserId } = useSelector((state) => state.qna);
   const [question, setQuestion] = useState(null);
   const [answer, setAnswer] = useState(null);
   const [select, setSelect] = useState(true);
@@ -17,17 +19,14 @@ const ProfileQnA = ({ qnabyUserId }) => {
     setAnswer(qnabyUserId.filter((e) => e.isAnswer === true));
   }, []);
 
-  const onSelectHandler = (e) => {
+  const onSelectHandler = useCallback((e) => {
     if (e.target.textContent === "질문") {
-      console.log("q");
       setSelect(true);
     }
     if (e.target.textContent === "답변") {
-      console.log("a");
       setSelect(false);
     }
-    return;
-  };
+  }, []);
 
   return (
     <Card css={profileContentCardContainer}>

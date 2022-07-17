@@ -1,13 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
+import { Divider, Collapse } from "antd";
 import { TextContainer, DetailAnswerContainer } from "../styles/QuestionStyle";
 import Answer from "./Answer";
 
 const Answers = ({ answers, me }) => {
+  answers.sort((a, b) => {
+    return b.recommends.length - a.recommends.length;
+  });
+
   return (
     <div>
       {answers.length === 0 && (
         <div css={TextContainer}>
+          <Divider plain />
           <h2>아직 답변이 없습니다. 당신의 지식을 공유해 보세요!</h2>
         </div>
       )}

@@ -2,6 +2,7 @@ import { model } from "mongoose";
 import { UserSchema, UserType } from "../schemas/user-schema";
 import {
   InputDTO,
+  OAuthUserDTO,
   Password,
   UpdateInfo,
 } from "../../interfaces/user-interface";
@@ -30,6 +31,9 @@ export class UserModel {
   }
 
   async create(userInfo: InputDTO) {
+    return await User.create(userInfo);
+  }
+  async createOAuthUser(userInfo: OAuthUserDTO) {
     return await User.create(userInfo);
   }
 

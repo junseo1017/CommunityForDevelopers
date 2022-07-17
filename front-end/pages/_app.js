@@ -2,17 +2,9 @@ import React from "react";
 import Head from "next/head";
 import "../styles/globals.css";
 import "antd/dist/antd.css";
-import { useEffect } from "react";
 import wrapper from "../store/index";
-import { useDispatch } from "react-redux";
-import { myinfo } from "../actions/user";
 
 const MyApp = ({ Component, pageProps }) => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    // 로그인 여부 확인
-    dispatch(myinfo());
-  }, []);
   return (
     <>
       <Head>

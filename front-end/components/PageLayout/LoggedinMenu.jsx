@@ -1,14 +1,30 @@
 import { useSelector, useDispatch } from "react-redux";
 import Link from "next/link";
-import userSlice from "../../reducers/user";
+import { useState, useEffect } from "react";
 import { message } from "antd";
-import { useCallback } from "react";
+import { logout } from "../../actions/user";
 const LoggedinMenu = () => {
+  const [action, setAction] = useState(false);
   const dispatch = useDispatch();
-  const { me } = useSelector((state) => state.user);
+  const { me, logoutError, logoutDone } = useSelector((state) => state.user);
+
+  // 로그아웃 알림
+  useEffect(() => {
+    if (!action) return;
+    if (logoutError) {
+      message.error(logoutError);
+      return setAction(false);
+    }
+    if (logoutDone) {
+      message.success("정상적으로 로그아웃 되었습니다.");
+      return setAction(false);
+    }
+  }, [logoutDone, logoutError]);
 
   const logoutHandler = () => {
-    message.success("로그아웃 기능 구현중입니다.");
+    dispatch(logout());
+
+    setAction(true);
   };
 
   return (

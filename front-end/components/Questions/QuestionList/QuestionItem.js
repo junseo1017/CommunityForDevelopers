@@ -35,15 +35,13 @@ const QuestionItem = ({ _id, title, recommends, contents, tags, user, date, answ
             {text}
           </span>
         ))}
-        <div>
-          {tags.map((tag, idx) => {
-            return <Tag key={`${_id} + ${idx}`}>{tag}</Tag>;
-          })}
-        </div>
-        <div>
-          <StarOutlined />
-          <span>{`  ${recommends}명이 이 질문을 추천함.`}</span>
-          <span>{`(${user.nickname}가 ${formattedDate}에 질문함)`}</span>
+        <div className="tag-container">
+          <div>
+            {tags.map((tag, idx) => {
+              return <Tag key={`${_id} + ${idx}`}>{tag}</Tag>;
+            })}
+          </div>
+          <span>{`(${user.nickname}이/가 ${formattedDate}에 질문함)`}</span>
         </div>
       </div>
     </div>
