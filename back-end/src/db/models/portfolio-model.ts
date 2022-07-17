@@ -35,12 +35,25 @@ export class PortfolioModel {
     });
   }
 
+  async getCountByUserId(userId: string) {
+    return await Portfolio.find({ author: userId }).count();
+  }
+
+  async getScrapsCountByUserId(userId: string) {
+    return await Portfolio.find({ scraps: new Types.ObjectId(userId) }).count();
+  }
+
+  async getScrapsByUserId(userId: string) {
+    return await Portfolio.find({ scraps: new Types.ObjectId(userId) });
+  }
+
   async findPortfoliosInit() {
     return await Portfolio.find({}).sort({ _id: -1 }).limit(12).populate({
       path: "author",
       select: "nickname",
     });
   }
+
   async findPortfolios(lastId: string) {
     const id = new Types.ObjectId(lastId);
     return await Portfolio.find({ _id: { $lt: id } })
@@ -51,6 +64,7 @@ export class PortfolioModel {
         select: "nickname",
       });
   }
+
   async findBySearch(searchInfo: SearchInfo, page: number) {
     return await Portfolio.aggregate([
       {
@@ -74,6 +88,7 @@ export class PortfolioModel {
       { $limit: 12 },
     ]);
   }
+
   async create(portInfo: InputDTO) {
     return await Portfolio.create(portInfo);
   }

@@ -21,13 +21,13 @@ userRouter.post(
         password,
       });
 
-      const newUser = await userService.addUser({
+      await userService.addUser({
         nickname,
         email,
         password,
       });
 
-      res.status(201).json(newUser);
+      res.status(201).json({ signUp: "succeed" });
     } catch (error) {
       next(error);
     }
@@ -42,16 +42,13 @@ userRouter.post(
     try {
       const userToken = await userService.getUserToken({ email, password });
 
-      if (req.cookies)
-        console.log("쿠키:", req.cookies, "\n인증쿠키:", req.signedCookies);
-
       res.cookie("userinfo", userToken, {
         expires: new Date(Date.now() + 60000 * 1440), //24시간
         httpOnly: true,
         signed: true,
       });
 
-      res.status(200).json(userToken);
+      res.status(200).json({ signIn: "succeed" });
     } catch (error) {
       next(error);
     }
@@ -75,7 +72,8 @@ userRouter.get(
     } catch (error) {
       next(error);
     }
-})
+  }
+);
 
 userRouter.get(
   "/oauth/github/callback",
@@ -97,7 +95,8 @@ userRouter.get(
     } catch (error) {
       next(error);
     }
-  })
+  }
+);
 
 userRouter.get(
   "/logout",
@@ -106,7 +105,7 @@ userRouter.get(
     try {
       if (req.currentUserId) {
         res.clearCookie("userinfo");
-        res.status(200).json({ logout: "succeed" });
+        res.status(200).json({ signOut: "succeed" });
       }
     } catch (error) {
       next(error);
@@ -127,15 +126,10 @@ userRouter.get(
   loginRequired,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
-      console.log(req);
-      const userId = req.currentUserId;
+      const userId = req.currentUserId || "";
 
-      if (userId !== undefined) {
-        const users = await userService.getUserInfo(userId);
-        console.log(users);
-        res.send(users);
-        // res.send(users);
-      }
+      const users = await userService.getUserInfo(userId);
+      res.status(200).json(users);
     } catch (error) {
       next(error);
     }
@@ -147,7 +141,20 @@ userRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.userId;
     try {
-      res.send(await userService.getUserInfo(userId));
+      res.status(200).json(await userService.getUserInfo(userId));
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+userRouter.get(
+  "/contents/count",
+  loginRequired,
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
+    const userId = req.currentUserId || "";
+    try {
+      res.status(200).json(await userService.getUserContentsCount(userId));
     } catch (error) {
       next(error);
     }
@@ -190,12 +197,8 @@ userRouter.put(
     }
 
     try {
-      const updatedUserInfo = await userService.setPassword(
-        { userId, currentPassword },
-        password
-      );
-
-      res.status(200).json(updatedUserInfo);
+      await userService.setPassword({ userId, currentPassword }, password);
+      res.status(200).json({ changePassword: "succeed" });
     } catch (error) {
       next(error);
     }

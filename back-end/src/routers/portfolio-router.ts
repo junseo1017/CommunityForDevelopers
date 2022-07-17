@@ -64,6 +64,19 @@ portfolioRouter.get(
   }
 );
 
+portfolioRouter.get(
+  "/user/scraps/contents",
+  loginRequired,
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.currentUserId || "";
+      res.status(200).json(await portfolioService.getUserScraps(userId));
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 portfolioRouter.post(
   "/",
   loginRequired,

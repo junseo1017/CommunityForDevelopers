@@ -55,6 +55,14 @@ class PortfolioService {
     return portfolio;
   }
 
+  async getUserScraps(userId: string) {
+    const portfolio = await this.portfolioModel.getScrapsByUserId(userId);
+    if (!portfolio) {
+      throw new Error("포토폴리오가 존재하지 않습니다.");
+    }
+    return portfolio;
+  }
+
   async getPortfoliosBySearch(searchInfo: SearchInfo, page: number) {
     const portfolios = await this.portfolioModel.findBySearch(searchInfo, page);
     if (!portfolios) {

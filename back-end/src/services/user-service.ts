@@ -1,4 +1,11 @@
-import { UserModel, userModel } from "../db";
+import {
+  UserModel,
+  userModel,
+  PortfolioModel,
+  portfolioModel,
+  QnaModel,
+  qnaModel,
+} from "../db";
 import {
   InputDTO,
   UpdateInfo,
@@ -12,8 +19,16 @@ import axios, { AxiosResponse } from "axios";
 
 class UserService {
   userModel;
-  constructor(userModel: UserModel) {
+  portfolioModel;
+  qnaModel;
+  constructor(
+    userModel: UserModel,
+    portfolioModel: PortfolioModel,
+    qnaModel: QnaModel
+  ) {
     this.userModel = userModel;
+    this.portfolioModel = portfolioModel;
+    this.qnaModel = qnaModel;
   }
 
   async addUser(userInfo: InputDTO) {
@@ -63,8 +78,14 @@ class UserService {
       );
     }
 
-    const accessToken = jwtUtil.access(user);
-    const refreshToken = jwtUtil.refresh(user);
+    const accessToken = jwtUtil.generateAccessToken({
+      userId: user._id,
+      role: user.role,
+    });
+    const refreshToken = jwtUtil.generateRefreshToken({
+      userId: user._id,
+      role: user.role,
+    });
 
     return { accessToken, refreshToken };
   }
@@ -81,6 +102,17 @@ class UserService {
     return userInfo;
   }
 
+  async getUserContentsCount(userId: string) {
+    const portfolioCount = (await portfolioModel.getCountByUserId(userId)) ?? 0;
+    const scrabCount =
+      (await portfolioModel.getScrapsCountByUserId(userId)) ?? 0;
+    const questionCount =
+      (await qnaModel.getQuestionCountByUserId(userId)) ?? 0;
+    const answerCount = (await qnaModel.getAnswerCountByUserId(userId)) ?? 0;
+
+    return { portfolioCount, scrabCount, questionCount, answerCount };
+  }
+
   async getGitHubInfo(githubCode: string) {
     const getTokenUrl = "https://github.com/login/oauth/access_token";
     const request = {
@@ -88,14 +120,14 @@ class UserService {
       client_id: process.env.GITHUB_CLIENT_ID,
       client_secret: process.env.GITHUB_CLIENT_SECRET,
     };
-    console.log(request)
+    console.log(request);
     const response: AxiosResponse = await axios.post(getTokenUrl, request, {
       headers: {
         Accept: "application/json",
       },
     });
     if (response.data.error) {
-      console.log(response.data.error)
+      console.log(response.data.error);
       throw new Error("Unauthorized");
     }
     const { access_token } = response.data;
@@ -120,8 +152,14 @@ class UserService {
     if (!user) {
       user = await this.userModel.createOAuthUser({ email, nickname });
     }
-    const accessToken = jwtUtil.access(user);
-    const refreshToken = jwtUtil.refresh(user);
+    const accessToken = jwtUtil.generateAccessToken({
+      userId: user._id,
+      role: user.role,
+    });
+    const refreshToken = jwtUtil.generateRefreshToken({
+      userId: user._id,
+      role: user.role,
+    });
 
     return { accessToken, refreshToken };
   }
@@ -132,7 +170,11 @@ class UserService {
       throw new Error("가입 내역이 없습니다. 다시 한 번 확인해 주세요.");
     }
 
-    return await this.userModel.update(userId, toUpdate);
+    // 업데이트
+    await this.userModel.update(userId, toUpdate);
+
+    // 이후 조회된 쿼리 반환
+    return this.userModel.findById(userId);
   }
 
   // 비밀번호 수정
@@ -190,5 +232,5 @@ class UserService {
   }
 }
 
-const userService = new UserService(userModel);
+const userService = new UserService(userModel, portfolioModel, qnaModel);
 export { userService };
