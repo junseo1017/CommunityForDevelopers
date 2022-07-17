@@ -162,6 +162,10 @@ export const CommentsContainer = css`
   display: flex;
   flex-direction: column;
 
+  & div.comment-container {
+    position: relative;
+  }
+
   & div.ant-comment {
     margin: 0.5em 0;
     height: auto;
@@ -188,6 +192,15 @@ export const CommentsContainer = css`
 
   & .focused {
     background-color: rgb(24, 144, 255, 0.25);
+  }
+
+  & div.comment-mode {
+    display: flex;
+    gap: 0.5em;
+
+    position: absolute;
+    top: 1em;
+    right: 1em;
   }
 `;
 

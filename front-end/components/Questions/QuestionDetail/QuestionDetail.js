@@ -14,6 +14,7 @@ import Like from "../Like";
 import Answers from "./Answers";
 import Output from "editorjs-react-renderer";
 import axios from "axios";
+import moment from "moment";
 
 const QuestionDetail = ({ qna, answers }) => {
   console.log(qna);
