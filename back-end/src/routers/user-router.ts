@@ -72,7 +72,8 @@ userRouter.get(
     } catch (error) {
       next(error);
     }
-})
+  }
+);
 
 userRouter.get(
   "/oauth/github/callback",
@@ -94,7 +95,8 @@ userRouter.get(
     } catch (error) {
       next(error);
     }
-  })
+  }
+);
 
 userRouter.get(
   "/logout",
@@ -124,12 +126,10 @@ userRouter.get(
   loginRequired,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
-      const userId = req.currentUserId;
+      const userId = req.currentUserId || "";
 
-      if (userId !== undefined) {
-        const users = await userService.getUserInfo(userId);
-        res.status(200).json(users);
-      }
+      const users = await userService.getUserInfo(userId);
+      res.status(200).json(users);
     } catch (error) {
       next(error);
     }
@@ -141,7 +141,20 @@ userRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.userId;
     try {
-      res.send(await userService.getUserInfo(userId));
+      res.status(200).json(await userService.getUserInfo(userId));
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+userRouter.get(
+  "/contents/count",
+  loginRequired,
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
+    const userId = req.currentUserId || "";
+    try {
+      res.status(200).json(await userService.getUserContentsCount(userId));
     } catch (error) {
       next(error);
     }
