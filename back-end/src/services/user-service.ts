@@ -4,9 +4,11 @@ import {
   UpdateInfo,
   LoginInfo,
   SearchInfo,
+  GithubEmailInfo,
 } from "../interfaces/user-interface";
 import bcrypt from "bcrypt";
 import { jwtUtil } from "../utils/jwt-util";
+import axios, { AxiosResponse } from "axios";
 
 class UserService {
   userModel;
@@ -77,6 +79,51 @@ class UserService {
       throw new Error("해당 ID에 맞는 회원 정보를 불러올 수 없습니다.");
     }
     return userInfo;
+  }
+
+  async getGitHubInfo(githubCode: string) {
+    const getTokenUrl = "https://github.com/login/oauth/access_token";
+    const request = {
+      githubCode,
+      client_id: process.env.GITHUB_CLIENT_ID,
+      client_secret: process.env.GITHUB_CLIENT_SECRET,
+    };
+    console.log(request)
+    const response: AxiosResponse = await axios.post(getTokenUrl, request, {
+      headers: {
+        Accept: "application/json",
+      },
+    });
+    if (response.data.error) {
+      console.log(response.data.error)
+      throw new Error("Unauthorized");
+    }
+    const { access_token } = response.data;
+    const getUserUrl = "https://api.github.com/user";
+    const { data: userData } = await axios.get(getUserUrl, {
+      headers: { Authorization: `token ${access_token}` },
+    });
+    const nickname = userData.login;
+
+    const { data: emailDataArr } = await axios.get(`${getUserUrl}/emails`, {
+      headers: { Authorization: `token ${access_token}` },
+    });
+    const { email } = emailDataArr.find(
+      (emailData: GithubEmailInfo) =>
+        emailData.primary === true && emailData.verified === true
+    );
+    return { email, nickname };
+  }
+
+  async getUserTokenByOAuth(email: string, nickname: string) {
+    let user = await this.userModel.findByEmail(email);
+    if (!user) {
+      user = await this.userModel.createOAuthUser({ email, nickname });
+    }
+    const accessToken = jwtUtil.access(user);
+    const refreshToken = jwtUtil.refresh(user);
+
+    return { accessToken, refreshToken };
   }
 
   // 회원 정보 수정
