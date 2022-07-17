@@ -22,41 +22,17 @@ const Home = () => {
   console.log(mainPortfolios);
 
   const { Option } = Select;
-
   const portfolioSearchObjects = useMemo(() => {
-    const checkboxOptions = [
-      {
-        label: "제목",
-        value: "제목",
-      },
-      {
-        label: "내용",
-        value: "내용",
-      },
-      {
-        label: "유저",
-        value: "유저",
-      },
+    const orderBys = [
+      <Option key={0}>추천 순</Option>,
+      <Option key={1}>최신 순</Option>,
+      <Option key={2}>댓글 순</Option>,
+      <Option key={3}>스크랩 순</Option>,
     ];
-    const orderBys = [];
-    orderBys.push(<Option key={0}>추천 순</Option>);
-    for (let i = 10; i < 36; i++) {
-      orderBys.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
-    }
     return {
-      checkboxOptions,
       orderBys,
     };
   }, []);
-  const mainContainer = css`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  `;
-  const dividerCss = css`
-    margin-top: 5;
-    margin-bottom: 15;
-  `;
 
   return (
     <AppLayout>
@@ -89,7 +65,7 @@ const Home = () => {
 };
 
 // SSR (프론트 서버에서 실행)
-export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, query }) => {
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req }) => {
   const cookie = req?.headers.cookie; // req가 있다면 cookie에 요청에 담겨진 cookie를 할당한다.
   axios.defaults.headers.Cookie = ""; // 요청이 들어올 때마다 초기화 시켜주는 것이다. 여기는 클라이언트 서버에서 실행되므로 이전 요청이 남아있을 수 있기 때문이다
   if (req && cookie) {
@@ -103,3 +79,9 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
 });
 
 export default Home;
+
+const mainContainer = css``;
+const dividerCss = css`
+  margin-top: 13px;
+  margin-bottom: 15;
+`;

@@ -2,22 +2,27 @@
 import { css, jsx } from "@emotion/react";
 
 export const SearchBarContainer = css`
-  display: flex;
-  width: 100%;
-  padding: 0 1em;
-  margin: 1em;
-  gap: 2em;
+  width: 75%;
 
-  align-items: center;
+  & input {
+    width: 100%;
+    height: 3em;
+    padding: 0 1em;
+    margin: 0 auto;
 
-  & span.ant-input-affix-wrapper,
-  button.ant-input-search-button {
-    height: 10vh;
-  }
+    font-size: 1.5em;
 
-  & button.ant-input-search-button,
-  input.ant-input {
-    font-size: 2em;
+    border: 2px solid gray;
+    border-radius: 0.5em;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+    opacity: 0.75;
+    outline: none;
+
+    &:focus {
+      box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+      border: 2px solid black;
+      color: black;
+    }
   }
 `;
 
@@ -70,20 +75,26 @@ export const DescriptionContainer = css`
   flex-direction: column;
   margin-top: 1em;
 
-  & div:first-of-type {
+  & span.descriptions {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  & div:last-of-type {
-    opacity: 0.75;
-    align-self: flex-end;
+  & div.tag-container {
+    margin-top: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & > span {
+      opacity: 0.75;
+    }
   }
 `;
 
 export const DetailContainer = css`
-  width: 80%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -123,14 +134,27 @@ export const DetailAnswerContainer = css`
     display: flex;
     flex-direction: row;
     gap: 1em;
+    justify-content: space-between;
+    align-items: center;
 
-    & h2 {
+    & > h2 {
+      width: 100%;
       font-weight: 700;
+      margin: 0;
+    }
+
+    & div.answer-mode {
+      display: flex;
+      gap: 1em;
     }
   }
 
   & div.ant-collapse {
     background-color: #fff;
+  }
+
+  & div.badge-container {
+    justify-content: flex-end;
   }
 `;
 
