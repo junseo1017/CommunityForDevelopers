@@ -104,13 +104,13 @@ class UserService {
 
   async getUserContentsCount(userId: string) {
     const portfolioCount = (await portfolioModel.getCountByUserId(userId)) ?? 0;
-    const scrabCount =
+    const scrapCount =
       (await portfolioModel.getScrapsCountByUserId(userId)) ?? 0;
     const questionCount =
       (await qnaModel.getQuestionCountByUserId(userId)) ?? 0;
     const answerCount = (await qnaModel.getAnswerCountByUserId(userId)) ?? 0;
 
-    return { portfolioCount, scrabCount, questionCount, answerCount };
+    return { portfolioCount, scrapCount, questionCount, answerCount };
   }
 
   async getGitHubInfo(githubCode: string) {
