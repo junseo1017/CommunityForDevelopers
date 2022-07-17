@@ -4,7 +4,8 @@ import React, { useMemo } from "react";
 import wrapper from "../store";
 import { List, Select, Divider } from "antd";
 import { BackTop } from "antd";
-import PortfolioCard from "../components/Portfolo/PortfolioCard";
+//import PortfolioCard from "../components/Portfolo/PortfolioCard";
+import PortfolioCard from "../components/Common/PortfolioCard";
 import PorfolioSearch from "../components/Portfolo/PorfolioSearch";
 import { loadPortfolios } from "../actions/portfolio";
 import { css } from "@emotion/react";
@@ -39,6 +40,11 @@ const Home = () => {
       <div css={mainContainer}>
         <PorfolioSearch {...portfolioSearchObjects} />
         <Divider css={dividerCss} />
+        {/* <div css={portfolioContainer}>
+          {mainPortfolios.map((portfolio) => (
+            <PortfolioCard {...portfolio} />
+          ))}
+        </div> */}
         <List
           grid={{
             gutter: 18,
@@ -84,4 +90,16 @@ const mainContainer = css``;
 const dividerCss = css`
   margin-top: 13px;
   margin-bottom: 15;
+`;
+
+const portfolioContainer = css`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  & * {
+    margin: 0;
+  }
 `;
