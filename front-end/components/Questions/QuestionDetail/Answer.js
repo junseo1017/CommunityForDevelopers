@@ -7,6 +7,7 @@ import { MessageOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons
 import { DetailAnswerContainer } from "../styles/QuestionStyle";
 import Like from "../Like";
 import Output from "editorjs-react-renderer";
+import AddEditor from "../Editor/AddEditor";
 import axios from "axios";
 
 const Answer = ({ answer, me }) => {
@@ -18,15 +19,6 @@ const Answer = ({ answer, me }) => {
   const initialMode = !!(me._id === answer.author._id);
 
   const [isChanged, setIsChanged] = useState(false);
-  const [isAnswerDeleteMode, setIsAnswerDeleteMode] = useState(initialMode);
-
-  const handleDelete = async (deleteId) => {
-    try {
-      await axios.delete(`/api/qnas/${deleteId}`);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
     const getData = async () => {
@@ -47,6 +39,24 @@ const Answer = ({ answer, me }) => {
     getData();
   }, [isChanged]);
 
+  const [isAuthor, setIsAuthor] = useState(initialMode);
+  const [isAnswerUpdateMode, setIsAnswerUpdateMode] = useState(false);
+
+  // 수정 삭제 작업 중..
+  const handleDelete = async (deleteId) => {
+    try {
+      await axios.delete(`/api/qnas/${deleteId}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleUpdate = async () => {
+    setIsAnswerUpdateMode(!isAnswerUpdateMode);
+  };
+
+  console.log("answerId :", answer._id);
+
   return (
     <div css={DetailAnswerContainer} key={answer._id}>
       <Divider plain />
@@ -59,9 +69,14 @@ const Answer = ({ answer, me }) => {
           recommendData={recommendData}
           setIsChanged={setIsChanged}
         />
-        {isAnswerDeleteMode && (
+        {isAuthor && (
           <div className="answer-mode">
-            <EditOutlined style={{ fontSize: "2em" }} />
+            <EditOutlined
+              style={{ fontSize: "2em" }}
+              onClick={() => {
+                handleUpdate();
+              }}
+            />
             <DeleteOutlined
               style={{ fontSize: "2em" }}
               onClick={() => {
@@ -71,7 +86,16 @@ const Answer = ({ answer, me }) => {
           </div>
         )}
       </div>
-      <Output data={JSON.parse(answer.contents)} />
+      {!isAnswerUpdateMode ? (
+        <Output data={JSON.parse(answer.contents)} />
+      ) : (
+        <AddEditor
+          data={JSON.parse(answer.contents)}
+          isAnswer={true}
+          qnaId={answer._id}
+          isUpdate={true}
+        />
+      )}
       <Collapse>
         <Collapse.Panel header="댓글 보기">
           <Comments contentId={answer._id} user={me} />

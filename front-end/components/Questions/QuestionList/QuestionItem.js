@@ -1,19 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-
+import moment from "moment";
 import { Badge, Tag } from "antd";
 import { MessageOutlined, StarOutlined } from "@ant-design/icons";
 import { TitleContainer, DescriptionContainer } from "../styles/QuestionStyle";
 import Link from "next/link";
 
 const QuestionItem = ({ _id, title, recommends, contents, tags, user, date, answers }) => {
-  const formattedDate = `${new Date(date).getFullYear()}년 ${
-    new Date(date).getMonth() + 1
-  }월 ${new Date(date).getDate()}일`;
+  const formattedDate = moment(date).format("YYYY월 MM월 DD일");
+
+  const parsedContents = JSON.parse(contents);
 
   const filteredBlocks =
-    JSON.parse(contents) &&
-    JSON.parse(contents).blocks.map(({ type, data }) => {
+    parsedContents &&
+    parsedContents.blocks.map(({ type, data }) => {
       return type === "paragraph" || type === "header" ? data : "";
     });
 
