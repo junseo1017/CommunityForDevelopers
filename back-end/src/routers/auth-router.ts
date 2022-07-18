@@ -14,7 +14,7 @@ authRouter.get(
       };
       const params = new URLSearchParams(config).toString();
       const finalUrl = `${baseUrl}?${params}`;
-      res.redirect(finalUrl);
+      res.send({ url: finalUrl });
     } catch (error) {
       next(error);
     }
