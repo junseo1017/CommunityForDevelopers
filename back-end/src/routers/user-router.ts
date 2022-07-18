@@ -55,6 +55,8 @@ userRouter.post(
 );
 
 userRouter.get(
+<<<<<<< HEAD
+=======
   "/oauth/github",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -97,6 +99,7 @@ userRouter.get(
 );
 
 userRouter.get(
+>>>>>>> 17b62b2f6f1d8bc72318ec75536df16d209fca35
   "/logout",
   loginRequired,
   async (req: ExtendReq, res: Response, next: NextFunction) => {

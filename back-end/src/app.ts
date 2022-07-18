@@ -14,7 +14,6 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 
 // Content-Type: application/json 형태의 데이터를 인식하고 핸들링할 수 있게 함.
 app.use(express.json());
-
 // Content-Type: application/x-www-form-urlencoded 형태의 데이터를 인식하고 핸들링할 수 있게 함.
 app.use(express.urlencoded({ extended: false }));
 
@@ -23,6 +22,7 @@ app.use("/api/users", Routers.userRouter);
 app.use("/api/portfolios", Routers.portfolioRouter);
 app.use("/api/comments", Routers.commentRouter);
 app.use("/api/qnas", Routers.qnaRouter);
+app.use("/api/oauth", Routers.authRouter);
 
 app.use(errorHandler);
 export { app };
