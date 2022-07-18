@@ -11,11 +11,9 @@ import {
   UpdateInfo,
   LoginInfo,
   SearchInfo,
-  GithubEmailInfo,
 } from "../interfaces/user-interface";
 import bcrypt from "bcrypt";
 import { jwtUtil } from "../utils/jwt-util";
-import axios, { AxiosResponse } from "axios";
 
 class UserService {
   userModel;
@@ -111,52 +109,6 @@ class UserService {
     const answerCount = (await qnaModel.getAnswerCountByUserId(userId)) ?? 0;
 
     return { portfolioCount, scrapCount, questionCount, answerCount };
-  }
-
-  async getGitHubInfo(code: string) {
-    const getTokenUrl = "https://github.com/login/oauth/access_token";
-    const getUserUrl = "https://api.github.com/user";
-    const request = {
-      client_id: process.env.GITHUB_CLIENT_ID,
-      client_secret: process.env.GITHUB_CLIENT_SECRET,
-      code,
-    };
-    const response: AxiosResponse = await axios.post(getTokenUrl, request, {
-      headers: { Accept: "application/json" },
-    });
-    if (response.data.error) {
-      throw new Error("Unauthorized");
-    }
-    const { access_token } = response.data;
-    const { data: userData } = await axios.get(getUserUrl, {
-      headers: { Authorization: `token ${access_token}` },
-    });
-    const nickname = userData.login;
-    const { data: emailDataArr } = await axios.get(`${getUserUrl}/emails`, {
-      headers: { Authorization: `token ${access_token}` },
-    });
-    const { email } = emailDataArr.find(
-      (emailData: GithubEmailInfo) =>
-        emailData.primary === true && emailData.verified === true
-    );
-    return { email, nickname };
-  }
-
-  async getUserTokenByOAuth(email: string, nickname: string) {
-    let user = await this.userModel.findByEmail(email);
-    if (!user) {
-      user = await this.userModel.createOAuthUser({ email, nickname });
-    }
-    const accessToken = jwtUtil.generateAccessToken({
-      userId: user._id,
-      role: user.role,
-    });
-    const refreshToken = jwtUtil.generateRefreshToken({
-      userId: user._id,
-      role: user.role,
-    });
-
-    return { accessToken, refreshToken };
   }
 
   // 회원 정보 수정
