@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { qnaService } from "../services/qna-service";
 import { ExtendReq, loginRequired } from "../middlewares/login-required";
+import { upload, getImageUrl } from "../utils/img-upload";
 
 const qnaRouter = Router();
 
@@ -42,10 +43,13 @@ qnaRouter.get(
 qnaRouter.post(
   "/",
   loginRequired,
+  upload,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const author = req.currentUserId || "";
-      const { title, contents, imgUrl, tags, isAnswer, parentQnaId } = req.body;
+      const { title, contents, tags, isAnswer, parentQnaId } = req.body;
+      const image = req.file;
+      const imgUrl = <string>await getImageUrl(<Express.Multer.File>image);
       const newQnA = await qnaService.addQna({
         title,
         contents,
@@ -65,19 +69,15 @@ qnaRouter.post(
 qnaRouter.put(
   "/:qnaId",
   loginRequired,
+  upload,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const qnaId = req.params.qnaId;
       const author = req.currentUserId || "";
-      const {
-        title,
-        contents,
-        imgUrl,
-        recommends,
-        tags,
-        isAnswer,
-        parentQnaId,
-      } = req.body;
+      const image = req.file;
+      const imgUrl = <string>await getImageUrl(<Express.Multer.File>image);
+      const { title, contents, recommends, tags, isAnswer, parentQnaId } =
+        req.body;
       const toUpdate = {
         ...(title && { title }),
         ...(contents && { contents }),
