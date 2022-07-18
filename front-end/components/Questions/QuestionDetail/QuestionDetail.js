@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import Router, { useRouter } from "next/router";
 import Comments from "./Comments";
@@ -72,6 +72,13 @@ const QuestionDetail = ({ qna, answers }) => {
     getData();
   }, [isChanged]);
 
+  const EditorRef = useRef();
+  console.log("EditorRef", EditorRef);
+
+  const handleScroll = () => {
+    EditorRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <div css={DetailContainer}>
       <div css={DetailQuestionContainer}>
@@ -116,7 +123,10 @@ const QuestionDetail = ({ qna, answers }) => {
           <Button
             size="large"
             type="primary"
-            onClick={() => setIsAnswerCreateMode(!isAnswerCreateMode)}>
+            onClick={() => {
+              setIsAnswerCreateMode(!isAnswerCreateMode);
+              handleScroll();
+            }}>
             답변하기
           </Button>
         </div>
@@ -132,10 +142,11 @@ const QuestionDetail = ({ qna, answers }) => {
             isUpdate={true}
           />
         )}
+        <div ref={EditorRef}></div>
         {isAnswerCreateMode && (
           <div css={EditorContainer}>
             <Divider plain />
-            <h2>답변하기</h2>
+            <h2 ref={EditorRef}>답변하기</h2>
             <Input
               size="large"
               placeholder="답변의 제목을 작성하세요"
@@ -144,7 +155,6 @@ const QuestionDetail = ({ qna, answers }) => {
             <AddEditor title={answerTitle} isAnswer parentQnaId={qna._id} />
           </div>
         )}
-        <div></div>
       </div>
       <Answers answers={answers} me={me ? me : null} />
       <TopButton />
