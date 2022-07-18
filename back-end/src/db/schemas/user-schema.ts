@@ -40,10 +40,6 @@ const UserSchema = new Schema(
       type: [String],
       required: false,
     },
-    scraps: {
-      type: [String],
-      required: false,
-    },
     role: {
       type: String,
       required: true,

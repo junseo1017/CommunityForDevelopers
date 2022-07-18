@@ -39,6 +39,14 @@ export class QnaModel {
     });
   }
 
+  async getQuestionCountByUserId(userId: string) {
+    return await Qna.find({ author: userId, isAnswer: false }).count();
+  }
+
+  async getAnswerCountByUserId(userId: string) {
+    return await Qna.find({ author: userId, isAnswer: true }).count();
+  }
+
   async create(qnaInfo: QnaInputDTO) {
     return await Qna.create(qnaInfo);
   }
