@@ -50,12 +50,7 @@ const PortfolioCard = ({
       onClick={goDetailPortfolio}
       css={CardCss}
       hoverable
-      cover={
-        <img
-          alt="example"
-          src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-        />
-      }
+      cover={<img alt="example" src={image} />}
       actions={[]}>
       <Meta
         title={title || "제목"}

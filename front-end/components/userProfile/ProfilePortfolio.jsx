@@ -78,7 +78,7 @@ const ProfilePortfolio = () => {
                 </Link>
                 <div>
                   <div>
-                    <Link href={`/profile/${e.author._id}`}>
+                    <Link href={`/profile/${e.author?._id}`}>
                       <Avatar
                         style={{ cursor: "pointer" }}
                         size={25}
@@ -86,8 +86,8 @@ const ProfilePortfolio = () => {
                       />
                     </Link>
                     <h3>
-                      <Link href={`/profile/${e.author._id}`}>
-                        <a>{e.author.nickname}</a>
+                      <Link href={`/profile/${e.author?._id}`}>
+                        <a>{e.author?.nickname}</a>
                       </Link>
                     </h3>
                   </div>

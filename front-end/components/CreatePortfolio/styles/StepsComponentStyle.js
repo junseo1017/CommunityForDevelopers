@@ -2,7 +2,7 @@
 import { css, jsx } from "@emotion/react";
 
 export const StepsPadding = css`
-  padding: 40px 20px;
+  padding: 40px 20px 10px 20px;
   .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-icon {
     background: #000;
   }

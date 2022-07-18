@@ -6,7 +6,7 @@ import { StepsPadding, ButtonCss } from "./styles/StepsComponentStyle";
 import { blackBtn } from "../Common/style/btnStyle";
 const { Step } = Steps;
 
-const StepsComp = ({ current = 0, showModal, next, onSubmitCard, prev }) => {
+const StepsComp = ({ current = 0, showModal, prev }) => {
   return (
     <>
       <Steps css={StepsPadding} current={current}>
@@ -22,6 +22,7 @@ const StepsComp = ({ current = 0, showModal, next, onSubmitCard, prev }) => {
           justifyContent: "end",
           paddingRight: 10,
           paddingBottom: 20,
+          paddingTop: "20px",
         }}>
         <div css={blackBtn}>
           {current > 0 && current < 2 && (
@@ -31,16 +32,6 @@ const StepsComp = ({ current = 0, showModal, next, onSubmitCard, prev }) => {
               }}
               onClick={() => prev()}>
               Previous
-            </Button>
-          )}
-          {current < 1 && (
-            <Button
-              type="primary"
-              onClick={() => {
-                onSubmitCard();
-                next();
-              }}>
-              Next
             </Button>
           )}
         </div>

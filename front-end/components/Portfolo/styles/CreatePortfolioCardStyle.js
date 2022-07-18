@@ -1,10 +1,41 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
+export const formContainer = css`
+  width: 100%;
+`;
+
+export const submitButton = css`
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: end;
+  flex: 1;
+  .ant-btn-primary {
+    background-color: #000;
+    border-color: #000;
+  }
+  .ant-btn-primary: hover {
+    background-color: #bbb;
+    border-color: #bbb;
+  }
+  .ant-btn-primary: focus {
+    background-color: #000;
+    border-color: #000;
+  }
+  .ant-btn-default: hover {
+    border-color: #000;
+    color: #000;
+  }
+  .ant-btn-default: focus {
+    border-color: #000;
+    color: #000;
+  }
+`;
+
 export const Container = css`
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   height: 100%;
@@ -14,13 +45,25 @@ export const LeftCard = css`
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
   flex: 1;
   margin-right: 20px;
+  min-width: 400px;
+  // .ant-form-item-label {
+  //   flex: 0 0 100%;
+  //   max-width: 100%;
+  //   justify-self: start;
+  //   padding: 0 0 8px;
+  //   line-height: 1.5715;
+  //   white-space: initial;
+  //   text-align: left;
+  //}
 `;
 
 export const RightCard = css`
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-  flex: 0.8;
+  flex: 0.97;
+  min-width: 400px;
 `;
 
+//ant-form-item-explain-error
 export const LabelCss = css`
   .ant-form-item-label > label::before {
     display: inline-block;

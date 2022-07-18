@@ -4,14 +4,17 @@ import _remove from "lodash/remove";
 import _find from "lodash/find";
 import {
   addComment,
+  scrapPortfolio,
   addPortfolio,
   likePortfolio,
   loadHashtagPortfolios,
   loadPortfolio,
   loadPortfolios,
+  loadPortfoliosSearch,
   removePortfolio,
   retweet,
   unlikePortfolio,
+  unscrapPortfolio,
   updatePortfolio,
   uploadImages,
   loadUserPortfolios,
@@ -40,6 +43,9 @@ const initialState = {
   likePortfolioLoading: false,
   likePortfolioDone: false,
   likePortfolioError: null,
+  scrapPortfolioLoading: false,
+  scrapPortfolioDone: false,
+  scrapPortfolioError: null,
   uploadImagesLoading: false,
   uploadImagesDone: false,
   uploadImagesError: null,
@@ -54,7 +60,7 @@ const initialState = {
     image: {},
     content: "",
     comments: [],
-    contentTexts: "",
+    contentText: "",
   },
 };
 
@@ -81,6 +87,22 @@ const portfolioSlice = createSlice({
         state.hasMorePortfolios = action.payload.length === 12;
       })
       .addCase(loadPortfolios.rejected, (state, action) => {
+        state.loadPortfoliosLoading = false;
+        state.loadPortfoliosError = action.error.message;
+      })
+      // loadPortfoliosSearch
+      .addCase(loadPortfoliosSearch.pending, (state) => {
+        state.loadPortfoliosLoading = true;
+        state.loadPortfoliosDone = false;
+        state.loadPortfoliosError = null;
+      })
+      .addCase(loadPortfoliosSearch.fulfilled, (state, action) => {
+        state.loadPortfoliosLoading = false;
+        state.loadPortfoliosDone = true;
+        state.mainPortfolios = _concat(state.mainPortfolios, action.payload);
+        state.hasMorePortfolios = action.payload.length === 12;
+      })
+      .addCase(loadPortfoliosSearch.rejected, (state, action) => {
         state.loadPortfoliosLoading = false;
         state.loadPortfoliosError = action.error.message;
       })
@@ -178,6 +200,38 @@ const portfolioSlice = createSlice({
         state.removePortfolioLoading = false;
         state.removePortfolioError = action.error.message;
       })
+      // scrapPortfolio
+      .addCase(scrapPortfolio.pending, (state) => {
+        state.scrapPortfolioLoading = true;
+        state.scrapPortfolioDone = false;
+        state.scrapPortfolioError = null;
+      })
+      .addCase(scrapPortfolio.fulfilled, (state, action) => {
+        state.scrapPortfolioLoading = false;
+        state.scrapPortfolioDone = true;
+        state.singlePortfolio.scraps.push(action.payload.UserId);
+      })
+      .addCase(scrapPortfolio.rejected, (state, action) => {
+        state.scrapPortfolioLoading = false;
+        state.scrapPortfolioError = action.error.message;
+      })
+      // unscrapPortfolio
+      .addCase(unscrapPortfolio.pending, (state) => {
+        state.scrapPortfolioLoading = true;
+        state.scrapPortfolioDone = false;
+        state.scrapPortfolioError = null;
+      })
+      .addCase(unscrapPortfolio.fulfilled, (state, action) => {
+        state.scrapPortfolioLoading = false;
+        state.scrapPortfolioDone = true;
+        _remove(state.singlePortfolio.scraps, function (c) {
+          return c === action.payload.UserId;
+        });
+      })
+      .addCase(unscrapPortfolio.rejected, (state, action) => {
+        state.scrapPortfolioLoading = false;
+        state.scrapPortfolioError = action.error.message;
+      })
       // likePortfolio
       .addCase(likePortfolio.pending, (state) => {
         state.likePortfolioLoading = true;
@@ -188,7 +242,7 @@ const portfolioSlice = createSlice({
         //const portfolio = _find(state.mainPortfolios, { id: action.payload.PortfolioId });
         state.likePortfolioLoading = false;
         state.likePortfolioDone = true;
-        state.singlePortfolio.Likers.push({ id: action.payload.UserId });
+        state.singlePortfolio.recommends.push(action.payload.UserId);
       })
       .addCase(likePortfolio.rejected, (state, action) => {
         state.likePortfolioLoading = false;
@@ -204,7 +258,10 @@ const portfolioSlice = createSlice({
         //const portfolio = _find(state.mainPortfolios, { id: action.payload.PortfolioId });
         state.likePortfolioLoading = false;
         state.likePortfolioDone = true;
-        _remove(state.singlePortfolio.Likers, { id: action.payload.UserId });
+
+        _remove(state.singlePortfolio.recommends, function (c) {
+          return c === action.payload.UserId;
+        });
       })
       .addCase(unlikePortfolio.rejected, (state, action) => {
         state.likePortfolioLoading = false;
