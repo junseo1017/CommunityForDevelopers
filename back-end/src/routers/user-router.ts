@@ -142,8 +142,8 @@ userRouter.get(
     const userId = req.params.userId;
     try {
       const userinfo = await userService.getUserInfo(userId);
-      const contentsCount = await userService.getUserContentsCount(userId);
-      res.status(200).json({ userinfo, ...contentsCount });
+      const count = await userService.getUserContentsCount(userId);
+      res.status(200).json({ userinfo, count });
     } catch (error) {
       next(error);
     }
