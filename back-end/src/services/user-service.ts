@@ -113,30 +113,25 @@ class UserService {
     return { portfolioCount, scrapCount, questionCount, answerCount };
   }
 
-  async getGitHubInfo(githubCode: string) {
+  async getGitHubInfo(code: string) {
     const getTokenUrl = "https://github.com/login/oauth/access_token";
+    const getUserUrl = "https://api.github.com/user";
     const request = {
-      githubCode,
       client_id: process.env.GITHUB_CLIENT_ID,
       client_secret: process.env.GITHUB_CLIENT_SECRET,
+      code,
     };
-    console.log(request);
     const response: AxiosResponse = await axios.post(getTokenUrl, request, {
-      headers: {
-        Accept: "application/json",
-      },
+      headers: { Accept: "application/json" },
     });
     if (response.data.error) {
-      console.log(response.data.error);
       throw new Error("Unauthorized");
     }
     const { access_token } = response.data;
-    const getUserUrl = "https://api.github.com/user";
     const { data: userData } = await axios.get(getUserUrl, {
       headers: { Authorization: `token ${access_token}` },
     });
     const nickname = userData.login;
-
     const { data: emailDataArr } = await axios.get(`${getUserUrl}/emails`, {
       headers: { Authorization: `token ${access_token}` },
     });
