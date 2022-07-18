@@ -7,10 +7,12 @@ import SignInForm from "../../components/Sign/SignInForm";
 import LoginLogo from "../../components/Sign/LoginLogo";
 import { LoginPageContainer } from "./loginstyle";
 import OAuthSign from "../../components/Sign/OAuthSign";
+import { getGithubLoginUrl, getKakaoLoginUrl } from "../../actions/user";
 import { useSelector } from "react-redux";
 import Router from "next/router";
+import wrapper from "../../store";
 const Login = () => {
-  const { me, oauthInfo } = useSelector((state) => state.user);
+  const { me } = useSelector((state) => state.user);
 
   // 로그인 된 상태로 로그인 페이지 이동 시 홈으로 라우팅
   useEffect(() => {
@@ -35,4 +37,13 @@ const Login = () => {
     </div>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({}) => {
+  await store.dispatch(getGithubLoginUrl());
+  await store.dispatch(getKakaoLoginUrl());
+  return {
+    props: {},
+  };
+});
+
 export default Login;

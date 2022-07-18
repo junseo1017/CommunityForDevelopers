@@ -1,18 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import { KakaoLogo, NaverLogo, GithubLogo } from "./OAuthLogos/OAtuhLogos";
+import { KakaoLogo, GithubLogo } from "./OAuthLogos/OAtuhLogos";
 import { OAuthStyle } from "./SignStyles";
-import { githubLogin } from "../../actions/user";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { useState } from "react";
-
+import { useSelector, useDispatch } from "react-redux";
+import { getKakaoLoginUrl } from "../../actions/user";
 const OAuthSign = () => {
   const dispatch = useDispatch();
-  const { me } = useSelector((state) => state.user);
-  const OAuthHandler = async () => {
-    dispatch(githubLogin());
-  };
+  const { githubLoginUrl, kakaoLoginUrl } = useSelector((state) => state.user);
 
   return (
     <section css={OAuthStyle}>
@@ -20,12 +14,12 @@ const OAuthSign = () => {
       <div>
         <ul>
           <li>
-            <a title="카카오 아이디로 가입하기">
+            <a href={kakaoLoginUrl && kakaoLoginUrl} title="카카오 아이디로 가입하기">
               <KakaoLogo />
             </a>
           </li>
           <li>
-            <a onClick={OAuthHandler} title="네이버 아이디로 가입하기">
+            <a href={githubLoginUrl && githubLoginUrl} title="깃허브 아이디로 가입하기">
               <GithubLogo />
             </a>
           </li>
