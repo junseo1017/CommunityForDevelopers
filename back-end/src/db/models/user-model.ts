@@ -12,7 +12,10 @@ import { SoftDeleteModel } from "soft-delete-plugin-mongoose";
 const User = model<UserType, SoftDeleteModel<UserType>>("users", UserSchema);
 export class UserModel {
   async findAll() {
-    return await User.find({});
+    return await User.find(
+      {},
+      { email: 1, nickname: 1, job: 1, skills: 1, imgUrl: 1 }
+    );
   }
 
   async findById(userId: string) {
@@ -23,7 +26,7 @@ export class UserModel {
   }
 
   async findByEmail(email: string) {
-    return await User.findOne({ email });
+    return await User.findOne({ email }, { password: 1 });
   }
 
   async getPassword(userId: string) {

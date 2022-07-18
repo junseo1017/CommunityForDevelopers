@@ -53,11 +53,24 @@ portfolioRouter.get(
 
 portfolioRouter.get(
   "/user/:userId",
-  async (req: ExtendReq, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.params.userId;
       const Portfolio = await portfolioService.getUserPortfolio(userId);
       res.status(200).json(Portfolio);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+portfolioRouter.get(
+  "/user/:userId/scraps",
+  loginRequired,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.params.userId;
+      res.status(200).json(await portfolioService.getUserScraps(userId));
     } catch (error) {
       next(error);
     }
