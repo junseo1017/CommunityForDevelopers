@@ -55,6 +55,7 @@ const Answer = ({ answer, me }) => {
     setIsAnswerUpdateMode(!isAnswerUpdateMode);
   };
 
+  console.log("answer :", answer);
   console.log("answerId :", answer._id);
 
   return (
@@ -86,6 +87,7 @@ const Answer = ({ answer, me }) => {
           </div>
         )}
       </div>
+      {answer.recommends && answer.recommends.map((user) => <div key={user}>{user}</div>)}
       {!isAnswerUpdateMode ? (
         <Output data={JSON.parse(answer.contents)} />
       ) : (
