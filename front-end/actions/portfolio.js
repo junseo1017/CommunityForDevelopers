@@ -158,3 +158,15 @@ export const loadMyPortfolios = createAsyncThunk(
     }
   },
 );
+
+export const loadScrapPortfolios = createAsyncThunk(
+  "user/loadScrapPortfolios",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`api/portfolios/user/${data}/scraps`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);

@@ -13,29 +13,29 @@ const ProfileMyInfoForm = ({ action, setAction }) => {
   const imageinputRef = useRef();
   const [skills, setSkills] = useState([]);
   const [inputImage, setInputImage] = useState("/image/profile_image_default.jpg");
-  const { userInfo } = useSelector((state) => state.user);
+  const { userinfo } = useSelector((state) => state.user.userInfo);
   const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({ defaultValues: userInfo });
+  } = useForm({ defaultValues: userinfo });
   const { ref, ...rest } = register("imgUrl");
 
   // form에 사용되는 state value 넣어주기
   useEffect(() => {
-    reset(userInfo);
-    setSkills(userInfo.skills);
-    if (userInfo.imgUrl) {
-      setInputImage(userInfo.imgUrl);
+    reset(userinfo);
+    setSkills(userinfo.skills);
+    if (userinfo.imgUrl) {
+      setInputImage(userinfo.imgUrl);
     }
   }, []);
 
   const onSubmit = (data) => {
     dispatch(
       patchUserinfo({
-        userId: userInfo._id,
+        userId: userinfo._id,
         nickname: data.nickname,
         job: data.job,
         imgUrl: data.imgUrl,
@@ -75,7 +75,7 @@ const ProfileMyInfoForm = ({ action, setAction }) => {
       <label>{"이메일"}</label>
       <input
         style={{ backgroundColor: "rgb(220,220,220)" }}
-        value={(userInfo && userInfo.email) || ""}
+        value={(userinfo && userinfo.email) || ""}
         {...register("email")}
       />
 

@@ -15,7 +15,7 @@ import { useMediaQuery } from "react-responsive";
 import { textLimitHandler } from "../Common/textLimit";
 const ProfilePortfolio = () => {
   const [showHeader, setShowHeader] = useState(null);
-  const { myPortfolios } = useSelector((state) => state.portfolio);
+  const { userPortfolios } = useSelector((state) => state.portfolio);
 
   const isresponsive = useMediaQuery({
     query: "(max-width:768px)",
@@ -38,8 +38,8 @@ const ProfilePortfolio = () => {
   return (
     <Card css={profileContentCardContainer}>
       <div css={portfolioContainer}>
-        {myPortfolios &&
-          myPortfolios.map((e) => {
+        {userPortfolios &&
+          userPortfolios.map((e) => {
             return (
               <div id="check" css={portfolioStyle} key={e._id}>
                 <Link href={`/portfolio/${e._id}`}>
