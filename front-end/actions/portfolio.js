@@ -62,8 +62,10 @@ export const uploadImages = createAsyncThunk(
   "portfolio/uploadImages",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/portfolio/images", data); // POST /portfolio/images
-      return response.data;
+      console.log(data);
+      //const response = await axios.post("/portfolio/images", data); // POST /portfolio/images
+      //return response.data;
+      //return data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }

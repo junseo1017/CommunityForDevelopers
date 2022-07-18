@@ -60,7 +60,7 @@ const initialState = {
     image: {},
     content: "",
     comments: [],
-    contentTexts: "",
+    contentText: "",
   },
 };
 

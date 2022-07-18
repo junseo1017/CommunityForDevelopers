@@ -5,6 +5,7 @@ import { Avatar, Popover, Tag } from "antd";
 import Link from "next/link";
 import { StarOutlined, LikeOutlined, MessageOutlined } from "@ant-design/icons";
 import { useMediaQuery } from "react-responsive";
+import { DEFAULT_IMAGE } from "../../pages/constants/Image";
 
 const PortfolioCard = ({
   title,
@@ -26,18 +27,21 @@ const PortfolioCard = ({
   }, [isresponsive]);
 
   const textLimitHandler = (text, limit) => {
-    if (text.length >= limit) {
-      return text.substr(0, limit) + "...";
+    if (text) {
+      if (text.length >= limit) {
+        return text.substr(0, limit) + "...";
+      }
+      return text;
     }
-    return text;
   };
 
   const skillsTag = (list) => {
     return (
       <div css={popoverStyle}>
-        {list.map((e, i) => {
-          return <Tag key={`${e}+${i}`}>{e}</Tag>;
-        })}
+        {list &&
+          list.map((e, i) => {
+            return <Tag key={`${e}+${i}`}>{e}</Tag>;
+          })}
       </div>
     );
   };
@@ -47,7 +51,7 @@ const PortfolioCard = ({
       <Link href={`/portfolio/${_id}`}>
         <div style={{ cursor: "pointer" }}>
           <div>
-            <img src="https://static.remove.bg/remove-bg-web/5c20d2ecc9ddb1b6c85540a333ec65e2c616dbbd/assets/start-1abfb4fe2980eabfbbaaa4365a0692539f7cd2725f324f904565a9a744f8e214.jpg" />
+            <img src={image || DEFAULT_IMAGE} />
             <div id="gradation">
               <div id="textbox">
                 <h3>{showHeader ? textLimitHandler(title, 20) : textLimitHandler(title, 35)}</h3>
@@ -74,7 +78,7 @@ const PortfolioCard = ({
             <Avatar
               style={{ cursor: "pointer" }}
               size={25}
-              src="https://joeschmoe.io/api/v1/random"
+              src={author?.imgUrl ? author.imgUrl : "https://joeschmoe.io/api/v1/random"}
             />
           </Link>
           <h3>
@@ -87,15 +91,15 @@ const PortfolioCard = ({
           <div>
             <StarOutlined />
           </div>
-          <p>{scraps.length}</p>
+          <p>{scraps ? scraps.length : 0}</p>
           <div>
             <LikeOutlined />
           </div>
-          <p>{recommends.length}</p>
+          <p>{recommends ? recommends.length : 0}</p>
           <div>
             <MessageOutlined />
           </div>
-          <p>{comments.length}</p>
+          <p>{comments ? comments.length : 0}</p>
         </div>
       </div>
     </div>
