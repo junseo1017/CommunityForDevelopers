@@ -19,6 +19,7 @@ import {
   uploadImages,
   loadUserPortfolios,
   loadMyPortfolios,
+  loadScrapPortfolios,
 } from "../actions/portfolio";
 //수정중
 const initialState = {
@@ -49,10 +50,15 @@ const initialState = {
   uploadImagesLoading: false,
   uploadImagesDone: false,
   uploadImagesError: null,
-  myPortfolios: null,
+  // 준서
+  userPortfolios: null,
+  userScrapPortfolios: null,
   loadMyPortfoliosLoading: false,
   loadMyPortfoliosDone: false,
   loadMyPortfoliosError: false,
+  loadScrapPortfoliosLoading: false,
+  loadScrapPortfoliosDone: false,
+  loadScrapPortfoliosError: false,
   singlePortfolio: {
     title: "",
     skills: [],
@@ -325,9 +331,26 @@ const portfolioSlice = createSlice({
         console.log("fulfilled");
         state.loadMyPortfoliosLoading = false;
         state.loadMyPortfoliosDone = true;
-        state.myPortfolios = action.payload;
+        state.userPortfolios = action.payload;
       })
       .addCase(loadMyPortfolios.rejected, (state, action) => {
+        state.loadMyPortfoliosLoading = false;
+        state.loadMyPortfoliosError = action.error.message;
+      })
+      // loadUserPortfolios
+      .addCase(loadScrapPortfolios.pending, (state) => {
+        console.log("pending");
+        state.loadScrapPortfoliosLoading = true;
+        state.loadScrapPortfoliosDone = false;
+        state.loadScrapPortfoliosError = null;
+      })
+      .addCase(loadScrapPortfolios.fulfilled, (state, action) => {
+        console.log("fulfilled");
+        state.loadScrapPortfoliosLoading = false;
+        state.loadScrapPortfoliosDone = true;
+        state.userScrapPortfolios = action.payload;
+      })
+      .addCase(loadScrapPortfolios.rejected, (state, action) => {
         state.loadMyPortfoliosLoading = false;
         state.loadMyPortfoliosError = action.error.message;
       })

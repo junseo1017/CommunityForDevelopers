@@ -1,37 +1,18 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import { KakaoLogo, NaverLogo } from "./OAuthLogos/OAtuhLogos";
+import { KakaoLogo, NaverLogo, GithubLogo } from "./OAuthLogos/OAtuhLogos";
+import { OAuthStyle } from "./SignStyles";
+import { githubLogin } from "../../actions/user";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useState } from "react";
+
 const OAuthSign = () => {
-  const OAuthStyle = css`
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    & > * {
-      width: 100%;
-      padding: 0 !important;
-    }
-    & > h3 {
-      font-size: 14px;
-      text-align: center;
-      margin: 0;
-    }
-    & ul {
-      width: 100%;
-      list-style: none;
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      margin: 0;
-      padding: 0;
-    }
-    & li > a {
-      color: black;
-      z-index: 1000;
-    }
-  `;
+  const dispatch = useDispatch();
+  const { me } = useSelector((state) => state.user);
+  const OAuthHandler = async () => {
+    dispatch(githubLogin());
+  };
 
   return (
     <section css={OAuthStyle}>
@@ -39,13 +20,13 @@ const OAuthSign = () => {
       <div>
         <ul>
           <li>
-            <a href="#" title="카카오 아이디로 가입하기">
+            <a title="카카오 아이디로 가입하기">
               <KakaoLogo />
             </a>
           </li>
           <li>
-            <a href="#" title="네이버 아이디로 가입하기">
-              <NaverLogo />
+            <a onClick={OAuthHandler} title="네이버 아이디로 가입하기">
+              <GithubLogo />
             </a>
           </li>
         </ul>

@@ -66,15 +66,14 @@ userRouter.get(
       };
       const params = new URLSearchParams(config).toString();
       const finalUrl = `${baseUrl}?${params}`;
-
-      res.redirect(finalUrl);
+      res.send({ url: finalUrl });
     } catch (error) {
       next(error);
     }
   }
 );
 
-userRouter.post(
+userRouter.get(
   "/oauth/github/callback",
   async (req: Request, res: Response, next: NextFunction) => {
     const code = req.query.code as string;

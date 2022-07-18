@@ -1,5 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { signup, login, userinfo, patchUserinfo, myinfo, logout } from "../actions/user";
+import {
+  signup,
+  login,
+  userinfo,
+  patchUserinfo,
+  myinfo,
+  logout,
+  githubLogin,
+} from "../actions/user";
 
 const initialState = {
   // 내 정보
@@ -12,6 +20,11 @@ const initialState = {
   loginLoading: false,
   loginDone: false,
   loginError: null,
+  // OAuth로그인
+  oauthUrl: null,
+  oauthloginLoading: false,
+  oauthloginDone: false,
+  oauthloginError: null,
   // 로그아웃
   logoutLoading: false,
   logoutDone: false,
@@ -21,7 +34,7 @@ const initialState = {
   loadMyInfoDone: false,
   loadMyInfoError: null,
   // 유저 정보 가져오기
-  userInfo: null,
+  userInfo: { userinfo: null, count: null },
   userInfoLoading: false,
   userInfoDone: false,
   userInfoError: null,
@@ -57,22 +70,38 @@ const userSlice = createSlice({
         state.loginLoading = false;
         state.loginError = action.payload;
       })
+      // github login
+      .addCase(githubLogin.pending, (state) => {
+        console.log("pending");
+        state.loginLoading = true;
+        state.loginDone = false;
+        state.loginError = null;
+      })
+      .addCase(githubLogin.fulfilled, (state, action) => {
+        console.log("fulfilled");
+        state.oauthInfo = action.payload;
+        state.loginLoading = false;
+        state.loginDone = true;
+      })
+      .addCase(githubLogin.rejected, (state, action) => {
+        console.log("reject");
+        console.log(action);
+        state.loginLoading = false;
+        state.loginError = action.payload;
+      })
 
       // logout
       .addCase(logout.pending, (state) => {
-        console.log("pending");
         state.logoutLoading = true;
         state.logoutDone = false;
         state.logoutError = null;
       })
       .addCase(logout.fulfilled, (state) => {
-        console.log("fulfilled");
         state.logoutLoading = false;
         state.logoutDone = true;
         state.me = null;
       })
       .addCase(logout.rejected, (state, action) => {
-        console.log("rejected");
         state.loginLoading = false;
         state.logoutError = action.payload;
       })
