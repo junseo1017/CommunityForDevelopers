@@ -6,6 +6,8 @@ import { Button } from "antd";
 import { EditorContainer } from "../styles/QuestionStyle";
 import axios from "axios";
 import { useRouter } from "next/router";
+import ModalAsync from "../../Common/ModalAsync";
+import useModalAsync from "../../../hooks/useModalAsync";
 
 const Editor = dynamic(() => import("./Editor"), {
   ssr: false,
@@ -116,6 +118,7 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
       <Button
         onClick={() => {
           saveContents(qnaId);
+          // ModalAsync();
           router.push(`/qna/${router.query._id}`);
         }}>
         저장하기
