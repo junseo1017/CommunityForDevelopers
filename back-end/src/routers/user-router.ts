@@ -55,51 +55,6 @@ userRouter.post(
 );
 
 userRouter.get(
-<<<<<<< HEAD
-=======
-  "/oauth/github",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const baseUrl = "https://github.com/login/oauth/authorize";
-      const config = {
-        client_id: process.env.GITHUB_CLIENT_ID || "",
-        scope: "read:user user:email",
-        allow_signup: "true",
-      };
-      const params = new URLSearchParams(config).toString();
-      const finalUrl = `${baseUrl}?${params}`;
-      res.send({ url: finalUrl });
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-userRouter.get(
-  "/oauth/github/callback",
-  async (req: Request, res: Response, next: NextFunction) => {
-    const code = req.query.code as string;
-    try {
-      const { email, nickname } = await userService.getGitHubInfo(code);
-      const userToken = await userService.getUserTokenByOAuth(email, nickname);
-      if (req.cookies)
-        console.log("쿠키:", req.cookies, "\n인증쿠키:", req.signedCookies);
-
-      res.cookie("userinfo", userToken, {
-        expires: new Date(Date.now() + 60000 * 1440), //24시간
-        httpOnly: true,
-        signed: true,
-      });
-
-      res.status(200).json(userToken);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-userRouter.get(
->>>>>>> 17b62b2f6f1d8bc72318ec75536df16d209fca35
   "/logout",
   loginRequired,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
