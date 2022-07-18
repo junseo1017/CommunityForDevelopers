@@ -9,6 +9,8 @@ function errorHandler(
   // 터미널에 노란색으로 출력됨.
   console.log("\x1b[33m%s\x1b[0m", error.stack);
 
+  console.log("에러핸들러의 next는 뭐가 나올까", next());
+
   // error 메시지에 따른 에러 상태 코드
   switch (error.message) {
     // 401 에러, 로그인 오류
