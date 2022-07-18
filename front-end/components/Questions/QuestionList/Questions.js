@@ -41,7 +41,12 @@ const Questions = ({ questions, answers }) => {
   return (
     <>
       <div css={SearchBarContainer}>
-        <input type="text" placeholder="검색어를 입력하세요" />
+        <input
+          type="text"
+          autoComplete="false"
+          placeholder="검색어를 입력하세요"
+          aria-label="search"
+        />
         {/* <Input.Search
           placeholder="Search Questions"
           allowClear

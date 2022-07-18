@@ -58,7 +58,7 @@ const EDITOR_JS_TOOLS = {
     class: Header,
     shortcut: "CMD+SHIFT+H",
     config: {
-      placeholder: "Enter a header",
+      placeholder: "제목을 작성해주세요.",
       levels: [1, 2, 3, 4, 5, 6],
       defaultLevel: 2,
     },

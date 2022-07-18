@@ -24,6 +24,26 @@ export const loadPortfolios = createAsyncThunk(
     },
   },
 );
+export const loadPortfoliosSearch = createAsyncThunk(
+  "portfolio/loadPortfoliosSearch",
+  async (data) => {
+    const query = "?";
+
+    const response = await axios.get("/api/portfolios/search/list", data);
+    console.log(response);
+    return response.data;
+  },
+  {
+    condition: (data, { getState }) => {
+      const { portfolio } = getState();
+      if (portfolio.loadPortfoliosLoading) {
+        // console.warn('중복 요청 취소');
+        return false;
+      }
+      return true;
+    },
+  },
+);
 
 export const addPortfolio = createAsyncThunk("portfolio/addPortfolio", async (data, thunkAPI) => {
   try {
@@ -42,8 +62,10 @@ export const uploadImages = createAsyncThunk(
   "portfolio/uploadImages",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/portfolio/images", data); // POST /portfolio/images
-      return response.data;
+      console.log(data);
+      //const response = await axios.post("/portfolio/images", data); // POST /portfolio/images
+      //return response.data;
+      //return data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -89,11 +111,15 @@ export const loadPortfolio = createAsyncThunk(
 );
 
 export const likePortfolio = createAsyncThunk(
-  "portfolio/likePortfolio",
+  "user/likePortfolio",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.patch(`/portfolio/${data.portfolioId}/like`); // PATCH /portfolio/1/like
-      return response.data;
+      console.log(`%c 포트폴리오 추천 요청: ${Object.values(data)} `, "color: green;");
+      const response = await axios.put(
+        `/api/portfolios/${data.portfolioId}/?field=recommends&adding=true`,
+        data,
+      );
+      return { ...response.data, UserId: data.UserId };
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -101,11 +127,47 @@ export const likePortfolio = createAsyncThunk(
 );
 
 export const unlikePortfolio = createAsyncThunk(
-  "portfolio/unlikePortfolio",
+  "user/unlikePortfolio",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.delete(`/portfolio/${data.portfolioId}/like`); // DELETE /portfolio/1/like
-      return response.data;
+      console.log(`%c 포트폴리오 추천취소 요청: ${Object.values(data)} `, "color: green;");
+      const response = await axios.put(
+        `/api/portfolios/${data.portfolioId}/?field=recommends&adding=false`,
+        data,
+      );
+      return { ...response.data, UserId: data.UserId };
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const scrapPortfolio = createAsyncThunk(
+  "user/scrapPortfolio",
+  async (data, { rejectWithValue }) => {
+    try {
+      console.log(`%c 포트폴리오 스크랩 요청: ${Object.values(data)} `, "color: green;");
+      const response = await axios.put(
+        `/api/portfolios/${data.portfolioId}/?field=scraps&adding=true`,
+        data,
+      );
+      return { ...response.data, UserId: data.UserId };
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const unscrapPortfolio = createAsyncThunk(
+  "user/unscrapPortfolio",
+  async (data, { rejectWithValue }) => {
+    try {
+      console.log(`%c 포트폴리오 스크랩 요청: ${Object.values(data)} `, "color: green;");
+      const response = await axios.put(
+        `/api/portfolios/${data.portfolioId}/?field=scraps&adding=false`,
+        data,
+      );
+      return { ...response.data, UserId: data.UserId };
     } catch (error) {
       return rejectWithValue(error.response.data);
     }

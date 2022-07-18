@@ -6,13 +6,18 @@ import { Button } from "antd";
 import { EditorContainer } from "../styles/QuestionStyle";
 import axios from "axios";
 import { useRouter } from "next/router";
+import ModalAsync from "../../Common/ModalAsync";
+import useModalAsync from "../../../hooks/useModalAsync";
 
 const Editor = dynamic(() => import("./Editor"), {
   ssr: false,
 });
 
-const AddEditor = ({ title, data, isAnswer, parentQnaId, tags }) => {
+const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }) => {
+  const [isChanged, setIsChanged] = useState(false);
+  console.log(qnaId);
   const router = useRouter();
+  console.log("현재 페이지", router.query._id);
   const editorCore = useRef(null);
   // 업로드된 이미지 추적
   const [imageArray, setImageArray] = useState([]);
@@ -28,31 +33,58 @@ const AddEditor = ({ title, data, isAnswer, parentQnaId, tags }) => {
   };
 
   const saveContents = async () => {
+    console.log(qnaId);
     // 에디터의 컨텐츠를 가져와 서버에 저장하기
-    try {
-      const savedData = await editorCore.current.save();
-
-      await axios.post(
-        "/api/qnas",
-        {
-          title,
-          contents: JSON.stringify(savedData),
-          isAnswer,
-          parentQnaId,
-          tags,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+    if (isUpdate) {
+      try {
+        const savedData = await editorCore.current.save();
+        const response = await axios.put(
+          `/api/qnas/${qnaId}`,
+          {
+            contents: JSON.stringify(savedData),
           },
-        },
-      );
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          },
+        );
 
-      // 서버에서 사용하지 않는 이미지 제거하기
+        console.log(response);
+        setIsChanged(true);
+        router.push(`/qna/${router.query._id}`);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        const savedData = await editorCore.current.save();
 
-      // 서버에 질문 저장하기
-    } catch (e) {
-      console.log(e);
+        await axios.post(
+          "/api/qnas",
+          {
+            title,
+            contents: JSON.stringify(savedData),
+            isAnswer,
+            parentQnaId,
+            tags,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          },
+        );
+
+        // 서버에서 사용하지 않는 이미지 제거하기
+
+        // 서버에 질문 저장하기
+
+        setIsChanged(true);
+        router.push(`/qna/${router.query._id}`);
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 
@@ -85,8 +117,9 @@ const AddEditor = ({ title, data, isAnswer, parentQnaId, tags }) => {
     <div css={EditorContainer}>
       <Button
         onClick={() => {
-          saveContents();
-          router.push("/qna");
+          saveContents(qnaId);
+          // ModalAsync();
+          router.push(`/qna/${router.query._id}`);
         }}>
         저장하기
       </Button>
