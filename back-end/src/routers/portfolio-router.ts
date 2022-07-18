@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { portfolioService } from "../services/portfolio-service";
 import { ExtendReq, loginRequired } from "../middlewares/login-required";
+import { upload, getImageUrl } from "../utils/img-upload";
 
 const portfolioRouter = Router();
 
