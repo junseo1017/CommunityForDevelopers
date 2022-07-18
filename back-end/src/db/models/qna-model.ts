@@ -20,7 +20,7 @@ export class QnaModel {
       },
       {
         path: "recommends",
-        select: "nickname",
+        select: ["nickname", "imgUrl"],
       },
       {
         path: "comments",
@@ -37,6 +37,14 @@ export class QnaModel {
       path: "author",
       select: "nickname",
     });
+  }
+
+  async getQuestionCountByUserId(userId: string) {
+    return await Qna.find({ author: userId, isAnswer: false }).count();
+  }
+
+  async getAnswerCountByUserId(userId: string) {
+    return await Qna.find({ author: userId, isAnswer: true }).count();
   }
 
   async create(qnaInfo: QnaInputDTO) {

@@ -24,7 +24,7 @@ const UserSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
+      required: false,
     },
     job: {
       type: String,
@@ -37,10 +37,6 @@ const UserSchema = new Schema(
       default: "",
     },
     skills: {
-      type: [String],
-      required: false,
-    },
-    scraps: {
       type: [String],
       required: false,
     },
