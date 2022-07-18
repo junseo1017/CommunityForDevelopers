@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { backendUrl } from "../config/config";
-
+import { popUp } from "../components/Common/popupCenter";
 axios.defaults.baseURL = backendUrl;
 axios.defaults.withCredentials = true; // front, backend 간 쿠키공유
 
@@ -30,8 +30,7 @@ export const githubLogin = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await axios.get("/api/users/oauth/github");
-      console.log(response);
-      return response.data;
+      const popup = popUp(response.data.url, "CFD Github login", 400, 500);
     } catch (error) {
       return rejectWithValue(error.response.data);
     }

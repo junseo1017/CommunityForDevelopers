@@ -94,6 +94,9 @@ export const portfolioContainer = css`
   & * {
     margin: 0;
   }
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
 `;
 
 export const portfolioStyle = css`

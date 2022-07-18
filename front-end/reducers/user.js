@@ -21,6 +21,7 @@ const initialState = {
   loginDone: false,
   loginError: null,
   // OAuth로그인
+  oauthUrl: null,
   oauthloginLoading: false,
   oauthloginDone: false,
   oauthloginError: null,
@@ -33,7 +34,7 @@ const initialState = {
   loadMyInfoDone: false,
   loadMyInfoError: null,
   // 유저 정보 가져오기
-  userInfo: null,
+  userInfo: { userinfo: null, count: null },
   userInfoLoading: false,
   userInfoDone: false,
   userInfoError: null,
@@ -77,7 +78,8 @@ const userSlice = createSlice({
         state.loginError = null;
       })
       .addCase(githubLogin.fulfilled, (state, action) => {
-        console.log(action.payload);
+        console.log("fulfilled");
+        state.oauthInfo = action.payload;
         state.loginLoading = false;
         state.loginDone = true;
       })
@@ -90,19 +92,16 @@ const userSlice = createSlice({
 
       // logout
       .addCase(logout.pending, (state) => {
-        console.log("pending");
         state.logoutLoading = true;
         state.logoutDone = false;
         state.logoutError = null;
       })
       .addCase(logout.fulfilled, (state) => {
-        console.log("fulfilled");
         state.logoutLoading = false;
         state.logoutDone = true;
         state.me = null;
       })
       .addCase(logout.rejected, (state, action) => {
-        console.log("rejected");
         state.loginLoading = false;
         state.logoutError = action.payload;
       })

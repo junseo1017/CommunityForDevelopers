@@ -30,19 +30,19 @@ const ProfileCard = () => {
         <div css={ProfileCardContent}>
           <div>
             <p>포트폴리오</p>
-            <h3>{count.portfolioCount}</h3>
+            <h3>{count && count.portfolioCount}</h3>
           </div>
           <div>
             <p>스크랩</p>
-            <h3>{count.scrapCount}</h3>
+            <h3>{count && count.scrapCount}</h3>
           </div>
           <div>
             <p>질문</p>
-            <h3>{count.questionCount}</h3>
+            <h3>{count && count.questionCount}</h3>
           </div>
           <div>
             <p>답변</p>
-            <h3>{count.answerCount}</h3>
+            <h3>{count && count.answerCount}</h3>
           </div>
         </div>
         <div></div>
