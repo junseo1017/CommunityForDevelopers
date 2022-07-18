@@ -2,17 +2,14 @@
 import { css, jsx } from "@emotion/react";
 import { KakaoLogo, NaverLogo, GithubLogo } from "./OAuthLogos/OAtuhLogos";
 import { OAuthStyle } from "./SignStyles";
-import { githubLogin } from "../../actions/user";
+import { getGithubLoginUrl } from "../../actions/user";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useState } from "react";
-
+import { popUp } from "../Common/popupCenter";
+import Link from "next/link";
 const OAuthSign = () => {
-  const dispatch = useDispatch();
-  const { me } = useSelector((state) => state.user);
-  const OAuthHandler = async () => {
-    dispatch(githubLogin());
-  };
+  const { oauthUrl } = useSelector((state) => state.user);
 
   return (
     <section css={OAuthStyle}>
@@ -25,7 +22,7 @@ const OAuthSign = () => {
             </a>
           </li>
           <li>
-            <a onClick={OAuthHandler} title="네이버 아이디로 가입하기">
+            <a href={oauthUrl && oauthUrl} title="네이버 아이디로 가입하기">
               <GithubLogo />
             </a>
           </li>

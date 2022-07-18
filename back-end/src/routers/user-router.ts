@@ -88,8 +88,7 @@ userRouter.get(
         httpOnly: true,
         signed: true,
       });
-
-      res.status(200).json(userToken);
+      res.redirect("http://localhost:3000/");
     } catch (error) {
       next(error);
     }

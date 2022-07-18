@@ -28,6 +28,6 @@ export const popUp = (url, title, w, h) => {
       `,
   );
 
-  if (window.focus) newWindow.focus();
+  // if (window.focus) newWindow.focus();
   return newWindow;
 };

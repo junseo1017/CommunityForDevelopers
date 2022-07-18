@@ -25,12 +25,12 @@ export const login = createAsyncThunk("user/login", async (data, { rejectWithVal
   }
 });
 
-export const githubLogin = createAsyncThunk(
+export const getGithubLoginUrl = createAsyncThunk(
   "user/oauthlogin",
   async (data, { rejectWithValue }) => {
     try {
       const response = await axios.get("/api/users/oauth/github");
-      const popup = popUp(response.data.url, "CFD Github login", 400, 500);
+      return response.data.url;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }

@@ -6,7 +6,7 @@ import {
   patchUserinfo,
   myinfo,
   logout,
-  githubLogin,
+  getGithubLoginUrl,
 } from "../actions/user";
 
 const initialState = {
@@ -22,9 +22,9 @@ const initialState = {
   loginError: null,
   // OAuth로그인
   oauthUrl: null,
-  oauthloginLoading: false,
-  oauthloginDone: false,
-  oauthloginError: null,
+  getOAuthUrlLoading: false,
+  getOAuthUrlDone: false,
+  getOAuthUrlError: null,
   // 로그아웃
   logoutLoading: false,
   logoutDone: false,
@@ -71,23 +71,23 @@ const userSlice = createSlice({
         state.loginError = action.payload;
       })
       // github login
-      .addCase(githubLogin.pending, (state) => {
+      .addCase(getGithubLoginUrl.pending, (state) => {
         console.log("pending");
-        state.loginLoading = true;
-        state.loginDone = false;
-        state.loginError = null;
+        state.getOAuthUrlLoading = true;
+        state.getOAuthUrlDone = false;
+        state.getOAuthUrlError = null;
       })
-      .addCase(githubLogin.fulfilled, (state, action) => {
+      .addCase(getGithubLoginUrl.fulfilled, (state, action) => {
         console.log("fulfilled");
-        state.oauthInfo = action.payload;
-        state.loginLoading = false;
-        state.loginDone = true;
+        state.oauthUrl = action.payload;
+        state.getOAuthUrlLoading = false;
+        state.getOAuthUrlDone = true;
       })
-      .addCase(githubLogin.rejected, (state, action) => {
+      .addCase(getGithubLoginUrl.rejected, (state, action) => {
         console.log("reject");
         console.log(action);
-        state.loginLoading = false;
-        state.loginError = action.payload;
+        state.getOAuthUrlLoading = false;
+        state.getOAuthUrlError = action.payload;
       })
 
       // logout
