@@ -7,7 +7,7 @@ import SignInForm from "../../components/Sign/SignInForm";
 import LoginLogo from "../../components/Sign/LoginLogo";
 import { LoginPageContainer } from "./loginstyle";
 import OAuthSign from "../../components/Sign/OAuthSign";
-import { getGithubLoginUrl } from "../../actions/user";
+import { getGithubLoginUrl, getKakaoLoginUrl } from "../../actions/user";
 import { useSelector } from "react-redux";
 import Router from "next/router";
 import wrapper from "../../store";
@@ -40,6 +40,7 @@ const Login = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({}) => {
   await store.dispatch(getGithubLoginUrl());
+  await store.dispatch(getKakaoLoginUrl());
   return {
     props: {},
   };

@@ -23,8 +23,7 @@ const LoggedinMenu = () => {
 
   const logoutHandler = () => {
     dispatch(logout());
-
-    setAction(true);
+    window.location.reload();
   };
 
   return (

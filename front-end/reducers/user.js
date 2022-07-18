@@ -7,6 +7,7 @@ import {
   myinfo,
   logout,
   getGithubLoginUrl,
+  getKakaoLoginUrl,
 } from "../actions/user";
 
 const initialState = {
@@ -21,7 +22,8 @@ const initialState = {
   loginDone: false,
   loginError: null,
   // OAuth로그인
-  oauthUrl: null,
+  githubLoginUrl: null,
+  kakaoLoginUrl: null,
   getOAuthUrlLoading: false,
   getOAuthUrlDone: false,
   getOAuthUrlError: null,
@@ -72,24 +74,39 @@ const userSlice = createSlice({
       })
       // github login
       .addCase(getGithubLoginUrl.pending, (state) => {
-        console.log("pending");
         state.getOAuthUrlLoading = true;
         state.getOAuthUrlDone = false;
         state.getOAuthUrlError = null;
       })
       .addCase(getGithubLoginUrl.fulfilled, (state, action) => {
-        console.log("fulfilled");
-        state.oauthUrl = action.payload;
+        state.githubLoginUrl = action.payload;
         state.getOAuthUrlLoading = false;
         state.getOAuthUrlDone = true;
       })
       .addCase(getGithubLoginUrl.rejected, (state, action) => {
-        console.log("reject");
         console.log(action);
         state.getOAuthUrlLoading = false;
-        state.getOAuthUrlError = action.payload;
+        state.getOAuthUrlError = action.error;
       })
+      // kakao login
+      .addCase(getKakaoLoginUrl.pending, (state) => {
+        console.log("pending");
+        state.getOAuthUrlLoading = true;
+        state.getOAuthUrlDone = false;
+        state.getOAuthUrlError = null;
+      })
+      .addCase(getKakaoLoginUrl.fulfilled, (state, action) => {
+        console.log("fulfilled");
 
+        state.kakaoLoginUrl = action.payload;
+        state.getOAuthUrlLoading = false;
+        state.getOAuthUrlDone = true;
+      })
+      .addCase(getKakaoLoginUrl.rejected, (state, action) => {
+        console.log("reject");
+        state.getOAuthUrlLoading = false;
+        state.getOAuthUrlError = action.error.message;
+      })
       // logout
       .addCase(logout.pending, (state) => {
         state.logoutLoading = true;
