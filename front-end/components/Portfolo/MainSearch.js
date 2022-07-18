@@ -1,8 +1,8 @@
 import React from "react";
 /** @jsxImportSource @emotion/react */
-import { SearchCss } from "./styles/mainSearchStyle";
+import { SearchCss, Button } from "./styles/mainSearchStyle";
 
-const MainSearch = () => {
+const MainSearch = ({ onChange, searchOptions }) => {
   return (
     <div css={SearchCss}>
       <div>
@@ -16,10 +16,11 @@ const MainSearch = () => {
             <label htmlFor="search">
               <input
                 type="search"
-                name="search"
+                name="value"
                 authocomplete="off"
                 placeholder="검색"
                 aria-label="포트폴리오 검색"
+                onChange={onChange}
               />
             </label>
           </form>
@@ -27,14 +28,23 @@ const MainSearch = () => {
       </div>
       <div>
         <ul>
-          <li className="checked">
-            <button>제목</button>
+          <li>
+            <Button checked={searchOptions.title} name="title" onClick={onChange}>
+              제목
+            </Button>
           </li>
           <li>
-            <button>내용</button>
+            <Button checked={searchOptions.contentText} name="contentText" onClick={onChange}>
+              내용
+            </Button>
           </li>
           <li>
-            <button>유저</button>
+            <Button
+              checked={searchOptions["author.nickname"]}
+              name="author.nickname"
+              onClick={onChange}>
+              유저
+            </Button>
           </li>
         </ul>
       </div>
