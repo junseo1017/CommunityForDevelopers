@@ -5,8 +5,7 @@ import {
   userCreateJoiSchema,
   userUpdateJoiSchema,
 } from "../db/schemas/joi-schemas";
-import axios from "axios";
-import { GithubEmailInfo } from "../interfaces";
+
 const userRouter = Router();
 
 userRouter.post(
@@ -75,11 +74,11 @@ userRouter.get(
   }
 );
 
-userRouter.get(
+userRouter.post(
   "/oauth/github/callback",
   async (req: Request, res: Response, next: NextFunction) => {
+    const code = req.query.code as string;
     try {
-      const code = req.query.code as string;
       const { email, nickname } = await userService.getGitHubInfo(code);
       const userToken = await userService.getUserTokenByOAuth(email, nickname);
       if (req.cookies)
