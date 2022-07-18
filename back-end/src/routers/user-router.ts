@@ -141,20 +141,9 @@ userRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.userId;
     try {
-      res.status(200).json(await userService.getUserInfo(userId));
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-userRouter.get(
-  "/contents/count",
-  loginRequired,
-  async (req: ExtendReq, res: Response, next: NextFunction) => {
-    const userId = req.currentUserId || "";
-    try {
-      res.status(200).json(await userService.getUserContentsCount(userId));
+      const userinfo = await userService.getUserInfo(userId);
+      const contentsCount = await userService.getUserContentsCount(userId);
+      res.status(200).json({ userinfo, ...contentsCount });
     } catch (error) {
       next(error);
     }
