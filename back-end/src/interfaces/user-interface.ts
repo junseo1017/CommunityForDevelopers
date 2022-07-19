@@ -6,6 +6,7 @@ export interface InputDTO {
 export interface OAuthUserDTO {
   nickname: string;
   email: string;
+  loginType: string;
 }
 export interface UpdateInfo {
   nickname: string;

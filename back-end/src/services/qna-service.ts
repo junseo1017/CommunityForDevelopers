@@ -44,6 +44,11 @@ class QnaService {
     return QnA;
   }
 
+  async getAnswerByQuestion(qnaId: string) {
+    const answers = await this.qnaModel.findAnswerById(qnaId);
+    return answers;
+  }
+
   async setQna(qnaId: string, userId: string, qnaInfo: QnaInputDTO) {
     const QnA = await this.qnaModel.findById(qnaId);
     if (!QnA) {
