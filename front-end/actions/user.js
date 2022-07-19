@@ -90,3 +90,27 @@ export const userinfo = createAsyncThunk("user/userinfo", async (data, { rejectW
     return rejectWithValue(error.response.data);
   }
 });
+
+export const editPassword = createAsyncThunk(
+  "user/editPassword",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`/api/users/password`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const userWithdrawals = createAsyncThunk(
+  "user/userWithdrawals",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(`/api/users`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);

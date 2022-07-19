@@ -17,13 +17,13 @@ const LoggedinMenu = () => {
     }
     if (logoutDone) {
       message.success("정상적으로 로그아웃 되었습니다.");
-      return setAction(false);
+      window.location.reload();
     }
   }, [logoutDone, logoutError]);
 
   const logoutHandler = () => {
     dispatch(logout());
-    window.location.reload();
+    setAction(true);
   };
 
   return (

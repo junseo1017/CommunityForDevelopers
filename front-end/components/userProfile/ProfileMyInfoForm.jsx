@@ -10,35 +10,36 @@ import { myInfoSubmitBtnStyle, myInfoFormStyle, myInfoSkills } from "./styles/My
 import Image from "next/image";
 
 const ProfileMyInfoForm = ({ action, setAction }) => {
-  const imageinputRef = useRef();
+  const imageinputRef = useRef("");
   const [skills, setSkills] = useState([]);
-  const [inputImage, setInputImage] = useState("/image/profile_image_default.jpg");
+  const [imagePreview, setImagePreview] = useState("/image/profile_image_default.jpg");
   const { userinfo } = useSelector((state) => state.user.userInfo);
   const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm({ defaultValues: userinfo });
   const { ref, ...rest } = register("imgUrl");
+
+  console.log(watch("imgUrl"));
 
   // form에 사용되는 state value 넣어주기
   useEffect(() => {
     reset(userinfo);
     setSkills(userinfo.skills);
-    if (userinfo.imgUrl) {
-      setInputImage(userinfo.imgUrl);
-    }
   }, []);
 
   const onSubmit = (data) => {
+    // console.log(data);
     dispatch(
       patchUserinfo({
         userId: userinfo._id,
         nickname: data.nickname,
         job: data.job,
-        imgUrl: data.imgUrl,
+        imgUrl: data.imgUrl[0],
         skills,
       }),
     );
@@ -66,12 +67,16 @@ const ProfileMyInfoForm = ({ action, setAction }) => {
   };
 
   const addImageHandler = (e) => {
-    setInputImage(e.target.value);
+    // setInputImage(e.target.value.toString());
     console.log(e.target.value);
   };
 
   return (
-    <form css={myInfoFormStyle} onSubmit={handleSubmit(onSubmit)} onKeyDown={checkKeyDown}>
+    <form
+      css={myInfoFormStyle}
+      onSubmit={handleSubmit(onSubmit)}
+      onKeyDown={checkKeyDown}
+      encType="multipart/form-data">
       <label>{"이메일"}</label>
       <input
         style={{ backgroundColor: "rgb(220,220,220)" }}
@@ -92,19 +97,15 @@ const ProfileMyInfoForm = ({ action, setAction }) => {
           ref(e);
           imageinputRef.current = e;
         }}
-        style={{ display: "none" }}
+        // style={{ display: "none" }}
         type="file"
-        autoComplete="off"
+        name="imgUrl"
         onChange={addImageHandler}
       />
-      <div style={{ width: "150px" }}>
-        <Image
-          src={"/image/profile_image_default.jpg"}
-          layout="responsive"
-          width="100%"
-          height="100%"
-        />
-      </div>
+      {/* <div style={{ width: "150px" }}>
+        <Image src={imagePreview} layout="responsive" width="100%" height="100%" />
+      </div> */}
+
       <label>{"직업"}</label>
       <input {...register("job")} list="list" autoComplete="off" />
       <datalist id="list">

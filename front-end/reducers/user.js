@@ -8,6 +8,8 @@ import {
   logout,
   getGithubLoginUrl,
   getKakaoLoginUrl,
+  editPassword,
+  userWithdrawals,
 } from "../actions/user";
 
 const initialState = {
@@ -44,6 +46,14 @@ const initialState = {
   patchUserLoading: false,
   patchUserDone: false,
   patchUserError: null,
+  // 비밀번호 변경
+  editPasswordLoading: false,
+  editPasswordDone: false,
+  editPasswordError: null,
+  // 유저 탈퇴
+  userWithdrawalsLoading: false,
+  userWithdrawalsDone: false,
+  userWithdrawalsError: null,
   /* By 지의신 Portfolio */
 };
 
@@ -184,6 +194,40 @@ const userSlice = createSlice({
 
         state.patchUserLoading = false;
         state.patchUserError = action.payload;
+      })
+      // editPassword
+      .addCase(editPassword.pending, (state) => {
+        console.log("pending");
+        state.editPasswordLoading = true;
+        state.editPasswordDone = false;
+        state.editPasswordError = null;
+      })
+      .addCase(editPassword.fulfilled, (state) => {
+        console.log("fulfilled");
+        state.editPasswordLoading = false;
+        state.editPasswordDone = true;
+      })
+      .addCase(editPassword.rejected, (state) => {
+        console.log("reject");
+        state.editPasswordLoading = false;
+        state.editPasswordError = action.payload;
+      })
+      // userWithdrawals
+      .addCase(userWithdrawals.pending, (state) => {
+        console.log("pending");
+        state.userWithdrawalsLoading = true;
+        state.userWithdrawalsDone = false;
+        state.userWithdrawalsError = null;
+      })
+      .addCase(userWithdrawals.fulfilled, (state) => {
+        console.log("fulfilled");
+        state.userWithdrawalsLoading = false;
+        state.userWithdrawalsDone = true;
+      })
+      .addCase(userWithdrawals.rejected, (state, action) => {
+        console.log("reject");
+        state.userWithdrawalsLoading = false;
+        state.userWithdrawalsError = action;
       })
       .addDefaultCase((state) => state),
 });
