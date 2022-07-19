@@ -6,13 +6,11 @@ class QnaService {
     this.qnaModel = qnaModel;
   }
   async addQna(qnaInfo: QnaInputDTO) {
-    const { title, contents, author, imgUrl, tags, isAnswer, parentQnaId } =
-      qnaInfo;
+    const { title, contents, author, tags, isAnswer, parentQnaId } = qnaInfo;
     const newQnaInfo = {
       title,
       contents,
       author,
-      imgUrl,
       tags,
       isAnswer,
       parentQnaId,
