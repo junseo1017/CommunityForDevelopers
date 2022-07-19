@@ -24,11 +24,6 @@ export interface LoginInfo {
   password: string;
 }
 
-export interface SearchInfo {
-  userId: string;
-  currentPassword: string;
-}
-
 export interface GithubEmailInfo {
   email: string;
   primary: boolean;
