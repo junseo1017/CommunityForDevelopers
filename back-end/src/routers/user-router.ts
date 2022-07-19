@@ -5,7 +5,7 @@ import {
   userCreateJoiSchema,
   userUpdateJoiSchema,
 } from "../db/schemas/joi-schemas";
-import { upload, getImageUrl } from "../utils/img-upload";
+import { upload, getImageUrl } from "../utils/image-util";
 
 const userRouter = Router();
 
