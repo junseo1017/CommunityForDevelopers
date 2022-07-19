@@ -11,6 +11,7 @@ export interface UserType extends Document {
   scraps: string[];
   role: string;
   loginType: string;
+  isDeleted?: boolean;
 }
 
 const UserSchema = new Schema(
