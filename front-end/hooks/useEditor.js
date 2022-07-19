@@ -21,7 +21,6 @@ const useEditor = () => {
       const data = {
         content: JSON.stringify(savedData),
       };
-
       /* Clear all the unused images from server */
       await clearEditorLeftoverImages();
       return { ...portfolioValue, ...data };
