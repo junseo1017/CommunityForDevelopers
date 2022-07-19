@@ -14,7 +14,7 @@ authRouter.get(
       };
       const params = new URLSearchParams(config).toString();
       const finalUrl = `${baseUrl}?${params}`;
-      res.send({ url: finalUrl });
+      res.json({ url: finalUrl });
     } catch (error) {
       next(error);
     }
@@ -28,7 +28,11 @@ authRouter.get(
     try {
       const { email, nickname } = await authService.getKakaoInfo(code);
       console.log(email, nickname);
-      const userToken = await authService.getUserTokenByOAuth(email, nickname);
+      const userToken = await authService.getUserTokenByOAuth(
+        email,
+        nickname,
+        "KAKAO"
+      );
       if (req.cookies)
         console.log("쿠키:", req.cookies, "\n인증쿠키:", req.signedCookies);
 
@@ -58,7 +62,7 @@ authRouter.get(
       const params = new URLSearchParams(config).toString();
       const finalUrl = `${baseUrl}?${params}`;
 
-      res.send({ url: finalUrl });
+      res.json({ url: finalUrl });
     } catch (error) {
       next(error);
     }
@@ -71,7 +75,11 @@ authRouter.get(
     const code = req.query.code as string;
     try {
       const { email, nickname } = await authService.getGitHubInfo(code);
-      const userToken = await authService.getUserTokenByOAuth(email, nickname);
+      const userToken = await authService.getUserTokenByOAuth(
+        email,
+        nickname,
+        "GITHUB"
+      );
       if (req.cookies)
         console.log("쿠키:", req.cookies, "\n인증쿠키:", req.signedCookies);
 

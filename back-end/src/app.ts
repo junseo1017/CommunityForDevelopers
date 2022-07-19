@@ -24,6 +24,7 @@ app.use("/api/comments", Routers.commentRouter);
 app.use("/api/qnas", Routers.qnaRouter);
 app.use("/api/oauth", Routers.authRouter);
 app.use("/api/images", Routers.imgRouter);
+app.use("/api/search", Routers.searchRouter);
 
 app.use(errorHandler);
 export { app };

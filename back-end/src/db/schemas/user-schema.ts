@@ -10,6 +10,7 @@ export interface UserType extends Document {
   skills: string[];
   scraps: string[];
   role: string;
+  loginType: string;
 }
 
 const UserSchema = new Schema(
@@ -44,6 +45,11 @@ const UserSchema = new Schema(
       type: String,
       required: true,
       default: "user",
+    },
+    loginType: {
+      type: String,
+      required: true,
+      default: "CFD",
     },
   },
   {

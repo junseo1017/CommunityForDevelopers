@@ -12,7 +12,9 @@ class PortfolioService {
   }
   async addPortfolio(portInfo: InputDTO) {
     const {
+      authorId,
       author,
+      authorImg,
       title,
       description,
       skills,
@@ -21,7 +23,9 @@ class PortfolioService {
       thumbnail,
     } = portInfo;
     const newPortInfo = {
+      authorId,
       author,
+      authorImg,
       title,
       description,
       skills,
@@ -72,6 +76,10 @@ class PortfolioService {
   }
 
   async getPortfoliosBySearch(searchInfo: SearchInfo, page: number) {
+    const skills = searchInfo.skills;
+    if (typeof skills === "string") {
+      searchInfo.skills = [skills];
+    }
     const portfolios = await this.portfolioModel.findBySearch(searchInfo, page);
     if (!portfolios) {
       throw new Error("검색과정에서 문제가 발생하였습니다.");
@@ -84,7 +92,7 @@ class PortfolioService {
     if (!portfolio) {
       throw new Error("포토폴리오 정보가 없습니다.");
     }
-    if (!portfolio.author.equals(userId)) {
+    if (!portfolio.authorId.equals(userId)) {
       throw new Error("Forbidden");
     }
     return await this.portfolioModel.update(portId, portInfo);
@@ -118,7 +126,7 @@ class PortfolioService {
     if (!portfolio) {
       throw new Error("해당 포토폴리오가 존재하지 않습니다.");
     }
-    if (!portfolio.author.equals(userId)) {
+    if (!portfolio.authorId.equals(userId)) {
       throw new Error("Forbidden");
     }
     return await this.portfolioModel.deleteById(portId);
