@@ -114,7 +114,7 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
   };
 
   return (
-    <div css={EditorContainer}>
+    <div className="editor-container">
       <Button
         onClick={() => {
           saveContents(qnaId);

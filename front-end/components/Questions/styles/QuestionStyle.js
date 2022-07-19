@@ -227,12 +227,16 @@ export const TextContainer = css`
 export const EditorContainer = css`
   width: 100%;
   display: flex;
+  height: auto;
   flex-direction: column;
   align-items: center;
-  padding: 0 2em;
+  padding: 1em 2em;
   gap: 1em;
 
-  border: 1px solid #000000;
+  .answer {
+    display: none;
+  }
+
   border-radius: 4px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 
@@ -248,6 +252,11 @@ export const EditorContainer = css`
   & > span,
   input.ant-input-sm {
     width: 7em;
+  }
+
+  & div.editor-container {
+    width: 75%;
+    margin: 0 auto;
   }
 
   & div.codex-editor--narrow {

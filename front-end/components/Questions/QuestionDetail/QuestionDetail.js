@@ -123,6 +123,9 @@ const QuestionDetail = ({ qna, answers }) => {
             type="primary"
             onClick={() => {
               setIsAnswerCreateMode(!isAnswerCreateMode);
+              isAnswerCreateMode
+                ? (EditorRef.current.style.display = "flex")
+                : (EditorRef.current.style.display = "none");
               handleScroll();
             }}>
             답변하기
@@ -140,19 +143,15 @@ const QuestionDetail = ({ qna, answers }) => {
             isUpdate={true}
           />
         )}
-        <span ref={EditorRef}></span>
-        {isAnswerCreateMode && (
-          <div css={EditorContainer}>
-            <Divider plain />
-            <h2>답변하기</h2>
-            <Input
-              size="large"
-              placeholder="답변의 제목을 작성하세요"
-              onChange={(e) => setAnswerTItle(e.target.value)}
-            />
-            <AddEditor title={answerTitle} isAnswer parentQnaId={qna._id} />
-          </div>
-        )}
+        <div ref={EditorRef} css={EditorContainer}>
+          <h2>답변하기</h2>
+          <Input
+            size="large"
+            placeholder="답변의 제목을 작성하세요"
+            onChange={(e) => setAnswerTItle(e.target.value)}
+          />
+          <AddEditor title={answerTitle} isAnswer parentQnaId={qna._id} />
+        </div>
       </div>
       <Answers answers={answers} me={me ? me : null} />
       <TopButton />
