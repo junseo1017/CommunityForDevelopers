@@ -1,7 +1,7 @@
 import { SearchInfo } from "../interfaces/portfolio-interface";
 
 function getSearchCondition(searchInfo: SearchInfo, page: number) {
-  let condition: Array<any> = [];
+  const condition: Array<any> = [];
   if (searchInfo.value) {
     condition.push({
       $search: {
@@ -13,11 +13,16 @@ function getSearchCondition(searchInfo: SearchInfo, page: number) {
       },
     });
   }
+
   if (searchInfo.skills) {
+    const skillList: RegExp[] = [];
+    searchInfo.skills.map((skill) => {
+      skillList.push(new RegExp(skill, "i"));
+    });
     condition.push({
       $match: {
         skills: {
-          $in: searchInfo.skills,
+          $in: skillList,
         },
       },
     });
