@@ -1,6 +1,8 @@
 import { Schema, Document, Types } from "mongoose";
 export interface PortfolioType extends Document {
-  author: Types.ObjectId;
+  authorId: Types.ObjectId;
+  author: string;
+  authorImg: string;
   title: string;
   description: string;
   skills: string;
@@ -13,9 +15,17 @@ export interface PortfolioType extends Document {
 
 const PortfolioSchema = new Schema(
   {
-    author: {
+    authorId: {
       type: Schema.Types.ObjectId,
       ref: "users",
+      required: true,
+    },
+    author: {
+      type: String,
+      required: true,
+    },
+    authorImg: {
+      type: String,
       required: true,
     },
     title: {
@@ -55,7 +65,7 @@ const PortfolioSchema = new Schema(
     comments: [
       {
         type: Schema.Types.ObjectId,
-        ref: "users",
+        ref: "comments",
         required: false,
       },
     ],
