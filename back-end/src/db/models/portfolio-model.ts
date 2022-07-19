@@ -1,38 +1,29 @@
 import { model, Types, Document } from "mongoose";
 import { PortfolioSchema, PortfolioType } from "../schemas/portfolio-schema";
+import { getSearchCondition } from "../../utils/search-condition";
 import {
   UpdateInfo,
   InputDTO,
   SearchInfo,
 } from "../../interfaces/portfolio-interface";
 
-// const Portfolio = model("portofolios", PortfolioSchema);
 const Portfolio = model<PortfolioType & Document>(
   "portofolios",
   PortfolioSchema
 );
 export class PortfolioModel {
   async findById(portId: string) {
-    return await Portfolio.findOne({ _id: portId }).populate([
-      {
+    return await Portfolio.findOne({ _id: portId }).populate({
+      path: "comments",
+      populate: {
         path: "author",
         select: "nickname",
       },
-      {
-        path: "comments",
-        populate: {
-          path: "author",
-          select: "nickname",
-        },
-      },
-    ]);
+    });
   }
 
   async findByUserId(userId: string) {
-    return await Portfolio.find({ author: userId }).populate({
-      path: "author",
-      select: "nickname",
-    });
+    return await Portfolio.find({ authorId: userId });
   }
 
   async getCountByUserId(userId: string) {
@@ -48,45 +39,19 @@ export class PortfolioModel {
   }
 
   async findPortfoliosInit() {
-    return await Portfolio.find({}).sort({ _id: -1 }).limit(12).populate({
-      path: "author",
-      select: "nickname",
-    });
+    return await Portfolio.find({}).sort({ _id: -1 }).limit(12);
   }
 
   async findPortfolios(lastId: string) {
     const id = new Types.ObjectId(lastId);
     return await Portfolio.find({ _id: { $lt: id } })
       .sort({ _id: -1 })
-      .limit(12)
-      .populate({
-        path: "author",
-        select: "nickname",
-      });
+      .limit(12);
   }
 
   async findBySearch(searchInfo: SearchInfo, page: number) {
-    return await Portfolio.aggregate([
-      {
-        $search: {
-          index: "searchIndex",
-          text: {
-            query: searchInfo.value,
-            path: searchInfo.options,
-          },
-        },
-      },
-      {
-        $match: {
-          skills: {
-            $in: searchInfo.skills,
-          },
-        },
-      },
-      { $sort: { [searchInfo.orderBy]: -1 } },
-      { $skip: (page - 1) * 12 },
-      { $limit: 12 },
-    ]);
+    const searchConditon = getSearchCondition(searchInfo, page);
+    return await Portfolio.aggregate(searchConditon);
   }
 
   async create(portInfo: InputDTO) {

@@ -19,8 +19,9 @@ qnaRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const qnaId = req.params.qnaId;
-      const QnA = await qnaService.getQnaById(qnaId);
-      res.status(200).json(QnA);
+      const Qusetion = await qnaService.getQnaById(qnaId);
+      const Answers = await qnaService.getAnswerByQuestion(qnaId);
+      res.status(200).json({ Qusetion, Answers });
     } catch (error) {
       next(error);
     }

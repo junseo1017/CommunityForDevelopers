@@ -23,6 +23,7 @@ app.use("/api/portfolios", Routers.portfolioRouter);
 app.use("/api/comments", Routers.commentRouter);
 app.use("/api/qnas", Routers.qnaRouter);
 app.use("/api/oauth", Routers.authRouter);
+app.use("/api/search", Routers.searchRouter);
 
 app.use(errorHandler);
 export { app };
