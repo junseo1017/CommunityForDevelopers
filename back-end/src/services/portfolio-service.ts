@@ -11,8 +11,15 @@ class PortfolioService {
     this.portfolioModel = portfolioModel;
   }
   async addPortfolio(portInfo: InputDTO) {
-    const { author, title, description, skills, content, contentText } =
-      portInfo;
+    const {
+      author,
+      title,
+      description,
+      skills,
+      content,
+      contentText,
+      thumbnail,
+    } = portInfo;
     const newPortInfo = {
       author,
       title,
@@ -20,6 +27,7 @@ class PortfolioService {
       skills,
       content,
       contentText,
+      thumbnail,
     };
     return await this.portfolioModel.create(newPortInfo);
   }

@@ -5,6 +5,7 @@ export interface InputDTO {
   skills: string[];
   content: string;
   contentText: string;
+  thumbnail: string;
 }
 
 export interface UpdateInfo {
@@ -13,6 +14,7 @@ export interface UpdateInfo {
   skills: string[];
   content: string;
   contentText: string;
+  thumbnail: string;
 }
 
 export interface SearchInfo {
