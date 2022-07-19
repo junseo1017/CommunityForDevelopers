@@ -6,12 +6,7 @@ import {
   QnaModel,
   qnaModel,
 } from "../db";
-import {
-  InputDTO,
-  UpdateInfo,
-  LoginInfo,
-  SearchInfo,
-} from "../interfaces/user-interface";
+import { InputDTO, UpdateInfo, LoginInfo } from "../interfaces/user-interface";
 import bcrypt from "bcrypt";
 import { jwtUtil } from "../utils/jwt-util";
 
@@ -125,25 +120,11 @@ class UserService {
   }
 
   // 비밀번호 수정
-  async setPassword(userInfoRequired: SearchInfo, password: string) {
-    const { userId, currentPassword } = userInfoRequired;
-
+  async setPassword(userId: string, password: string) {
     const user = await this.userModel.getPassword(userId);
 
     if (!user) {
       throw new Error("가입 내역이 없습니다. 다시 한 번 확인해 주세요.");
-    }
-
-    const correctPasswordHash = user.password;
-    const isPasswordCorrect = await bcrypt.compare(
-      currentPassword,
-      correctPasswordHash
-    );
-
-    if (!isPasswordCorrect) {
-      throw new Error(
-        "현재 비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요."
-      );
     }
 
     if (password) {
@@ -154,25 +135,11 @@ class UserService {
     return await this.userModel.update(userId, { password });
   }
 
-  async deleteUser(userInfoRequired: SearchInfo) {
-    const { userId, currentPassword } = userInfoRequired;
-
+  async deleteUser(userId: string) {
     const user = await this.userModel.getPassword(userId);
 
     if (!user) {
       throw new Error("가입 내역이 없습니다. 다시 한 번 확인해 주세요.");
-    }
-
-    const correctPasswordHash = user.password;
-    const isPasswordCorrect = await bcrypt.compare(
-      currentPassword,
-      correctPasswordHash
-    );
-
-    if (!isPasswordCorrect) {
-      throw new Error(
-        "현재 비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요."
-      );
     }
 
     return await this.userModel.deleteById(userId);
