@@ -33,33 +33,22 @@ const ProfileMyInfoForm = ({ action, setAction }) => {
   );
   const { ref, ...rest } = register("image");
 
-  // form에 사용되는 state value 넣어주기
+  // form에 사용되는 state value 넣어주기(imagePreview, skills)
   useEffect(() => {
     if (userinfo) {
-      // reset({
-      //   userId: userinfo._id,
-      //   nickname: userinfo.nickname,
-      //   job: userinfo.job,
-      //   image: userinfo.imgUrl,
-      //   skills: userinfo.skills,
-      // });
+      setImagePreview(userinfo.imgUrl);
       setSkills(userinfo.skills);
     }
   }, [userinfo]);
 
   const onSubmit = (data) => {
-    // const formData = new FormData();
-    // formData.append("file", imageinputRef.current.files[0]);
-    // console.log(formData.get("file"));
-    dispatch(
-      patchUserinfo({
-        userId: data.userId,
-        nickname: data.nickname,
-        job: data.job,
-        image: imageinputRef.current.files[0],
-        skills: data.skills,
-      }),
-    );
+    const formData = new FormData();
+    formData.append("image", imageinputRef.current.files[0]);
+    formData.append("nickname", data.nickname);
+    formData.append("userId", data.userId);
+    formData.append("job", data.job);
+    formData.append("skills", skills);
+    dispatch(patchUserinfo(formData));
     setAction(true);
   };
 
@@ -79,6 +68,7 @@ const ProfileMyInfoForm = ({ action, setAction }) => {
     setSkills(skills.filter((elem) => elem != e.target.id));
   };
 
+  // 이미지 미리보기
   const addPreviewImage = (fileBlob) => {
     if (fileBlob) {
       const reader = new FileReader();

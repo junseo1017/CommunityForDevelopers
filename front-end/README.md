@@ -60,6 +60,9 @@ cd community-for-developers/back-end
 <!-- 회원탈퇴 완료 시 홈으로 리다이렉팅 -->
 <!-- 스크랩북 UI 구현 > author 닉네임 반환시켜줘야함 / imgUrl 반환해줘야함 -->
 
+7/20
+프로필 skills 배열로 반환시킬 수 있는지?
+
 어드민 페이지
 이미지 처리
 프로필 카드 이미지 식(null 일 때) 수정하기
