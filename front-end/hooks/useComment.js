@@ -1,16 +1,30 @@
-import React, { useState } from "react";
-
+import React, { useState, useCallback, useMemo } from "react";
+import useConfirmModal from "./useConfirmModal";
 import { addComment } from "../actions/portfolio";
 import { useDispatch } from "react-redux";
 
-const useComment = ({ _id }) => {
+const useComment = ({ _id, nickname }) => {
   //const [comments, setComments] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [value, setValue] = useState("");
-
+  const redirectLogin = useCallback(() => {
+    Router.push("/login");
+  }, []);
+  const modalMessage = useMemo(
+    () => ({
+      title: "로그인이 필요한 서비스 입니다.",
+      description: "로그인해 주세요.",
+    }),
+    [],
+  );
+  const [showConfirm] = useConfirmModal({
+    okFunc: redirectLogin,
+    message: modalMessage,
+  });
   const dispatch = useDispatch();
 
   const handleSubmit = () => {
+    if (!nickname) showConfirm();
     if (!value) return;
     setSubmitting(true);
     setTimeout(() => {

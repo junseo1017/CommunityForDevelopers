@@ -131,7 +131,7 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
         <div css={submitButton}>
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              next
+              다음
             </Button>
           </Form.Item>
         </div>

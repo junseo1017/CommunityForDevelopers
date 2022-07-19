@@ -40,7 +40,11 @@ const createPortfolio = (props) => {
 
   useEffect(() => {
     if (error) {
-      const [showConfirm] = useConfirmModal(redirectLogin, redirectHome, modalMessage);
+      const [showConfirm] = useConfirmModal({
+        okFunc: redirectLogin,
+        cancleFunc: redirectHome,
+        message: modalMessage,
+      });
       showConfirm();
     }
   }, [error]);
@@ -62,7 +66,6 @@ const createPortfolio = (props) => {
   }, []);
 
   const [current, setCurrent] = useState(0);
-
   const setCurrentStep = useCallback((num) => {
     setCurrent(num);
   }, []);

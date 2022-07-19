@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import AppLayout from "../components/AppLayout";
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import wrapper from "../store";
 import { List, Select, Divider } from "antd";
 import { BackTop } from "antd";
@@ -19,6 +19,33 @@ const Home = () => {
   const { mainPortfolios, hasMorePortfolios, loadPortfoliosLoading } = useSelector(
     (state) => state.portfolio,
   );
+
+  useEffect(() => {
+    function onScroll() {
+      // window.scrollY : 얼마나 내렸는지
+      // document.documentElement.clientHeight : 화면에 보이는 길이
+      // document.documentElement.scrollHeight : 총길이
+      console.log(hasMorePortfolios, loadPortfoliosLoading);
+      if (hasMorePortfolios && !loadPortfoliosLoading) {
+        if (
+          window.scrollY + document.documentElement.clientHeight >
+          document.documentElement.scrollHeight - 300
+        ) {
+          const lastId = mainPortfolios[mainPortfolios.length - 1]?._id;
+          dispatch(
+            loadPortfolios({
+              lastId,
+            }),
+          );
+        }
+      }
+    }
+    window.addEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [hasMorePortfolios, loadPortfoliosLoading, mainPortfolios]);
+
   console.log(me);
   console.log(mainPortfolios);
 

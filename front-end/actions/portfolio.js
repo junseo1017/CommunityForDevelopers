@@ -9,8 +9,10 @@ axios.defaults.withCredentials = true; // front, backend 간 쿠키공유
 export const loadPortfolios = createAsyncThunk(
   "portfolio/loadPortfolios",
   async (data) => {
-    //const response = await axios.get(`/portfolios?lastId=${data?.lastId || 0}`);
-    const response = await axios.get(`/api/portfolios`);
+    console.log(`%c 포트폴리오 요청: ${data?.lastId} `, "color: green;");
+    const response = await axios.get(`/api/portfolios/?lastId=${data?.lastId || ""}`);
+    //const response = await axios.get(`/api/portfolios`);
+    console.log(response);
     return response.data;
   },
   {
