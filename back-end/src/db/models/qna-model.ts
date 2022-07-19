@@ -33,7 +33,7 @@ export class QnaModel {
   }
 
   async findAnswerById(qnaId: string) {
-    return await Qna.find({ parentQnaId: qnaId }, { isAnswer: true }).populate([
+    return await Qna.find({ parentQnaId: qnaId }).populate([
       {
         path: "author",
         select: "nickname",
