@@ -24,21 +24,19 @@ const QuestionDetail = ({ qna }) => {
   console.log("question", question);
   console.log("answers", answers);
 
-  // qna의 id 가져오기
-  const router = useRouter();
-  const qnaId = router.query._id;
-
   // user 정보 가져오기
   const { me } = useSelector((state) => state.user);
   console.log("me", me);
 
-  const initialState = !!(me._id === question.author._id);
+  // 현재 로그인 유저가 질문자인지 확인
+  const initialLoginState = !!(me._id === question.author._id);
 
-  const [isAnswerCreateMode, setIsAnswerCreateMode] = useState(initialState);
-  const [isAuthor, setIsAuthor] = useState(false);
-  const [isAnswerUpdateMode, setIsAnswerUpdateMode] = useState(false);
+  const [isAnswerCreateMode, setIsAnswerCreateMode] = useState(false); // 답변 form 열기
+  const [isAuthor, setIsAuthor] = useState(initialLoginState); // 수정, 삭제 버튼 보여주기
+  const [isAnswerUpdateMode, setIsAnswerUpdateMode] = useState(false); // 답변 수정 form 변경
+  const [answerTitle, setAnswerTItle] = useState(""); // 답변 제목 저장
 
-  // 수정 삭제 작업 중..
+  // 질문 삭제
   const handleDelete = async (deleteId) => {
     try {
       await axios.delete(`/api/qnas/${deleteId}`);
@@ -47,41 +45,40 @@ const QuestionDetail = ({ qna }) => {
     }
   };
 
+  // 질문 수정
   const handleUpdate = async () => {
     setIsAnswerUpdateMode(!isAnswerUpdateMode);
   };
 
-  const [answerTitle, setAnswerTItle] = useState("");
+  // ! 질문 Like 제거
+  // const [recommendData, setRecommendData] = useState({
+  //   isRecommended: false,
+  //   numberOfRecommends: 0,
+  // });
 
-  const [recommendData, setRecommendData] = useState({
-    isRecommended: false,
-    numberOfRecommends: 0,
-  });
+  // const [isChanged, setIsChanged] = useState(false);
 
-  const [isChanged, setIsChanged] = useState(false);
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       const response = await axios.get(`/api/qnas/${qnaId}`);
+  //       const qna = response.data;
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await axios.get(`/api/qnas/${qnaId}`);
-        const qna = response.data;
+  //       const isRecommended = qna.recommends.map((user) => user._id).includes(me._id);
+  //       const numberOfRecommends = qna.recommends.length;
 
-        const isRecommended = qna.recommends.map((user) => user._id).includes(me._id);
-        const numberOfRecommends = qna.recommends.length;
+  //       setRecommendData({ isRecommended, numberOfRecommends });
+  //       setIsChanged(false);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
 
-        setRecommendData({ isRecommended, numberOfRecommends });
-        setIsChanged(false);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  //   getData();
+  // }, [isChanged]);
 
-    getData();
-  }, [isChanged]);
-
+  // 답변하기 form 오픈 시 스크롤
   const EditorRef = useRef();
-  console.log("EditorRef", EditorRef);
-
   const handleScroll = () => EditorRef.current.scrollIntoView({ behavior: "smooth" });
 
   return (
@@ -101,7 +98,7 @@ const QuestionDetail = ({ qna }) => {
               style={{ fontSize: "2em" }}
               onClick={() => {
                 handleDelete(question._id);
-                router.replace(`/qna/${router.query._id}`);
+                // router.replace(`/qna/${router.query._id}`);
               }}
             />
           </div>
@@ -131,8 +128,8 @@ const QuestionDetail = ({ qna }) => {
             onClick={() => {
               setIsAnswerCreateMode(!isAnswerCreateMode);
               isAnswerCreateMode
-                ? (EditorRef.current.style.display = "none")
-                : (EditorRef.current.style.display = "flex");
+                ? (EditorRef.current.style.display = "flex")
+                : (EditorRef.current.style.display = "none");
               handleScroll();
             }}>
             답변하기
@@ -160,7 +157,7 @@ const QuestionDetail = ({ qna }) => {
           <AddEditor title={answerTitle} isAnswer parentQnaId={question._id} />
         </div>
       </div>
-      <Answers answers={answers} me={me ? me : null} />
+      <Answers answers={answers} />
       <TopButton />
     </div>
   );

@@ -37,13 +37,6 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
     // URL query 가져오기
     const _id = query._id;
 
-    // qna 데이터와 answer 데이터 가져오기
-    // const [qna, answers] = await Promise.all([
-    //   axios.get(`/api/qnas/${_id}`),
-    //   axios.get("/api/qnas"),
-    // ]).then((value) => console.log("value:", value));
-
-    // console.log("SSR 데이터", qna, answers);
     const response = await axios.get(`/api/qnas/${_id}`);
     const qna = response.data;
 

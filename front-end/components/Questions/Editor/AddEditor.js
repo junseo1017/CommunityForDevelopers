@@ -50,7 +50,7 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
           },
         );
 
-        console.log(response);
+        // console.log(response);
         setIsChanged(true);
         router.push(`/qna/${router.query._id}`);
       } catch (error) {
