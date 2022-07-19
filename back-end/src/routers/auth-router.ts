@@ -27,7 +27,6 @@ authRouter.get(
     const code = req.query.code as string;
     try {
       const { email, nickname } = await authService.getKakaoInfo(code);
-      console.log(email, nickname);
       const userToken = await authService.getUserTokenByOAuth(
         email,
         nickname,
