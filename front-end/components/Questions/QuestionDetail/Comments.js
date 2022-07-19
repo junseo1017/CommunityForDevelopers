@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import { Avatar, Button, Comment, Form, Input, List } from "antd";
+import { Avatar, Button, Comment, Modal, List } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
@@ -10,8 +10,13 @@ import { useEffect } from "react";
 import moment from "moment";
 import axios from "axios";
 import { CommentsContainer, CommentStyle } from "../styles/QuestionStyle";
+import ModalAsync from "../../Common/ModalAsync";
+import useModalAsync from "../../../hooks/useModalAsync";
 
 const CommentsEditor = ({ comment, handleChange, userList, handleSubmit, isUpdate }) => {
+  const [modalVisible, setModalVisible, handleOk, confirmLoading, modalText, showModal] =
+    useModalAsync(handleSubmit, "댓글을 저장할까요?", next);
+
   return (
     <>
       <MentionsInput
@@ -31,9 +36,21 @@ const CommentsEditor = ({ comment, handleChange, userList, handleSubmit, isUpdat
           style={{ backgroundColor: "rgb(24, 144, 255, 0.25)" }}
         />
       </MentionsInput>
-      <Button type="primary" onClick={handleSubmit}>
+      <Button
+        type="primary"
+        onClick={() => {
+          showModal(true);
+          handleSubmit;
+        }}>
         댓글 작성하기
       </Button>
+      <ModalAsync
+        visible={modalVisible}
+        setVisible={setModalVisible}
+        handleOk={handleOk}
+        confirmLoading={confirmLoading}
+        modalText={modalText}
+      />
     </>
   );
 };
