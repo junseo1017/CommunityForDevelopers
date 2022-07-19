@@ -2,7 +2,13 @@ import dotenv from "dotenv";
 dotenv.config();
 import multer from "multer";
 import { initializeApp } from "firebase/app";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_APIKEY,
@@ -33,7 +39,10 @@ async function getImageUrl(image: Express.Multer.File) {
 
     const storage = getStorage(app);
     const imageRef = ref(storage, `images/${fileName}`);
-    const snapshot = await uploadBytes(imageRef, image.buffer);
+    const metadata = {
+      contentType: `image/${type}`,
+    };
+    const snapshot = await uploadBytes(imageRef, image.buffer, metadata);
     return await getDownloadURL(snapshot.ref);
   } catch (error) {
     console.log(error);
@@ -41,4 +50,15 @@ async function getImageUrl(image: Express.Multer.File) {
   }
 }
 
-export { upload, getImageUrl };
+// image delete
+async function deleteImage(imgUrl: string) {
+  try {
+    const storage = getStorage(app);
+    const imageRef = ref(storage, imgUrl);
+    await deleteObject(imageRef);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export { upload, getImageUrl, deleteImage };
