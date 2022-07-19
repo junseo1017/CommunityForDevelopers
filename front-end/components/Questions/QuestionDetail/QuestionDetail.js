@@ -7,16 +7,20 @@ import Comments from "./Comments";
 import TopButton from "../TopButton";
 import { Button, Badge, Tag, Divider, Collapse, Input } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { DetailContainer, DetailQuestionContainer, EditorContainer } from "../styles/QuestionStyle";
-import Link from "next/link";
+import {
+  DetailContainer,
+  DetailQuestionContainer,
+  AnswerEditorContainer,
+} from "../styles/QuestionStyle";
 import AddEditor from "../Editor/AddEditor";
-import Like from "../Like";
 import Answers from "./Answers";
 import Output from "editorjs-react-renderer";
 import axios from "axios";
 import moment from "moment";
 
 const QuestionDetail = ({ qna }) => {
+  const router = useRouter();
+
   // 질문 답변 분류
   const question = qna.Question;
   const answers = qna.Answers;
@@ -29,17 +33,18 @@ const QuestionDetail = ({ qna }) => {
   console.log("me", me);
 
   // 현재 로그인 유저가 질문자인지 확인
-  const initialLoginState = !!(me._id === question.author._id);
+  const initialLoginState = me._id === question.author._id;
 
-  const [isAnswerCreateMode, setIsAnswerCreateMode] = useState(false); // 답변 form 열기
   const [isAuthor, setIsAuthor] = useState(initialLoginState); // 수정, 삭제 버튼 보여주기
   const [isAnswerUpdateMode, setIsAnswerUpdateMode] = useState(false); // 답변 수정 form 변경
+  const [isAnswerCreateMode, setIsAnswerCreateMode] = useState(false); // 답변 form 열기
   const [answerTitle, setAnswerTItle] = useState(""); // 답변 제목 저장
 
   // 질문 삭제
   const handleDelete = async (deleteId) => {
     try {
       await axios.delete(`/api/qnas/${deleteId}`);
+      router.push(`/qna`);
     } catch (error) {
       console.log(error);
     }
@@ -50,41 +55,14 @@ const QuestionDetail = ({ qna }) => {
     setIsAnswerUpdateMode(!isAnswerUpdateMode);
   };
 
-  // ! 질문 Like 제거
-  // const [recommendData, setRecommendData] = useState({
-  //   isRecommended: false,
-  //   numberOfRecommends: 0,
-  // });
-
-  // const [isChanged, setIsChanged] = useState(false);
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     try {
-  //       const response = await axios.get(`/api/qnas/${qnaId}`);
-  //       const qna = response.data;
-
-  //       const isRecommended = qna.recommends.map((user) => user._id).includes(me._id);
-  //       const numberOfRecommends = qna.recommends.length;
-
-  //       setRecommendData({ isRecommended, numberOfRecommends });
-  //       setIsChanged(false);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
-  //   getData();
-  // }, [isChanged]);
-
   // 답변하기 form 오픈 시 스크롤
   const EditorRef = useRef();
-  const handleScroll = () => EditorRef.current.scrollIntoView({ behavior: "smooth" });
+  const handleScroll = () =>
+    EditorRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
 
   return (
     <div css={DetailContainer}>
       <div css={DetailQuestionContainer}>
-        {/* <Like qnaId={question._id} recommendData={recommendData} setIsChanged={setIsChanged} /> */}
         <h1>{question.title}</h1>
         {isAuthor && (
           <div>
@@ -98,7 +76,6 @@ const QuestionDetail = ({ qna }) => {
               style={{ fontSize: "2em" }}
               onClick={() => {
                 handleDelete(question._id);
-                // router.replace(`/qna/${router.query._id}`);
               }}
             />
           </div>
@@ -112,24 +89,14 @@ const QuestionDetail = ({ qna }) => {
           <p>최근 수정일: {moment(question.updatedAt).format("YYYY월 MM월 DD일")}</p>
         </div>
         <div>
-          {/* <Link href="/qna">
-            <Button size="large" type="text">
-              목록으로 가기
-            </Button>
-          </Link>
-          <Link href="/qna/new">
-            <Button size="large" type="primary">
-              다른 질문하기
-            </Button>
-          </Link> */}
           <Button
             size="large"
             type="primary"
             onClick={() => {
-              setIsAnswerCreateMode(!isAnswerCreateMode);
               isAnswerCreateMode
-                ? (EditorRef.current.style.display = "flex")
-                : (EditorRef.current.style.display = "none");
+                ? (EditorRef.current.style.display = "none")
+                : (EditorRef.current.style.display = "flex");
+              setIsAnswerCreateMode(!isAnswerCreateMode);
               handleScroll();
             }}>
             답변하기
@@ -147,7 +114,7 @@ const QuestionDetail = ({ qna }) => {
             isUpdate={true}
           />
         )}
-        <div ref={EditorRef} css={EditorContainer}>
+        <div ref={EditorRef} css={AnswerEditorContainer}>
           <h2>답변하기</h2>
           <Input
             size="large"
