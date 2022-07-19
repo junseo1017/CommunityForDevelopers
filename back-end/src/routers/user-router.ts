@@ -157,6 +157,7 @@ userRouter.delete(
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
     try {
+      res.clearCookie("userinfo");
       res.status(200).json(await userService.deleteUser(userId));
     } catch (error) {
       next(error);

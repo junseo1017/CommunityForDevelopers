@@ -22,6 +22,7 @@ export class UserModel {
         imgUrl: 1,
         role: 1,
         loginType: 1,
+        isDeleted: 1,
       }
     );
   }
@@ -37,16 +38,20 @@ export class UserModel {
         imgUrl: 1,
         role: 1,
         loginType: 1,
+        isDeleted: 1,
       }
     );
   }
 
   async findByEmail(email: string) {
-    return await User.findOne({ email }, { password: 1 });
+    return await User.findOne(
+      { email },
+      { email: 1, password: 1, isDeleted: 1 }
+    );
   }
 
   async getPassword(userId: string) {
-    return await User.findOne({ _id: userId }, { password: 1 });
+    return await User.findOne({ _id: userId }, { password: 1, isDeleted: 1 });
   }
 
   async create(userInfo: InputDTO) {
