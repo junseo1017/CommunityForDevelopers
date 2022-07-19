@@ -16,19 +16,26 @@ import Output from "editorjs-react-renderer";
 import axios from "axios";
 import moment from "moment";
 
-const QuestionDetail = ({ qna, answers }) => {
-  console.log(qna);
+const QuestionDetail = ({ qna }) => {
+  // 질문 답변 분류
+  const question = qna.Question;
+  const answers = qna.Answers;
+  console.log("qna", qna);
+  console.log("question", question);
+  console.log("answers", answers);
+
   // qna의 id 가져오기
   const router = useRouter();
   const qnaId = router.query._id;
 
   // user 정보 가져오기
   const { me } = useSelector((state) => state.user);
+  console.log("me", me);
 
-  const initialState = !!(me._id === qna.author._id);
+  const initialState = !!(me._id === question.author._id);
 
-  const [isAnswerCreateMode, setIsAnswerCreateMode] = useState(false);
-  const [isAuthor, setIsAuthor] = useState(initialState);
+  const [isAnswerCreateMode, setIsAnswerCreateMode] = useState(initialState);
+  const [isAuthor, setIsAuthor] = useState(false);
   const [isAnswerUpdateMode, setIsAnswerUpdateMode] = useState(false);
 
   // 수정 삭제 작업 중..
@@ -80,8 +87,8 @@ const QuestionDetail = ({ qna, answers }) => {
   return (
     <div css={DetailContainer}>
       <div css={DetailQuestionContainer}>
-        {/* <Like qnaId={qna._id} recommendData={recommendData} setIsChanged={setIsChanged} /> */}
-        <h1>{qna.title}</h1>
+        {/* <Like qnaId={question._id} recommendData={recommendData} setIsChanged={setIsChanged} /> */}
+        <h1>{question.title}</h1>
         {isAuthor && (
           <div>
             <EditOutlined
@@ -93,19 +100,19 @@ const QuestionDetail = ({ qna, answers }) => {
             <DeleteOutlined
               style={{ fontSize: "2em" }}
               onClick={() => {
-                handleDelete(qna._id);
+                handleDelete(question._id);
                 router.replace(`/qna/${router.query._id}`);
               }}
             />
           </div>
         )}
         <div className="tag-container">
-          {qna.tags.map((tag, index) => (
+          {question.tags.map((tag, index) => (
             <Tag key={index}>{tag}</Tag>
           ))}
-          <p>질문자: {qna.author.nickname}</p>
-          <p>질문일: {moment(qna.createdAt).format("YYYY월 MM월 DD일")}</p>
-          <p>최근 수정일: {moment(qna.updatedAt).format("YYYY월 MM월 DD일")}</p>
+          <p>질문자: {question.author.nickname}</p>
+          <p>질문일: {moment(question.createdAt).format("YYYY월 MM월 DD일")}</p>
+          <p>최근 수정일: {moment(question.updatedAt).format("YYYY월 MM월 DD일")}</p>
         </div>
         <div>
           {/* <Link href="/qna">
@@ -124,8 +131,8 @@ const QuestionDetail = ({ qna, answers }) => {
             onClick={() => {
               setIsAnswerCreateMode(!isAnswerCreateMode);
               isAnswerCreateMode
-                ? (EditorRef.current.style.display = "flex")
-                : (EditorRef.current.style.display = "none");
+                ? (EditorRef.current.style.display = "none")
+                : (EditorRef.current.style.display = "flex");
               handleScroll();
             }}>
             답변하기
@@ -133,13 +140,13 @@ const QuestionDetail = ({ qna, answers }) => {
         </div>
         <Divider plain />
         {!isAnswerUpdateMode ? (
-          <Output data={JSON.parse(qna.contents)} />
+          <Output data={JSON.parse(question.contents)} />
         ) : (
           <AddEditor
-            data={JSON.parse(qna.contents)}
+            data={JSON.parse(question.contents)}
             title={answerTitle}
             isAnswer={false}
-            qnaId={qna._id}
+            qnaId={question._id}
             isUpdate={true}
           />
         )}
@@ -150,7 +157,7 @@ const QuestionDetail = ({ qna, answers }) => {
             placeholder="답변의 제목을 작성하세요"
             onChange={(e) => setAnswerTItle(e.target.value)}
           />
-          <AddEditor title={answerTitle} isAnswer parentQnaId={qna._id} />
+          <AddEditor title={answerTitle} isAnswer parentQnaId={question._id} />
         </div>
       </div>
       <Answers answers={answers} me={me ? me : null} />

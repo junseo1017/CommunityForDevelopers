@@ -55,7 +55,7 @@ const Answer = ({ answer, me }) => {
     setIsAnswerUpdateMode(!isAnswerUpdateMode);
   };
 
-  console.log("answer :", answer);
+  console.log("[ans] answer :", answer);
   console.log("answerId :", answer._id);
 
   return (
