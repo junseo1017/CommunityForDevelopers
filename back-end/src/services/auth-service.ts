@@ -64,10 +64,18 @@ class AuthService {
     return { email, nickname };
   }
 
-  async getUserTokenByOAuth(email: string, nickname: string) {
+  async getUserTokenByOAuth(
+    email: string,
+    nickname: string,
+    loginType: string
+  ) {
     let user = await this.userModel.findByEmail(email);
     if (!user) {
-      user = await this.userModel.createOAuthUser({ email, nickname });
+      user = await this.userModel.createOAuthUser({
+        email,
+        nickname,
+        loginType,
+      });
     }
     const accessToken = jwtUtil.generateAccessToken({
       userId: user._id,
