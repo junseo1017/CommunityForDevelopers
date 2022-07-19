@@ -35,7 +35,9 @@ export class PortfolioModel {
   }
 
   async getScrapsByUserId(userId: string) {
-    return await Portfolio.find({ scraps: new Types.ObjectId(userId) });
+    return await Portfolio.find({
+      scraps: new Types.ObjectId(userId),
+    }).populate({ path: "scraps", select: ["nickname", "imgUrl"] });
   }
 
   async findPortfoliosInit() {
