@@ -5,6 +5,7 @@ import {
   userCreateJoiSchema,
   userUpdateJoiSchema,
 } from "../db/schemas/joi-schemas";
+import { upload, getImageUrl } from "../utils/img-upload";
 
 const userRouter = Router();
 
@@ -109,9 +110,13 @@ userRouter.get(
 userRouter.put(
   "/info",
   loginRequired,
+  upload,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
-    const { nickname, job, imgUrl, skills } = req.body;
+    const image = req.file;
+    const imgUrl = <string>await getImageUrl(<Express.Multer.File>image);
+
+    const { nickname, job, skills } = req.body;
 
     const toUpdate = {
       nickname,
