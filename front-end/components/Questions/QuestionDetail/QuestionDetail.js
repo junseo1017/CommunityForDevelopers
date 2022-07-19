@@ -75,9 +75,7 @@ const QuestionDetail = ({ qna, answers }) => {
   const EditorRef = useRef();
   console.log("EditorRef", EditorRef);
 
-  const handleScroll = () => {
-    EditorRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  const handleScroll = () => EditorRef.current.scrollIntoView({ behavior: "smooth" });
 
   return (
     <div css={DetailContainer}>
@@ -142,11 +140,11 @@ const QuestionDetail = ({ qna, answers }) => {
             isUpdate={true}
           />
         )}
-        <div ref={EditorRef}></div>
+        <span ref={EditorRef}></span>
         {isAnswerCreateMode && (
           <div css={EditorContainer}>
             <Divider plain />
-            <h2 ref={EditorRef}>답변하기</h2>
+            <h2>답변하기</h2>
             <Input
               size="large"
               placeholder="답변의 제목을 작성하세요"
