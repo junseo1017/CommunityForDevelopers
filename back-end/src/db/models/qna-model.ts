@@ -32,6 +32,26 @@ export class QnaModel {
     ]);
   }
 
+  async findAnswerById(qnaId: string) {
+    return await Qna.find({ parentQnaId: qnaId }, { isAnswer: true }).populate([
+      {
+        path: "author",
+        select: "nickname",
+      },
+      {
+        path: "recommends",
+        select: ["nickname", "imgUrl"],
+      },
+      {
+        path: "comments",
+        populate: {
+          path: "author",
+          select: "nickname",
+        },
+      },
+    ]);
+  }
+
   async findByUserId(userId: string) {
     return await Qna.find({ author: userId }).populate({
       path: "author",
