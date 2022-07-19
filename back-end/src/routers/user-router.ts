@@ -140,14 +140,10 @@ userRouter.put(
   loginRequired,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
-    const { password, currentPassword } = req.body;
-
-    if (!currentPassword) {
-      throw new Error("정보를 변경하려면, 현재의 비밀번호가 필요합니다");
-    }
+    const { password } = req.body;
 
     try {
-      await userService.setPassword({ userId, currentPassword }, password);
+      await userService.setPassword(userId, password);
       res.status(200).json({ changePassword: "succeed" });
     } catch (error) {
       next(error);
@@ -160,19 +156,8 @@ userRouter.delete(
   loginRequired,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
-    const currentPassword = req.body.currentPassword;
-
-    if (!currentPassword) {
-      throw new Error("정보를 삭제하려면, 현재의 비밀번호가 필요합니다.");
-    }
-
     try {
-      const deletedUserInfo = await userService.deleteUser({
-        userId,
-        currentPassword,
-      });
-
-      res.status(200).json(deletedUserInfo);
+      res.status(200).json(await userService.deleteUser(userId));
     } catch (error) {
       next(error);
     }
