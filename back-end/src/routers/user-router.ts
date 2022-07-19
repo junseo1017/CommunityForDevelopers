@@ -115,7 +115,7 @@ userRouter.put(
     const userId = req.currentUserId || "";
     const image = req.file;
     const imgUrl = <string>await getImageUrl(<Express.Multer.File>image);
-
+    console.log(req.body);
     const { nickname, job, skills } = req.body;
 
     const toUpdate = {
@@ -141,7 +141,6 @@ userRouter.put(
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
     const { password } = req.body;
-
     try {
       await userService.setPassword(userId, password);
       res.status(200).json({ changePassword: "succeed" });

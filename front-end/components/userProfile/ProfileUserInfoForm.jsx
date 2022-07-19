@@ -17,10 +17,11 @@ const ProfileUserInfoForm = () => {
   const { ref, ...rest } = register("imgUrl");
   // form에 사용되는 state value 넣어주기
   useEffect(() => {
-    reset(userinfo);
-    setSkills(userinfo.skills);
-    if (userinfo.imgUrl) {
-      setInputImage(userinfo.imgUrl);
+    if (userinfo) {
+      setSkills(userinfo.skills);
+      if (userinfo.imgUrl) {
+        setInputImage(userinfo.imgUrl);
+      }
     }
   }, []);
 

@@ -17,11 +17,11 @@ const EditPassword = () => {
 
   // 다른 유저가 임의로 url 접근했을 때 홈으로 푸쉬
   useEffect(() => {
-    if (!me || !userInfo) return;
-    if (me._id !== userInfo.userinfo._id) {
-      router.push("/");
-    } else console.log("hi");
-  }, []);
+    if (!me) router.push("/");
+    if (me && userInfo) {
+      me._id === userInfo.userinfo._id ? console.log("hi") : router.push("/");
+    }
+  }, [me, userInfo]);
 
   return (
     <AppLayout>

@@ -16,10 +16,12 @@ const ProfileUserInfo = () => {
 
   // 프로필 조회 유저 본인인지 확인
   useEffect(() => {
-    if (me._id === userInfo.userinfo._id) {
-      setShowMyInfo(true);
-    } else {
-      setShowMyInfo(false);
+    if (me && userInfo) {
+      if (me._id === userInfo.userinfo._id) {
+        setShowMyInfo(true);
+      } else {
+        setShowMyInfo(false);
+      }
     }
   }, []);
 

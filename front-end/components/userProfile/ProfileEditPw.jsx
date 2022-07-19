@@ -7,7 +7,9 @@ import { EditPwContainer, EditPwFormStyle } from "./styles/ProfileEditPwStyles";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { editPassword } from "../../actions/user";
+import { useRouter } from "next/router";
 const ProfileEditPw = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const { editPasswordDone, editPasswordError } = useSelector((state) => state.user);
   const {
@@ -19,6 +21,7 @@ const ProfileEditPw = () => {
   useEffect(() => {
     if (editPasswordDone) {
       message.success("성공적으로 비밀번호가 변경되었습니다.");
+      router.push(`/profile/${router.query.id}`);
     }
     if (editPasswordError) {
       message.error("비밀번호 변경 중 에러가 발생했습니다.");
@@ -26,8 +29,7 @@ const ProfileEditPw = () => {
   }, [editPasswordDone, editPasswordError]);
 
   const onSubmit = (data) => {
-    console.log(data);
-    // dispatch(editPassword(data.password));
+    dispatch(editPassword(data.password));
   };
   return (
     <Card css={EditPwContainer}>

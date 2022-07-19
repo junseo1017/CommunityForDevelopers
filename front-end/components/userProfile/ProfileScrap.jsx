@@ -82,7 +82,7 @@ const ProfileScrap = () => {
                     </Link>
                     <h3>
                       <Link href={`/profile/${e.author?._id}`}>
-                        <a>{e.author?.nickname}</a>
+                        <a>{e.author}</a>
                       </Link>
                     </h3>
                   </div>

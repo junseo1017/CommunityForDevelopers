@@ -62,6 +62,7 @@ export const logout = createAsyncThunk("user/logout", async (data, { rejectWithV
 export const myinfo = createAsyncThunk("user/myinfo", async (data, { rejectWithValue }) => {
   try {
     const response = await axios.get("/api/users/token");
+    console.log(response.data);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);
@@ -95,7 +96,8 @@ export const editPassword = createAsyncThunk(
   "user/editPassword",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`/api/users/password`);
+      console.log(data);
+      const response = await axios.put(`/api/users/password`, { password: data });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

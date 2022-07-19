@@ -21,10 +21,10 @@ const ProfileEditInfoStyle = css`
 `;
 
 const ProfileEditInfo = () => {
-  const [withdrawals, setWithdrawals] = useState(false);
-  const dispatch = useDispatch();
-  const { userWithdrawalsDone, userWithdrawalsError } = useSelector((state) => state.user);
   const router = useRouter();
+  const dispatch = useDispatch();
+  const [withdrawals, setWithdrawals] = useState(false);
+  const { userWithdrawalsDone, userWithdrawalsError, me } = useSelector((state) => state.user);
 
   const withdrawalsHandler = () => {
     setWithdrawals(confirm("정말 탈퇴하시겠습니까?"));
@@ -33,6 +33,7 @@ const ProfileEditInfo = () => {
   useEffect(() => {
     if (withdrawals) {
       dispatch(userWithdrawals());
+      router.push("/");
     }
   }, [withdrawals]);
 
@@ -50,11 +51,15 @@ const ProfileEditInfo = () => {
       <li>
         <a onClick={withdrawalsHandler}>회원탈퇴</a>
       </li>
-      <li>
-        <Link href={`/profile/${router.query.id}/editPassword`}>
-          <a>비밀번호 변경</a>
-        </Link>
-      </li>
+      {me && me.loginType === "CFD" ? (
+        <li>
+          <Link href={`/profile/${router.query.id}/editPassword`}>
+            <a>비밀번호 변경</a>
+          </Link>
+        </li>
+      ) : (
+        <p></p>
+      )}
     </ul>
   );
 };
