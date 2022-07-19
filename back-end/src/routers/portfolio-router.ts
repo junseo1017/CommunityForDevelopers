@@ -46,7 +46,6 @@ portfolioRouter.get(
 
 portfolioRouter.get(
   "/user/:userId/scraps",
-  loginRequired,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.params.userId;
