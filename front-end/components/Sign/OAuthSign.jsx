@@ -1,37 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import { KakaoLogo, NaverLogo } from "./OAuthLogos/OAtuhLogos";
+import { KakaoLogo, GithubLogo } from "./OAuthLogos/OAtuhLogos";
+import { OAuthStyle } from "./SignStyles";
+import { useSelector, useDispatch } from "react-redux";
+import { getKakaoLoginUrl } from "../../actions/user";
 const OAuthSign = () => {
-  const OAuthStyle = css`
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    & > * {
-      width: 100%;
-      padding: 0 !important;
-    }
-    & > h3 {
-      font-size: 14px;
-      text-align: center;
-      margin: 0;
-    }
-    & ul {
-      width: 100%;
-      list-style: none;
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      margin: 0;
-      padding: 0;
-    }
-    & li > a {
-      color: black;
-      z-index: 1000;
-    }
-  `;
+  const dispatch = useDispatch();
+  const { githubLoginUrl, kakaoLoginUrl } = useSelector((state) => state.user);
 
   return (
     <section css={OAuthStyle}>
@@ -39,13 +14,13 @@ const OAuthSign = () => {
       <div>
         <ul>
           <li>
-            <a href="#" title="카카오 아이디로 가입하기">
+            <a href={kakaoLoginUrl && kakaoLoginUrl} title="카카오 아이디로 가입하기">
               <KakaoLogo />
             </a>
           </li>
           <li>
-            <a href="#" title="네이버 아이디로 가입하기">
-              <NaverLogo />
+            <a href={githubLoginUrl && githubLoginUrl} title="깃허브 아이디로 가입하기">
+              <GithubLogo />
             </a>
           </li>
         </ul>

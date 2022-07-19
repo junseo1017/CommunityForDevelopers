@@ -1,5 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { signup, login, userinfo, patchUserinfo, myinfo, logout } from "../actions/user";
+import {
+  signup,
+  login,
+  userinfo,
+  patchUserinfo,
+  myinfo,
+  logout,
+  getGithubLoginUrl,
+  getKakaoLoginUrl,
+} from "../actions/user";
 
 const initialState = {
   // 내 정보
@@ -12,6 +21,12 @@ const initialState = {
   loginLoading: false,
   loginDone: false,
   loginError: null,
+  // OAuth로그인
+  githubLoginUrl: null,
+  kakaoLoginUrl: null,
+  getOAuthUrlLoading: false,
+  getOAuthUrlDone: false,
+  getOAuthUrlError: null,
   // 로그아웃
   logoutLoading: false,
   logoutDone: false,
@@ -21,7 +36,7 @@ const initialState = {
   loadMyInfoDone: false,
   loadMyInfoError: null,
   // 유저 정보 가져오기
-  userInfo: null,
+  userInfo: { userinfo: null, count: null },
   userInfoLoading: false,
   userInfoDone: false,
   userInfoError: null,
@@ -57,22 +72,53 @@ const userSlice = createSlice({
         state.loginLoading = false;
         state.loginError = action.payload;
       })
+      // github login
+      .addCase(getGithubLoginUrl.pending, (state) => {
+        state.getOAuthUrlLoading = true;
+        state.getOAuthUrlDone = false;
+        state.getOAuthUrlError = null;
+      })
+      .addCase(getGithubLoginUrl.fulfilled, (state, action) => {
+        state.githubLoginUrl = action.payload;
+        state.getOAuthUrlLoading = false;
+        state.getOAuthUrlDone = true;
+      })
+      .addCase(getGithubLoginUrl.rejected, (state, action) => {
+        console.log(action);
+        state.getOAuthUrlLoading = false;
+        state.getOAuthUrlError = action.error;
+      })
+      // kakao login
+      .addCase(getKakaoLoginUrl.pending, (state) => {
+        console.log("pending");
+        state.getOAuthUrlLoading = true;
+        state.getOAuthUrlDone = false;
+        state.getOAuthUrlError = null;
+      })
+      .addCase(getKakaoLoginUrl.fulfilled, (state, action) => {
+        console.log("fulfilled");
 
+        state.kakaoLoginUrl = action.payload;
+        state.getOAuthUrlLoading = false;
+        state.getOAuthUrlDone = true;
+      })
+      .addCase(getKakaoLoginUrl.rejected, (state, action) => {
+        console.log("reject");
+        state.getOAuthUrlLoading = false;
+        state.getOAuthUrlError = action.error.message;
+      })
       // logout
       .addCase(logout.pending, (state) => {
-        console.log("pending");
         state.logoutLoading = true;
         state.logoutDone = false;
         state.logoutError = null;
       })
       .addCase(logout.fulfilled, (state) => {
-        console.log("fulfilled");
         state.logoutLoading = false;
         state.logoutDone = true;
         state.me = null;
       })
       .addCase(logout.rejected, (state, action) => {
-        console.log("rejected");
         state.loginLoading = false;
         state.logoutError = action.payload;
       })

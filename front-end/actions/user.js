@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { backendUrl } from "../config/config";
-
+import { popUp } from "../components/Common/popupCenter";
 axios.defaults.baseURL = backendUrl;
 axios.defaults.withCredentials = true; // front, backend 간 쿠키공유
 
@@ -24,6 +24,30 @@ export const login = createAsyncThunk("user/login", async (data, { rejectWithVal
     return rejectWithValue(error.response.data);
   }
 });
+
+export const getGithubLoginUrl = createAsyncThunk(
+  "user/getGithubLoginUrl",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("/api/oauth/github");
+      return response.data.url;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const getKakaoLoginUrl = createAsyncThunk(
+  "user/getKakaoLoginUrl",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("/api/oauth/kakao");
+      return response.data.url;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
 
 export const logout = createAsyncThunk("user/logout", async (data, { rejectWithValue }) => {
   try {

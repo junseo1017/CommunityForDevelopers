@@ -19,7 +19,6 @@ const useModalAsync = (asyncCallback, modalDescription, next, dispatchFunc) => {
       // setTimeout(() => {
       setModalVisible(false);
       setConfirmLoading(false);
-      console.log(dispatchFunc);
       if (dispatchFunc) {
         const response = dispatchFunc(data);
         console.log(response);

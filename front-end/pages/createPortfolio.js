@@ -23,6 +23,7 @@ let Editor = dynamic(() => import("../components/Editor/Editor"), {
 });
 
 const createPortfolio = (props) => {
+  /* 비로그인 */
   const { error } = props;
   const redirectLogin = useCallback(() => {
     Router.push("/login");
@@ -37,7 +38,6 @@ const createPortfolio = (props) => {
     }),
     [],
   );
-
   useEffect(() => {
     if (error) {
       const [showConfirm] = useConfirmModal({
@@ -54,17 +54,18 @@ const createPortfolio = (props) => {
   const { imagePaths, addPortfolioLoading, addPortfolioDone, addPortfolioError } = useSelector(
     (state) => state.portfolio,
   );
-
   const dispatch = useDispatch();
+
   const dispatchAddPortfolio = useCallback((data) => {
     const filteredBlocks = JSON.parse(data.content).blocks.map(({ type, data }) => {
       return type === "paragraph" || type === "header" ? data : "";
     });
     const texts = filteredBlocks.map((block) => block.text).join(" ");
-    const newData = { ...data, contentText: texts + data.description, imgSrc: "tempUrl" };
+    const newData = { ...data, contentText: texts + data.description, imgUrl: "tempUrl" };
     dispatch(addPortfolio(newData));
   }, []);
 
+  /* 단계 관리 */
   const [current, setCurrent] = useState(0);
   const setCurrentStep = useCallback((num) => {
     setCurrent(num);
@@ -75,17 +76,20 @@ const createPortfolio = (props) => {
   const prev = useCallback(() => {
     setCurrent((prev) => prev - 1);
   }, [current]);
+
+  /* 첫번째 단계 */
   const onSubmitCard = useCallback((values) => {
     console.log("Received values of form: ", values);
     let formData = new FormData();
     //if (values.image) formData.append("file", values.image[0].originFileObj);
-    if (values.image) formData.append("file", values.image);
+    if (values.image) formData.append("image", values.image);
     //dispatch(portfolioActions.updateState(value));
     //dispatch(portfolioActions.updateState({ ...values, image: formData }));
     dispatch(portfolioActions.updateState({ ...values, image: "" }));
     dispatch(uploadImages(formData));
     next();
   }, []);
+
   const [savePortf, handleInitialize, imageArray] = useEditor();
   const [modalVisible, setModalVisible, handleOk, confirmLoading, modalText, showModal] =
     useModalAsync(savePortf, "포트폴리오를 저장하시겠습니까?", next, dispatchAddPortfolio);

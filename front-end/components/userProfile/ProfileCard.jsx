@@ -2,12 +2,7 @@
 import { css, jsx } from "@emotion/react";
 import { useRouter } from "next/router";
 import { Avatar, Card } from "antd";
-import {
-  ProfileCardContainer,
-  ProfileCardContent,
-  CardProfile,
-  CardDetail,
-} from "./styles/ProfileCardStyles";
+import { ProfileCardContainer, ProfileCardContent, CardProfile } from "./styles/ProfileCardStyles";
 import { useMediaQuery } from "react-responsive";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -15,7 +10,7 @@ import { useState } from "react";
 
 const ProfileCard = () => {
   const [showUI, setShowUI] = useState(false);
-  const { userInfo } = useSelector((state) => state.user);
+  const { userinfo, count } = useSelector((state) => state.user.userInfo);
   const isresponsive = useMediaQuery({
     query: "(max-width:768px)",
   });
@@ -30,24 +25,24 @@ const ProfileCard = () => {
       <div>
         <div css={CardProfile}>
           <Avatar size={showUI ? 100 : 150} src="https://joeschmoe.io/api/v1/random" />
-          {userInfo && <p>{userInfo.nickname}</p>}
+          {userinfo && <p>{userinfo.nickname}</p>}
         </div>
         <div css={ProfileCardContent}>
           <div>
             <p>포트폴리오</p>
-            <h3>1</h3>
+            <h3>{count && count.portfolioCount}</h3>
           </div>
           <div>
             <p>스크랩</p>
-            <h3>1</h3>
+            <h3>{count && count.scrapCount}</h3>
           </div>
           <div>
             <p>질문</p>
-            <h3>1</h3>
+            <h3>{count && count.questionCount}</h3>
           </div>
           <div>
             <p>답변</p>
-            <h3>1</h3>
+            <h3>{count && count.answerCount}</h3>
           </div>
         </div>
         <div></div>
