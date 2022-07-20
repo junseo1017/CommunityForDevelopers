@@ -50,7 +50,7 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
           },
         );
 
-        console.log(response);
+        // console.log(response);
         setIsChanged(true);
         router.push(`/qna/${router.query._id}`);
       } catch (error) {
@@ -81,7 +81,7 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
         // 서버에 질문 저장하기
 
         setIsChanged(true);
-        router.push(`/qna/${router.query._id}`);
+        // router.push(`/qna/${router.query._id}`);
       } catch (e) {
         console.log(e);
       }
@@ -114,7 +114,7 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
   };
 
   return (
-    <div css={EditorContainer}>
+    <div className="editor-container">
       <Button
         onClick={() => {
           saveContents(qnaId);

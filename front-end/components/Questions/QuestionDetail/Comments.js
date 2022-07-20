@@ -1,55 +1,74 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import { Avatar, Button, Comment, Form, Input, List } from "antd";
+import { Avatar, Button, Comment, Modal, List } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 import { MentionsInput, Mention } from "react-mentions";
 import { useEffect } from "react";
 import moment from "moment";
 import axios from "axios";
 import { CommentsContainer, CommentStyle } from "../styles/QuestionStyle";
+import ModalAsync from "../../Common/ModalAsync";
+import useModalAsync from "../../../hooks/useModalAsync";
+
+const CommentsEditor = ({ comment, handleChange, userList, handleSubmit, isUpdate }) => {
+  const [modalVisible, setModalVisible, handleOk, confirmLoading, modalText, showModal] =
+    useModalAsync(handleSubmit, "댓글을 저장할까요?", next);
+
+  return (
+    <>
+      <MentionsInput
+        className="mentions-input"
+        value={comment}
+        onChange={handleChange}
+        placeholder="댓글을 작성하세요."
+        a11ySuggestionsListLabel={"Suggested mentions"}>
+        <Mention
+          className="mentions"
+          markup="@__display__"
+          trigger="@"
+          data={userList}
+          renderSuggestion={(highlightedDisplay, focused) => (
+            <div className={`user ${focused ? "focused" : ""}`}>{highlightedDisplay}</div>
+          )}
+          style={{ backgroundColor: "rgb(24, 144, 255, 0.25)" }}
+        />
+      </MentionsInput>
+      <Button
+        type="primary"
+        onClick={() => {
+          showModal(true);
+          handleSubmit;
+        }}>
+        댓글 작성하기
+      </Button>
+      <ModalAsync
+        visible={modalVisible}
+        setVisible={setModalVisible}
+        handleOk={handleOk}
+        confirmLoading={confirmLoading}
+        modalText={modalText}
+      />
+    </>
+  );
+};
 
 const Comments = ({ contentId, user }) => {
-  const CommentsEditor = ({ comment, handleChange, userList, handleSubmit, isUpdate }) => {
-    return (
-      <>
-        <MentionsInput
-          className="mentions-input"
-          value={comment}
-          onChange={handleChange}
-          placeholder="댓글을 작성하세요."
-          a11ySuggestionsListLabel={"Suggested mentions"}>
-          <Mention
-            className="mentions"
-            markup="@__display__"
-            trigger="@"
-            data={userList}
-            value={comment}
-            renderSuggestion={(highlightedDisplay, focused) => (
-              <div className={`user ${focused ? "focused" : ""}`}>{highlightedDisplay}</div>
-            )}
-            style={{ backgroundColor: "rgb(24, 144, 255, 0.25)" }}
-          />
-        </MentionsInput>
-        <Button type="primary" onClick={handleSubmit}>
-          {!isUpdate ? "댓글 추가하기" : "댓글 수정하기"}
-        </Button>
-      </>
-    );
-  };
+  const router = useRouter();
+  console.log(router);
 
   const { me } = useSelector((state) => state.user);
   const [userList, setUserList] = useState([]);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
 
-  const [isUpdateMode, setIsUpdateMode] = useState({
-    isUpdate: false,
-    updateId: "",
-  });
+  // const [isUpdateMode, setIsUpdateMode] = useState({
+  //   isUpdate: false,
+  //   updateId: "",
+  // });
 
-  // 수정 삭제 작업 중..
   const handleDelete = async (deleteId) => {
     try {
       await axios.delete(`api/comments/${deleteId}`);
@@ -58,15 +77,15 @@ const Comments = ({ contentId, user }) => {
     }
   };
 
-  const handleUpdate = async (commentId) => {
-    setIsUpdateMode((current) => {
-      return {
-        ...current,
-        isUpdate: !current.isUpdate,
-        updateId: commentId,
-      };
-    });
-  };
+  // const handleUpdate = async (commentId) => {
+  //   setIsUpdateMode((current) => {
+  //     return {
+  //       ...current,
+  //       isUpdate: !current.isUpdate,
+  //       updateId: commentId,
+  //     };
+  //   });
+  // };
 
   useEffect(() => {
     const getCurrentComments = async () => {
@@ -103,6 +122,7 @@ const Comments = ({ contentId, user }) => {
 
   const handleChange = (e) => {
     setComment(e.target.value);
+    console.log(e.target.value);
   };
 
   const handleCreateSubmit = async () => {
@@ -112,6 +132,7 @@ const Comments = ({ contentId, user }) => {
         content: comment,
       });
       setComment("");
+      router.reload();
     } catch (error) {
       console.log(error);
     }
@@ -138,20 +159,7 @@ const Comments = ({ contentId, user }) => {
           header={`${comments.length}${comments.length > 1 ? "개의 댓글들" : "개의 댓글"}`}
           itemLayout="horizontal"
           renderItem={(comment) => {
-            return !isUpdateMode.isUpdate && isUpdateMode.updateId === comment._id ? (
-              <Comment
-                avatar={<Avatar src={user.imgUrl} alt={userList.nickname} />}
-                content={
-                  <CommentsEditor
-                    comment={comment.content}
-                    handleChange={handleChange}
-                    userList={userList}
-                    handleSubmit={handleUpdateSubmit}
-                    isUpdate
-                  />
-                }
-              />
-            ) : (
+            return (
               <div className="comment-container">
                 <Comment
                   author={<p>{user.nickname}</p>}
@@ -162,11 +170,11 @@ const Comments = ({ contentId, user }) => {
                 />
                 {me._id === comment.author?._id && (
                   <div className="comment-mode">
-                    <EditOutlined
+                    {/* <EditOutlined
                       onClick={() => {
                         handleUpdate(comment._id);
                       }}
-                    />
+                    /> */}
                     <DeleteOutlined
                       onClick={() => {
                         handleDelete(comment._id);
