@@ -19,7 +19,7 @@ const EditPassword = () => {
   useEffect(() => {
     if (!me) router.push("/");
     if (me && userInfo) {
-      me._id === userInfo.userinfo._id ? console.log("hi") : router.push("/");
+      me._id === userInfo?.userinfo?._id ? console.log("hi") : router.push("/");
     }
   }, [me, userInfo]);
 

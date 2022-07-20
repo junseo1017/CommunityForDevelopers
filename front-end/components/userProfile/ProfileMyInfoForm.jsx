@@ -114,7 +114,7 @@ const ProfileMyInfoForm = ({ action, setAction }) => {
           onChange={(e) => addPreviewImage(e.target.files[0])}
         />
         <div style={{ width: "200px" }}>
-          <Image src={imagePreview} layout="responsive" width="100%" height="100%" />
+          <Image priority src={imagePreview} layout="responsive" width="100%" height="100%" />
         </div>
       </div>
 
