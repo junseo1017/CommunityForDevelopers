@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
 import { KakaoLogo, GithubLogo } from "./OAuthLogos/OAtuhLogos";
-import { OAuthStyle } from "./SignStyles";
+import { OAuthStyle } from "./styles/SignStyles";
 import { useSelector, useDispatch } from "react-redux";
 import { getKakaoLoginUrl } from "../../actions/user";
 const OAuthSign = () => {

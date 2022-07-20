@@ -116,3 +116,13 @@ export const userWithdrawals = createAsyncThunk(
     }
   },
 );
+
+export const emailAuth = createAsyncThunk("user/emailauth", async (data, { rejectWithValue }) => {
+  try {
+    const response = await axios.post("/api/users/email", data);
+    console.log(data);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+});

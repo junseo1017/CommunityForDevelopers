@@ -10,6 +10,7 @@ import {
   getKakaoLoginUrl,
   editPassword,
   userWithdrawals,
+  emailAuth,
 } from "../actions/user";
 
 const initialState = {
@@ -54,6 +55,10 @@ const initialState = {
   userWithdrawalsLoading: false,
   userWithdrawalsDone: false,
   userWithdrawalsError: null,
+  // 이메일 인증
+  emailAuthLoading: false,
+  emailAuthDone: false,
+  emailAuthError: null,
   /* By 지의신 Portfolio */
 };
 
@@ -228,6 +233,23 @@ const userSlice = createSlice({
         console.log("reject");
         state.userWithdrawalsLoading = false;
         state.userWithdrawalsError = action;
+      })
+      // emailAuth
+      .addCase(emailAuth.pending, (state) => {
+        console.log("pending");
+        state.emailAuthLoading = true;
+        state.emailAuthDone = false;
+        state.emailAuthError = null;
+      })
+      .addCase(emailAuth.fulfilled, (state) => {
+        console.log("fulfilled");
+        state.emailAuthLoading = false;
+        state.emailAuthDone = true;
+      })
+      .addCase(emailAuth.rejected, (state, action) => {
+        console.log("reject");
+        state.emailAuthLoading = false;
+        state.emailAuthError = action;
       })
       .addDefaultCase((state) => state),
 });
