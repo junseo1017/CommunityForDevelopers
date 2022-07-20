@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { message } from "antd";
 
-const useModalAsync = (asyncCallback, modalDescription, next, dispatchFunc) => {
+const useModalAsync = (asyncCallback, modalDescription, next, dispatchFunc, imgFormData) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState(modalDescription);
   const [modalVisible, setModalVisible] = useState(false);
@@ -19,9 +19,8 @@ const useModalAsync = (asyncCallback, modalDescription, next, dispatchFunc) => {
       // setTimeout(() => {
       setModalVisible(false);
       setConfirmLoading(false);
-      console.log(dispatchFunc);
       if (dispatchFunc) {
-        const response = dispatchFunc(data);
+        const response = dispatchFunc(data, imgFormData);
         console.log(response);
       } else {
         return;

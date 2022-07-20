@@ -3,7 +3,7 @@ import { Button, Modal, Space } from "antd";
 import React from "react";
 const { confirm } = Modal;
 
-const useConfirmModal = (okFunc, cancleFunc, message) => {
+const useConfirmModal = ({ okFunc, cancleFunc, message }) => {
   const showConfirm = () => {
     confirm({
       title: message.title,
@@ -17,7 +17,7 @@ const useConfirmModal = (okFunc, cancleFunc, message) => {
 
       onCancel() {
         console.log("Cancel");
-        cancleFunc();
+        if (cancleFunc) cancleFunc();
       },
     });
   };
