@@ -7,11 +7,10 @@ import { SignInFormStyle, SignBtnStyle, errorInput } from "./styles/SignStyles";
 import { login } from "../../actions/user";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useCallback } from "react";
 
 const RegExp = {
   email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-  password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/,
+  password: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,15}$/,
 };
 
 const SignInForm = () => {
@@ -31,7 +30,7 @@ const SignInForm = () => {
         setSigninFlag(null);
       }
       if (loginError) {
-        message.error(JSON.stringify(loginError.reason, null, 4)).then();
+        message.error("로그인에 실패하였습니다.");
         setSigninFlag(null);
       }
     }
@@ -51,6 +50,7 @@ const SignInForm = () => {
     <form css={SignInFormStyle} onSubmit={handleSubmit(onSubmit)}>
       <div>
         <input
+          autoComplete="off"
           css={errors.email && errorInput}
           placeholder="이메일을 입력해주세요"
           {...register("email", {
@@ -61,6 +61,7 @@ const SignInForm = () => {
           })}
         />
         <input
+          autoComplete="off"
           css={errors.password && errorInput}
           type="password"
           placeholder="비밀번호을 입력해주세요"

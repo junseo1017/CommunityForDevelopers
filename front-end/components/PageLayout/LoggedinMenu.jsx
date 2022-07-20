@@ -18,7 +18,7 @@ const LoggedinMenu = () => {
       return setAction(false);
     }
     if (logoutDone) {
-      message.success("();정상적으로 로그아웃 되었습니다.");
+      message.success("정상적으로 로그아웃 되었습니다.");
       router.push("/");
     }
   }, [logoutDone, logoutError]);

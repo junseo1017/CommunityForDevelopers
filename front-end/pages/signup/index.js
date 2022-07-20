@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
+import { message } from "antd";
 import LoginLogo from "../../components/Sign/LoginLogo";
 import SignUpForm from "../../components/Sign/SignUpForm";
 import Link from "next/link";
