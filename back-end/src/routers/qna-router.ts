@@ -48,8 +48,8 @@ qnaRouter.post(
       const authorId = req.currentUserId || "";
       const userInfo = await userService.getUserInfo(authorId);
       const author = userInfo.nickname;
-      const { title, contents, contentText, tags, isAnswer, parentQnaId } =
-        req.body;
+      const { title, contents, contentText, isAnswer, parentQnaId } = req.body;
+      const tags = JSON.parse(req.body.tags);
       const newQnA = await qnaService.addQna({
         title,
         contents,
@@ -79,10 +79,10 @@ qnaRouter.put(
         contents,
         contentText,
         recommends,
-        tags,
         isAnswer,
         parentQnaId,
       } = req.body;
+      const tags = JSON.parse(req.body.tags);
       const toUpdate = {
         ...(title && { title }),
         ...(contents && { contents }),

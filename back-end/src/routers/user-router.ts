@@ -128,9 +128,8 @@ userRouter.put(
     const userId = req.currentUserId || "";
     const image = req.file;
     const imgUrl = <string>await getImageUrl(<Express.Multer.File>image);
-
-    const { nickname, job, skills } = req.body;
-
+    const { nickname, job } = req.body;
+    const skills = JSON.parse(req.body.skills);
     const toUpdate = {
       nickname,
       job,

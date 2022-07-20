@@ -66,12 +66,10 @@ portfolioRouter.post(
       const userInfo = await userService.getUserInfo(authorId);
       const author = userInfo.nickname;
       const authorImg = userInfo.imgUrl;
-      const { title, description, skills, content, contentText } = req.body;
+      const { title, description, content, contentText } = req.body;
+      const skills = JSON.parse(req.body.skills);
       const image = req.file;
       const thumbnail = <string>await getImageUrl(<Express.Multer.File>image);
-
-      console.log("바디값:", req.body);
-      console.log("스킬데이터:", JSON.parse(req.body.skills));
 
       const newPortfolio = await portfolioService.addPortfolio({
         authorId,
@@ -122,7 +120,8 @@ portfolioRouter.put(
     try {
       const portId = req.params.portId;
       const userId = req.currentUserId || "";
-      const { title, description, skills, content, contentText } = req.body;
+      const { title, description, content, contentText } = req.body;
+      const skills = JSON.parse(req.body.skills);
       const image = req.file;
       const thumbnail = <string>await getImageUrl(<Express.Multer.File>image);
       const toUpdate = {
