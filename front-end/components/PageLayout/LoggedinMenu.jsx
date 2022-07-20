@@ -3,9 +3,11 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { message } from "antd";
 import { logout } from "../../actions/user";
+import { useRouter } from "next/router";
 const LoggedinMenu = () => {
-  const [action, setAction] = useState(false);
+  const router = useRouter();
   const dispatch = useDispatch();
+  const [action, setAction] = useState(false);
   const { me, logoutError, logoutDone } = useSelector((state) => state.user);
 
   // 로그아웃 알림
@@ -16,14 +18,14 @@ const LoggedinMenu = () => {
       return setAction(false);
     }
     if (logoutDone) {
-      message.success("정상적으로 로그아웃 되었습니다.");
-      return setAction(false);
+      message.success("();정상적으로 로그아웃 되었습니다.");
+      router.push("/");
     }
   }, [logoutDone, logoutError]);
 
   const logoutHandler = () => {
     dispatch(logout());
-    window.location.reload();
+    setAction(true);
   };
 
   return (

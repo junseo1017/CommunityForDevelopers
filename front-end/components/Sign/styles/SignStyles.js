@@ -153,6 +153,9 @@ export const SignUpContentStyle = css`
       outline: none !important;
       box-shadow: 0 0 10px #719ece;
     }
+    @media (max-width: 768px) {
+      width: 100%;
+    }
   }
 
   & > form > div {
@@ -174,10 +177,15 @@ export const signUpBtn = css`
   text-align: center;
   transition: 100ms linear;
   border-radius: 5px;
+  font-size: 16px;
+
   cursor: pointer;
   :hover {
     background-color: black;
     color: white;
+  }
+  @media (max-width: 768px) {
+    width: 100%;
   }
 `;
 

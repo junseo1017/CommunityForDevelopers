@@ -6,42 +6,51 @@ import { useCallback, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { patchUserinfo } from "../../actions/user";
-import { myInfoSubmitBtnStyle, myInfoFormStyle, myInfoSkills } from "./styles/MyInfoStyles";
+import {
+  myInfoSubmitBtnStyle,
+  myInfoFormStyle,
+  myInfoSkills,
+  infoImageFormStyle,
+} from "./styles/MyInfoStyles";
 import Image from "next/image";
 
 const ProfileMyInfoForm = ({ action, setAction }) => {
-  const imageinputRef = useRef();
+  const imageinputRef = useRef("");
   const [skills, setSkills] = useState([]);
-  const [inputImage, setInputImage] = useState("/image/profile_image_default.jpg");
+  const [imagePreview, setImagePreview] = useState("/image/profile_image_default.jpg");
   const { userinfo } = useSelector((state) => state.user.userInfo);
   const dispatch = useDispatch();
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({ defaultValues: userinfo });
-  const { ref, ...rest } = register("imgUrl");
+  const { register, handleSubmit, reset } = useForm(
+    userinfo && {
+      defaultValues: {
+        userId: userinfo._id,
+        nickname: userinfo.nickname,
+        job: userinfo.job,
+        image: userinfo.imgUrl,
+        skills: userinfo.skills,
+      },
+    },
+  );
+  const { ref, ...rest } = register("image");
 
-  // form에 사용되는 state value 넣어주기
+  // form에 사용되는 state value 넣어주기(imagePreview, skills)
   useEffect(() => {
-    reset(userinfo);
-    setSkills(userinfo.skills);
-    if (userinfo.imgUrl) {
-      setInputImage(userinfo.imgUrl);
+    if (userinfo) {
+      setSkills(userinfo.skills);
+      if (userinfo.imgUrl) setImagePreview(userinfo.imgUrl);
     }
-  }, []);
+  }, [userinfo]);
 
   const onSubmit = (data) => {
-    dispatch(
-      patchUserinfo({
-        userId: userinfo._id,
-        nickname: data.nickname,
-        job: data.job,
-        imgUrl: data.imgUrl,
-        skills,
-      }),
-    );
+    const formData = new FormData();
+    if (imageinputRef.current.files[0]) {
+      formData.append("image", imageinputRef.current.files[0]);
+    }
+    formData.append("nickname", data.nickname);
+    formData.append("userId", data.userId);
+    formData.append("job", data.job);
+    formData.append("skills", skills);
+    dispatch(patchUserinfo(formData));
     setAction(true);
   };
 
@@ -61,17 +70,26 @@ const ProfileMyInfoForm = ({ action, setAction }) => {
     setSkills(skills.filter((elem) => elem != e.target.id));
   };
 
-  const imageBtnClickHandler = () => {
-    imageinputRef.current.click();
-  };
-
-  const addImageHandler = (e) => {
-    setInputImage(e.target.value);
-    console.log(e.target.value);
+  // 이미지 미리보기
+  const addPreviewImage = (fileBlob) => {
+    if (fileBlob) {
+      const reader = new FileReader();
+      reader.readAsDataURL(fileBlob);
+      return new Promise((resolve) => {
+        reader.onload = () => {
+          setImagePreview(reader.result);
+          resolve();
+        };
+      });
+    }
   };
 
   return (
-    <form css={myInfoFormStyle} onSubmit={handleSubmit(onSubmit)} onKeyDown={checkKeyDown}>
+    <form
+      css={myInfoFormStyle}
+      onSubmit={handleSubmit(onSubmit)}
+      onKeyDown={checkKeyDown}
+      encType="multipart/form-data">
       <label>{"이메일"}</label>
       <input
         style={{ backgroundColor: "rgb(220,220,220)" }}
@@ -83,28 +101,23 @@ const ProfileMyInfoForm = ({ action, setAction }) => {
       <input autoComplete="off" {...register("nickname", { required: true })} />
 
       <label>{"프로필 사진"}</label>
-      <button onClick={imageBtnClickHandler} type="button">
-        사진 등록하기
-      </button>
-      <input
-        {...rest}
-        ref={(e) => {
-          ref(e);
-          imageinputRef.current = e;
-        }}
-        style={{ display: "none" }}
-        type="file"
-        autoComplete="off"
-        onChange={addImageHandler}
-      />
-      <div style={{ width: "150px" }}>
-        <Image
-          src={"/image/profile_image_default.jpg"}
-          layout="responsive"
-          width="100%"
-          height="100%"
+      <div css={infoImageFormStyle}>
+        <label htmlFor="imageInput">사진 등록하기</label>
+        <input
+          ref={(e) => {
+            ref(e);
+            imageinputRef.current = e;
+          }}
+          id="imageInput"
+          type="file"
+          name="image"
+          onChange={(e) => addPreviewImage(e.target.files[0])}
         />
+        <div style={{ width: "200px" }}>
+          <Image src={imagePreview} layout="responsive" width="100%" height="100%" />
+        </div>
       </div>
+
       <label>{"직업"}</label>
       <input {...register("job")} list="list" autoComplete="off" />
       <datalist id="list">
@@ -123,16 +136,17 @@ const ProfileMyInfoForm = ({ action, setAction }) => {
       <label>{"사용 기술"}</label>
       <div css={myInfoSkills}>
         <input placeholder="입력 후 Enter를 눌러주세요" autoComplete="off" onKeyDown={onKeyPress} />
-        <div>
-          {skills &&
-            skills.map((e, i) => {
+        {skills.length > 0 && (
+          <div>
+            {skills.map((e, i) => {
               return (
                 <Tag id={e} onClick={deleteTagHandler} key={`${e}+${i}`} color="default">
                   {e}
                 </Tag>
               );
             })}
-        </div>
+          </div>
+        )}
       </div>
       <input css={myInfoSubmitBtnStyle} type="submit" value={"회원정보 변경"} />
     </form>

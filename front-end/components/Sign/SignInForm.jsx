@@ -3,7 +3,7 @@ import { css, jsx } from "@emotion/react";
 import { Divider, message } from "antd";
 import { useForm } from "react-hook-form";
 import Router from "next/router";
-import { SignInFormStyle, SignBtnStyle, errorInput } from "./SignStyles";
+import { SignInFormStyle, SignBtnStyle, errorInput } from "./styles/SignStyles";
 import { login } from "../../actions/user";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";

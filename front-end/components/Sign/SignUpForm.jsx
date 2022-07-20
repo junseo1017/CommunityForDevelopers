@@ -1,24 +1,28 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import { useEffect, useState } from "react";
-import { Divider, message } from "antd";
-import Router from "next/router";
-import axios from "axios";
-import { signup } from "../../actions/user";
+import { Divider, message, Spin } from "antd";
+import { SignUpFormStyle, SignUpContentStyle, signUpBtn, errorInput } from "./styles/SignStyles";
+import { EmailAuthBtn, EmailAuthDoneBtn } from "./styles/emailAuth";
+import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { signup } from "../../actions/user";
 import { useForm } from "react-hook-form";
-import { SignUpFormStyle, SignUpContentStyle, signUpBtn, errorInput } from "./SignStyles";
+import { emailAuth } from "../../actions/user";
 import OAuthSign from "./OAuthSign";
-
+import EmailAuth from "./EmailAuth";
+import { RandomNum } from "../Common/utils";
 const RegExp = {
   email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-  password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/,
+  password: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,15}$/,
 };
 
 const SignUpForm = () => {
-  const [signupFlag, setSignupFlag] = useState(null);
   const dispatch = useDispatch();
-  const { signupDone, signupError } = useSelector((state) => state.user);
+  const randomNumRef = useRef("");
+  const emailRef = useRef("");
+  const [showemailAuth, setShowEmailAuth] = useState(false);
+  const [authDone, setAuthDone] = useState(false);
+  const { emailAuthDone, emailAuthError, emailAuthLoading } = useSelector((state) => state.user);
   const {
     register,
     handleSubmit,
@@ -27,18 +31,22 @@ const SignUpForm = () => {
   } = useForm();
 
   useEffect(() => {
-    if (signupFlag) {
-      if (signupDone) {
-        message.success("회원가입에 성공하였습니다.").then(() => Router.push("/login").then());
-        setSignupFlag(null);
-      }
-      if (signupError) {
-        message.error(JSON.stringify(signupError.reason, null, 4)).then();
-      }
+    if (emailAuthDone) {
+      message.success("입력하신 이메일로 인증번호가 발송되었습니다!");
+      setShowEmailAuth(true);
     }
-  }, [signupDone, signupError]);
+    if (emailAuthError) {
+      message.error("인증번호 전송에 실패했습니다. 다시 시도해주세요.");
+    }
+  }, [emailAuthDone, emailAuthError]);
 
   const onSubmit = (data) => {
+    if (!authDone) {
+      return message.error("이메일 인증을 완료해주세요.");
+    }
+    if (emailRef.current !== watch("email")) {
+      return message.error("인증받은 이메일로 가입을 시도해주세요.");
+    }
     dispatch(
       signup({
         email: data.email,
@@ -46,7 +54,6 @@ const SignUpForm = () => {
         password: data.password,
       }),
     );
-    setSignupFlag(true);
   };
 
   const emailErrorMessage = () => {
@@ -81,6 +88,17 @@ const SignUpForm = () => {
     }
   };
 
+  const EmailAuthHandler = () => {
+    if (RegExp.email.test(watch("email"))) {
+      randomNumRef.current = RandomNum();
+      emailRef.current = watch("email");
+      dispatch(emailAuth({ email: watch("email"), authNumber: randomNumRef.current }));
+      return;
+    } else {
+      message.error("이메일이 제대로 입력되었는지 확인해주세요.");
+    }
+  };
+
   return (
     <div css={SignUpFormStyle}>
       <div>
@@ -93,6 +111,7 @@ const SignUpForm = () => {
               <div>
                 <label>이메일</label>
                 <input
+                  autoComplete="off"
                   css={errors.email && errorInput}
                   placeholder="이메일을 입력해주세요"
                   {...register("email", {
@@ -104,12 +123,29 @@ const SignUpForm = () => {
                   })}
                 />
                 {emailErrorMessage()}
+                {showemailAuth ? (
+                  <EmailAuth
+                    randomNumRef={randomNumRef}
+                    setAuthDone={setAuthDone}
+                    setShowEmailAuth={setShowEmailAuth}
+                    email={watch("email")}
+                  />
+                ) : authDone ? (
+                  <button type="button" css={EmailAuthDoneBtn}>
+                    인증완료
+                  </button>
+                ) : (
+                  <button type="button" onClick={EmailAuthHandler} css={EmailAuthBtn}>
+                    {emailAuthLoading ? <Spin /> : `인증하기`}
+                  </button>
+                )}
               </div>
               <div>
                 <label>비밀번호</label>
-                <p>문자,숫자를 조합한 8~15자리 비밀번호를 입력해주세요</p>
+                <p>문자,숫자,특수문자를 조합한 8~15자리 비밀번호를 입력해주세요</p>
                 <input
                   css={errors.password && errorInput}
+                  autoComplete="off"
                   placeholder="비밀번호를 입력해주세요"
                   type="password"
                   {...register("password", {
@@ -126,6 +162,7 @@ const SignUpForm = () => {
                 <label>비밀번호 확인</label>
                 <input
                   css={errors.passwordCheck && errorInput}
+                  autoComplete="off"
                   placeholder="비밀번호를 입력해주세요"
                   type="password"
                   {...register("passwordCheck", {
@@ -143,6 +180,7 @@ const SignUpForm = () => {
                 <label>닉네임</label>
                 <p>CFD에서 사용될 2~15자리의 닉네임</p>
                 <input
+                  autoComplete="off"
                   css={errors.nickname && errorInput}
                   placeholder="닉네임을 입력해주세요"
                   {...register("nickname", {

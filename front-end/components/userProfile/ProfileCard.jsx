@@ -24,7 +24,16 @@ const ProfileCard = () => {
     <Card css={ProfileCardContainer}>
       <div>
         <div css={CardProfile}>
-          <Avatar size={showUI ? 100 : 150} src="https://joeschmoe.io/api/v1/random" />
+          <Avatar
+            size={showUI ? 100 : 150}
+            src={
+              !userinfo
+                ? "/image/profile_image_default.jpg"
+                : userinfo.imgUrl
+                ? userinfo.imgUrl
+                : "/image/profile_image_default.jpg"
+            }
+          />
           {userinfo && <p>{userinfo.nickname}</p>}
         </div>
         <div css={ProfileCardContent}>

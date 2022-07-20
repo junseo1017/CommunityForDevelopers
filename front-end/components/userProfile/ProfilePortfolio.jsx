@@ -15,6 +15,7 @@ import { useMediaQuery } from "react-responsive";
 import { textLimitHandler } from "../Common/textLimit";
 const ProfilePortfolio = () => {
   const [showHeader, setShowHeader] = useState(null);
+  const { userinfo } = useSelector((state) => state.user.userInfo);
   const { userPortfolios } = useSelector((state) => state.portfolio);
 
   const isresponsive = useMediaQuery({
@@ -76,7 +77,7 @@ const ProfilePortfolio = () => {
                       <Avatar
                         style={{ cursor: "pointer" }}
                         size={25}
-                        src="https://joeschmoe.io/api/v1/random"
+                        src={userinfo.imgUrl ? userinfo.imgUrl : "/image/profile_image_default.jpg"}
                       />
                     </Link>
                     <h3>
@@ -87,9 +88,9 @@ const ProfilePortfolio = () => {
                   </div>
                   <div>
                     <StarOutlined />
-                    <p>{e.recommends}</p>
+                    <p>{e.scraps.length}</p>
                     <LikeOutlined />
-                    <p>{e.comments.length}</p>
+                    <p>{e.recommends.length}</p>
                     <MessageOutlined />
                     <p>{e.comments.length}</p>
                   </div>
