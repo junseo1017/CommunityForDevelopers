@@ -81,7 +81,7 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
         // 서버에 질문 저장하기
 
         setIsChanged(true);
-        router.push(`/qna/${router.query._id}`);
+        // router.push(`/qna/${router.query._id}`);
       } catch (e) {
         console.log(e);
       }
