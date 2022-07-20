@@ -5,7 +5,7 @@ import {
   userCreateJoiSchema,
   userUpdateJoiSchema,
 } from "../db/schemas/joi-schemas";
-import { upload, getImageUrl } from "../utils/image-util";
+import { upload, getImageUrl, authMailer } from "../utils";
 
 const userRouter = Router();
 
@@ -49,6 +49,18 @@ userRouter.post(
       });
 
       res.status(200).json({ signIn: "succeed" });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+userRouter.post(
+  "/email",
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
+    const email = req.body.email;
+    try {
+      res.status(200).json(await authMailer(email));
     } catch (error) {
       next(error);
     }
