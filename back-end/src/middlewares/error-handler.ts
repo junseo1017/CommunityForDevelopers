@@ -1,5 +1,19 @@
 import { Request, Response, NextFunction } from "express";
 
+class AppError extends Error {
+  public name = "error";
+  public status: number;
+  public message: string;
+  constructor(status: number, message: string, name?: string) {
+    super(message);
+    this.status = status ?? 500;
+    this.message = message;
+    if (name !== undefined) {
+      this.name = name;
+    }
+  }
+}
+
 function errorHandler(
   error: Error,
   req: Request,
@@ -9,26 +23,12 @@ function errorHandler(
   // 터미널에 노란색으로 출력됨.
   console.log("\x1b[33m%s\x1b[0m", error.stack);
 
-  console.log("에러핸들러의 next는 뭐가 나올까", next());
-
-  // error 메시지에 따른 에러 상태 코드
-  switch (error.message) {
-    // 401 에러, 로그인 오류
-    case "Unauthorized":
-      res.status(401).json({ result: "error", reason: error.message });
-      break;
-    // 403 에러, 사용자가 리소스에 대한 필요 권한 없음
-    case "Forbidden":
-      res.status(403).json({ result: "error", reason: error.message });
-      break;
-    // 406 에러
-    case "headers의 Content-Type을 application/json으로 설정해주세요":
-      res.status(406).json({ result: "error", reason: error.message });
-      break;
-    // default는 400 에러로 설정
-    default:
-      res.status(400).json({ result: "error", reason: error.message });
+  if (error instanceof AppError) {
+    return res
+      .status(error.status)
+      .json({ result: error.name, reson: error.message });
   }
+  return res.status(500).json(error);
 }
 
-export { errorHandler };
+export { errorHandler, AppError };
