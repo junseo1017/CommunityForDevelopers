@@ -130,6 +130,10 @@ userRouter.put(
     const imgUrl = <string>await getImageUrl(<Express.Multer.File>image);
     const { nickname, job } = req.body;
     const skills = JSON.parse(req.body.skills);
+
+    console.log("body데이터:", req.body);
+    console.log("skills Parse처리:", JSON.parse(req.body.skills));
+
     const toUpdate = {
       nickname,
       job,

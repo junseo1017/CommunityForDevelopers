@@ -68,6 +68,10 @@ portfolioRouter.post(
       const authorImg = userInfo.imgUrl;
       const { title, description, content, contentText } = req.body;
       const skills = JSON.parse(req.body.skills);
+
+      console.log("body데이터:", req.body);
+      console.log("skills Parse처리:", JSON.parse(req.body.skills));
+
       const image = req.file;
       const thumbnail = <string>await getImageUrl(<Express.Multer.File>image);
 
@@ -122,6 +126,10 @@ portfolioRouter.put(
       const userId = req.currentUserId || "";
       const { title, description, content, contentText } = req.body;
       const skills = JSON.parse(req.body.skills);
+
+      console.log("body데이터:", req.body);
+      console.log("skills Parse처리:", JSON.parse(req.body.skills));
+
       const image = req.file;
       const thumbnail = <string>await getImageUrl(<Express.Multer.File>image);
       const toUpdate = {
