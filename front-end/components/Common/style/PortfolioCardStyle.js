@@ -24,6 +24,7 @@ export const popoverStyle = css`
 export const portfolioStyle = css`
   display: flex;
   flex-direction: column;
+
   & > div:first-of-type > div {
     width: 100%;
     position: relative;
@@ -31,16 +32,17 @@ export const portfolioStyle = css`
     & > img {
       width: 100%;
       height: 100%;
-
       border-radius: 5px;
     }
 
     & > div:first-of-type {
       width: 100%;
+
       position: absolute;
       bottom: 0;
       padding: 0 0 10px 10px;
-      background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.5) 60%);
+      background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.5) 20%);
+
       opacity: 0;
       transition: 150ms;
 
@@ -48,6 +50,7 @@ export const portfolioStyle = css`
         font-size: 16px;
         font-weight: 900;
         color: white;
+        padding-top: 15px;
       }
       p {
         font-size: 14px;

@@ -20,6 +20,7 @@ import {
   loadUserPortfolios,
   loadMyPortfolios,
   loadScrapPortfolios,
+  loadPortfoliosSearchScroll,
 } from "../actions/portfolio";
 //수정중
 const initialState = {
@@ -105,10 +106,26 @@ const portfolioSlice = createSlice({
       .addCase(loadPortfoliosSearch.fulfilled, (state, action) => {
         state.loadPortfoliosLoading = false;
         state.loadPortfoliosDone = true;
-        state.mainPortfolios = _concat(state.mainPortfolios, action.payload);
+        state.mainPortfolios = action.payload;
         state.hasMorePortfolios = action.payload.length === 12;
       })
       .addCase(loadPortfoliosSearch.rejected, (state, action) => {
+        state.loadPortfoliosLoading = false;
+        state.loadPortfoliosError = action.error.message;
+      })
+      //loadPortfoliosSearchScroll
+      .addCase(loadPortfoliosSearchScroll.pending, (state) => {
+        state.loadPortfoliosLoading = true;
+        state.loadPortfoliosDone = false;
+        state.loadPortfoliosError = null;
+      })
+      .addCase(loadPortfoliosSearchScroll.fulfilled, (state, action) => {
+        state.loadPortfoliosLoading = false;
+        state.loadPortfoliosDone = true;
+        state.mainPortfolios = _concat(state.mainPortfolios, action.payload);
+        state.hasMorePortfolios = action.payload.length === 12;
+      })
+      .addCase(loadPortfoliosSearchScroll.rejected, (state, action) => {
         state.loadPortfoliosLoading = false;
         state.loadPortfoliosError = action.error.message;
       })
@@ -185,7 +202,7 @@ const portfolioSlice = createSlice({
         //const portfolio = _find(state.mainPortfolios, { _id: action.payload.portfolioId });
         state.addCommentLoading = false;
         state.addCommentDone = true;
-        state.singlePortfolio.comments.unshift(action.payload);
+        state.singlePortfolio.comments.push(action.payload);
       })
       .addCase(addComment.rejected, (state, action) => {
         state.addCommentLoading = false;

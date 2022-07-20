@@ -12,6 +12,8 @@ export interface Qna {
 export interface QnaInputDTO {
   title: string;
   contents: string;
+  contentText: string;
+  authorId: string;
   author: string;
   tags: string[];
   isAnswer: boolean;
