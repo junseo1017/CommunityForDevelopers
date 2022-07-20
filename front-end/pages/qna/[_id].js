@@ -13,10 +13,11 @@ const QuestionDetail = dynamic(
   { ssr: false },
 );
 
-const QuestionDetailPage = ({ qna, answers }) => {
+const QuestionDetailPage = ({ qna }) => {
+  console.log("[id] qna", qna);
   return (
     <AppLayout>
-      <QuestionDetail qna={qna} answers={answers} />
+      <QuestionDetail qna={qna} />
     </AppLayout>
   );
 };
@@ -33,18 +34,15 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   await store.dispatch(myinfo());
 
   try {
+    // URL query 가져오기
     const _id = query._id;
 
     const response = await axios.get(`/api/qnas/${_id}`);
     const qna = response.data;
 
-    const answer_response = await axios.get("/api/qnas");
-    const answers = answer_response.data.filter((answer) => answer.parentQnaId === _id);
-
     return {
       props: {
         qna,
-        answers,
       },
     };
   } catch (error) {
