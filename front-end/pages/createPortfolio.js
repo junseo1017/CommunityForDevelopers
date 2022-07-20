@@ -24,6 +24,7 @@ let Editor = dynamic(() => import("../components/Editor/Editor"), {
 
 const createPortfolio = (props) => {
   /* 비로그인 */
+  const [imgFormData, setImgFormData] = useState();
   const { error } = props;
   const redirectLogin = useCallback(() => {
     Router.push("/login");
@@ -56,14 +57,24 @@ const createPortfolio = (props) => {
   );
   const dispatch = useDispatch();
 
-  const dispatchAddPortfolio = useCallback((data) => {
-    const filteredBlocks = JSON.parse(data.content).blocks.map(({ type, data }) => {
-      return type === "paragraph" || type === "header" ? data : "";
-    });
-    const texts = filteredBlocks.map((block) => block.text).join(" ");
-    const newData = { ...data, contentText: texts + data.description, imgUrl: "tempUrl" };
-    dispatch(addPortfolio(newData));
-  }, []);
+  const dispatchAddPortfolio = useCallback(
+    (data, formdata) => {
+      const filteredBlocks = JSON.parse(data.content).blocks.map(({ type, data }) => {
+        return type === "paragraph" || type === "header" ? data : "";
+      });
+      const texts = filteredBlocks.map((block) => block.text).join(" ");
+      //const newData = { ...data, contentText: texts + data.description, imgUrl: formdata };
+      const newData = { ...data, contentText: texts + data.description };
+      delete newData.imgSrc;
+      //formdata.append("body", JSON.stringify(newData));
+      for (const [key, value] of Object.entries(newData)) {
+        formdata.append(`${key}`, `${value}`);
+      }
+      formdata.set("skills", JSON.stringify(newData.skills));
+      dispatch(addPortfolio(formdata));
+    },
+    [imgFormData],
+  );
 
   /* 단계 관리 */
   const [current, setCurrent] = useState(0);
@@ -80,19 +91,26 @@ const createPortfolio = (props) => {
   /* 첫번째 단계 */
   const onSubmitCard = useCallback((values) => {
     console.log("Received values of form: ", values);
-    let formData = new FormData();
+    const formData = new FormData();
     //if (values.image) formData.append("file", values.image[0].originFileObj);
     if (values.image) formData.append("image", values.image);
+    setImgFormData(formData);
     //dispatch(portfolioActions.updateState(value));
     //dispatch(portfolioActions.updateState({ ...values, image: formData }));
     dispatch(portfolioActions.updateState({ ...values, image: "" }));
-    dispatch(uploadImages(formData));
+    //dispatch(uploadImages(formData));
     next();
   }, []);
 
   const [savePortf, handleInitialize, imageArray] = useEditor();
   const [modalVisible, setModalVisible, handleOk, confirmLoading, modalText, showModal] =
-    useModalAsync(savePortf, "포트폴리오를 저장하시겠습니까?", next, dispatchAddPortfolio);
+    useModalAsync(
+      savePortf,
+      "포트폴리오를 저장하시겠습니까?",
+      next,
+      dispatchAddPortfolio,
+      imgFormData,
+    );
 
   return (
     <AppLayout>
@@ -106,13 +124,7 @@ const createPortfolio = (props) => {
         confirmLoading={confirmLoading}
         modalText={modalText}
       />
-      <StepsComp
-        current={current}
-        setCurrent={setCurrentStep}
-        onSubmitCard={onSubmitCard}
-        showModal={showModal}
-        prev={prev}
-      />
+      <StepsComp current={current} setCurrent={setCurrentStep} showModal={showModal} prev={prev} />
 
       {current === 2 && <ResultComp />}
       {current === 0 && <CreatePortfolioCard onSubmitCard={onSubmitCard} />}

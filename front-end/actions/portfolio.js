@@ -26,6 +26,7 @@ export const loadPortfolios = createAsyncThunk(
     },
   },
 );
+
 export const loadPortfoliosSearch = createAsyncThunk(
   "portfolio/loadPortfoliosSearch",
   async (data) => {
