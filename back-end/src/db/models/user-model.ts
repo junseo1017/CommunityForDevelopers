@@ -14,23 +14,44 @@ export class UserModel {
   async findAll() {
     return await User.find(
       {},
-      { email: 1, nickname: 1, job: 1, skills: 1, imgUrl: 1 }
+      {
+        email: 1,
+        nickname: 1,
+        job: 1,
+        skills: 1,
+        imgUrl: 1,
+        role: 1,
+        loginType: 1,
+        isDeleted: 1,
+      }
     );
   }
 
   async findById(userId: string) {
     return await User.findOne(
       { _id: userId },
-      { email: 1, nickname: 1, job: 1, skills: 1, imgUrl: 1 }
+      {
+        email: 1,
+        nickname: 1,
+        job: 1,
+        skills: 1,
+        imgUrl: 1,
+        role: 1,
+        loginType: 1,
+        isDeleted: 1,
+      }
     );
   }
 
   async findByEmail(email: string) {
-    return await User.findOne({ email }, { password: 1 });
+    return await User.findOne(
+      { email },
+      { email: 1, password: 1, isDeleted: 1 }
+    );
   }
 
   async getPassword(userId: string) {
-    return await User.findOne({ _id: userId }, { password: 1 });
+    return await User.findOne({ _id: userId }, { password: 1, isDeleted: 1 });
   }
 
   async create(userInfo: InputDTO) {

@@ -48,6 +48,11 @@ const PortfolioSchema = new Schema(
       type: String,
       required: true,
     },
+    thumbnail: {
+      type: String,
+      required: false,
+      default: "",
+    },
     scraps: [
       {
         type: Schema.Types.ObjectId,

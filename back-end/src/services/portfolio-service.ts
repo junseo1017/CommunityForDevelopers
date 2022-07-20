@@ -20,6 +20,7 @@ class PortfolioService {
       skills,
       content,
       contentText,
+      thumbnail,
     } = portInfo;
     const newPortInfo = {
       authorId,
@@ -30,6 +31,7 @@ class PortfolioService {
       skills,
       content,
       contentText,
+      thumbnail,
     };
     return await this.portfolioModel.create(newPortInfo);
   }

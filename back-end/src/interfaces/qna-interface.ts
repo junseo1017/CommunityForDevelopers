@@ -3,7 +3,6 @@ export interface Qna {
   title: string;
   contents: string;
   author: string;
-  imgUrl: string;
   recommends: string[];
   tags: string[];
   isAnswer: boolean;
@@ -16,7 +15,6 @@ export interface QnaInputDTO {
   contentText: string;
   authorId: string;
   author: string;
-  imgUrl: string;
   tags: string[];
   isAnswer: boolean;
   parentQnaId: string;

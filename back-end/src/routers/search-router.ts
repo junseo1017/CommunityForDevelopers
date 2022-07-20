@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { portfolioService, qnaService, userService } from "../services";
+import { portfolioService, qnaService } from "../services";
 
 const searchRouter = Router();
 

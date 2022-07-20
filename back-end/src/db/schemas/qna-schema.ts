@@ -36,11 +36,6 @@ const QnaSchema = new Schema(
       type: String,
       required: true,
     },
-    imgUrl: {
-      type: String,
-      required: false,
-      default: "",
-    },
     recommends: [
       {
         type: Schema.Types.ObjectId,

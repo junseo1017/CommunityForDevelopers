@@ -1,7 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { qnaService, userService } from "../services";
 import { ExtendReq, loginRequired } from "../middlewares/login-required";
-import { upload, getImageUrl } from "../utils/img-upload";
 
 const qnaRouter = Router();
 
@@ -44,22 +43,19 @@ qnaRouter.get(
 qnaRouter.post(
   "/",
   loginRequired,
-  upload,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const authorId = req.currentUserId || "";
       const userInfo = await userService.getUserInfo(authorId);
       const author = userInfo.nickname;
-      const { title, contents, contentText, tags, isAnswer, parentQnaId } = req.body;
-      const image = req.file;
-      const imgUrl = <string>await getImageUrl(<Express.Multer.File>image);
+      const { title, contents, contentText, tags, isAnswer, parentQnaId } =
+        req.body;
       const newQnA = await qnaService.addQna({
         title,
         contents,
         contentText,
         authorId,
         author,
-        imgUrl,
         tags,
         isAnswer,
         parentQnaId,
@@ -74,13 +70,10 @@ qnaRouter.post(
 qnaRouter.put(
   "/:qnaId",
   loginRequired,
-  upload,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const qnaId = req.params.qnaId;
       const userId = req.currentUserId || "";
-      const image = req.file;
-      const imgUrl = <string>await getImageUrl(<Express.Multer.File>image);
       const {
         title,
         contents,
@@ -94,7 +87,6 @@ qnaRouter.put(
         ...(title && { title }),
         ...(contents && { contents }),
         ...(contentText && { contentText }),
-        ...(imgUrl && { imgUrl }),
         ...(recommends && { recommends }),
         ...(tags && { tags }),
         ...(isAnswer && { isAnswer }),
