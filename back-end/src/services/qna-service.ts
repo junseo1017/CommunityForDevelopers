@@ -33,13 +33,13 @@ class QnaService {
     if (lastId) {
       const QnAs = await this.qnaModel.findQnas(lastId);
       if (!QnAs) {
-        throw new Error("포토폴리오 목록이 존재하지 않습니다.");
+        throw new Error("QnA 목록이 존재하지 않습니다.");
       }
       return QnAs;
     }
     const QnAs = await this.qnaModel.findQnasInit();
     if (!QnAs) {
-      throw new Error("포토폴리오 목록이 존재하지 않습니다.");
+      throw new Error("QnA 목록이 존재하지 않습니다.");
     }
     return QnAs;
   }
