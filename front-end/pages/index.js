@@ -1,17 +1,22 @@
 /** @jsxImportSource @emotion/react */
 import AppLayout from "../components/AppLayout";
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useCallback, useState } from "react";
 import wrapper from "../store";
 import { List, Select, Divider } from "antd";
 import { BackTop } from "antd";
 //import PortfolioCard from "../components/Portfolo/PortfolioCard";
 import PortfolioCard from "../components/Common/PortfolioCard";
 import PorfolioSearch from "../components/Portfolo/PorfolioSearch";
-import { loadPortfolios } from "../actions/portfolio";
+import {
+  loadPortfolios,
+  loadPortfoliosSearch,
+  loadPortfoliosSearchScroll,
+} from "../actions/portfolio";
 import { css } from "@emotion/react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { myinfo } from "../actions/user";
+import useDidMountEffect from "../hooks/useDidMountEffect";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -19,16 +24,57 @@ const Home = () => {
   const { mainPortfolios, hasMorePortfolios, loadPortfoliosLoading } = useSelector(
     (state) => state.portfolio,
   );
+  const [query, setQuery] = useState();
+  const setSearchQuery = useCallback((q) => {
+    setQuery(q);
+  }, []);
+  useEffect(() => {
+    function onScroll() {
+      // window.scrollY : 얼마나 내렸는지
+      // document.documentElement.clientHeight : 화면에 보이는 길이
+      // document.documentElement.scrollHeight : 총길이
+      console.log(hasMorePortfolios, loadPortfoliosLoading);
+      if (hasMorePortfolios && !loadPortfoliosLoading) {
+        if (
+          window.scrollY + document.documentElement.clientHeight >
+          document.documentElement.scrollHeight - 300
+        ) {
+          //const lastId = mainPortfolios[mainPortfolios.length - 1]?._id;
+          const page = Math.floor((mainPortfolios.length - 1) / 12) + 1;
+          const newQuery = query.substring(0, 6) + `${page}` + query.substring(7);
+          dispatch(
+            loadPortfoliosSearchScroll({
+              query: newQuery,
+            }),
+          );
+        }
+      }
+    }
+    window.addEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [hasMorePortfolios, loadPortfoliosLoading, mainPortfolios]);
+
+  useDidMountEffect(() => {
+    console.log(query);
+    dispatch(
+      loadPortfoliosSearch({
+        query,
+      }),
+    );
+  }, [query]);
+
   console.log(me);
   console.log(mainPortfolios);
 
   const { Option } = Select;
   const portfolioSearchObjects = useMemo(() => {
     const orderBys = [
-      <Option key={"추천 순"}>추천 순</Option>,
-      <Option key={"최신 순"}>최신 순</Option>,
-      <Option key={"댓글 순"}>댓글 순</Option>,
-      <Option key={"스크랩 순"}>스크랩 순</Option>,
+      <Option key={"recommends"}>추천 순</Option>,
+      <Option key={"createdAt"}>최신 순</Option>,
+      <Option key={"comments"}>댓글 순</Option>,
+      <Option key={"scraps"}>스크랩 순</Option>,
     ];
     return {
       orderBys,
@@ -38,13 +84,8 @@ const Home = () => {
   return (
     <AppLayout>
       <div css={mainContainer}>
-        <PorfolioSearch {...portfolioSearchObjects} />
+        <PorfolioSearch {...portfolioSearchObjects} setSearchQuery={setSearchQuery} />
         <Divider css={dividerCss} />
-        {/* <div css={portfolioContainer}>
-          {mainPortfolios.map((portfolio) => (
-            <PortfolioCard {...portfolio} />
-          ))}
-        </div> */}
         <List
           grid={{
             gutter: 18,
@@ -77,7 +118,11 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   if (req && cookie) {
     axios.defaults.headers.Cookie = cookie;
   }
-  await store.dispatch(loadPortfolios());
+  await store.dispatch(
+    loadPortfoliosSearch({
+      query: "?page=1&orderBy=recommends",
+    }),
+  );
   await store.dispatch(myinfo());
   return {
     props: {},
@@ -86,20 +131,10 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
 
 export default Home;
 
-const mainContainer = css``;
+const mainContainer = css`
+  width: 100%;
+`;
 const dividerCss = css`
   margin-top: 13px;
   margin-bottom: 15;
-`;
-
-const portfolioContainer = css`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 20px;
-  & * {
-    margin: 0;
-  }
 `;

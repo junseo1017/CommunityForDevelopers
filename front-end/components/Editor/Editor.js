@@ -4,11 +4,17 @@ import { createReactEditorJS } from "react-editor-js";
 import Image from "@editorjs/image";
 import { DEFAULTVALUE } from "./defaultValue";
 import { EditorSize, TextCener } from "./styles/EditorStyle";
+import { uploadImages } from "../../actions/image";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 const ReactEditorJS = createReactEditorJS();
 
 //import API from "../api/image" // Your server url
 
 const Editor = ({ imageArray, handleInitialize, data }) => {
+  const dispatch = useDispatch();
+  const { imagePaths } = useSelector((state) => state.image);
+  const { imagePath } = useSelector((state) => state.image);
   const [editorTools, setEditorTools] = useState("");
   let editorComponent;
   if (!editorTools) editorComponent = "Loading...";
@@ -33,7 +39,6 @@ const Editor = ({ imageArray, handleInitialize, data }) => {
       </div>
     );
   }
-
   useEffect(() => {
     const importConstants = async () => {
       const EDITOR_JS_TOOLS = (await import("./tools")).default;
@@ -43,19 +48,20 @@ const Editor = ({ imageArray, handleInitialize, data }) => {
           class: Image,
           config: {
             uploader: {
-              uploadByFile(file) {
-                let formData = new FormData();
+              async uploadByFile(file) {
+                const formData = new FormData();
                 console.log(file);
-                formData.append("images", file);
-
+                formData.append("image", file);
                 // send image to server
-                return API.imageUpload(formData).then((res) => {
+                // get the uploaded image path, pushing image path to image array
+                return axios.post("/api/images", formData).then((res) => {
                   // get the uploaded image path, pushing image path to image array
-                  imageArray.push(res.data.data);
+                  console.log(res);
+                  imageArray.push(res.data.imgUrl);
                   return {
                     success: 1,
                     file: {
-                      url: res.data.data,
+                      url: res.data.imgUrl,
                     },
                   };
                 });
