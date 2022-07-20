@@ -10,13 +10,14 @@ import { DEFAULT_IMAGE } from "../../pages/constants/Image";
 const PortfolioCard = ({
   title,
   description,
-  image,
   skills,
   author,
   comments,
   recommends,
   scraps,
   _id,
+  authorImg,
+  thumbnail,
 }) => {
   const [showHeader, setShowHeader] = useState(null);
   const isresponsive = useMediaQuery({
@@ -51,7 +52,7 @@ const PortfolioCard = ({
       <Link href={`/portfolio/${_id}`}>
         <div style={{ cursor: "pointer" }}>
           <div>
-            <img src={image || DEFAULT_IMAGE} />
+            <img src={thumbnail || DEFAULT_IMAGE} />
             <div id="gradation">
               <div id="textbox">
                 <h3>{showHeader ? textLimitHandler(title, 20) : textLimitHandler(title, 35)}</h3>
@@ -78,12 +79,12 @@ const PortfolioCard = ({
             <Avatar
               style={{ cursor: "pointer" }}
               size={25}
-              src={author?.imgUrl ? author.imgUrl : "https://joeschmoe.io/api/v1/random"}
+              src={authorImg ? authorImg : "https://joeschmoe.io/api/v1/random"}
             />
           </Link>
           <h3>
             <Link href={`/profile/${author?._id}`}>
-              <a>{author?.nickname}</a>
+              <a>{author}</a>
             </Link>
           </h3>
         </div>

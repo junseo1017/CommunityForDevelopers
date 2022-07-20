@@ -97,8 +97,18 @@ export const addComment = createAsyncThunk(
   "portfolio/addComment",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`/api/comments/portfolio/${data.portfolioId}`, data); // POST /portfolio/1
-      return response.data;
+      const response = await axios.post(`/api/comments/portfolio/${data.portfolioId}`, {
+        content: data.content,
+      }); // POST /portfolio/1
+      console.log(response.data);
+      return {
+        ...response.data,
+        author: {
+          _id: response.data.author,
+          imgUrl: data.author.imgUrl,
+          nickname: data.author.nickname,
+        },
+      };
     } catch (error) {
       console.log(error);
       return rejectWithValue(error.response.data);

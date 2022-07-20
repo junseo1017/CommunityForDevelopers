@@ -202,7 +202,7 @@ const portfolioSlice = createSlice({
         //const portfolio = _find(state.mainPortfolios, { _id: action.payload.portfolioId });
         state.addCommentLoading = false;
         state.addCommentDone = true;
-        state.singlePortfolio.comments.unshift(action.payload);
+        state.singlePortfolio.comments.push(action.payload);
       })
       .addCase(addComment.rejected, (state, action) => {
         state.addCommentLoading = false;

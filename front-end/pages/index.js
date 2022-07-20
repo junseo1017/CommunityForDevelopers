@@ -41,7 +41,7 @@ const Home = () => {
         ) {
           //const lastId = mainPortfolios[mainPortfolios.length - 1]?._id;
           const page = Math.floor((mainPortfolios.length - 1) / 12) + 1;
-          const newQuery = query.substring(0, 6) + `${page}` + query.substring(7);
+          const newQuery = query?.substring(0, 6) + `${page}` + query?.substring(7);
           dispatch(
             loadPortfoliosSearchScroll({
               query: newQuery,

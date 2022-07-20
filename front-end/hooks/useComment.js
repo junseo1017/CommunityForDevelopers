@@ -3,7 +3,7 @@ import useConfirmModal from "./useConfirmModal";
 import { addComment } from "../actions/portfolio";
 import { useDispatch } from "react-redux";
 
-const useComment = ({ _id, nickname }) => {
+const useComment = ({ nickname, Portf_id, imgUrl }) => {
   //const [comments, setComments] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [value, setValue] = useState("");
@@ -39,9 +39,7 @@ const useComment = ({ _id, nickname }) => {
       //     datetime: moment().fromNow(),
       //   },
       // ]);
-      dispatch(
-        addComment({ content: value, portfolioId: _id /*, author: { _id, nickname, imgUrl }*/ }),
-      );
+      dispatch(addComment({ content: value, portfolioId: Portf_id, author: { nickname, imgUrl } }));
     }, 1000);
   };
 
