@@ -21,7 +21,10 @@ const Answer = ({ answer }) => {
     numberOfRecommends: 0,
   });
 
-  const initialLoginState = me._id === answer.author._id;
+  const isRecommended = answer.recommends.map((user) => user._id).includes(me._id);
+  const numberOfRecommends = answer.recommends.length;
+
+  const initialLoginState = me._id === answer.authorId;
 
   const [isChanged, setIsChanged] = useState(false);
 
@@ -30,9 +33,8 @@ const Answer = ({ answer }) => {
       try {
         const response = await axios.get(`/api/qnas/${answer._id}`);
         const qna = response.data;
-
-        const isRecommended = qna.recommends.map((user) => user._id).includes(me._id);
-        const numberOfRecommends = qna.recommends.length;
+        console.log("qna", qna);
+        // Answer가 Answers에 추가됨 -> 확인 불가능
 
         setRecommendData({ isRecommended, numberOfRecommends });
         setIsChanged(false);
@@ -60,6 +62,8 @@ const Answer = ({ answer }) => {
   const handleUpdate = async () => {
     setIsAnswerUpdateMode(!isAnswerUpdateMode);
   };
+
+  console.log("recommendData", recommendData);
 
   return (
     <div css={DetailAnswerContainer} key={answer._id}>
