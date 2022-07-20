@@ -6,12 +6,23 @@ class QnaService {
     this.qnaModel = qnaModel;
   }
   async addQna(qnaInfo: QnaInputDTO) {
-    const { title, contents, author, imgUrl, tags, isAnswer, parentQnaId } =
-      qnaInfo;
+    const {
+      title,
+      contents,
+      contentText,
+      authorId,
+      author,
+      imgUrl,
+      tags,
+      isAnswer,
+      parentQnaId,
+    } = qnaInfo;
     const newQnaInfo = {
       title,
       contents,
+      contentText,
       author,
+      authorId,
       imgUrl,
       tags,
       isAnswer,
@@ -20,10 +31,17 @@ class QnaService {
     return await this.qnaModel.create(newQnaInfo);
   }
 
-  async getQnas() {
-    const QnAs = await this.qnaModel.findAll();
+  async getQnas(lastId?: string) {
+    if (lastId) {
+      const QnAs = await this.qnaModel.findQnas(lastId);
+      if (!QnAs) {
+        throw new Error("포토폴리오 목록이 존재하지 않습니다.");
+      }
+      return QnAs;
+    }
+    const QnAs = await this.qnaModel.findQnasInit();
     if (!QnAs) {
-      throw new Error("QnA 목록이 존재하지 않습니다.");
+      throw new Error("포토폴리오 목록이 존재하지 않습니다.");
     }
     return QnAs;
   }
@@ -45,8 +63,15 @@ class QnaService {
   }
 
   async getAnswerByQuestion(qnaId: string) {
-    const answers = await this.qnaModel.findAnswerById(qnaId);
-    return answers;
+    return await this.qnaModel.findAnswerById(qnaId);
+  }
+
+  async getQnasBySearch(value: string, lastId: string) {
+    const QnAs = await this.qnaModel.findBySearch(value, lastId);
+    if (!QnAs) {
+      throw new Error("검색 과정에서 문제가 발생하였습니다.");
+    }
+    return QnAs;
   }
 
   async setQna(qnaId: string, userId: string, qnaInfo: QnaInputDTO) {
@@ -54,7 +79,7 @@ class QnaService {
     if (!QnA) {
       throw new Error("QnA 정보가 없습니다.");
     }
-    if (!QnA.author.equals(userId)) {
+    if (!QnA.authorId.equals(userId)) {
       throw new Error("Forbidden");
     }
     return await this.qnaModel.update(qnaId, qnaInfo);
@@ -83,7 +108,7 @@ class QnaService {
     if (!QnA) {
       throw new Error("해당 QnA가 존재하지 않습니다.");
     }
-    if (!QnA.author.equals(userId)) {
+    if (!QnA.authorId.equals(userId)) {
       throw new Error("Forbidden");
     }
     return QnA;

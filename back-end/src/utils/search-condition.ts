@@ -35,4 +35,26 @@ function getSearchCondition(searchInfo: SearchInfo, page: number) {
   return condition;
 }
 
-export { getSearchCondition };
+function qnaSearchCondition(value: string, lastId: string) {
+  const condition: Array<any> = [];
+  if (value) {
+    condition.push({
+      $search: {
+        index: "searchQnA",
+        text: {
+          query: value,
+          path: ["title", "contentText"],
+        },
+      },
+    });
+  }
+  if (lastId) {
+    condition.push({
+      $match: { _id: { $lt: lastId } },
+    });
+  }
+  condition.push({ $sort: { _id: -1 } }, { $limit: 8 });
+  return condition;
+}
+
+export { getSearchCondition, qnaSearchCondition };

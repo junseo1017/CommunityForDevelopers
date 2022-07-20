@@ -13,6 +13,8 @@ export interface Qna {
 export interface QnaInputDTO {
   title: string;
   contents: string;
+  contentText: string;
+  authorId: string;
   author: string;
   imgUrl: string;
   tags: string[];

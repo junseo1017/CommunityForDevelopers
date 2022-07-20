@@ -1,23 +1,24 @@
 import { model, Types, Document } from "mongoose";
 import { QnaSchema, QnaType } from "../schemas/qna-schema";
 import { QnaInputDTO } from "../../interfaces/qna-interface";
+import { qnaSearchCondition } from "../../utils/search-condition";
 
 const Qna = model<QnaType & Document>("qnas", QnaSchema);
 
 export class QnaModel {
-  async findAll() {
-    return await Qna.find({}).populate({
-      path: "author",
-      select: "nickname",
-    });
+  async findQnasInit() {
+    return await Qna.find({}).sort({ _id: -1 }).limit(8);
+  }
+
+  async findQnas(lastId: string) {
+    const id = new Types.ObjectId(lastId);
+    return await Qna.find({ _id: { $lt: id } })
+      .sort({ _id: -1 })
+      .limit(8);
   }
 
   async findById(qnaId: string) {
     return await Qna.findOne({ _id: qnaId }).populate([
-      {
-        path: "author",
-        select: "nickname",
-      },
       {
         path: "recommends",
         select: ["nickname", "imgUrl"],
@@ -35,10 +36,6 @@ export class QnaModel {
   async findAnswerById(qnaId: string) {
     return await Qna.find({ parentQnaId: qnaId }).populate([
       {
-        path: "author",
-        select: "nickname",
-      },
-      {
         path: "recommends",
         select: ["nickname", "imgUrl"],
       },
@@ -53,10 +50,12 @@ export class QnaModel {
   }
 
   async findByUserId(userId: string) {
-    return await Qna.find({ author: userId }).populate({
-      path: "author",
-      select: "nickname",
-    });
+    return await Qna.find({ author: userId });
+  }
+
+  async findBySearch(value: string, lastId: string) {
+    const searchCondition = qnaSearchCondition(value, lastId);
+    return await Qna.aggregate(searchCondition);
   }
 
   async getQuestionCountByUserId(userId: string) {
