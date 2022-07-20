@@ -90,8 +90,8 @@ const Answer = ({ answer }) => {
           </div>
         )}
       </div>
-      {answer.recommends &&
-        answer.recommends.map((user) => <div key={user._id}>{user.nickname}</div>)}
+      {/* {answer.recommends &&
+        answer.recommends.map((user) => <div key={user._id}>{user.nickname}</div>)} */}
       {!isAnswerUpdateMode ? (
         <Output data={JSON.parse(answer.contents)} />
       ) : (

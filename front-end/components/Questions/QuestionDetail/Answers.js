@@ -6,10 +6,6 @@ import { TextContainer, DetailAnswerContainer } from "../styles/QuestionStyle";
 import Answer from "./Answer";
 
 const Answers = ({ answers }) => {
-  const { me } = useSelector((state) => state.user);
-  console.log("answers me", me);
-  console.log("answers answers", answers);
-
   answers.sort((a, b) => {
     return b.recommends.length - a.recommends.length;
   });

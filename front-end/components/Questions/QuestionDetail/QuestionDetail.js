@@ -33,7 +33,7 @@ const QuestionDetail = ({ qna }) => {
   console.log("me", me);
 
   // 현재 로그인 유저가 질문자인지 확인
-  const initialLoginState = me._id === question.author._id;
+  const initialLoginState = me._id === question.authorId;
 
   const [isAuthor, setIsAuthor] = useState(initialLoginState); // 수정, 삭제 버튼 보여주기
   const [isAnswerUpdateMode, setIsAnswerUpdateMode] = useState(false); // 답변 수정 form 변경
