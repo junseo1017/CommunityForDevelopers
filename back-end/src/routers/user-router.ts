@@ -58,9 +58,10 @@ userRouter.post(
 userRouter.post(
   "/email",
   async (req: ExtendReq, res: Response, next: NextFunction) => {
-    const email = req.body.email;
+    const { email, authNumber } = req.body;
     try {
-      res.status(200).json(await authMailer(email));
+      await authMailer(email, authNumber);
+      res.status(200).json({ sendMail: "succeed" });
     } catch (error) {
       next(error);
     }
