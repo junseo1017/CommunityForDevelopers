@@ -42,9 +42,10 @@ const ProfileMyInfoForm = ({ action, setAction }) => {
   }, [userinfo]);
 
   const onSubmit = (data) => {
-    console.log(skills);
     const formData = new FormData();
-    formData.append("image", imageinputRef.current.files[0]);
+    if (imageinputRef.current.files[0]) {
+      formData.append("image", imageinputRef.current.files[0]);
+    }
     formData.append("nickname", data.nickname);
     formData.append("userId", data.userId);
     formData.append("job", data.job);
