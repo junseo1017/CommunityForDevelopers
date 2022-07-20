@@ -26,7 +26,7 @@ const PortfolioSchema = new Schema(
     },
     authorImg: {
       type: String,
-      required: true,
+      required: false,
     },
     title: {
       type: String,
