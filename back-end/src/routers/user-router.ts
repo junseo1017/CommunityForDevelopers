@@ -137,7 +137,7 @@ userRouter.put(
       imgUrl,
       skills,
     };
-    console.log(req.body);
+
     try {
       await userUpdateJoiSchema.validateAsync({ nickname });
       const updatedUserInfo = await userService.setUser(userId, toUpdate);

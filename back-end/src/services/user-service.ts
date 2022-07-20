@@ -9,6 +9,7 @@ import {
 import { InputDTO, UpdateInfo, LoginInfo } from "../interfaces/user-interface";
 import bcrypt from "bcrypt";
 import { jwtUtil } from "../utils/jwt-util";
+import { AppError } from "../middlewares/error-handler";
 
 class UserService {
   userModel;
@@ -29,13 +30,10 @@ class UserService {
 
     const user = await this.userModel.findByEmail(email);
     if (user) {
-      if (user.isDeleted) {
-        throw new Error("탈퇴한 메일 입니다.");
-      } else {
-        throw new Error(
-          "이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요."
-        );
-      }
+      throw new AppError(
+        500,
+        "이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요."
+      );
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -48,7 +46,11 @@ class UserService {
 
     const createdNewUser = await this.userModel.create(newUserInfo);
 
-    return createdNewUser;
+    if (!createdNewUser) {
+      throw new AppError(500, "회원가입을 실패했습니다.");
+    }
+
+    return;
   }
 
   async getUserToken(loginInfo: LoginInfo) {
@@ -57,13 +59,10 @@ class UserService {
     const user = await this.userModel.findByEmail(email);
 
     if (!user) {
-      throw new Error(
+      throw new AppError(
+        500,
         "해당 이메일은 가입 내역이 없습니다. 다시 한 번 확인해 주세요."
       );
-    }
-
-    if (user.isDeleted) {
-      throw new Error("탈퇴한 회원입니다.");
     }
 
     const correctPasswordHash = user.password; // db에 저장되어 있는 암호화된 비밀번호
@@ -74,7 +73,8 @@ class UserService {
     );
 
     if (!isPasswordCorrect) {
-      throw new Error(
+      throw new AppError(
+        500,
         "비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요."
       );
     }
@@ -98,11 +98,9 @@ class UserService {
   async getUserInfo(userId: string) {
     const userInfo = await this.userModel.findById(userId);
     if (!userInfo) {
-      throw new Error("해당 ID에 맞는 회원 정보를 불러올 수 없습니다.");
+      throw new AppError(500, "해당 ID에 맞는 회원 정보를 불러올 수 없습니다.");
     }
-    if (userInfo.isDeleted) {
-      throw new Error("탈퇴한 회원입니다.");
-    }
+
     return userInfo;
   }
 
@@ -119,55 +117,38 @@ class UserService {
 
   // 회원 정보 수정
   async setUser(userId: string, toUpdate: UpdateInfo) {
-    const userInfo = await this.userModel.findById(userId);
+    const userInfo = await this.userModel.update(userId, toUpdate);
 
     if (!userInfo) {
-      throw new Error("가입 내역이 없습니다. 다시 한 번 확인해 주세요.");
+      throw new AppError(500, "회원정보 업데이트를 실패했습니다.");
     }
 
-    if (userInfo.isDeleted) {
-      throw new Error("탈퇴한 회원입니다.");
-    }
-
-    // 업데이트
-    await this.userModel.update(userId, toUpdate);
-
-    // 이후 조회된 쿼리 반환
     return this.userModel.findById(userId);
   }
 
-  // 비밀번호 수정
   async setPassword(userId: string, password: string) {
-    const user = await this.userModel.getPassword(userId);
-
-    if (!user) {
-      throw new Error("가입 내역이 없습니다. 다시 한 번 확인해 주세요.");
-    }
-
-    if (user.isDeleted) {
-      throw new Error("탈퇴한 회원입니다.");
-    }
-
     if (password) {
       const newPasswordHash = await bcrypt.hash(password, 10);
       password = newPasswordHash;
     }
 
-    return await this.userModel.update(userId, { password });
+    const updated = await this.userModel.update(userId, { password });
+
+    if (!updated) {
+      throw new AppError(500, "비밀번호 변경을 실패했습니다.");
+    }
+
+    return;
   }
 
   async deleteUser(userId: string) {
-    const user = await this.userModel.getPassword(userId);
+    const deleted = await this.userModel.deleteById(userId);
 
-    if (!user) {
-      throw new Error("가입 내역이 없습니다. 다시 한 번 확인해 주세요.");
+    if (!deleted) {
+      throw new AppError(500, "회원 탈퇴를 실패했습니다.");
     }
 
-    if (user.isDeleted) {
-      throw new Error("탈퇴한 회원입니다.");
-    }
-
-    return await this.userModel.deleteById(userId);
+    return deleted;
   }
 }
 
