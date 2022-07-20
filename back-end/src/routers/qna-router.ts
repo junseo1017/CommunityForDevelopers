@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { qnaService } from "../services/qna-service";
+import { qnaService, userService } from "../services";
 import { ExtendReq, loginRequired } from "../middlewares/login-required";
 
 const qnaRouter = Router();
@@ -45,11 +45,16 @@ qnaRouter.post(
   loginRequired,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
-      const author = req.currentUserId || "";
-      const { title, contents, tags, isAnswer, parentQnaId } = req.body;
+      const authorId = req.currentUserId || "";
+      const userInfo = await userService.getUserInfo(authorId);
+      const author = userInfo.nickname;
+      const { title, contents, contentText, tags, isAnswer, parentQnaId } =
+        req.body;
       const newQnA = await qnaService.addQna({
         title,
         contents,
+        contentText,
+        authorId,
         author,
         tags,
         isAnswer,
@@ -68,18 +73,26 @@ qnaRouter.put(
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const qnaId = req.params.qnaId;
-      const author = req.currentUserId || "";
-      const { title, contents, recommends, tags, isAnswer, parentQnaId } =
-        req.body;
+      const userId = req.currentUserId || "";
+      const {
+        title,
+        contents,
+        contentText,
+        recommends,
+        tags,
+        isAnswer,
+        parentQnaId,
+      } = req.body;
       const toUpdate = {
         ...(title && { title }),
         ...(contents && { contents }),
+        ...(contentText && { contentText }),
         ...(recommends && { recommends }),
         ...(tags && { tags }),
         ...(isAnswer && { isAnswer }),
         ...(parentQnaId && { parentQnaId }),
       };
-      const updatedQnaA = await qnaService.setQna(qnaId, author, toUpdate);
+      const updatedQnaA = await qnaService.setQna(qnaId, userId, toUpdate);
       res.status(200).json(updatedQnaA);
     } catch (error) {
       next(error);

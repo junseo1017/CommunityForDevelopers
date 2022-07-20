@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { portfolioService, userService } from "../services";
+import { portfolioService, qnaService } from "../services";
 
 const searchRouter = Router();
 
@@ -23,6 +23,20 @@ searchRouter.get(
         page
       );
       res.status(200).json(Portfolios);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+searchRouter.get(
+  "/qnas",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const value = req.query.value as string;
+      const lastId = req.query.lastId as string;
+      const QnAs = await qnaService.getQnasBySearch(value, lastId);
+      res.status(200).json(QnAs);
     } catch (error) {
       next(error);
     }
