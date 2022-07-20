@@ -1,5 +1,6 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 const useEditor = () => {
   const editorCore = useRef(null);
@@ -12,6 +13,21 @@ const useEditor = () => {
     const array = imageArray.filter((image) => image !== img);
     setImageArray(array);
   }
+  /* add image to imageArray */
+  function addImages(img) {
+    imageArray.push(img);
+  }
+  useEffect(() => {
+    if (portfolioValue.content) {
+      const editorData = JSON.parse(portfolioValue.content);
+      for (const block of editorData.blocks) {
+        if (block.type === "image") {
+          /* Get the image path and save it in image array for later comparison */
+          addImages(block.data.file.url);
+        }
+      }
+    }
+  }, [portfolioValue]);
 
   const savePortfolio = async () => {
     /* get the editor.js content and save it to server */
@@ -21,7 +37,6 @@ const useEditor = () => {
       const data = {
         content: JSON.stringify(savedData),
       };
-
       /* Clear all the unused images from server */
       await clearEditorLeftoverImages();
       return { ...portfolioValue, ...data };
@@ -47,8 +62,8 @@ const useEditor = () => {
         if (!currentImages.includes(img)) {
           try {
             /* delete image from backend */
-            await API.deleteImage({ imagePath: img });
-
+            //await API.deleteImage({ imagePath: img });
+            await axios.delete("/api/images", { imgUrl: img });
             /* remove from array */
             removeImage(img);
           } catch (err) {

@@ -2,7 +2,6 @@
 import {
   LabelCss,
   FormItemLayout,
-  TailFormItemLayout,
   Container,
   LeftCard,
   RightCard,
@@ -28,11 +27,9 @@ import {
   message,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-//import PortfolioCard from "./PortfolioCard";
 import PortfolioCard from "../Common/PortfolioCard";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-const { Step } = Steps;
 
 const CreatePortfolioCard = ({ onSubmitCard }) => {
   const [items, name, onNameChange, addItem] = useSelects();
@@ -131,7 +128,7 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
         <div css={submitButton}>
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              next
+              다음
             </Button>
           </Form.Item>
         </div>
@@ -154,7 +151,7 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
                 >
                   <ImgCrop rotate>
                     <Upload.Dragger
-                      name="files"
+                      name="image"
                       /*action="/upload.do"*/ maxCount={1}
                       onChange={onChange}
                       onRemove={onRemove}

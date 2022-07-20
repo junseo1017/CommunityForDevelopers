@@ -9,8 +9,10 @@ axios.defaults.withCredentials = true; // front, backend 간 쿠키공유
 export const loadPortfolios = createAsyncThunk(
   "portfolio/loadPortfolios",
   async (data) => {
-    //const response = await axios.get(`/portfolios?lastId=${data?.lastId || 0}`);
-    const response = await axios.get(`/api/portfolios`);
+    console.log(`%c 포트폴리오 요청: ${data?.lastId} `, "color: green;");
+    const response = await axios.get(`/api/portfolios/?lastId=${data?.lastId || ""}`);
+    //const response = await axios.get(`/api/portfolios`);
+    console.log(response);
     return response.data;
   },
   {
@@ -24,12 +26,31 @@ export const loadPortfolios = createAsyncThunk(
     },
   },
 );
+
 export const loadPortfoliosSearch = createAsyncThunk(
   "portfolio/loadPortfoliosSearch",
   async (data) => {
-    const query = "?";
+    console.log(`/api/search/portfolios/${data.query}`);
+    const response = await axios.get(`/api/search/portfolios/${data.query}`);
+    console.log(response);
+    return response.data;
+  },
+  {
+    condition: (data, { getState }) => {
+      const { portfolio } = getState();
+      if (portfolio.loadPortfoliosLoading) {
+        // console.warn('중복 요청 취소');
+        return false;
+      }
+      return true;
+    },
+  },
+);
 
-    const response = await axios.get("/api/portfolios/search/list", data);
+export const loadPortfoliosSearchScroll = createAsyncThunk(
+  "portfolio/loadPortfoliosSearchScroll",
+  async (data) => {
+    const response = await axios.get(`/api/search/portfolios/${data.query}`);
     console.log(response);
     return response.data;
   },
