@@ -115,7 +115,6 @@ userRouter.put(
     const userId = req.currentUserId || "";
     const image = req.file;
     const imgUrl = <string>await getImageUrl(<Express.Multer.File>image);
-    console.log(req.body);
     const { nickname, job, skills } = req.body;
 
     const toUpdate = {
@@ -124,7 +123,7 @@ userRouter.put(
       imgUrl,
       skills,
     };
-
+    console.log(req.body);
     try {
       await userUpdateJoiSchema.validateAsync({ nickname });
       const updatedUserInfo = await userService.setUser(userId, toUpdate);

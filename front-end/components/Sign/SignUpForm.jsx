@@ -17,6 +17,7 @@ const RegExp = {
 
 const SignUpForm = () => {
   const [signupFlag, setSignupFlag] = useState(null);
+  const [emailAuth, setEmailAuth] = useState(false);
   const dispatch = useDispatch();
   const { signupDone, signupError } = useSelector((state) => state.user);
   const {
@@ -104,6 +105,7 @@ const SignUpForm = () => {
                   })}
                 />
                 {emailErrorMessage()}
+                {}
               </div>
               <div>
                 <label>비밀번호</label>

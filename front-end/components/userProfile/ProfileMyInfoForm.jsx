@@ -36,12 +36,13 @@ const ProfileMyInfoForm = ({ action, setAction }) => {
   // form에 사용되는 state value 넣어주기(imagePreview, skills)
   useEffect(() => {
     if (userinfo) {
-      setImagePreview(userinfo.imgUrl);
       setSkills(userinfo.skills);
+      if (userinfo.imgUrl) setImagePreview(userinfo.imgUrl);
     }
   }, [userinfo]);
 
   const onSubmit = (data) => {
+    console.log(skills);
     const formData = new FormData();
     formData.append("image", imageinputRef.current.files[0]);
     formData.append("nickname", data.nickname);
@@ -111,7 +112,7 @@ const ProfileMyInfoForm = ({ action, setAction }) => {
           name="image"
           onChange={(e) => addPreviewImage(e.target.files[0])}
         />
-        <div style={{ width: "150px" }}>
+        <div style={{ width: "200px" }}>
           <Image src={imagePreview} layout="responsive" width="100%" height="100%" />
         </div>
       </div>
