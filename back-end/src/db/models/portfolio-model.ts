@@ -52,8 +52,8 @@ export class PortfolioModel {
   }
 
   async findBySearch(searchInfo: SearchInfo, page: number) {
-    const searchConditon = getSearchCondition(searchInfo, page);
-    return await Portfolio.aggregate(searchConditon);
+    const searchCondition = getSearchCondition(searchInfo, page);
+    return await Portfolio.aggregate(searchCondition);
   }
 
   async create(portInfo: InputDTO) {
