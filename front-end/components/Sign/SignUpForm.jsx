@@ -11,11 +11,7 @@ import { emailAuth } from "../../actions/user";
 import OAuthSign from "./OAuthSign";
 import EmailAuth from "./EmailAuth";
 import { RandomNum } from "../Common/utils";
-
-const RegExp = {
-  email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-  password: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,15}$/,
-};
+import { RegExp } from "../Common/utils";
 
 const SignUpForm = () => {
   const dispatch = useDispatch();
@@ -59,33 +55,33 @@ const SignUpForm = () => {
 
   const emailErrorMessage = () => {
     if (errors.email && errors.email.type === "required") {
-      return <span>이메일을 입력해주세요.</span>;
+      return <strong>이메일을 입력해주세요.</strong>;
     } else if (errors.email && errors.email.type === "pattern") {
-      return <span>{errors.email.message}</span>;
+      return <strong>{errors.email.message}</strong>;
     }
   };
 
   const pwErrorMessage = () => {
     if (errors.password && errors.password.type === "required") {
-      return <span>비밀번호를 입력해주세요</span>;
+      return <strong>비밀번호를 입력해주세요</strong>;
     } else if (errors.password && errors.password.type === "pattern") {
-      return <span>{errors.password.message}</span>;
+      return <strong>{errors.password.message}</strong>;
     }
   };
 
   const pwCkErrorMessage = () => {
     if (errors.passwordCheck && errors.passwordCheck.type === "required") {
-      return <span>비밀번호를 한 번 더 입력해주세요</span>;
+      return <strong>비밀번호를 한 번 더 입력해주세요</strong>;
     } else if (errors.passwordCheck && errors.passwordCheck.type === "validate") {
-      return <span>{errors.passwordCheck.message}</span>;
+      return <strong>{errors.passwordCheck.message}</strong>;
     }
   };
 
   const nicknameErrorMessage = () => {
     if (errors.nickname && errors.nickname.type === "required") {
-      return <span>닉네임을 입력해주세요</span>;
+      return <strong>닉네임을 입력해주세요</strong>;
     } else if (errors.nickname && errors.nickname.type === "minLength") {
-      return <span>{errors.nickname.message}</span>;
+      return <strong>{errors.nickname.message}</strong>;
     }
   };
 
@@ -102,7 +98,7 @@ const SignUpForm = () => {
 
   return (
     <div css={SignUpFormStyle}>
-      <div>
+      <main>
         <h2>회원가입</h2>
         <OAuthSign />
         <Divider plain></Divider>
@@ -110,8 +106,9 @@ const SignUpForm = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div>
               <div>
-                <label>이메일</label>
+                <label htmlFor="emailInput">이메일</label>
                 <input
+                  id="emailInput"
                   autoComplete="off"
                   css={errors.email && errorInput}
                   placeholder="이메일을 입력해주세요"
@@ -142,9 +139,10 @@ const SignUpForm = () => {
                 )}
               </div>
               <div>
-                <label>비밀번호</label>
+                <label htmlFor="passwordInput">비밀번호</label>
                 <p>문자,숫자,특수문자를 조합한 8~15자리 비밀번호를 입력해주세요</p>
                 <input
+                  id="passwordInput"
                   css={errors.password && errorInput}
                   autoComplete="off"
                   placeholder="비밀번호를 입력해주세요"
@@ -160,8 +158,9 @@ const SignUpForm = () => {
                 {pwErrorMessage()}
               </div>
               <div>
-                <label>비밀번호 확인</label>
+                <label htmlFor="passwordConfirmInput">비밀번호 확인</label>
                 <input
+                  id="passwordConfirmInput"
                   css={errors.passwordCheck && errorInput}
                   autoComplete="off"
                   placeholder="비밀번호를 입력해주세요"
@@ -178,9 +177,10 @@ const SignUpForm = () => {
                 {pwCkErrorMessage()}
               </div>
               <div>
-                <label>닉네임</label>
+                <label htmlFor="nicknameInput">닉네임</label>
                 <p>CFD에서 사용될 2~15자리의 닉네임</p>
                 <input
+                  id="nicknameInput"
                   autoComplete="off"
                   css={errors.nickname && errorInput}
                   placeholder="닉네임을 입력해주세요"
@@ -199,10 +199,10 @@ const SignUpForm = () => {
                 {nicknameErrorMessage()}
               </div>
             </div>
-            <input css={signUpBtn} type="submit" value={"회원가입하기"} />
+            <input css={signUpBtn} type="submit" value={`회원가입하기`} />
           </form>
         </section>
-      </div>
+      </main>
     </div>
   );
 };

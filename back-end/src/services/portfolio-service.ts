@@ -5,6 +5,7 @@ import {
   UpdateInfo,
   SearchInfo,
 } from "../interfaces/portfolio-interface";
+import { AppError } from "../middlewares/error-handler";
 
 class PortfolioService {
   constructor(private portfolioModel: PortfolioModel) {
@@ -40,13 +41,13 @@ class PortfolioService {
     if (lastId) {
       const portfolios = await this.portfolioModel.findPortfolios(lastId);
       if (!portfolios) {
-        throw new Error("포토폴리오 목록이 존재하지 않습니다.");
+        throw new AppError(400, "포토폴리오가 존재하지 않습니다.");
       }
       return portfolios;
     }
     const portfolios = await this.portfolioModel.findPortfoliosInit();
     if (!portfolios) {
-      throw new Error("포토폴리오 목록이 존재하지 않습니다.");
+      throw new AppError(400, "포토폴리오 정보가 없습니다.");
     }
     return portfolios;
   }
@@ -54,7 +55,7 @@ class PortfolioService {
   async getPortfolio(portId: string) {
     const portfolio = await this.portfolioModel.findById(portId);
     if (!portfolio) {
-      throw new Error("포토폴리오가 존재하지 않습니다.");
+      throw new AppError(400, "포토폴리오 정보가 없습니다.");
     }
     return portfolio;
   }
@@ -62,7 +63,7 @@ class PortfolioService {
   async getUserPortfolio(userId: string) {
     const portfolio = await this.portfolioModel.findByUserId(userId);
     if (!portfolio) {
-      throw new Error("포토폴리오가 존재하지 않습니다.");
+      throw new AppError(400, "포토폴리오 정보가 없습니다.");
     }
     return portfolio;
   }
@@ -70,7 +71,7 @@ class PortfolioService {
   async getUserScraps(userId: string) {
     const portfolio = await this.portfolioModel.getScrapsByUserId(userId);
     if (!portfolio) {
-      throw new Error("포토폴리오가 존재하지 않습니다.");
+      throw new AppError(400, "포토폴리오 정보가 없습니다.");
     }
     return portfolio;
   }
@@ -82,7 +83,7 @@ class PortfolioService {
     }
     const portfolios = await this.portfolioModel.findBySearch(searchInfo, page);
     if (!portfolios) {
-      throw new Error("검색과정에서 문제가 발생하였습니다.");
+      throw new AppError(400, "검색과정에서 문제가 발생하였습니다.");
     }
     return portfolios;
   }
@@ -90,10 +91,14 @@ class PortfolioService {
   async setPortfolio(portId: string, userId: string, portInfo: UpdateInfo) {
     const portfolio = await this.portfolioModel.findById(portId);
     if (!portfolio) {
-      throw new Error("포토폴리오 정보가 없습니다.");
+      throw new AppError(400, "포토폴리오 정보가 없습니다.");
     }
     if (!portfolio.authorId.equals(userId)) {
-      throw new Error("Forbidden");
+      throw new AppError(
+        403,
+        "자신의 포토폴리오만 수정 가능합니다.",
+        "Forbidden Error"
+      );
     }
     return await this.portfolioModel.update(portId, portInfo);
   }
@@ -106,7 +111,7 @@ class PortfolioService {
   ) {
     const portfolio = await this.portfolioModel.findById(portId);
     if (!portfolio) {
-      throw new Error("포토폴리오 정보가 없습니다.");
+      throw new AppError(400, "포토폴리오 정보가 없습니다.");
     }
     if (adding) {
       return await this.portfolioModel.addUserInField(portId, userId, field);
@@ -117,17 +122,21 @@ class PortfolioService {
   async setPortfolioComment(portId: string, commentId: Types.ObjectId) {
     const portfolio = await this.portfolioModel.findById(portId);
     if (!portfolio) {
-      throw new Error("포토폴리오 정보가 없습니다.");
+      throw new AppError(400, "포토폴리오 정보가 없습니다.");
     }
     return await this.portfolioModel.updateComment(portId, commentId);
   }
   async deletePortfolio(portId: string, userId: string) {
     const portfolio = await this.portfolioModel.findById(portId);
     if (!portfolio) {
-      throw new Error("해당 포토폴리오가 존재하지 않습니다.");
+      throw new AppError(400, "포토폴리오 정보가 없습니다.");
     }
     if (!portfolio.authorId.equals(userId)) {
-      throw new Error("Forbidden");
+      throw new AppError(
+        403,
+        "자신의 포토폴리오만 삭제 가능합니다.",
+        "Forbidden Error"
+      );
     }
     return await this.portfolioModel.deleteById(portId);
   }

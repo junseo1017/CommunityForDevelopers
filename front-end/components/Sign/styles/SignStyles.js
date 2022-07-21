@@ -65,7 +65,7 @@ export const OAuthStyle = css`
     width: 100%;
     padding: 0 !important;
   }
-  & > h3 {
+  & > h2 {
     font-size: 14px;
     text-align: center;
     margin: 0;
@@ -126,13 +126,17 @@ export const SignUpContentStyle = css`
     font-weight: 700;
     padding-left: 2px;
   }
+  // 회원가입 인풋 설명
   & p {
     font-size: 12px;
     color: rgb(160, 160, 160);
     font-weight: 500;
     padding-left: 2px;
   }
-  & span {
+  // 에러메세지
+  & strong {
+    font-size: 12px;
+    text-decoration: none;
     color: rgb(255, 119, 119);
     padding-left: 5px;
     font-weight: 500;
@@ -148,6 +152,9 @@ export const SignUpContentStyle = css`
     ::placeholder {
       padding-left: 10px;
       font-weight: 500;
+      @media (max-width: 768px) {
+        font-size: 12px;
+      }
     }
     :focus {
       outline: none !important;

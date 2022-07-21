@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import { qnaModel, QnaModel } from "../db/models/qna-model";
 import { QnaInputDTO } from "../interfaces/qna-interface";
+import { AppError } from "../middlewares/error-handler";
 class QnaService {
   constructor(private qnaModel: QnaModel) {
     this.qnaModel = qnaModel;
@@ -33,13 +34,13 @@ class QnaService {
     if (lastId) {
       const QnAs = await this.qnaModel.findQnas(lastId);
       if (!QnAs) {
-        throw new Error("QnA 목록이 존재하지 않습니다.");
+        throw new AppError(400, "QnA 정보가 없습니다.");
       }
       return QnAs;
     }
     const QnAs = await this.qnaModel.findQnasInit();
     if (!QnAs) {
-      throw new Error("QnA 목록이 존재하지 않습니다.");
+      throw new AppError(400, "QnA 정보가 없습니다.");
     }
     return QnAs;
   }
@@ -47,7 +48,7 @@ class QnaService {
   async getQnaById(qnaId: string) {
     const QnA = await this.qnaModel.findById(qnaId);
     if (!QnA) {
-      throw new Error("QnA가 존재하지 않습니다.");
+      throw new AppError(400, "QnA 정보가 없습니다.");
     }
     return QnA;
   }
@@ -55,7 +56,7 @@ class QnaService {
   async getQnaByUserId(userId: string) {
     const QnA = await this.qnaModel.findByUserId(userId);
     if (!QnA) {
-      throw new Error("QnA가 존재하지 않습니다.");
+      throw new AppError(400, "QnA 정보가 없습니다.");
     }
     return QnA;
   }
@@ -67,7 +68,7 @@ class QnaService {
   async getQnasBySearch(value: string, lastId: string) {
     const QnAs = await this.qnaModel.findBySearch(value, lastId);
     if (!QnAs) {
-      throw new Error("검색 과정에서 문제가 발생하였습니다.");
+      throw new AppError(400, "검색 과정에서 문제가 발생하였습니다.");
     }
     return QnAs;
   }
@@ -75,39 +76,49 @@ class QnaService {
   async setQna(qnaId: string, userId: string, qnaInfo: QnaInputDTO) {
     const QnA = await this.qnaModel.findById(qnaId);
     if (!QnA) {
-      throw new Error("QnA 정보가 없습니다.");
+      throw new AppError(400, "QnA 정보가 없습니다.");
     }
     if (!QnA.authorId.equals(userId)) {
-      throw new Error("Forbidden");
+      throw new AppError(
+        403,
+        "자신의 QnA만 수정 가능합니다.",
+        "Forbidden Error"
+      );
     }
     return await this.qnaModel.update(qnaId, qnaInfo);
   }
 
   async setQnaComment(qnaId: string, commentId: Types.ObjectId) {
-    const QnA = await this.qnaModel.findById(qnaId);
+    const QnA = await this.qnaModel.updateComment(qnaId, commentId);
     if (!QnA) {
-      throw new Error("QnA정보가 없습니다.");
+      throw new AppError(400, "댓글을 작성할 QnA 정보가 없습니다.");
     }
-    return await this.qnaModel.updateComment(qnaId, commentId);
+    return QnA;
   }
   async recommendQna(qnaId: string, userId: string, recommended: boolean) {
-    const QnA = await this.qnaModel.findById(qnaId);
-    if (!QnA) {
-      throw new Error("QnA정보가 없습니다.");
-    }
     if (recommended) {
-      return await this.qnaModel.addRecommend(qnaId, userId);
+      const QnA = await this.qnaModel.addRecommend(qnaId, userId);
+      if (!QnA) {
+        throw new AppError(400, "추천할 QnA정보가 없습니다.");
+      }
     }
-    return await this.qnaModel.deleteRecommend(qnaId, userId);
+    const QnA = await this.qnaModel.deleteRecommend(qnaId, userId);
+    if (!QnA) {
+      throw new AppError(400, "추천 취소할 QnA정보가 없습니다.");
+    }
   }
 
   async deleteQna(qnaId: string, userId: string) {
     const QnA = await this.qnaModel.deleteById(qnaId);
     if (!QnA) {
-      throw new Error("해당 QnA가 존재하지 않습니다.");
+      throw new AppError(400, "QnA 정보가 없습니다.");
     }
     if (!QnA.authorId.equals(userId)) {
-      throw new Error("Forbidden");
+      throw new AppError(
+        403,
+        "자신의 QnA만 삭제 가능합니다.",
+        "Forbidden Error"
+      );
     }
     return QnA;
   }

@@ -10,16 +10,16 @@ const OAuthSign = () => {
 
   return (
     <section css={OAuthStyle}>
-      <h3>SNS 계정으로 간편 로그인/회원가입</h3>
+      <h2>SNS 계정으로 간편 로그인/회원가입</h2>
       <div>
         <ul>
           <li>
-            <a href={kakaoLoginUrl && kakaoLoginUrl} title="카카오 아이디로 가입하기">
+            <a href={kakaoLoginUrl && kakaoLoginUrl} aria-label="카카오 아이디로 가입하기">
               <KakaoLogo />
             </a>
           </li>
           <li>
-            <a href={githubLoginUrl && githubLoginUrl} title="깃허브 아이디로 가입하기">
+            <a href={githubLoginUrl && githubLoginUrl} aria-label="깃허브 아이디로 가입하기">
               <GithubLogo />
             </a>
           </li>
