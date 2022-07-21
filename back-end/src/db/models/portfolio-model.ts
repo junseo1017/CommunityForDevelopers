@@ -87,22 +87,22 @@ export class PortfolioModel {
     );
   }
 
-  async updateComment(portId: string, commentId: Types.ObjectId) {
+  async updateComment(
+    portId: string,
+    commentId: Types.ObjectId,
+    setType: string
+  ) {
     const filter = { _id: portId };
     const option = { returnOriginal: false };
     return await Portfolio.findOneAndUpdate(
       filter,
-      { $addToSet: { comments: commentId } },
+      { [setType]: { comments: commentId } },
       option
     );
   }
 
   async deleteById(portId: string) {
     return await Portfolio.findOneAndDelete({ _id: portId });
-  }
-
-  async deleteByEmail(email: string) {
-    return await Portfolio.findOneAndDelete({ email });
   }
 }
 

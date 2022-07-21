@@ -124,8 +124,21 @@ class PortfolioService {
     if (!portfolio) {
       throw new AppError(400, "포토폴리오 정보가 없습니다.");
     }
-    return await this.portfolioModel.updateComment(portId, commentId);
+    return await this.portfolioModel.updateComment(
+      portId,
+      commentId,
+      "$addToSet"
+    );
   }
+
+  async deletePortfolioComment(portId: string, commentId: Types.ObjectId) {
+    const portfolio = await this.portfolioModel.findById(portId);
+    if (!portfolio) {
+      throw new AppError(400, "포토폴리오 정보가 없습니다.");
+    }
+    return await this.portfolioModel.updateComment(portId, commentId, "$pull");
+  }
+
   async deletePortfolio(portId: string, userId: string) {
     const portfolio = await this.portfolioModel.findById(portId);
     if (!portfolio) {
