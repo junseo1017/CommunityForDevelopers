@@ -124,7 +124,7 @@ export const removePortfolio = createAsyncThunk(
       const response = await axios.delete(`/api/portfolios/${data.portfolioId}`); // DELETE /portfolio/1/comment
       //thunkAPI.dispatch(userSlice.actions.removePortfolioToMe(response.data.id));
       console.log(response.data);
-      return response.data;
+      return { ...response.data, portfolioId: data.portfolioId };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
