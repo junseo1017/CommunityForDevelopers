@@ -71,7 +71,7 @@ export const addPortfolio = createAsyncThunk("portfolio/addPortfolio", async (da
     console.log(data);
     const response = await axios.post("/api/portfolios", data);
     console.log(response);
-    thunkAPI.dispatch(userSlice.actions.addPortfolioToMe(response.data.id));
+    //thunkAPI.dispatch(userSlice.actions.addPortfolioToMe(response.data.id));
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -120,8 +120,10 @@ export const removePortfolio = createAsyncThunk(
   "portfolio/removePortfolio",
   async (data, thunkAPI) => {
     try {
-      const response = await axios.delete(`/portfolio/${data.portfolioId}`); // DELETE /portfolio/1/comment
-      thunkAPI.dispatch(userSlice.actions.removePortfolioToMe(response.data.id));
+      console.log(data);
+      const response = await axios.delete(`/api/portfolios/${data.portfolioId}`); // DELETE /portfolio/1/comment
+      //thunkAPI.dispatch(userSlice.actions.removePortfolioToMe(response.data.id));
+      console.log(response.data);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
@@ -129,11 +131,26 @@ export const removePortfolio = createAsyncThunk(
   },
 );
 
+//http://localhost:5000/api/comments/:commentId
+export const removeComment = createAsyncThunk("portfolio/removeComment", async (data, thunkAPI) => {
+  try {
+    console.log(data);
+    const response = await axios.delete(`/api/comments/${data.commentId}`); //
+    console.log(response.data);
+    //return response.data;
+    return { commentId: data.commentId };
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data);
+  }
+});
+
 export const loadPortfolio = createAsyncThunk(
   "portfolio/loadPortfolio",
   async (data, { rejectWithValue }) => {
     try {
+      console.log(data);
       const response = await axios.get(`/api/portfolios/${data.portfolioId}`);
+      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue("wow", error.response.data);
@@ -218,7 +235,12 @@ export const updatePortfolio = createAsyncThunk(
   "portfolio/updatePortfolio",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.patch(`/portfolio/${data.portfolioId}`, data);
+      for (let value of data.formdata.entries()) {
+        console.log(value[0] + ", ", value[1]);
+      }
+      console.log(data.portfolioId);
+      const response = await axios.put(`/api/portfolios/${data.portfolioId}`, data.formdata);
+      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

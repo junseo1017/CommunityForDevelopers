@@ -12,9 +12,9 @@ const ReactEditorJS = createReactEditorJS();
 //import API from "../api/image" // Your server url
 
 const Editor = ({ imageArray, handleInitialize, data }) => {
+  const { singlePortfolio } = useSelector((state) => state.portfolio);
+  console.log(singlePortfolio);
   const dispatch = useDispatch();
-  const { imagePaths } = useSelector((state) => state.image);
-  const { imagePath } = useSelector((state) => state.image);
   const [editorTools, setEditorTools] = useState("");
   let editorComponent;
   if (!editorTools) editorComponent = "Loading...";
@@ -25,16 +25,7 @@ const Editor = ({ imageArray, handleInitialize, data }) => {
           onInitialize={handleInitialize}
           tools={editorTools}
           placeholder={`포트폴리오 내용을 작성해주세요`}
-          defaultValue={{
-            blocks: [
-              {
-                type: "header",
-                data: {
-                  level: 2,
-                },
-              },
-            ],
-          }}
+          defaultValue={singlePortfolio.content && JSON.parse(singlePortfolio.content)}
         />
       </div>
     );

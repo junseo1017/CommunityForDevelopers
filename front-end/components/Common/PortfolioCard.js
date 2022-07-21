@@ -6,6 +6,7 @@ import Link from "next/link";
 import { StarOutlined, LikeOutlined, MessageOutlined } from "@ant-design/icons";
 import { useMediaQuery } from "react-responsive";
 import { DEFAULT_IMAGE } from "../../pages/constants/Image";
+import { useSelector } from "react-redux";
 
 const PortfolioCard = ({
   title,
@@ -19,6 +20,8 @@ const PortfolioCard = ({
   authorImg,
   thumbnail,
 }) => {
+  const { me } = useSelector((state) => state.user);
+  const { loadPortfoliosDone } = useSelector((state) => state.portfolio);
   const [showHeader, setShowHeader] = useState(null);
   const isresponsive = useMediaQuery({
     query: "(max-width:768px)",
