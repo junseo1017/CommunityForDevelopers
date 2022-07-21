@@ -241,7 +241,7 @@ const portfolioSlice = createSlice({
       .addCase(removePortfolio.fulfilled, (state, action) => {
         state.removePortfolioLoading = false;
         state.removePortfolioDone = true;
-        _remove(state.mainPortfolios, { _id: action.payload.portfolioId });
+        _remove(state.mainPortfolios, { id: action.payload.portfolioId });
       })
       .addCase(removePortfolio.rejected, (state, action) => {
         state.removePortfolioLoading = false;
