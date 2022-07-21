@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo } from "react";
 import useConfirmModal from "./useConfirmModal";
 import { addComment } from "../actions/portfolio";
 import { useDispatch } from "react-redux";
+import Router from "next/router";
 
 const useComment = ({ nickname, Portf_id, imgUrl }) => {
   //const [comments, setComments] = useState([]);
