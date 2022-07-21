@@ -7,6 +7,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { getGithubLoginUrl, getKakaoLoginUrl } from "../../actions/user";
+import wrapper from "../../store";
+
 const signUpContainer = css`
   display: flex;
   flex-direction: column;
@@ -44,4 +47,13 @@ const SignUp = () => {
     </div>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({}) => {
+  await store.dispatch(getGithubLoginUrl());
+  await store.dispatch(getKakaoLoginUrl());
+  return {
+    props: {},
+  };
+});
+
 export default SignUp;
