@@ -1,12 +1,16 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { userService } from "../services";
-import { ExtendReq, loginRequired } from "../middlewares";
+import {
+  ExtendReq,
+  loginRequired,
+  validateRequestWith,
+  checkImage,
+} from "../middlewares";
 import {
   userCreateJoiSchema,
   userUpdateJoiSchema,
 } from "../db/schemas/joi-schemas";
-import { validateRequestWith } from "../middlewares/validator";
-import { upload, getImageUrl, authMailer } from "../utils";
+import { authMailer, upload } from "../utils";
 
 const userRouter = Router();
 
@@ -121,22 +125,13 @@ userRouter.get(
 userRouter.put(
   "/info",
   loginRequired,
-  validateRequestWith(userUpdateJoiSchema, "body"),
   upload,
+  checkImage,
+  validateRequestWith(userUpdateJoiSchema, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
-    const image = req.file;
-    let imgUrl = "";
-    if (image) {
-      imgUrl = <string>await getImageUrl(<Express.Multer.File>image);
-    }
-
-    const { nickname, job } = req.body;
-
-    console.log("라우터:", req.body);
-
+    const { nickname, job, imgUrl } = req.body;
     const skills = req.body.skills.split(",");
-
     const toUpdate = {
       nickname,
       job,

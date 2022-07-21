@@ -13,9 +13,10 @@ const userCreateJoiSchema = Joi.object({
 });
 
 const userUpdateJoiSchema = Joi.object({
-  nickname: Joi.string(),
+  nickname: Joi.string().required(),
   job: Joi.string(),
   skills: Joi.string(),
+  imgUrl: Joi.string(),
 });
 
 export { userCreateJoiSchema, userUpdateJoiSchema };
