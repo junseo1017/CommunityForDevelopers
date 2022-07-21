@@ -70,6 +70,7 @@ const Portfolio = () => {
   const onClickLikePort = () => {
     if (!me) {
       showConfirm();
+      return;
     }
     if (liked) dispatch(unlikePortfolio({ portfolioId: singlePortfolio?._id, UserId: me?._id }));
     else dispatch(likePortfolio({ portfolioId: singlePortfolio?._id, UserId: me?._id }));
@@ -77,6 +78,7 @@ const Portfolio = () => {
   const onClickScrapPort = () => {
     if (!me) {
       showConfirm();
+      return;
     }
     if (scrapped)
       dispatch(unscrapPortfolio({ portfolioId: singlePortfolio?._id, UserId: me?._id }));
