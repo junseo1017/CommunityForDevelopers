@@ -129,7 +129,7 @@ export const Button = styled.button`
   text-align: center;
   white-space: nowrap;
   @media (max-width: 768px) {
-    font-size: 12px;
+    font-size: 13px;
     padding: 4px 6px 4px 6px;
   }
   ${(props) =>
