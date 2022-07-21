@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { portfolioService, userService } from "../services";
-import { ExtendReq, loginRequired } from "../middlewares/login-required";
-import { upload, getImageUrl } from "../utils/image-util";
+import { ExtendReq, loginRequired, checkImage } from "../middlewares";
+import { upload } from "../utils";
 
 const portfolioRouter = Router();
 
@@ -61,6 +61,7 @@ portfolioRouter.post(
   "/",
   loginRequired,
   upload,
+  checkImage,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const authorId = req.currentUserId || "";
@@ -72,9 +73,7 @@ portfolioRouter.post(
       console.log("req.body: ", req.body);
 
       const skills = JSON.parse(req.body.skills);
-
-      const image = req.file;
-      const thumbnail = <string>await getImageUrl(<Express.Multer.File>image);
+      const thumbnail = req.body.imgUrl;
 
       const newPortfolio = await portfolioService.addPortfolio({
         authorId,
@@ -99,6 +98,7 @@ portfolioRouter.put(
   "/:portId",
   loginRequired,
   upload,
+  checkImage,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const portId = req.params.portId;
     const userId = req.currentUserId || "";
@@ -115,8 +115,7 @@ portfolioRouter.put(
         res.status(200).json(updatedPortfolio);
       }
       const { title, description, skills, content, contentText } = req.body;
-      const image = req.file;
-      const thumbnail = <string>await getImageUrl(<Express.Multer.File>image);
+      const thumbnail = req.body.imgUrl;
       const toUpdate = {
         ...(title && { title }),
         ...(description && { description }),
