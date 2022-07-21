@@ -6,21 +6,17 @@ import {
   userUpdateJoiSchema,
 } from "../db/schemas/joi-schemas";
 import { upload, getImageUrl } from "../utils/image-util";
+import { validateBodyWith } from "../middlewares/validator";
 
 const userRouter = Router();
 
 userRouter.post(
   "/",
+  validateBodyWith(userCreateJoiSchema, "body"),
   async (req: Request, res: Response, next: NextFunction) => {
     const { nickname, email, password } = req.body;
 
     try {
-      await userCreateJoiSchema.validateAsync({
-        email,
-        nickname,
-        password,
-      });
-
       await userService.addUser({
         nickname,
         email,
