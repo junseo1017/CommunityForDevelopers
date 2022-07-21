@@ -5,12 +5,9 @@ const portfolioSearchJoi = Joi.object({
 });
 
 const portfolioCreateJoi = Joi.object({
-  authorId: Joi.string().required(),
-  author: Joi.string().required(),
-  authorImg: Joi.string(),
   title: Joi.string().min(2).max(30).required(),
-  description: Joi.string().max(100).required(),
-  skills: Joi.array().items(Joi.string().required()),
+  description: Joi.string().max(100),
+  skills: Joi.string(),
   content: Joi.string().required(),
   contentText: Joi.string().required(),
   imgUrl: Joi.string(),
@@ -22,12 +19,9 @@ const portfolioUpdateQueryJoi = Joi.object({
 });
 
 const portfolioUpdateJoi = Joi.object({
-  authorId: Joi.string().required(),
-  author: Joi.string().required(),
-  authorImg: Joi.string(),
   title: Joi.string().min(2).max(30).required(),
-  description: Joi.string().max(100).required(),
-  skills: Joi.array().items(Joi.string().required()),
+  description: Joi.string().max(100),
+  skills: Joi.string(),
   content: Joi.string().required(),
   contentText: Joi.string().required(),
   imgUrl: Joi.string(),
