@@ -27,7 +27,7 @@ const useEditor = () => {
         }
       }
     }
-  }, [portfolioValue]);
+  }, []);
 
   const savePortfolio = async () => {
     /* get the editor.js content and save it to server */
@@ -54,16 +54,23 @@ const useEditor = () => {
     const currentImages = [];
     document
       .querySelectorAll(".image-tool__image-picture")
-      .forEach((x) => currentImages.push(x.src.includes("/images/") && x.src));
+      .forEach((x) => currentImages.push(x.src.includes("firebasestorage") && x.src));
 
     if (imageArray.length > currentImages.length) {
       /* image deleted */
+      console.log(imageArray);
+      console.log("0------------");
+      console.log(currentImages);
       for (const img of imageArray) {
         if (!currentImages.includes(img)) {
           try {
             /* delete image from backend */
             //await API.deleteImage({ imagePath: img });
-            await axios.delete("/api/images", { imgUrl: img });
+            console.log(img);
+            axios.defaults.baseURL = backendUrl;
+            axios.defaults.withCredentials = true;
+            await axios.delete("/api/images", { data: { imgUrl: img } });
+            //dispatch(removeImages({ imgUrl: img }));
             /* remove from array */
             removeImage(img);
           } catch (err) {

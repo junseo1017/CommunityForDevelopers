@@ -5,7 +5,6 @@ import { Avatar, Popover, Tag } from "antd";
 import Link from "next/link";
 import { StarOutlined, LikeOutlined, MessageOutlined } from "@ant-design/icons";
 import { useMediaQuery } from "react-responsive";
-import { DEFAULT_IMAGE } from "../../pages/constants/Image";
 import { useSelector } from "react-redux";
 
 const PortfolioCard = ({
@@ -13,6 +12,7 @@ const PortfolioCard = ({
   description,
   skills,
   author,
+  authorId,
   comments,
   recommends,
   scraps,
@@ -55,7 +55,7 @@ const PortfolioCard = ({
       <Link href={`/portfolio/${_id}`}>
         <div style={{ cursor: "pointer" }}>
           <div>
-            <img src={thumbnail || DEFAULT_IMAGE} />
+            <img src={thumbnail || "/image/profile_image_default.jpg"} />
             <div id="gradation">
               <div id="textbox">
                 <h3>{showHeader ? textLimitHandler(title, 20) : textLimitHandler(title, 35)}</h3>
@@ -78,7 +78,7 @@ const PortfolioCard = ({
       </Link>
       <div>
         <div>
-          <Link href={`/profile/${author?._id}`}>
+          <Link href={`/profile/${authorId}`}>
             <Avatar
               style={{ cursor: "pointer" }}
               size={25}
@@ -86,7 +86,7 @@ const PortfolioCard = ({
             />
           </Link>
           <h3>
-            <Link href={`/profile/${author?._id}`}>
+            <Link href={`/profile/${authorId}`}>
               <a>{author}</a>
             </Link>
           </h3>

@@ -69,9 +69,17 @@ const createPortfolio = (props) => {
       //formdata.append("body", JSON.stringify(newData));
       console.log(newData);
       for (const [key, value] of Object.entries(newData)) {
-        formdata.append(`${key}`, `${value}`);
+        if (value) formdata.append(`${key}`, value);
       }
-      formdata.set("skills", JSON.stringify(newData.skills));
+      const isJsonString = (str) => {
+        try {
+          JSON.parse(str);
+        } catch (e) {
+          return false;
+        }
+        return true;
+      };
+      if (!isJsonString(newData.skills)) formdata.set("skills", JSON.stringify(newData.skills));
       dispatch(addPortfolio(formdata));
     },
     [imgFormData],

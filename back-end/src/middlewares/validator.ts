@@ -1,8 +1,13 @@
 import { AppError } from "./error-handler";
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
+import Joi from "joi";
+import { ExtendReq } from "../middlewares";
 type ParameterType = "query" | "body" | "params";
-const validateBodyWith = (schema: any, paramLocation: ParameterType) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
+const validateRequestWith = (
+  schema: Joi.Schema,
+  paramLocation: ParameterType
+) => {
+  return async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       await schema.validateAsync(req[paramLocation]);
       next();
@@ -12,4 +17,4 @@ const validateBodyWith = (schema: any, paramLocation: ParameterType) => {
   };
 };
 
-export { validateBodyWith };
+export { validateRequestWith };
