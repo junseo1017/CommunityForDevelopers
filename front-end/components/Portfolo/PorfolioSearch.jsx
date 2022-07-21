@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadPortfoliosSearch } from "../../actions/portfolio";
 import useDidMountEffect from "../../hooks/useDidMountEffect";
 import useDebouncedEffect from "../../hooks/useDebouncedEffect";
-import _ from "lodash";
+import { debounce } from "lodash";
 
 const PorfolioSearch = ({ orderBys, setSearchQuery }) => {
   const dispatch = useDispatch();
@@ -52,10 +52,17 @@ const PorfolioSearch = ({ orderBys, setSearchQuery }) => {
       ["options"]: Object.keys(newSearchOptions).filter((key) => newSearchOptions[key]),
     });
   };
+
+  const delaySetValue = useCallback(
+    debounce((value) => {
+      setSearchValue(value);
+    }, 500),
+    [],
+  );
   const [searchValue, setSearchValue] = useState("");
   //useDebouncedEffect(() => console.log(value), 1000, [value]);
   const onSearchValueChange = useCallback((e) => {
-    setSearchValue(e.target.value);
+    delaySetValue(e.target.value);
   }, []);
 
   useDidMountEffect(() => {
