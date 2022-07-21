@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
 import { Card, Button, Tag } from "antd";
-import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+
+import { useCallback, useState } from "react";
 import { profileContentCardContainer, qnaContainer, qnaNavStyle } from "./styles/MyInfoStyles";
 import ProfileQnAContent from "./ProfileQnAContent";
 import { useSelector } from "react-redux";

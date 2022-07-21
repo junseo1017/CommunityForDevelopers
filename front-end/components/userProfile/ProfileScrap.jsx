@@ -49,16 +49,8 @@ const ProfileScrap = () => {
                       <img src="https://static.remove.bg/remove-bg-web/5c20d2ecc9ddb1b6c85540a333ec65e2c616dbbd/assets/start-1abfb4fe2980eabfbbaaa4365a0692539f7cd2725f324f904565a9a744f8e214.jpg" />
                       <div id="gradation">
                         <div id="textbox">
-                          <h3>
-                            {showHeader
-                              ? textLimitHandler(e.title, 20)
-                              : textLimitHandler(e.title, 35)}
-                          </h3>
-                          <p>
-                            {showHeader
-                              ? textLimitHandler(e.content, 25)
-                              : textLimitHandler(e.content, 40)}
-                          </p>
+                          <h3>{textLimitHandler(e.title, 15)}</h3>
+                          <p>{textLimitHandler(e.description, 17)}</p>
                         </div>
                       </div>
                       <div>
@@ -73,15 +65,15 @@ const ProfileScrap = () => {
                 </Link>
                 <div>
                   <div>
-                    <Link href={`/profile/${e.author?._id}`}>
+                    <Link href={`/profile/${e.authorId}`}>
                       <Avatar
                         style={{ cursor: "pointer" }}
                         size={25}
-                        src={userinfo.imgUrl ? userinfo.imgUrl : "/image/profile_image_default.jpg"}
+                        src={e.authorImg ? e.authorImg : "/image/profile_image_default.jpg"}
                       />
                     </Link>
                     <h3>
-                      <Link href={`/profile/${e.author?._id}`}>
+                      <Link href={`/profile/${e.authorId}`}>
                         <a>{e.author}</a>
                       </Link>
                     </h3>

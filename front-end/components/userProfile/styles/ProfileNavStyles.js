@@ -16,7 +16,7 @@ export const profileNavStyle = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1.5vw;
+  gap: 15px;
   margin: 0;
   padding: 0;
   & a {
