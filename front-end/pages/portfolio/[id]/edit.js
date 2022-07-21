@@ -75,7 +75,7 @@ const EditPortfolio = (props) => {
       delete newData.imgSrc;
       //formdata.append("body", JSON.stringify(newData));
       for (const [key, value] of Object.entries(newData)) {
-        formdata.append(`${key}`, value);
+        if (value) formdata.append(`${key}`, value);
       }
       const isJsonString = (str) => {
         try {
