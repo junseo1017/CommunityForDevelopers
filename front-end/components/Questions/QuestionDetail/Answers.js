@@ -1,10 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import { Divider, Collapse } from "antd";
+import { useSelector } from "react-redux";
+import { Divider } from "antd";
 import { TextContainer, DetailAnswerContainer } from "../styles/QuestionStyle";
 import Answer from "./Answer";
 
-const Answers = ({ answers, me }) => {
+const Answers = ({ answers }) => {
+  console.log("답변s", answers);
+
   answers.sort((a, b) => {
     return b.recommends.length - a.recommends.length;
   });
@@ -21,7 +24,7 @@ const Answers = ({ answers, me }) => {
         answers.map((answer) => {
           return (
             <div css={DetailAnswerContainer} key={answer._id}>
-              <Answer answer={answer} me={me} />
+              <Answer answer={answer} />
             </div>
           );
         })}

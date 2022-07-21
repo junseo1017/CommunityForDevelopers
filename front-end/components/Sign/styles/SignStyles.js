@@ -54,6 +54,37 @@ export const SignBtnStyle = css`
   }
 `;
 
+export const OAuthStyle = css`
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  & > * {
+    width: 100%;
+    padding: 0 !important;
+  }
+  & > h2 {
+    font-size: 14px;
+    text-align: center;
+    margin: 0;
+  }
+  & ul {
+    width: 100%;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 0;
+    padding: 0;
+  }
+  & li > a {
+    color: black;
+    z-index: 1000;
+  }
+`;
+
 export const SignUpFormStyle = css`
   margin: 0 auto;
   & * {
@@ -95,13 +126,17 @@ export const SignUpContentStyle = css`
     font-weight: 700;
     padding-left: 2px;
   }
+  // 회원가입 인풋 설명
   & p {
     font-size: 12px;
     color: rgb(160, 160, 160);
     font-weight: 500;
     padding-left: 2px;
   }
-  & span {
+  // 에러메세지
+  & strong {
+    font-size: 12px;
+    text-decoration: none;
     color: rgb(255, 119, 119);
     padding-left: 5px;
     font-weight: 500;
@@ -117,10 +152,16 @@ export const SignUpContentStyle = css`
     ::placeholder {
       padding-left: 10px;
       font-weight: 500;
+      @media (max-width: 768px) {
+        font-size: 12px;
+      }
     }
     :focus {
       outline: none !important;
       box-shadow: 0 0 10px #719ece;
+    }
+    @media (max-width: 768px) {
+      width: 100%;
     }
   }
 
@@ -143,10 +184,15 @@ export const signUpBtn = css`
   text-align: center;
   transition: 100ms linear;
   border-radius: 5px;
+  font-size: 16px;
+
   cursor: pointer;
   :hover {
     background-color: black;
     color: white;
+  }
+  @media (max-width: 768px) {
+    width: 100%;
   }
 `;
 

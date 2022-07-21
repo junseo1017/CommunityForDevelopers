@@ -2,8 +2,9 @@ import { Schema, Document, Types } from "mongoose";
 export interface QnaType extends Document {
   title: string;
   contents: string;
-  author: Types.ObjectId;
-  imgUrl: string;
+  contentText: string;
+  authorId: Types.ObjectId;
+  author: string;
   recommends: string[];
   tages: string[];
   isAnswer: boolean;
@@ -21,15 +22,18 @@ const QnaSchema = new Schema(
       type: String,
       required: true,
     },
-    author: {
+    contentText: {
+      type: String,
+      required: true,
+    },
+    authorId: {
       type: Schema.Types.ObjectId,
       ref: "users",
       required: true,
     },
-    imgUrl: {
+    author: {
       type: String,
-      required: false,
-      default: "",
+      required: true,
     },
     recommends: [
       {

@@ -1,4 +1,5 @@
 import { css, jsx } from "@emotion/react";
+import styled from "@emotion/styled";
 
 export const SearchCss = css`
   width: 100%;
@@ -87,46 +88,32 @@ export const SearchCss = css`
       padding: 10px 17px;
       & > li {
         padding-right: 8px;
-        & > button {
-          -webkit-box-align: center;
-          align-items: center;
-          background-color: #fff;
-          border-radius: 999px;
-          color: #191919;
-          border: none;
-          cursor: pointer;
-          display: flex;
-          font-size: 16px;
-          font-weight: 600;
-          -webkit-box-pack: center;
-          justify-content: center;
-          padding: 6px 13px 6px 12px;
-          text-align: center;
-          white-space: nowrap;
-        }
-      }
-      & > li.checked {
-        border-color: #191919;
-        color: #fff;
-        padding-right: 8px;
-        & > button {
-          background-color: #191919;
-          color: #fff;
-          text-decoration: none;
-          -webkit-box-align: center;
-          align-items: center;
-          border-radius: 999px;
-          cursor: pointer;
-          display: flex;
-          font-size: 16px;
-          font-weight: 600;
-          -webkit-box-pack: center;
-          justify-content: center;
-          padding: 6px 13px 6px 12px;
-          text-align: center;
-          white-space: nowrap;
-        }
       }
     }
   }
+`;
+export const Button = styled.button`
+  -webkit-box-align: center;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 999px;
+  color: #191919;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  font-size: 16px;
+  font-weight: 600;
+  -webkit-box-pack: center;
+  justify-content: center;
+  padding: 6px 13px 6px 12px;
+  text-align: center;
+  white-space: nowrap;
+  ${(props) =>
+    props.checked &&
+    css`
+      background-color: #333;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 300;
+    `}
 `;

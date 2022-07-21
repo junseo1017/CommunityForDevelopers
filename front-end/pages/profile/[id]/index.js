@@ -7,20 +7,24 @@ import ProfileCard from "../../../components/userProfile/ProfileCard";
 import ProfileUserInfo from "../../../components/userProfile/ProfileUserInfo";
 import { ProfileContentContainer } from "../profileStyle";
 import { myinfo, userinfo } from "../../../actions/user";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import Head from "next/head";
+
 import axios from "axios";
 
 const Profile = () => {
-  const { userInfo } = useSelector((state) => state.user);
   return (
-    <AppLayout>
-      <ProfileNav />
-      <div css={ProfileContentContainer}>
-        <ProfileCard userInfo={userInfo} />
-        <ProfileUserInfo />
-      </div>
-    </AppLayout>
+    <>
+      <Head>
+        <title>CFDㅣ프로필</title>
+      </Head>
+      <AppLayout>
+        <ProfileNav />
+        <div css={ProfileContentContainer}>
+          <ProfileCard />
+          <ProfileUserInfo />
+        </div>
+      </AppLayout>
+    </>
   );
 };
 

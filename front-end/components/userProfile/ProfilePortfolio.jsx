@@ -12,9 +12,11 @@ import { StarOutlined, LikeOutlined, MessageOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
+import { textLimitHandler } from "../Common/textLimit";
 const ProfilePortfolio = () => {
   const [showHeader, setShowHeader] = useState(null);
-  const { myPortfolios } = useSelector((state) => state.portfolio);
+  const { userinfo } = useSelector((state) => state.user.userInfo);
+  const { userPortfolios } = useSelector((state) => state.portfolio);
 
   const isresponsive = useMediaQuery({
     query: "(max-width:768px)",
@@ -23,13 +25,6 @@ const ProfilePortfolio = () => {
   useEffect(() => {
     setShowHeader(isresponsive);
   }, [isresponsive]);
-
-  const textLimitHandler = (text, limit) => {
-    if (text.length >= limit) {
-      return text.substr(0, limit) + "...";
-    }
-    return text;
-  };
 
   const skills = (list) => {
     return (
@@ -44,8 +39,8 @@ const ProfilePortfolio = () => {
   return (
     <Card css={profileContentCardContainer}>
       <div css={portfolioContainer}>
-        {myPortfolios &&
-          myPortfolios.map((e) => {
+        {userPortfolios &&
+          userPortfolios.map((e) => {
             return (
               <div id="check" css={portfolioStyle} key={e._id}>
                 <Link href={`/portfolio/${e._id}`}>
@@ -78,24 +73,24 @@ const ProfilePortfolio = () => {
                 </Link>
                 <div>
                   <div>
-                    <Link href={`/profile/${e.author._id}`}>
+                    <Link href={`/profile/${e.author?._id}`}>
                       <Avatar
                         style={{ cursor: "pointer" }}
                         size={25}
-                        src="https://joeschmoe.io/api/v1/random"
+                        src={userinfo.imgUrl ? userinfo.imgUrl : "/image/profile_image_default.jpg"}
                       />
                     </Link>
                     <h3>
-                      <Link href={`/profile/${e.author._id}`}>
-                        <a>{e.author.nickname}</a>
+                      <Link href={`/profile/${e.author?._id}`}>
+                        <a>{e.author?.nickname}</a>
                       </Link>
                     </h3>
                   </div>
                   <div>
                     <StarOutlined />
-                    <p>{e.recommends}</p>
+                    <p>{e.scraps.length}</p>
                     <LikeOutlined />
-                    <p>{e.comments.length}</p>
+                    <p>{e.recommends.length}</p>
                     <MessageOutlined />
                     <p>{e.comments.length}</p>
                   </div>

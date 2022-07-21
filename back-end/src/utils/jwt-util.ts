@@ -1,12 +1,16 @@
 import jwt from "jsonwebtoken";
-import { UserType } from "../db/schemas/user-schema";
 
 const secretKey = process.env.JWT_SECRET_KEY || "secret-key";
 
+interface PayloadData {
+  userId: string;
+  role: string;
+}
+
 export const jwtUtil = {
-  access: (user: UserType) => {
+  generateAccessToken: (user: PayloadData) => {
     const payload = {
-      userId: user._id,
+      userId: user.userId,
       role: user.role,
     };
 
@@ -17,9 +21,9 @@ export const jwtUtil = {
     });
   },
 
-  refresh: (user: UserType) => {
+  generateRefreshToken: (user: PayloadData) => {
     const payload = {
-      userId: user._id,
+      userId: user.userId,
     };
     return jwt.sign(payload, secretKey, {
       algorithm: "HS256",
@@ -27,36 +31,38 @@ export const jwtUtil = {
     });
   },
 
-  decoded: (token: string) => {
+  decodedToken: (token: string) => {
     return jwt.decode(token);
   },
 
-  verify: (access: string) => {
+  verifyAccess: (access: string) => {
     try {
       const accessDecoded = jwt.verify(access, secretKey);
-
-      if (typeof accessDecoded !== "string") {
-        return {
-          userId: accessDecoded.userId,
-          role: accessDecoded.role,
-        };
-      }
+      return {
+        userId: (<jwt.JwtPayload>accessDecoded).userId,
+        role: (<jwt.JwtPayload>accessDecoded).role,
+      };
     } catch (error) {
-      return { error };
+      if ((<Error>error).name === "TokenExpiredError") {
+        throw new Error("EXPIRED_ACCESS_TOKEN_ERROR");
+      } else {
+        throw new Error("INVALID_ACCESS_TOKEN_ERROR");
+      }
     }
   },
 
-  refreshVerify: (refresh: string) => {
+  verifyRefresh: (refresh: string) => {
     try {
       const refreshDecoded = jwt.verify(refresh, secretKey);
-
-      if (typeof refreshDecoded !== "string") {
-        return {
-          userId: refreshDecoded.userId,
-        };
-      }
+      return {
+        userId: (<jwt.JwtPayload>refreshDecoded).userId,
+      };
     } catch (error) {
-      return { error };
+      if ((<Error>error).name === "TokenExpiredError") {
+        throw new Error("EXPIRED_REFRESH_TOKEN_ERROR");
+      } else {
+        throw new Error("INVALID_REFRESH_TOKEN_ERROR");
+      }
     }
   },
 };

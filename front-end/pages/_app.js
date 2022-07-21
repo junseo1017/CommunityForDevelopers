@@ -3,6 +3,8 @@ import Head from "next/head";
 import "../styles/globals.css";
 import "antd/dist/antd.css";
 import wrapper from "../store/index";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const MyApp = ({ Component, pageProps }) => {
   return (
