@@ -43,9 +43,6 @@ export const jwtUtil = {
         role: (<jwt.JwtPayload>accessDecoded).role,
       };
     } catch (error) {
-      console.log("엑세스토큰검증단계", error);
-      console.log("엑세스토큰검증단계name", (<Error>error).name);
-      console.log("엑세스토큰검증단계message", (<Error>error).message);
       if ((<Error>error).name === "TokenExpiredError") {
         throw new Error("EXPIRED_ACCESS_TOKEN_ERROR");
       } else {
@@ -61,7 +58,6 @@ export const jwtUtil = {
         userId: (<jwt.JwtPayload>refreshDecoded).userId,
       };
     } catch (error) {
-      console.log(error);
       if ((<Error>error).name === "TokenExpiredError") {
         throw new Error("EXPIRED_REFRESH_TOKEN_ERROR");
       } else {

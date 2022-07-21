@@ -1,10 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { userService } from "../services";
 import { ExtendReq, loginRequired } from "../middlewares";
-import {
-  userCreateJoiSchema,
-  userUpdateJoiSchema,
-} from "../db/schemas/joi-schemas";
 import { upload, getImageUrl, authMailer } from "../utils";
 
 const userRouter = Router();
@@ -15,12 +11,6 @@ userRouter.post(
     const { nickname, email, password } = req.body;
 
     try {
-      await userCreateJoiSchema.validateAsync({
-        email,
-        nickname,
-        password,
-      });
-
       await userService.addUser({
         nickname,
         email,
@@ -38,6 +28,8 @@ userRouter.post(
   "/login",
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
+
+    console.log("로그인:", req.body);
 
     try {
       const userToken = await userService.getUserToken({ email, password });
@@ -137,9 +129,8 @@ userRouter.put(
       imgUrl,
       skills,
     };
-    console.log(req.body);
+
     try {
-      await userUpdateJoiSchema.validateAsync({ nickname });
       const updatedUserInfo = await userService.setUser(userId, toUpdate);
       res.status(200).json(updatedUserInfo);
     } catch (error) {
