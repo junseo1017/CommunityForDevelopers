@@ -5,15 +5,24 @@ import LoggedinMenu from "./LoggedinMenu";
 import { HeaderContainer, HeaderContent } from "./styles/HeaderStyles";
 import Logo from "./logo";
 import Link from "next/link";
-
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 const Header = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.pathname === "/") {
+    }
+    if (router.pathname === "/qna") {
+    }
+  }, [router.pathname]);
   return (
     <header css={HeaderContainer}>
       <div>
         <div css={HeaderContent}>
           <nav>
             <Link href="/">
-              <a>
+              <a aria-label="CFD 홈페이지로 이동">
                 <Logo />
               </a>
             </Link>
@@ -24,7 +33,6 @@ const Header = () => {
               <Link href="/qna">
                 <a>Q&A</a>
               </Link>
-              <a>Magazine</a>
             </div>
           </nav>
           <nav>

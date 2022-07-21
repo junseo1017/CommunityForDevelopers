@@ -7,17 +7,24 @@ import ProfileCard from "../../../components/userProfile/ProfileCard";
 import ProfileUserInfo from "../../../components/userProfile/ProfileUserInfo";
 import { ProfileContentContainer } from "../profileStyle";
 import { myinfo, userinfo } from "../../../actions/user";
+import Head from "next/head";
+
 import axios from "axios";
 
 const Profile = () => {
   return (
-    <AppLayout>
-      <ProfileNav />
-      <div css={ProfileContentContainer}>
-        <ProfileCard />
-        <ProfileUserInfo />
-      </div>
-    </AppLayout>
+    <>
+      <Head>
+        <title>CFDㅣ프로필</title>
+      </Head>
+      <AppLayout>
+        <ProfileNav />
+        <div css={ProfileContentContainer}>
+          <ProfileCard />
+          <ProfileUserInfo />
+        </div>
+      </AppLayout>
+    </>
   );
 };
 

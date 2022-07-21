@@ -55,7 +55,7 @@ const AddButton = () => {
   return (
     <div css={addButtonStyle}>
       <Dropdown overlay={menu}>
-        <a href="#">
+        <a>
           <Space>
             <div>등록하기</div>
           </Space>

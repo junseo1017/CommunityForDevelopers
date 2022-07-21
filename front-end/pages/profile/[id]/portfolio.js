@@ -9,16 +9,22 @@ import { ProfileContentContainer } from "../profileStyle";
 import { loadMyPortfolios } from "../../../actions/portfolio";
 import { myinfo, userinfo } from "../../../actions/user";
 import axios from "axios";
+import Head from "next/head";
 
 const ProfileCPortfolio = () => {
   return (
-    <AppLayout>
-      <ProfileNav />
-      <div css={ProfileContentContainer}>
-        <ProfileCard />
-        <ProfilePortfolio />
-      </div>
-    </AppLayout>
+    <>
+      <Head>
+        <title>CFDㅣ프로필</title>
+      </Head>
+      <AppLayout>
+        <ProfileNav />
+        <div css={ProfileContentContainer}>
+          <ProfileCard />
+          <ProfilePortfolio />
+        </div>
+      </AppLayout>
+    </>
   );
 };
 
