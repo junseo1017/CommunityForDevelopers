@@ -82,10 +82,7 @@ portfolioRouter.post(
       const author = userInfo.nickname;
       const authorImg = userInfo.imgUrl;
       const { title, description, content, contentText } = req.body;
-
-      console.log("req.body: ", req.body);
-
-      const skills = JSON.parse(req.body.skills);
+      const skills = JSON.parse(req.body?.skills);
       const thumbnail = req.body.imgUrl;
 
       const newPortfolio = await portfolioService.addPortfolio({
@@ -129,8 +126,9 @@ portfolioRouter.put(
         );
         res.status(200).json(updatedPortfolio);
       }
-      const { title, description, skills, content, contentText } = req.body;
-      const thumbnail = req.body?.imgUrl;
+      const { title, description, content, contentText } = req.body;
+      const skills = JSON.parse(req.body?.skills);
+      const thumbnail = req.body.imgUrl;
       const toUpdate = {
         ...(title && { title }),
         ...(description && { description }),
