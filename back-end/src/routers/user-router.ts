@@ -1,13 +1,12 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { userService } from "../services";
-import { ExtendReq, loginRequired, Validator } from "../middlewares";
+import { ExtendReq, loginRequired } from "../middlewares";
 import { upload, getImageUrl, authMailer } from "../utils";
 
 const userRouter = Router();
 
 userRouter.post(
   "/",
-  Validator("register"),
   async (req: Request, res: Response, next: NextFunction) => {
     const { nickname, email, password } = req.body;
 
@@ -29,6 +28,8 @@ userRouter.post(
   "/login",
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
+
+    console.log("로그인:", req.body);
 
     try {
       const userToken = await userService.getUserToken({ email, password });
@@ -114,7 +115,6 @@ userRouter.get(
 userRouter.put(
   "/info",
   loginRequired,
-  Validator("updateUser"),
   upload,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
