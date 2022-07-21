@@ -28,7 +28,7 @@ function errorHandler(
       .status(error.status)
       .json({ result: error.name, reason: error.message });
   } else {
-    res.json({ result: error.name, reason: error.message });
+    res.status(500).json({ result: error.name, reason: error.message });
   }
 }
 

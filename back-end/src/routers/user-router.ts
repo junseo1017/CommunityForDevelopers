@@ -1,12 +1,18 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { userService } from "../services";
 import { ExtendReq, loginRequired } from "../middlewares";
+import {
+  userCreateJoiSchema,
+  userUpdateJoiSchema,
+} from "../db/schemas/joi-schemas";
+import { validateBodyWith } from "../middlewares/validator";
 import { upload, getImageUrl, authMailer } from "../utils";
 
 const userRouter = Router();
 
 userRouter.post(
   "/",
+  validateBodyWith(userCreateJoiSchema, "body"),
   async (req: Request, res: Response, next: NextFunction) => {
     const { nickname, email, password } = req.body;
 

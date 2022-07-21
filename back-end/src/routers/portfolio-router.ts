@@ -91,41 +91,27 @@ portfolioRouter.post(
     }
   }
 );
-// 6. 포토폴리오 스크랩&추천 추가/삭제
-portfolioRouter.put(
-  "/:portId/",
-  loginRequired,
-  async (req: ExtendReq, res: Response, next: NextFunction) => {
-    try {
-      const portId = req.params.portId;
-      const userId = req.currentUserId || "";
-      const field = req.query.field as string;
-      const adding = req.query.adding === "true";
-      const updatedPortfolio = await portfolioService.setField(
-        portId,
-        userId,
-        field,
-        adding
-      );
-      res.status(200).json(updatedPortfolio);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-// 7. 포토폴리오 수정
+// 6. 포토폴리오 수정
 portfolioRouter.put(
   "/:portId",
   loginRequired,
   upload,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
+    const portId = req.params.portId;
+    const userId = req.currentUserId || "";
+    const field = req.query.field as string;
+    const adding = req.query.adding === "true";
     try {
-      console.log(req);
-      const portId = req.params.portId;
-      const userId = req.currentUserId || "";
-      const { title, description, content, contentText } = req.body;
-      const skills = JSON.parse(req.body.skills);
-
+      if (field) {
+        const updatedPortfolio = await portfolioService.setField(
+          portId,
+          userId,
+          field,
+          adding
+        );
+        res.status(200).json(updatedPortfolio);
+      }
+      const { title, description, skills, content, contentText } = req.body;
       const image = req.file;
       const thumbnail = <string>await getImageUrl(<Express.Multer.File>image);
       const toUpdate = {
@@ -147,7 +133,7 @@ portfolioRouter.put(
     }
   }
 );
-// 8. 포토폴리오 삭제
+// 7. 포토폴리오 삭제
 portfolioRouter.delete(
   "/:portId",
   loginRequired,
