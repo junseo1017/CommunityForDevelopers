@@ -7,8 +7,11 @@ import {
   checkImage,
 } from "../middlewares";
 import {
-  userCreateJoiSchema,
-  userUpdateJoiSchema,
+  userRegisterJoi,
+  userLoginJoi,
+  userEmailJoi,
+  userUpdateInfoJoi,
+  userUpdatePWJoi,
 } from "../db/schemas/joi-schemas";
 import { authMailer, upload } from "../utils";
 
@@ -16,7 +19,7 @@ const userRouter = Router();
 
 userRouter.post(
   "/",
-  validateRequestWith(userCreateJoiSchema, "body"),
+  validateRequestWith(userRegisterJoi, "body"),
   async (req: Request, res: Response, next: NextFunction) => {
     const { nickname, email, password } = req.body;
 
@@ -36,10 +39,9 @@ userRouter.post(
 
 userRouter.post(
   "/login",
+  validateRequestWith(userLoginJoi, "body"),
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
-
-    console.log("로그인:", req.body);
 
     try {
       const userToken = await userService.getUserToken({ email, password });
@@ -59,6 +61,7 @@ userRouter.post(
 
 userRouter.post(
   "/email",
+  validateRequestWith(userEmailJoi, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const { email, authNumber } = req.body;
     try {
@@ -99,7 +102,6 @@ userRouter.get(
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const userId = req.currentUserId || "";
-
       const users = await userService.getUserInfo(userId);
       res.status(200).json(users);
     } catch (error) {
@@ -127,7 +129,7 @@ userRouter.put(
   loginRequired,
   upload,
   checkImage,
-  validateRequestWith(userUpdateJoiSchema, "body"),
+  validateRequestWith(userUpdateInfoJoi, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
     const { nickname, job, imgUrl } = req.body;
@@ -151,6 +153,7 @@ userRouter.put(
 userRouter.put(
   "/password",
   loginRequired,
+  validateRequestWith(userUpdatePWJoi, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
     const { password } = req.body;

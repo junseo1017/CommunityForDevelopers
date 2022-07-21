@@ -1,7 +1,8 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
+import { ExtendReq } from "../middlewares";
 import { getImageUrl } from "../utils";
 
-async function checkImage(req: Request, res: Response, next: NextFunction) {
+async function checkImage(req: ExtendReq, res: Response, next: NextFunction) {
   try {
     const image = req.file;
     if (image) {
