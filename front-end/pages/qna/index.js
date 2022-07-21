@@ -11,11 +11,6 @@ const questions = ({ qnas }) => {
   const answers = qnas.filter((qna) => qna.isAnswer);
   qnas = qnas.filter((qna) => !qna.isAnswer);
 
-  // useEffect(() => {
-  //   qnas = qnas.filter((qna) => !qna.isAnswer);
-  //   answers = qnas.filter((qna) => qna.isAnswer);
-  // }, [qnas]);
-
   return (
     <AppLayout>
       <Head>
@@ -30,13 +25,8 @@ export default questions;
 
 export async function getServerSideProps() {
   try {
-    const response = await axios.get("/api/qnas");
+    const response = await axios.get("/api/search/qnas?value=");
 
-    // if (!response) {
-    //   return {
-    //     notFound: true,
-    //   };
-    // }
     console.log("response", response.data);
     const qnas = response.data || [];
 

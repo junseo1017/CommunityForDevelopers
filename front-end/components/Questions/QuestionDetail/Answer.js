@@ -34,7 +34,7 @@ const Answer = ({ answer }) => {
         const response = await axios.get(`/api/qnas/${answer._id}`);
         const qna = response.data;
         console.log("qna", qna);
-        // Answer가 Answers에 추가됨 -> 확인 불가능
+        // Answer가 Answers에 추가되지 않음 -> 확인 불가능
 
         setRecommendData({ isRecommended, numberOfRecommends });
         setIsChanged(false);
@@ -64,6 +64,7 @@ const Answer = ({ answer }) => {
   };
 
   console.log("recommendData", recommendData);
+  console.log("answer.comments", answer.comments);
 
   return (
     <div css={DetailAnswerContainer} key={answer._id}>
@@ -108,7 +109,7 @@ const Answer = ({ answer }) => {
       )}
       <Collapse>
         <Collapse.Panel header="댓글 보기">
-          <Comments contentId={answer._id} user={me} />
+          <Comments currentComments={answer.comments} contentId={answer._id} user={me} />
         </Collapse.Panel>
       </Collapse>
     </div>

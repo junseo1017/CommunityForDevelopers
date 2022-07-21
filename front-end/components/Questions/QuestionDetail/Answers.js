@@ -6,6 +6,8 @@ import { TextContainer, DetailAnswerContainer } from "../styles/QuestionStyle";
 import Answer from "./Answer";
 
 const Answers = ({ answers }) => {
+  console.log("답변s", answers);
+
   answers.sort((a, b) => {
     return b.recommends.length - a.recommends.length;
   });

@@ -1,42 +1,44 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import React, { useState, useEffect } from "react";
-import { Button, Input, Divider } from "antd";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { Divider } from "antd";
 import QuestionsList from "./QuestionsList";
-import { SearchBarContainer } from "../styles/QuestionStyle";
-import Link from "next/link";
+import { SearchBarContainer, ColFlexBox } from "../styles/QuestionStyle";
+import axios from "axios";
+import { useInView } from "react-intersection-observer";
+import QuestionItem from "./QuestionItem";
+import TopButton from "../TopButton";
 
 const Questions = ({ questions, answers }) => {
-  const [query, setQuery] = useState("");
-  const [questionsList, setQuestionsList] = useState([...questions]);
+  const [questionsList, setQuestionsList] = useState(questions); // 불러온 데이터
+  // const [query, setQuery] = useState(""); // 검색어
+  // const [searchQueryString, setSearchQueryString] = useState(""); // 검색어 기반 url
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [page, setPage] = useState(1);
 
-  const searchQuestions = () => {
-    // e.preventDefault();
+  // useEffect(() => {
+  //   const lastId = questionsList[4]._id;
+  //   setSearchQueryString(`value=${query}&lastId=${lastId}`);
+  // }, [query, page]);
 
-    if (query === null || query === "") {
-      // 전체 데이터 목록
-      setQuestionsList((curr) => [...curr, questions]);
-    } else {
-      // 검색
-      const filteredQuestionList = questions.filter((question) => {
-        const filteredBlocks = JSON.parse(question.contents).blocks.map(({ type, data }) => {
-          return type === "paragraph" || type === "header" ? data : "";
-        });
+  // const getQnaData = useCallback(async () => {
+  //   setIsLoading(true);
+  //   const response = await axios.get(`/api/search/qnas?${searchQueryString}`);
 
-        const texts = filteredBlocks.map((block) => block.text).join(" ");
+  //   setQuestionsList((curr) => curr.concat(response.data));
+  //   setIsLoading(false);
+  // });
 
-        return (
-          question.title.toLowerCase().includes(query.toLowerCase()) ||
-          texts.toLowerCase().includes(query.toLowerCase())
-        );
-      });
-      setQuestionsList(filteredQuestionList);
-    }
-  };
+  // useEffect(() => {
+  //   getQnaData();
+  // }, [getQnaData]);
 
-  useEffect(() => {
-    setQuestionsList(questions);
-  }, [query]);
+  // useEffect(() => {
+  //   // 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니라면
+  //   if (inView && !isLoading) {
+  //     setPage((prevState) => prevState + 1);
+  //   }
+  // }, [inView, isLoading]);
 
   return (
     <>
@@ -46,31 +48,33 @@ const Questions = ({ questions, answers }) => {
           autoComplete="false"
           placeholder="검색어를 입력하세요"
           aria-label="search"
-        />
-        {/* <Input.Search
-          placeholder="Search Questions"
-          allowClear
-          enterButton
-          size="large"
           onChange={(e) => {
             setQuery(e.target.value);
+            console.log(searchQueryString);
           }}
-          onSearch={() => {
-            searchQuestions();
-          }}
-        /> */}
-        {/* <Link href="/qna/new">
-          <Button size="large" type="primary">
-            질문하기
-          </Button>
-        </Link> */}
+        />
       </div>
       <Divider plain />
-      {questions ? (
-        <QuestionsList questions={questionsList} answers={answers} />
-      ) : (
-        <h1>아직 질문이 없습니다. 궁금한 질문을 남겨주세요.</h1>
-      )}
+      <div css={ColFlexBox}>
+        {questions.map((question) => {
+          return (
+            <div key={question._id}>
+              <QuestionItem
+                _id={question._id}
+                title={question.title}
+                recommends={question.recommends.length}
+                contents={question.contents}
+                tags={question.tags}
+                user={question.author}
+                date={question.createdAt}
+                answers={answers}
+              />
+              <Divider plain />
+            </div>
+          );
+        })}
+      </div>
+      <TopButton />
     </>
   );
 };
