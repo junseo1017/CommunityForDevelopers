@@ -27,7 +27,7 @@ export const removeImages = createAsyncThunk(
     try {
       //{imgUrl:data}
       console.log(data);
-      const response = await axios.delete("/api/images", data); // POST /portfolio/images
+      const response = await axios.delete("/api/images", data);
       console.log(response.data);
       return response.data;
     } catch (error) {
