@@ -9,19 +9,23 @@ import { ProfileContentContainer } from "../profileStyle";
 import { myinfo, userinfo } from "../../../actions/user";
 import { getqnabyuserid } from "../../../actions/qna";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-const ProfileCQnA = () => {
-  const { userInfo } = useSelector((state) => state.user);
-  const { qnabyUserId } = useSelector((state) => state.qna);
+import { useSelector } from "react-redux";
+import Head from "next/head";
 
+const ProfileCQnA = () => {
   return (
-    <AppLayout>
-      <ProfileNav />
-      <div css={ProfileContentContainer}>
-        <ProfileCard />
-        <ProfileQnA />
-      </div>
-    </AppLayout>
+    <>
+      <Head>
+        <title>CFDㅣ프로필</title>
+      </Head>
+      <AppLayout>
+        <ProfileNav />
+        <div css={ProfileContentContainer}>
+          <ProfileCard />
+          <ProfileQnA />
+        </div>
+      </AppLayout>
+    </>
   );
 };
 

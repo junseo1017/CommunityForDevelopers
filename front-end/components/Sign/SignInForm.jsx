@@ -5,34 +5,26 @@ import { useForm } from "react-hook-form";
 import Router from "next/router";
 import { SignInFormStyle, SignBtnStyle, errorInput } from "./styles/SignStyles";
 import { login } from "../../actions/user";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-const RegExp = {
-  email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-  password: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,15}$/,
-};
+import { RegExp } from "../Common/utils";
 
 const SignInForm = () => {
   const dispatch = useDispatch();
-  const [signinFlag, setSigninFlag] = useState(null);
   const { loginDone, loginError } = useSelector((state) => state.user);
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm();
 
   useEffect(() => {
-    if (signinFlag) {
-      if (loginDone) {
-        Router.push("/");
-        setSigninFlag(null);
-      }
-      if (loginError) {
-        message.error("로그인에 실패하였습니다.");
-        setSigninFlag(null);
-      }
+    if (loginDone) {
+      Router.push("/");
+    }
+    if (loginError) {
+      message.error("로그인에 실패하였습니다.");
     }
   }, [loginDone, loginError]);
 
@@ -43,7 +35,6 @@ const SignInForm = () => {
         password: data.password,
       }),
     );
-    setSigninFlag(true);
   };
 
   return (
