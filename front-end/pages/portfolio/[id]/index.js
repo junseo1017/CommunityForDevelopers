@@ -10,7 +10,7 @@ import useConfirmModal from "../../../hooks/useConfirmModal";
 import axios from "axios";
 import { Affix, Button, Avatar, Comment, Form, Input, List } from "antd";
 import { removePortfolio } from "../../../actions/portfolio";
-
+import Head from "next/head";
 import {
   loadPortfolio,
   likePortfolio,
@@ -42,9 +42,9 @@ const Portfolio = () => {
   const dispatch = useDispatch();
   const { singlePortfolio, loadPortfoliosDone } = useSelector((state) => state.portfolio);
   const { me } = useSelector((state) => state.user);
-
-  const liked = singlePortfolio?.recommends?.find((v) => v === me._id);
-  const scrapped = singlePortfolio?.scraps?.find((v) => v === me._id);
+  console.log(singlePortfolio);
+  const liked = singlePortfolio?.recommends?.find((v) => v === me?._id);
+  const scrapped = singlePortfolio?.scraps?.find((v) => v === me?._id);
 
   const redirectLogin = useCallback(() => {
     Router.push("/login");
@@ -64,15 +64,16 @@ const Portfolio = () => {
     if (!me) {
       showConfirm();
     }
-    if (liked) dispatch(unlikePortfolio({ portfolioId: singlePortfolio?._id, UserId: me._id }));
-    else dispatch(likePortfolio({ portfolioId: singlePortfolio?._id, UserId: me._id }));
+    if (liked) dispatch(unlikePortfolio({ portfolioId: singlePortfolio?._id, UserId: me?._id }));
+    else dispatch(likePortfolio({ portfolioId: singlePortfolio?._id, UserId: me?._id }));
   };
   const onClickScrapPort = () => {
     if (!me) {
       showConfirm();
     }
-    if (scrapped) dispatch(unscrapPortfolio({ portfolioId: singlePortfolio?._id, UserId: me._id }));
-    else dispatch(scrapPortfolio({ portfolioId: singlePortfolio?._id, UserId: me._id }));
+    if (scrapped)
+      dispatch(unscrapPortfolio({ portfolioId: singlePortfolio?._id, UserId: me?._id }));
+    else dispatch(scrapPortfolio({ portfolioId: singlePortfolio?._id, UserId: me?._id }));
   };
 
   const comments = singlePortfolio.comments.map((data, index) => {
@@ -81,6 +82,7 @@ const Portfolio = () => {
         actions: [
           me?._id === data?.author?._id && (
             <span
+              style={{ textDecoration: "underline" }}
               onClick={() => {
                 dispatch(removeComment({ commentId: data?._id }));
               }}
@@ -97,7 +99,7 @@ const Portfolio = () => {
         avatar: (
           <Link href={`/profile/${data?.author?._id}`}>
             <Avatar
-              src={data?.author?.imgUrl || "https://joeschmoe.io/api/v1/random"}
+              src={data?.author?.imgUrl || "/image/profile_image_default.jpg"}
               alt="Han Solo"
             />
           </Link>
@@ -155,7 +157,10 @@ const Portfolio = () => {
 
   return (
     <AppLayout>
-      {me._id === singlePortfolio.authorId ? (
+      <Head>
+        <title>포트폴리오</title>
+      </Head>
+      {me?._id === singlePortfolio.authorId ? (
         <div style={{ paddingTop: "20px", width: "100%", display: "flex", justifyContent: "end" }}>
           <div>
             <Button
@@ -191,11 +196,10 @@ const Portfolio = () => {
       </ButtonContainer>
 
       {/*  maxWidth: "800px", */}
-
       {isJsonString(singlePortfolio.content) ? (
         <section
           css={EditorSize}
-          style={{ width: "100%", overflow: "auto", overflowWrap: "break-word" }}>
+          style={{ maxWidth: "800px", overflow: "auto", overflowWrap: "break-word" }}>
           <Output data={JSON.parse(singlePortfolio.content)} />
         </section>
       ) : (
@@ -205,7 +209,7 @@ const Portfolio = () => {
       <div style={{ width: "100%" }}>
         {comments.length > 0 && <CommentList comments={comments} />}
         <Comment
-          avatar={<Avatar src={me.imgUrl || "https://joeschmoe.io/api/v1/random"} alt="Han Solo" />}
+          avatar={<Avatar src={me?.imgUrl || "/image/profile_image_default.jpg"} alt="Han Solo" />}
           content={
             <CommentEditor
               onChange={handleChange}
@@ -247,6 +251,7 @@ export const EditorSize = css`
     height: 100% !important;
     max-height: 100% !important;
   }
+  //background-color: #f7f9fa;
 `;
 
 const ButtonContainer = styled.div`
@@ -263,13 +268,19 @@ const ButtonContainer = styled.div`
   .ant-btn:first-of-type {
     border-color: ${(props) => (props.borderLike ? "#1890ff" : "#d9d9d9")};
   }
+  .ant-btn:first-of-type :focus {
+    border-color: ${(props) => (props.borderLike ? "#1890ff" : "#d9d9d9")};
+  }
   .ant-btn:last-of-type {
+    border-color: ${(props) => (props.borderScrap ? "#1890ff" : "#d9d9d9")};
+  }
+  .ant-btn:last-of-type :focus {
     border-color: ${(props) => (props.borderScrap ? "#1890ff" : "#d9d9d9")};
   }
 
   .ant-btn:focus {
     color: #000;
-    border-color: #d9d9d9;
+
     box-shadow: 0 2px 0 rgb(0 0 0 / 2%);
   }
   .ant-btn:hover {

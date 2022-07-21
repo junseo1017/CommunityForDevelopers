@@ -7,11 +7,13 @@ import {
   RightCard,
   formContainer,
   submitButton,
+  fontWeight,
 } from "./styles/CreatePortfolioCardStyle";
 import { UploadOutlined } from "@ant-design/icons";
 import ImgCrop from "antd-img-crop";
 import TagRender from "./TagRender";
 import useSelects from "../../hooks/useSelects";
+import { debounce } from "lodash";
 import {
   Steps,
   Divider,
@@ -102,11 +104,27 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
     setImgFormErr("error");
   };
 
-  const [form] = Form.useForm();
-  const titleValue = Form.useWatch("title", form);
-  const descriptionValue = Form.useWatch("description", form);
-  const imageValue = Form.useWatch("image", form);
-  const skillsValue = Form.useWatch("skills", form);
+  // const [form] = Form.useForm();
+  // const titleValue = Form.useWatch("title", form);
+  // const descriptionValue = Form.useWatch("description", form);
+  // const imageValue = Form.useWatch("image", form);
+  // const skillsValue = Form.useWatch("skills", form);
+
+  const [titleValue, setTitleValue] = useState("");
+  const onTitleChange = debounce((e) => {
+    setTitleValue(e.target.value);
+  }, 700);
+
+  const [descriptionValue, setDescriptionValue] = useState("");
+  const onDescriptionChange = debounce((e) => {
+    setDescriptionValue(e.target.value);
+  }, 700);
+
+  const [skillsValue, setSkillsValue] = useState("");
+  const onSkillsChange = debounce((e) => {
+    setSkillsValue(e);
+  }, 900);
+
   const { Option } = Select;
 
   return (
@@ -117,7 +135,7 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
         //   setPortfCardValue(allValues);
         // }}
         {...FormItemLayout}
-        form={form}
+        //form={form}
         name="register"
         onFinish={onFinish}
         initialValues={{
@@ -135,7 +153,7 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
         <div css={Container}>
           <Card css={LeftCard}>
             <div css={LabelCss}>
-              <Form.Item label="썸네일 이미지">
+              <Form.Item label="썸네일 이미지" css={fontWeight}>
                 <Form.Item
                   className="image-required"
                   name="image"
@@ -172,6 +190,7 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
               hasFeedback
               name="title"
               label="제목"
+              css={fontWeight}
               initialValue={singlePortfolio.title}
               rules={[
                 {
@@ -179,13 +198,14 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
                   message: "제목을 작성해주세요",
                 },
               ]}>
-              <Input />
+              <Input onChange={onTitleChange} />
             </Form.Item>
 
             <Form.Item
               hasFeedback
               name="description"
               label="설명"
+              css={fontWeight}
               initialValue={singlePortfolio.description}
               rules={[
                 {
@@ -193,12 +213,13 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
                   message: "설명을 작성해주세요",
                 },
               ]}>
-              <Input.TextArea showCount maxLength={46} />
+              <Input.TextArea showCount maxLength={46} onChange={onDescriptionChange} />
             </Form.Item>
             <Form.Item
               name="skills"
               label="skills"
               hasFeedback
+              css={fontWeight}
               initialValue={singlePortfolio.skills}
               rules={[
                 {
@@ -208,6 +229,7 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
               ]}>
               <Select
                 mode="multiple"
+                onChange={onSkillsChange}
                 showArrow
                 tagRender={TagRender}
                 placeholder="사용했던 skills를 선택해주세요."

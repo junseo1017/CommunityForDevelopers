@@ -119,7 +119,7 @@ const EditPortfolio = (props) => {
   return (
     <AppLayout>
       <Head>
-        <title>포트폴리오 작성</title>
+        <title>포트폴리오 수정</title>
       </Head>
       <ModalAsync
         visible={modalVisible}

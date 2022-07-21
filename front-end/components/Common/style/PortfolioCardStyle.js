@@ -50,6 +50,7 @@ export const portfolioStyle = css`
         font-size: 16px;
         font-weight: 900;
         color: white;
+        margin-bottom: 0;
         padding-top: 15px;
       }
       p {
@@ -57,6 +58,7 @@ export const portfolioStyle = css`
         font-weight: 500;
         color: rgb(240, 240, 240);
         opacity: 0.8;
+        margin-bottom: 0;
       }
     }
 
