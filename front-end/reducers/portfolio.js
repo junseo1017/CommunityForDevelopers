@@ -241,7 +241,7 @@ const portfolioSlice = createSlice({
       .addCase(removePortfolio.fulfilled, (state, action) => {
         state.removePortfolioLoading = false;
         state.removePortfolioDone = true;
-        _remove(state.mainPortfolios, { _id: action.payload.portfolioId });
+        _remove(state.mainPortfolios, { id: action.payload.portfolioId });
       })
       .addCase(removePortfolio.rejected, (state, action) => {
         state.removePortfolioLoading = false;
@@ -336,10 +336,10 @@ const portfolioSlice = createSlice({
         state.updatePortfolioError = null;
       })
       .addCase(updatePortfolio.fulfilled, (state, action) => {
-        //const portfolio = _find(state.mainPortfolios, { id: action.payload.PortfolioId });
+        const portfolio = _find(state.mainPortfolios, { id: action.payload.PortfolioId });
         state.updatePortfolioLoading = false;
         state.updatePortfolioDone = true;
-        //portfolio.content = action.payload.content;
+        portfolio = action.payload;
       })
       .addCase(updatePortfolio.rejected, (state, action) => {
         state.updatePortfolioLoading = false;

@@ -6,6 +6,7 @@ export const SignInFormStyle = css`
   flex-direction: column;
   gap: 20px;
   & input {
+    padding-left: 10px;
     width: 300px;
     height: 50px;
   }
@@ -18,8 +19,9 @@ export const SignInFormStyle = css`
     transition: 100ms linear;
 
     &::placeholder {
-      padding-left: 10px;
+      /* padding-left: 10px; */
     }
+
     &:focus {
       outline: none !important;
       box-shadow: 0 0 10px #719ece;

@@ -3,7 +3,6 @@ import { css, jsx } from "@emotion/react";
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import Router, { useRouter } from "next/router";
-import Comments from "./Comments";
 import TopButton from "../TopButton";
 import { Button, Badge, Tag, Divider, Collapse, Input } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -33,7 +32,7 @@ const QuestionDetail = ({ qna }) => {
   console.log("me", me);
 
   // 현재 로그인 유저가 질문자인지 확인
-  const initialLoginState = me._id === question.author._id;
+  const initialLoginState = me?._id === question.authorId;
 
   const [isAuthor, setIsAuthor] = useState(initialLoginState); // 수정, 삭제 버튼 보여주기
   const [isAnswerUpdateMode, setIsAnswerUpdateMode] = useState(false); // 답변 수정 form 변경

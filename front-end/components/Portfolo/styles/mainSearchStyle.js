@@ -14,6 +14,7 @@ export const SearchCss = css`
   position: relative;
   right: 0;
   z-index: 3;
+
   & > div:first-of-type {
     -webkit-box-flex: 4;
     position: relative;
@@ -22,9 +23,15 @@ export const SearchCss = css`
     & > div:first-of-type {
       border: 1px solid transparent;
       height: 50px;
+      @media (max-width: 768px) {
+        height: 26px;
+      }
       border-radius: 50px;
       display: flex;
       margin-top: 2px;
+      @media (max-width: 768px) {
+        margin-top: 5px;
+      }
       width: 100%;
       & > div {
         width: 50px;
@@ -36,6 +43,10 @@ export const SearchCss = css`
         z-index: 1;
         & > svg {
           fill: dimgray;
+          @media (max-width: 768px) {
+            height: 17px;
+            width: 17px;
+          }
           height: 23px;
           width: 23px;
           margin-left: 4px;
@@ -57,6 +68,9 @@ export const SearchCss = css`
             outline: none;
             outline-offset: 2px;
             font-size: 22px;
+            @media (max-width: 768px) {
+              font-size: 16px;
+            }
             font-weight: 800;
             appearance: none;
             background: transparent;
@@ -86,8 +100,14 @@ export const SearchCss = css`
       display: flex;
       justify-content: space-evenly;
       padding: 10px 17px;
+      @media (max-width: 768px) {
+        padding: 6px 10px;
+      }
       & > li {
         padding-right: 8px;
+        @media (max-width: 768px) {
+          padding-right: 0px;
+        }
       }
     }
   }
@@ -108,8 +128,12 @@ export const Button = styled.button`
   padding: 6px 13px 6px 12px;
   text-align: center;
   white-space: nowrap;
+  @media (max-width: 768px) {
+    font-size: 12px;
+    padding: 4px 6px 4px 6px;
+  }
   ${(props) =>
-    props.checked &&
+    props?.checked &&
     css`
       background-color: #333;
       color: #fff;
