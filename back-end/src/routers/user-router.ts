@@ -5,14 +5,14 @@ import {
   userCreateJoiSchema,
   userUpdateJoiSchema,
 } from "../db/schemas/joi-schemas";
-import { validateBodyWith } from "../middlewares/validator";
+import { validateRequestWith } from "../middlewares/validator";
 import { upload, getImageUrl, authMailer } from "../utils";
 
 const userRouter = Router();
 
 userRouter.post(
   "/",
-  validateBodyWith(userCreateJoiSchema, "body"),
+  validateRequestWith(userCreateJoiSchema, "body"),
   async (req: Request, res: Response, next: NextFunction) => {
     const { nickname, email, password } = req.body;
 
@@ -121,12 +121,20 @@ userRouter.get(
 userRouter.put(
   "/info",
   loginRequired,
+  validateRequestWith(userUpdateJoiSchema, "body"),
   upload,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
     const image = req.file;
-    const imgUrl = <string>await getImageUrl(<Express.Multer.File>image);
+    let imgUrl = "";
+    if (image) {
+      imgUrl = <string>await getImageUrl(<Express.Multer.File>image);
+    }
+
     const { nickname, job } = req.body;
+
+    console.log("라우터:", req.body);
+
     const skills = req.body.skills.split(",");
 
     const toUpdate = {

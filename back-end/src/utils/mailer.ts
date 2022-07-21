@@ -21,9 +21,7 @@ async function authMailer(email: string, authNumber: number) {
       from: `CFD Team <${process.env.MAILER_ID}>`,
       to: email,
       subject: "이메일 인증번호 입니다",
-      html: `<div>
-              <p style="font-size: 16px;">인증번호 : ${authNumber}</p>
-            </div>`,
+      html: `<p style="font-size: 16px;">인증번호 : ${authNumber}</p>`,
     });
 
     console.log(info);
