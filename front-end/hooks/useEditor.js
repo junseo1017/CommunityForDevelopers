@@ -58,6 +58,9 @@ const useEditor = () => {
 
     if (imageArray.length > currentImages.length) {
       /* image deleted */
+      console.log(imageArray);
+      console.log("0------------");
+      console.log(currentImages);
       for (const img of imageArray) {
         if (!currentImages.includes(img)) {
           try {

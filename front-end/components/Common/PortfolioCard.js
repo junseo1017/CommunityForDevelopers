@@ -103,7 +103,7 @@ const PortfolioCard = ({
           <div>
             <MessageOutlined />
           </div>
-          <p>{comments ? comments.filter(({ isDeleted }) => isDeleted === false).length : 0}</p>
+          <p>{comments ? comments.length : 0}</p>
         </div>
       </div>
     </div>
