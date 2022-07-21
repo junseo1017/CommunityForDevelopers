@@ -16,10 +16,12 @@ import {
   unlikePortfolio,
   unscrapPortfolio,
   updatePortfolio,
+  removeComment,
   uploadImages,
   loadUserPortfolios,
   loadMyPortfolios,
   loadScrapPortfolios,
+  loadPortfoliosSearchScroll,
 } from "../actions/portfolio";
 //수정중
 const initialState = {
@@ -41,6 +43,9 @@ const initialState = {
   addCommentLoading: false,
   addCommentDone: false,
   addCommentError: null,
+  removeCommentLoading: false,
+  removeCommentDone: false,
+  removeCommentError: null,
   likePortfolioLoading: false,
   likePortfolioDone: false,
   likePortfolioError: null,
@@ -63,10 +68,12 @@ const initialState = {
     title: "",
     skills: [],
     description: "",
-    image: {},
+    thumbnail: "",
     content: "",
     comments: [],
     contentText: "",
+    scraps: [],
+    recommends: [],
   },
 };
 
@@ -75,7 +82,7 @@ const portfolioSlice = createSlice({
   initialState,
   reducers: {
     updateState(state, action) {
-      return { ...state, singlePortfolio: { ...action.payload } };
+      return { ...state, singlePortfolio: { ...state.singlePortfolio, ...action.payload } };
     },
   },
   extraReducers: (builder) =>
@@ -105,10 +112,26 @@ const portfolioSlice = createSlice({
       .addCase(loadPortfoliosSearch.fulfilled, (state, action) => {
         state.loadPortfoliosLoading = false;
         state.loadPortfoliosDone = true;
-        state.mainPortfolios = _concat(state.mainPortfolios, action.payload);
+        state.mainPortfolios = action.payload;
         state.hasMorePortfolios = action.payload.length === 12;
       })
       .addCase(loadPortfoliosSearch.rejected, (state, action) => {
+        state.loadPortfoliosLoading = false;
+        state.loadPortfoliosError = action.error.message;
+      })
+      //loadPortfoliosSearchScroll
+      .addCase(loadPortfoliosSearchScroll.pending, (state) => {
+        state.loadPortfoliosLoading = true;
+        state.loadPortfoliosDone = false;
+        state.loadPortfoliosError = null;
+      })
+      .addCase(loadPortfoliosSearchScroll.fulfilled, (state, action) => {
+        state.loadPortfoliosLoading = false;
+        state.loadPortfoliosDone = true;
+        state.mainPortfolios = _concat(state.mainPortfolios, action.payload);
+        state.hasMorePortfolios = action.payload.length === 12;
+      })
+      .addCase(loadPortfoliosSearchScroll.rejected, (state, action) => {
         state.loadPortfoliosLoading = false;
         state.loadPortfoliosError = action.error.message;
       })
@@ -185,12 +208,30 @@ const portfolioSlice = createSlice({
         //const portfolio = _find(state.mainPortfolios, { _id: action.payload.portfolioId });
         state.addCommentLoading = false;
         state.addCommentDone = true;
-        state.singlePortfolio.comments.unshift(action.payload);
+        state.singlePortfolio.comments.push(action.payload);
       })
       .addCase(addComment.rejected, (state, action) => {
         state.addCommentLoading = false;
         state.addCommentError = action.error.message;
       })
+      // removeComment
+      .addCase(removeComment.pending, (state) => {
+        state.removeCommentLoading = true;
+        state.removeCommentDone = false;
+        state.removeCommentError = null;
+      })
+      .addCase(removeComment.fulfilled, (state, action) => {
+        //const portfolio = _find(state.mainPortfolios, { _id: action.payload.portfolioId });
+        state.removeCommentLoading = false;
+        state.removeCommentDone = true;
+        _remove(state.singlePortfolio.comments, { _id: action.payload.commentId });
+        //state.singlePortfolio.comments.push(action.payload);
+      })
+      .addCase(removeComment.rejected, (state, action) => {
+        state.removeCommentLoading = false;
+        state.removeCommentError = action.error.message;
+      })
+
       // removePortfolio
       .addCase(removePortfolio.pending, (state) => {
         state.removePortfolioLoading = true;
@@ -200,7 +241,7 @@ const portfolioSlice = createSlice({
       .addCase(removePortfolio.fulfilled, (state, action) => {
         state.removePortfolioLoading = false;
         state.removePortfolioDone = true;
-        _remove(state.mainPortfolios, { id: action.payload.PortfolioId });
+        _remove(state.mainPortfolios, { _id: action.payload.portfolioId });
       })
       .addCase(removePortfolio.rejected, (state, action) => {
         state.removePortfolioLoading = false;
@@ -295,10 +336,10 @@ const portfolioSlice = createSlice({
         state.updatePortfolioError = null;
       })
       .addCase(updatePortfolio.fulfilled, (state, action) => {
-        const portfolio = _find(state.mainPortfolios, { id: action.payload.PortfolioId });
+        //const portfolio = _find(state.mainPortfolios, { id: action.payload.PortfolioId });
         state.updatePortfolioLoading = false;
         state.updatePortfolioDone = true;
-        portfolio.content = action.payload.content;
+        //portfolio.content = action.payload.content;
       })
       .addCase(updatePortfolio.rejected, (state, action) => {
         state.updatePortfolioLoading = false;

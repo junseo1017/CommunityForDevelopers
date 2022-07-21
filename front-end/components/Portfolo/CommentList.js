@@ -1,5 +1,6 @@
-import { Comment, List } from "antd";
+import { Comment, List, Avatar } from "antd";
 import React from "react";
+//<Link href={`/profile/${author?._id}`}></Link>
 
 const CommentList = ({ comments }) => {
   return (

@@ -227,12 +227,12 @@ export const TextContainer = css`
 export const EditorContainer = css`
   width: 100%;
   display: flex;
+  height: auto;
   flex-direction: column;
   align-items: center;
-  padding: 0 2em;
+  padding: 1em 2em;
   gap: 1em;
 
-  border: 1px solid #000000;
   border-radius: 4px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 
@@ -248,6 +248,75 @@ export const EditorContainer = css`
   & > span,
   input.ant-input-sm {
     width: 7em;
+  }
+
+  & div.editor-container {
+    width: 75%;
+    margin: 0 auto;
+  }
+
+  & div.codex-editor--narrow {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    & div {
+      width: 100%;
+    }
+
+    & div.ce-toolbar__plus {
+      width: 2em;
+      height: 2em;
+    }
+  }
+
+  & button {
+    align-self: end;
+  }
+
+  @media (max-width: 768px) {
+    & > input.ant-input-lg,
+    input.ant-input-sm {
+      width: 100%;
+    }
+
+    & div.codex-editor--narrow {
+      width: 100%;
+    }
+  }
+`;
+
+export const AnswerEditorContainer = css`
+  width: 100%;
+  height: auto;
+  flex-direction: column;
+  align-items: center;
+  padding: 1em 2em;
+  gap: 1em;
+
+  display: none;
+
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+
+  & > h1 {
+    color: #1890ff;
+    font-weight: bold;
+  }
+
+  & > input.ant-input-lg {
+    width: 50vw;
+  }
+
+  & > span,
+  input.ant-input-sm {
+    width: 7em;
+  }
+
+  & div.editor-container {
+    width: 75%;
+    margin: 0 auto;
   }
 
   & div.codex-editor--narrow {

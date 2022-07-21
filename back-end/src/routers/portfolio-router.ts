@@ -47,7 +47,6 @@ portfolioRouter.get(
 // 4. 유저별 스크랩 포토폴리오 조회
 portfolioRouter.get(
   "/user/:userId/scraps",
-  loginRequired,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.params.userId;
@@ -68,9 +67,12 @@ portfolioRouter.post(
       const userInfo = await userService.getUserInfo(authorId);
       const author = userInfo.nickname;
       const authorImg = userInfo.imgUrl;
-      const { title, description, skills, content, contentText } = req.body;
+      const { title, description, content, contentText } = req.body;
+      const skills = JSON.parse(req.body.skills);
+
       const image = req.file;
       const thumbnail = <string>await getImageUrl(<Express.Multer.File>image);
+
       const newPortfolio = await portfolioService.addPortfolio({
         authorId,
         author,
@@ -82,6 +84,7 @@ portfolioRouter.post(
         contentText,
         thumbnail,
       });
+
       res.status(201).json(newPortfolio);
     } catch (error) {
       next(error);

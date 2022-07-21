@@ -2,7 +2,6 @@
 import {
   LabelCss,
   FormItemLayout,
-  TailFormItemLayout,
   Container,
   LeftCard,
   RightCard,
@@ -28,16 +27,14 @@ import {
   message,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-//import PortfolioCard from "./PortfolioCard";
 import PortfolioCard from "../Common/PortfolioCard";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-const { Step } = Steps;
 
 const CreatePortfolioCard = ({ onSubmitCard }) => {
   const [items, name, onNameChange, addItem] = useSelects();
   const { singlePortfolio } = useSelector((state) => state.portfolio);
-  const [imgSrc, setImgSrc] = useState(singlePortfolio?.imgSrc);
+  const [imgSrc, setImgSrc] = useState(singlePortfolio?.thumbnail);
   const [imgFormErr, setImgFormErr] = useState();
   console.log(singlePortfolio);
   const [imgFile, setImgFile] = useState();
@@ -131,7 +128,7 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
         <div css={submitButton}>
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              next
+              다음
             </Button>
           </Form.Item>
         </div>
@@ -154,7 +151,7 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
                 >
                   <ImgCrop rotate>
                     <Upload.Dragger
-                      name="files"
+                      name="image"
                       /*action="/upload.do"*/ maxCount={1}
                       onChange={onChange}
                       onRemove={onRemove}
@@ -252,9 +249,10 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
             <PortfolioCard
               title={titleValue}
               description={descriptionValue}
-              image={imgSrc}
+              thumbnail={imgSrc}
               skills={skillsValue}
-              author={{ nickname: me.nickname, imgUrl: me.imgUrl }}
+              author={me.nickname}
+              authorImg={me.imgUrl ? me.imgUrl : ""}
             />
           </Card>
         </div>

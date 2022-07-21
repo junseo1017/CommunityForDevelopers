@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import Comments from "./Comments";
 import { Divider, Collapse } from "antd";
 import { MessageOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -10,13 +11,17 @@ import Output from "editorjs-react-renderer";
 import AddEditor from "../Editor/AddEditor";
 import axios from "axios";
 
-const Answer = ({ answer, me }) => {
+const Answer = ({ answer }) => {
+  const { me } = useSelector((state) => state.user);
+  console.log("answer me", me);
+  console.log("answer answer", answer);
+
   const [recommendData, setRecommendData] = useState({
     isRecommended: false,
     numberOfRecommends: 0,
   });
 
-  const initialMode = !!(me._id === answer.author._id);
+  const initialLoginState = me._id === answer.author._id;
 
   const [isChanged, setIsChanged] = useState(false);
 
@@ -39,10 +44,10 @@ const Answer = ({ answer, me }) => {
     getData();
   }, [isChanged]);
 
-  const [isAuthor, setIsAuthor] = useState(initialMode);
+  const [isAuthor, setIsAuthor] = useState(initialLoginState);
   const [isAnswerUpdateMode, setIsAnswerUpdateMode] = useState(false);
 
-  // 수정 삭제 작업 중..
+  // 답변 삭제하기
   const handleDelete = async (deleteId) => {
     try {
       await axios.delete(`/api/qnas/${deleteId}`);
@@ -51,11 +56,10 @@ const Answer = ({ answer, me }) => {
     }
   };
 
+  // 답변 수정하기
   const handleUpdate = async () => {
     setIsAnswerUpdateMode(!isAnswerUpdateMode);
   };
-
-  console.log("answerId :", answer._id);
 
   return (
     <div css={DetailAnswerContainer} key={answer._id}>
@@ -86,6 +90,8 @@ const Answer = ({ answer, me }) => {
           </div>
         )}
       </div>
+      {answer.recommends &&
+        answer.recommends.map((user) => <div key={user._id}>{user.nickname}</div>)}
       {!isAnswerUpdateMode ? (
         <Output data={JSON.parse(answer.contents)} />
       ) : (

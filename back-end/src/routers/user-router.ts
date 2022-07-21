@@ -5,8 +5,8 @@ import {
   userCreateJoiSchema,
   userUpdateJoiSchema,
 } from "../db/schemas/joi-schemas";
-import { upload, getImageUrl } from "../utils/image-util";
 import { validateBodyWith } from "../middlewares/validator";
+import { upload, getImageUrl, authMailer } from "../utils";
 
 const userRouter = Router();
 
@@ -35,6 +35,8 @@ userRouter.post(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
 
+    console.log("로그인:", req.body);
+
     try {
       const userToken = await userService.getUserToken({ email, password });
 
@@ -45,6 +47,19 @@ userRouter.post(
       });
 
       res.status(200).json({ signIn: "succeed" });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+userRouter.post(
+  "/email",
+  async (req: ExtendReq, res: Response, next: NextFunction) => {
+    const { email, authNumber } = req.body;
+    try {
+      await authMailer(email, authNumber);
+      res.status(200).json({ sendMail: "succeed" });
     } catch (error) {
       next(error);
     }
@@ -111,8 +126,8 @@ userRouter.put(
     const userId = req.currentUserId || "";
     const image = req.file;
     const imgUrl = <string>await getImageUrl(<Express.Multer.File>image);
-
-    const { nickname, job, skills } = req.body;
+    const { nickname, job } = req.body;
+    const skills = req.body.skills.split(",");
 
     const toUpdate = {
       nickname,
@@ -122,7 +137,6 @@ userRouter.put(
     };
 
     try {
-      await userUpdateJoiSchema.validateAsync({ nickname });
       const updatedUserInfo = await userService.setUser(userId, toUpdate);
       res.status(200).json(updatedUserInfo);
     } catch (error) {
@@ -137,7 +151,6 @@ userRouter.put(
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
     const { password } = req.body;
-
     try {
       await userService.setPassword(userId, password);
       res.status(200).json({ changePassword: "succeed" });

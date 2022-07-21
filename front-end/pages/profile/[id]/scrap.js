@@ -7,11 +7,11 @@ import ProfileScrap from "../../../components/userProfile/ProfileScrap";
 import { ProfileContentContainer } from "../profileStyle";
 import { myinfo, userinfo } from "../../../actions/user";
 import { loadScrapPortfolios } from "../../../actions/portfolio";
-import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import wrapper from "../../../store";
 import axios from "axios";
+import Head from "next/head";
 
 const ProfileCScrap = () => {
   const dispatch = useDispatch();
@@ -22,13 +22,18 @@ const ProfileCScrap = () => {
   }, []);
 
   return (
-    <AppLayout>
-      <ProfileNav />
-      <div css={ProfileContentContainer}>
-        <ProfileCard />
-        <ProfileScrap />
-      </div>
-    </AppLayout>
+    <>
+      <Head>
+        <title>CFDㅣ프로필</title>
+      </Head>
+      <AppLayout>
+        <ProfileNav />
+        <div css={ProfileContentContainer}>
+          <ProfileCard />
+          <ProfileScrap />
+        </div>
+      </AppLayout>
+    </>
   );
 };
 

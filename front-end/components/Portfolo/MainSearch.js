@@ -2,7 +2,7 @@ import React from "react";
 /** @jsxImportSource @emotion/react */
 import { SearchCss, Button } from "./styles/mainSearchStyle";
 
-const MainSearch = ({ onChange, searchOptions }) => {
+const MainSearch = ({ onChange, searchOptions, onSearchValueChange }) => {
   return (
     <div css={SearchCss}>
       <div>
@@ -20,7 +20,7 @@ const MainSearch = ({ onChange, searchOptions }) => {
                 authocomplete="off"
                 placeholder="검색"
                 aria-label="포트폴리오 검색"
-                onChange={onChange}
+                onChange={onSearchValueChange}
               />
             </label>
           </form>
@@ -39,10 +39,7 @@ const MainSearch = ({ onChange, searchOptions }) => {
             </Button>
           </li>
           <li>
-            <Button
-              checked={searchOptions["author.nickname"]}
-              name="author.nickname"
-              onClick={onChange}>
+            <Button checked={searchOptions["author"]} name="author" onClick={onChange}>
               유저
             </Button>
           </li>

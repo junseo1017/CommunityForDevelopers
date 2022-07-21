@@ -1,33 +1,34 @@
 /** @jsxImportSource @emotion/react */
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import TagRender from "./TagRender";
 import { Row, Col, Select, Input, Divider, Space, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import useSelects from "../../hooks/useSelects";
 import MainSearch from "./MainSearch";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loadPortfoliosSearch } from "../../actions/portfolio";
 import useDidMountEffect from "../../hooks/useDidMountEffect";
+import useDebouncedEffect from "../../hooks/useDebouncedEffect";
+import { debounce } from "lodash";
 
-const PorfolioSearch = ({ orderBys }) => {
-  const dispatch = useDispatch();
-
+const PorfolioSearch = ({ orderBys, setSearchQuery }) => {
   const [searchOptions, setSearchOptions] = useState({
     contentText: false,
     title: false,
-    "author.nickname": false,
+    author: false,
   });
 
   const [optionsInputs, setOptionsInputs] = useState({
-    options: ["contentText", "title", "author.nickname"],
+    options: ["contentText", "title", "author"],
   });
+
   const [inputs, setInputs] = useState({
-    value: "",
     orderBy: "recommends",
     skills: [],
     page: 1,
   });
+
   const orderByChange = (value) => {
     setInputs({
       ...inputs,
@@ -40,27 +41,45 @@ const PorfolioSearch = ({ orderBys }) => {
       ["skills"]: value,
     });
   };
-  const onChange = (e) => {
-    const { value, name, tagName } = e.target;
-    if (tagName === "BUTTON") {
-      const newSearchOptions = { ...searchOptions, [name]: !searchOptions[name] };
-      setSearchOptions(newSearchOptions);
-      setOptionsInputs({
-        ...optionsInputs,
-        ["options"]: Object.keys(newSearchOptions).filter((key) => newSearchOptions[key]),
-      });
-      return;
-    }
-    setInputs({
-      ...inputs,
-      [name]: value,
+  const onOptionsChange = (e) => {
+    const { name } = e.target;
+    const newSearchOptions = { ...searchOptions, [name]: !searchOptions[name] };
+    setSearchOptions(newSearchOptions);
+    setOptionsInputs({
+      ...optionsInputs,
+      ["options"]: Object.keys(newSearchOptions).filter((key) => newSearchOptions[key]),
     });
   };
 
+  const delaySetValue = useCallback(
+    debounce((value) => {
+      setSearchValue(value);
+    }, 500),
+    [],
+  );
+  const [searchValue, setSearchValue] = useState("");
+  //useDebouncedEffect(() => console.log(value), 1000, [value]);
+  const onSearchValueChange = useCallback((e) => {
+    delaySetValue(e.target.value);
+  }, []);
+
   useDidMountEffect(() => {
-    console.log({ ...inputs, ...optionsInputs });
-    dispatch(loadPortfoliosSearch({ ...inputs, ...optionsInputs }));
-  }, [inputs, optionsInputs]);
+    const query = "";
+    if (optionsInputs.options) {
+      query = optionsInputs.options.reduce(
+        (prev, cur) => prev + `&option=${cur}`,
+        `?page=${inputs.page}`,
+      );
+    }
+    query += `&orderBy=${inputs.orderBy}`;
+    if (searchValue) {
+      query += `&value=${searchValue}`;
+    }
+    if (inputs.skills) {
+      query = inputs.skills.reduce((prev, cur) => prev + `&skill=${cur}`, query);
+    }
+    setSearchQuery(query);
+  }, [inputs, optionsInputs, searchValue]);
 
   const [items, name, onNameChange, addItem] = useSelects();
   const OrderBySelectStyle = useMemo(() => ({ width: 106, textAlign: "end" }), []);
@@ -69,7 +88,11 @@ const PorfolioSearch = ({ orderBys }) => {
   return (
     <>
       <Row>
-        <MainSearch onChange={onChange} searchOptions={searchOptions} />
+        <MainSearch
+          onChange={onOptionsChange}
+          searchOptions={searchOptions}
+          onSearchValueChange={onSearchValueChange}
+        />
       </Row>
       <Row align="space-between" style={{ paddingTop: "10px" }}>
         <Col flex="0 0 auto">
