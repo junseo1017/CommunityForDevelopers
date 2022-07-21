@@ -2,7 +2,6 @@
 import { css, jsx } from "@emotion/react";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Divider } from "antd";
-import QuestionsList from "./QuestionsList";
 import { SearchBarContainer, ColFlexBox } from "../styles/QuestionStyle";
 import axios from "axios";
 import { useInView } from "react-intersection-observer";
@@ -11,27 +10,29 @@ import TopButton from "../TopButton";
 
 const Questions = ({ questions, answers }) => {
   const [questionsList, setQuestionsList] = useState(questions); // 불러온 데이터
-  // const [query, setQuery] = useState(""); // 검색어
-  // const [searchQueryString, setSearchQueryString] = useState(""); // 검색어 기반 url
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [page, setPage] = useState(1);
+  const [query, setQuery] = useState(""); // 유저가 입력한 검색어
+  const [searchQueryString, setSearchQueryString] = useState(""); // 검색어 기반 url
 
-  // useEffect(() => {
-  //   const lastId = questionsList[4]._id;
-  //   setSearchQueryString(`value=${query}&lastId=${lastId}`);
-  // }, [query, page]);
+  console.log("questionsList", questionsList);
+  const [lastId, setLastId] = useState(questionsList[questionsList.length - 1]?._id);
+  console.log("lastId", lastId);
 
-  // const getQnaData = useCallback(async () => {
-  //   setIsLoading(true);
-  //   const response = await axios.get(`/api/search/qnas?${searchQueryString}`);
+  useEffect(() => {
+    setSearchQueryString(`value=${query}&lastId=${lastId}`);
+    console.log(searchQueryString);
+  }, [query]);
 
-  //   setQuestionsList((curr) => curr.concat(response.data));
-  //   setIsLoading(false);
-  // });
+  const getQnaData = useCallback(async () => {
+    // setIsLoading(true);
+    const response = await axios.get(`/api/search/qnas?${searchQueryString}`);
 
-  // useEffect(() => {
-  //   getQnaData();
-  // }, [getQnaData]);
+    setQuestionsList(response.data);
+    // setIsLoading(false);
+  });
+
+  useEffect(() => {
+    getQnaData();
+  }, [getQnaData]);
 
   // useEffect(() => {
   //   // 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니라면
@@ -50,7 +51,6 @@ const Questions = ({ questions, answers }) => {
           aria-label="search"
           onChange={(e) => {
             setQuery(e.target.value);
-            console.log(searchQueryString);
           }}
         />
       </div>
@@ -60,14 +60,8 @@ const Questions = ({ questions, answers }) => {
           return (
             <div key={question._id}>
               <QuestionItem
-                _id={question._id}
-                title={question.title}
-                recommends={question.recommends.length}
-                contents={question.contents}
-                tags={question.tags}
-                user={question.author}
-                date={question.createdAt}
-                answers={answers}
+                question={question}
+                answers={answers.filter((answer) => answer.parentQnaId === question._id)}
               />
               <Divider plain />
             </div>
