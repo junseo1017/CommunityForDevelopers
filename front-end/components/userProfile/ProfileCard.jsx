@@ -14,6 +14,7 @@ const ProfileCard = () => {
   const isresponsive = useMediaQuery({
     query: "(max-width:768px)",
   });
+  
   useEffect(() => {
     if (isresponsive) {
       setShowUI(true);
