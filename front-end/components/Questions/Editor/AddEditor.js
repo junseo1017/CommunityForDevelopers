@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "antd";
 import { EditorContainer } from "../styles/QuestionStyle";
@@ -15,9 +15,7 @@ const Editor = dynamic(() => import("./Editor"), {
 
 const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }) => {
   const [isChanged, setIsChanged] = useState(false);
-  console.log(qnaId);
-  const router = useRouter();
-  console.log("현재 페이지", router.query._id);
+
   const editorCore = useRef(null);
   // 업로드된 이미지 추적
   const [imageArray, setImageArray] = useState([]);
@@ -32,56 +30,59 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
     setImageArray(newArr);
   };
 
-  const saveContents = async () => {
-    console.log(qnaId);
+  const addImages = (image) => {
+    imageArray.push(image);
+  };
+
+  useEffect(() => {
+    if (data) {
+      const editorData = JSON.parse(data);
+      for (const block of editorData.blocks) {
+        if (block.type === "image") {
+          addImages(block.data.file.url);
+        }
+      }
+    }
+  }, [data]);
+
+  const saveQna = async () => {
+    const savedData = await editorCore.current.save();
+    console.log(savedData);
+    const filteredBlocks = savedData.blocks.map(({ type, data }) => {
+      return type === "paragraph" || type === "header" ? data : "";
+    });
+
+    const contentText = filteredBlocks.map((block) => block.text).join(" ");
+
     // 에디터의 컨텐츠를 가져와 서버에 저장하기
     if (isUpdate) {
       try {
-        const savedData = await editorCore.current.save();
-        const response = await axios.put(
-          `/api/qnas/${qnaId}`,
-          {
-            contents: JSON.stringify(savedData),
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          },
-        );
+        await axios.put(`/api/qnas/${qnaId}`, {
+          contents: JSON.stringify(savedData),
+          contentText,
+        });
 
-        // console.log(response);
         setIsChanged(true);
-        router.push(`/qna/${router.query._id}`);
       } catch (error) {
         console.log(error);
       }
     } else {
       try {
-        const savedData = await editorCore.current.save();
-
-        await axios.post(
-          "/api/qnas",
-          {
-            title,
-            contents: JSON.stringify(savedData),
-            isAnswer,
-            parentQnaId,
-            tags,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          },
-        );
+        await axios.post("/api/qnas", {
+          title,
+          contents: JSON.stringify(savedData),
+          contentText,
+          isAnswer,
+          parentQnaId,
+          tags,
+        });
 
         // 서버에서 사용하지 않는 이미지 제거하기
+        await clearEditorLeftoverImages();
 
         // 서버에 질문 저장하기
 
         setIsChanged(true);
-        // router.push(`/qna/${router.query._id}`);
       } catch (e) {
         console.log(e);
       }
@@ -101,12 +102,12 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
         if (!currentImages.includes(img)) {
           try {
             // 서버에서 이미지 삭제하기
-            await API.deleteImage({ imagePath: img });
+            await axios.delete(`/api/images`, { imgUrl: img });
 
             // imageArray에서 삭제하기
             removeImage(img);
-          } catch (e) {
-            console.log(e.message);
+          } catch (error) {
+            console.log(error.message);
           }
         }
       }
@@ -117,9 +118,9 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
     <div className="editor-container">
       <Button
         onClick={() => {
-          saveContents(qnaId);
+          saveQna(qnaId);
           // ModalAsync();
-          router.push(`/qna/${router.query._id}`);
+          // router.push(`/qna/${router.query._id}`);
         }}>
         저장하기
       </Button>

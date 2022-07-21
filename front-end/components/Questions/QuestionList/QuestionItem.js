@@ -6,10 +6,10 @@ import { MessageOutlined, StarOutlined } from "@ant-design/icons";
 import { TitleContainer, DescriptionContainer } from "../styles/QuestionStyle";
 import Link from "next/link";
 
-const QuestionItem = ({ _id, title, recommends, contents, tags, user, date, answers }) => {
-  const formattedDate = moment(date).format("YYYY월 MM월 DD일");
+const QuestionItem = ({ question, answers }) => {
+  console.log("question", question);
 
-  const parsedContents = JSON.parse(contents);
+  const parsedContents = JSON.parse(question.contents);
 
   const filteredBlocks =
     parsedContents &&
@@ -19,15 +19,17 @@ const QuestionItem = ({ _id, title, recommends, contents, tags, user, date, answ
 
   const texts = filteredBlocks.map((block) => block.text).slice(0, 1);
 
-  answers = answers.filter((answer) => answer.parentQnaId === _id);
+  // answers = answers.filter((answer) => answer.parentQnaId === _id);
+
+  console.log(answers);
 
   return (
-    <div key={_id}>
+    <div key={question._id}>
       <div css={TitleContainer}>
         <Badge count={answers.length}>
           <MessageOutlined />
         </Badge>
-        <Link href={`/qna/${_id}`}>{title}</Link>
+        <Link href={`/qna/${question._id}`}>{question.title}</Link>
       </div>
       <div css={DescriptionContainer}>
         {texts.map((text, index) => (
@@ -37,11 +39,13 @@ const QuestionItem = ({ _id, title, recommends, contents, tags, user, date, answ
         ))}
         <div className="tag-container">
           <div>
-            {tags.map((tag, idx) => {
-              return <Tag key={`${_id} + ${idx}`}>{tag}</Tag>;
+            {question.tags.map((tag, idx) => {
+              return <Tag key={idx}>{tag}</Tag>;
             })}
           </div>
-          <span>{`(${user.nickname}이/가 ${formattedDate}에 질문함)`}</span>
+          <span>{`(${question.author}이/가 ${moment(question.createdAt).format(
+            "YYYY월 MM월 DD일",
+          )}에 질문함)`}</span>
         </div>
       </div>
     </div>

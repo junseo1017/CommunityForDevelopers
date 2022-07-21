@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import { Avatar, Button, Comment, Modal, List } from "antd";
+import { Avatar, Button, Comment, Form, TextArea, Modal, List } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
@@ -13,10 +13,21 @@ import { CommentsContainer, CommentStyle } from "../styles/QuestionStyle";
 import ModalAsync from "../../Common/ModalAsync";
 import useModalAsync from "../../../hooks/useModalAsync";
 
-const CommentsEditor = ({ comment, handleChange, userList, handleSubmit, isUpdate }) => {
-  const [modalVisible, setModalVisible, handleOk, confirmLoading, modalText, showModal] =
-    useModalAsync(handleSubmit, "댓글을 저장할까요?", next);
-
+// const Editor = ({ comment, handleChange, handleSubmit, isUpdate }) => {
+//   return (
+//     <>
+//       <Form.Item>
+//         <TextArea rows={4} onChange={handleChange} value={comment} />
+//       </Form.Item>
+//       <Form.Item>
+//         <Button htmlType="submit" onClick={handleSubmit} type="primary">
+//           Add Comment
+//         </Button>
+//       </Form.Item>
+//     </>
+//   );
+// };
+const Editor = ({ comment, handleChange, userList, handleSubmit, isUpdate }) => {
   return (
     <>
       <MentionsInput
@@ -39,30 +50,25 @@ const CommentsEditor = ({ comment, handleChange, userList, handleSubmit, isUpdat
       <Button
         type="primary"
         onClick={() => {
-          showModal(true);
-          handleSubmit;
+          handleSubmit();
         }}>
         댓글 작성하기
       </Button>
-      <ModalAsync
-        visible={modalVisible}
-        setVisible={setModalVisible}
-        handleOk={handleOk}
-        confirmLoading={confirmLoading}
-        modalText={modalText}
-      />
     </>
   );
 };
 
-const Comments = ({ contentId, user }) => {
+const Comments = ({ currentComments, contentId, user }) => {
   const router = useRouter();
   console.log(router);
+  console.log(contentId);
+  console.log("currentComments:", currentComments);
 
   const { me } = useSelector((state) => state.user);
-  const [userList, setUserList] = useState([]);
+  // const [userList, setUserList] = useState([]);
+  // console.log("userList", userList);
   const [comment, setComment] = useState("");
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState([...currentComments]);
 
   // const [isUpdateMode, setIsUpdateMode] = useState({
   //   isUpdate: false,
@@ -87,38 +93,38 @@ const Comments = ({ contentId, user }) => {
   //   });
   // };
 
-  useEffect(() => {
-    const getCurrentComments = async () => {
-      try {
-        const response = await axios.get(`/api/qnas/${contentId}`);
-        setComments(response.data.comments);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  // useEffect(() => {
+  //   const getCurrentComments = async () => {
+  //     try {
+  //       const response = await axios.get(`/api/qnas/${contentId}`);
+  //       setComments(response.data.comments);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
 
-    getCurrentComments();
-  }, []);
+  //   getCurrentComments();
+  // }, []);
 
-  useEffect(() => {
-    // 유저 전체 리스트 조회해 멘션 기능 활성화하기
-    const getUsers = async () => {
-      try {
-        const response = await axios.get("/api/users");
+  // useEffect(() => {
+  //   // 유저 전체 리스트 조회해 멘션 기능 활성화하기
+  //   const getUsers = async () => {
+  //     try {
+  //       const response = await axios.get("/api/users");
 
-        // 데이터 변환
-        const users = response.data.map((user) => {
-          return { id: user._id, display: user.nickname };
-        });
+  //       // 데이터 변환
+  //       const users = response.data.map((user) => {
+  //         return { id: user._id, display: user.nickname };
+  //       });
 
-        setUserList(users);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  //       setUserList(users);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
 
-    getUsers();
-  }, []);
+  //   getUsers();
+  // }, []);
 
   const handleChange = (e) => {
     setComment(e.target.value);
@@ -126,30 +132,31 @@ const Comments = ({ contentId, user }) => {
   };
 
   const handleCreateSubmit = async () => {
-    comment.length > 0 ? setComments([...comments, comment]) : alert("댓글을 작성하세요.");
+    console.log("submit");
+    // comment.length > 0 ? setComments([...comments, comment]) : alert("댓글을 작성하세요.");
     try {
-      await axios.post(`/api/comments/qna/${contentId}`, {
+      const response = await axios.post(`/api/comments/qna/${contentId}`, {
         content: comment,
       });
-      setComment("");
-      router.reload();
+      console.log("댓글추가", response);
+      // router.reload();
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleUpdateSubmit = async () => {
-    comment.length > 0 ? setComments([...comments, comment]) : alert("댓글을 작성하세요.");
-    try {
-      const res = await axios.put(`/api/comments/${contentId}`, {
-        content: comment,
-      });
-      console.log(res);
-      setComment("");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleUpdateSubmit = async () => {
+  //   comment.length > 0 ? setComments([...comments, comment]) : alert("댓글을 작성하세요.");
+  //   try {
+  //     const res = await axios.put(`/api/comments/${contentId}`, {
+  //       content: comment,
+  //     });
+  //     console.log(res);
+  //     setComment("");
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <div css={CommentsContainer}>
@@ -163,9 +170,9 @@ const Comments = ({ contentId, user }) => {
               <div className="comment-container">
                 <Comment
                   author={<p>{user.nickname}</p>}
-                  avatar={<Avatar src={user.imgUrl} alt={userList.nickname} />}
+                  avatar={<Avatar src={user.imgUrl} alt={user.nickname} />}
                   css={CommentStyle}
-                  content={<p>{comment.content || comment.author}</p>}
+                  content={<p>{comment.content || comment}</p>}
                   datetime={<span>{moment(comment.createdAt).fromNow()}</span>}
                 />
                 {me._id === comment.author?._id && (
@@ -188,12 +195,12 @@ const Comments = ({ contentId, user }) => {
         />
       )}
       <Comment
-        avatar={<Avatar src={user.imgUrl} alt={userList.nickname} />}
+        avatar={<Avatar src={me.imgUrl} alt={me.nickname} />}
         content={
-          <CommentsEditor
+          <Editor
             comment={comment}
             handleChange={handleChange}
-            userList={userList}
+            // userList={userList}
             handleSubmit={handleCreateSubmit}
           />
         }
