@@ -1,15 +1,14 @@
 import { AppError } from "./error-handler";
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import Joi from "joi";
+import { ExtendReq } from "../middlewares";
 type ParameterType = "query" | "body" | "params";
 const validateRequestWith = (
   schema: Joi.Schema,
   paramLocation: ParameterType
 ) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
-      console.log("조이 req:body:", req.body);
-      console.log("조이 req[paramLocation]:", req[paramLocation]);
       await schema.validateAsync(req[paramLocation]);
       next();
     } catch (error) {

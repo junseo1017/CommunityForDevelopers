@@ -1,18 +1,25 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { userService } from "../services";
-import { ExtendReq, loginRequired } from "../middlewares";
 import {
-  userCreateJoiSchema,
-  userUpdateJoiSchema,
+  ExtendReq,
+  loginRequired,
+  validateRequestWith,
+  checkImage,
+} from "../middlewares";
+import {
+  userRegisterJoi,
+  userLoginJoi,
+  userEmailJoi,
+  userUpdateInfoJoi,
+  userUpdatePWJoi,
 } from "../db/schemas/joi-schemas";
-import { validateRequestWith } from "../middlewares/validator";
-import { upload, getImageUrl, authMailer } from "../utils";
+import { authMailer, upload } from "../utils";
 
 const userRouter = Router();
 
 userRouter.post(
   "/",
-  validateRequestWith(userCreateJoiSchema, "body"),
+  validateRequestWith(userRegisterJoi, "body"),
   async (req: Request, res: Response, next: NextFunction) => {
     const { nickname, email, password } = req.body;
 
@@ -32,10 +39,9 @@ userRouter.post(
 
 userRouter.post(
   "/login",
+  validateRequestWith(userLoginJoi, "body"),
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
-
-    console.log("로그인:", req.body);
 
     try {
       const userToken = await userService.getUserToken({ email, password });
@@ -55,6 +61,7 @@ userRouter.post(
 
 userRouter.post(
   "/email",
+  validateRequestWith(userEmailJoi, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const { email, authNumber } = req.body;
     try {
@@ -95,7 +102,6 @@ userRouter.get(
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const userId = req.currentUserId || "";
-
       const users = await userService.getUserInfo(userId);
       res.status(200).json(users);
     } catch (error) {
@@ -121,22 +127,13 @@ userRouter.get(
 userRouter.put(
   "/info",
   loginRequired,
-  validateRequestWith(userUpdateJoiSchema, "body"),
   upload,
+  checkImage,
+  validateRequestWith(userUpdateInfoJoi, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
-    const image = req.file;
-    let imgUrl = "";
-    if (image) {
-      imgUrl = <string>await getImageUrl(<Express.Multer.File>image);
-    }
-
-    const { nickname, job } = req.body;
-
-    console.log("라우터:", req.body);
-
+    const { nickname, job, imgUrl } = req.body;
     const skills = req.body.skills.split(",");
-
     const toUpdate = {
       nickname,
       job,
@@ -156,6 +153,7 @@ userRouter.put(
 userRouter.put(
   "/password",
   loginRequired,
+  validateRequestWith(userUpdatePWJoi, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
     const { password } = req.body;

@@ -1,6 +1,7 @@
 import { Router, Response, NextFunction } from "express";
 import { ExtendReq, loginRequired } from "../middlewares/login-required";
 import { commentService, portfolioService, qnaService } from "../services";
+import { Types } from "mongoose";
 
 const commentRouter = Router();
 
@@ -76,7 +77,13 @@ commentRouter.delete(
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const commentId = req.params.commentId;
+      const id = new Types.ObjectId(commentId);
       const userId = req.currentUserId || "";
+      const portId = req.query.portId as string;
+      if (portId) {
+        await portfolioService.deletePortfolioComment(portId, id);
+      }
+
       const deletedComment = await commentService.deleteComment(
         commentId,
         userId
