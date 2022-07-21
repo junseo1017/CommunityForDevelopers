@@ -54,6 +54,7 @@ const PorfolioSearch = ({ setSearchQuery }) => {
       ["options"]: Object.keys(newSearchOptions).filter((key) => newSearchOptions[key]),
     });
   };
+
   const delaySetValue = useCallback(
     debounce((value) => {
       setSearchValue(value);

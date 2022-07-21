@@ -8,8 +8,7 @@ export const getqnabyuserid = createAsyncThunk(
   "user/userqna",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`api/qnas/user/${data}`);
-      console.log(response.data);
+      const response = await axios.get(`/api/qnas/user/${data}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

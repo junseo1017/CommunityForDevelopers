@@ -1,13 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import { Divider, message } from "antd";
+import { message } from "antd";
 import { useForm } from "react-hook-form";
 import Router from "next/router";
 import { SignInFormStyle, SignBtnStyle, errorInput } from "./styles/SignStyles";
 import { login } from "../../actions/user";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RegExp } from "../Common/utils";
 
 const SignInForm = () => {
   const dispatch = useDispatch();
@@ -15,7 +14,6 @@ const SignInForm = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
 
@@ -24,7 +22,7 @@ const SignInForm = () => {
       Router.push("/");
     }
     if (loginError) {
-      message.error("로그인에 실패하였습니다.");
+      message.error("회원정보가 일치하지 않습니다.");
     }
   }, [loginDone, loginError]);
 
@@ -46,9 +44,6 @@ const SignInForm = () => {
           placeholder="이메일을 입력해주세요"
           {...register("email", {
             required: true,
-            pattern: {
-              value: RegExp.email,
-            },
           })}
         />
         <input
@@ -58,9 +53,6 @@ const SignInForm = () => {
           placeholder="비밀번호을 입력해주세요"
           {...register("password", {
             required: true,
-            pattern: {
-              value: RegExp.password,
-            },
           })}
         />
       </div>

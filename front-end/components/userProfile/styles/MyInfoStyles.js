@@ -88,13 +88,16 @@ export const portfolioContainer = css`
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: start;
   flex-wrap: wrap;
   gap: 20px;
   & * {
     margin: 0;
   }
   @media (max-width: 768px) {
+    justify-content: space-between;
+  }
+  @media (max-width: 400px) {
     justify-content: center;
   }
 `;
@@ -129,30 +132,33 @@ export const infoImageFormStyle = css`
 export const portfolioStyle = css`
   display: flex;
   flex-direction: column;
+
   & > div:first-of-type > div {
     width: 100%;
     position: relative;
-
+    // 포트폴리오 이미지
     & > img {
-      width: 100%;
-      max-width: 350px;
-      height: 100%;
-      max-height: 260px;
+      width: 230px;
+      height: 230px;
       border-radius: 5px;
+      @media (max-width: 768px) {
+        width: 250px;
+        height: 250px;
+      }
     }
-
+    // 이미지 내 요소
     & > div:first-of-type {
       width: 100%;
       position: absolute;
       bottom: 0;
-      padding: 0 0 10px 10px;
+      padding: 0 8px 10px 8px;
       background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.5) 60%);
       opacity: 0;
       transition: 150ms;
 
       h3 {
         font-size: 16px;
-        font-weight: 900;
+        font-weight: 700;
         color: white;
       }
       p {
@@ -160,6 +166,9 @@ export const portfolioStyle = css`
         font-weight: 500;
         color: rgb(240, 240, 240);
         opacity: 0.8;
+      }
+      @media (max-width: 768px) {
+        opacity: 1;
       }
     }
 
@@ -186,10 +195,11 @@ export const portfolioStyle = css`
         font-size: 16px;
       }
     }
-
-    &:hover > div {
-      display: block;
-      opacity: 1;
+    @media (min-width: 768px) {
+      &:hover > div {
+        display: block;
+        opacity: 1;
+      }
     }
   }
   & > div:last-of-type {
@@ -201,22 +211,23 @@ export const portfolioStyle = css`
     & a {
       color: black;
     }
-
+    // 포트폴리오 하단 프로필 이미지, 닉네님
     & > div:first-of-type {
       display: flex;
       align-items: center;
-      font-size: 13px;
+      justify-content: center;
+      font-size: 12px;
       gap: 10px;
       @media (max-width: 768px) {
         gap: 2px;
         font-size: 11px;
       }
     }
-
+    // 포트폴리오 하단 추천, 스크랩, 댓글
     & > div:last-of-type {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 2px;
       @media (max-width: 768px) {
         gap: 2px;
       }

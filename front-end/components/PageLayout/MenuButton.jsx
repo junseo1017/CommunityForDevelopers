@@ -22,10 +22,11 @@ const MenuContanier = css`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 5vw;
+  gap: 3vw;
   & a {
     color: black;
-    font-size: 22px;
+    font-size: 16px;
+    padding-bottom: 5px;
     font-weight: 700;
   }
 `;

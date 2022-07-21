@@ -14,7 +14,7 @@ import {
 } from "./styles/MyInfoStyles";
 import Image from "next/image";
 
-const ProfileMyInfoForm = ({ action, setAction }) => {
+const ProfileMyInfoForm = () => {
   const imageinputRef = useRef("");
   const [skills, setSkills] = useState([]);
   const [imagePreview, setImagePreview] = useState("/image/profile_image_default.jpg");
@@ -51,7 +51,6 @@ const ProfileMyInfoForm = ({ action, setAction }) => {
     formData.append("job", data.job);
     formData.append("skills", skills);
     dispatch(patchUserinfo(formData));
-    setAction(true);
   };
 
   const checkKeyDown = useCallback((e) => {

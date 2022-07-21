@@ -63,7 +63,7 @@ const qnaSlice = createSlice({
         state.getQnAByUserIdError = false;
       })
       .addCase(getqnabyuserid.fulfilled, (state, action) => {
-        console.log("fulfilled");
+        console.log("fulfilled", action);
         state.getQnAByUserIdLoading = false;
         state.getQnAByUserIdDone = true;
         state.qnabyUserId = action.payload;
@@ -71,7 +71,7 @@ const qnaSlice = createSlice({
       .addCase(getqnabyuserid.rejected, (state, action) => {
         console.log("rejected");
         state.getQnAByUserIdLoading = false;
-        state.getQnAByUserIdError = action.payload;
+        state.getQnAByUserIdError = action.error;
       });
   },
 });
