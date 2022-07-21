@@ -21,6 +21,7 @@ import { throttle, debounce } from "lodash";
 
 const Home = () => {
   const dispatch = useDispatch();
+
   const { me } = useSelector((state) => state.user);
   console.log(me);
   const { mainPortfolios, hasMorePortfolios, loadPortfoliosLoading } = useSelector(
@@ -71,6 +72,7 @@ const Home = () => {
   }, [hasMorePortfolios, loadPortfoliosLoading, mainPortfolios]);
 
   useDidMountEffect(() => {
+    console.log(query);
     dispatch(
       loadPortfoliosSearch({
         query,
@@ -78,23 +80,10 @@ const Home = () => {
     );
   }, [query]);
 
-  const { Option } = Select;
-  const portfolioSearchObjects = useMemo(() => {
-    const orderBys = [
-      <Option key={"recommends"}>추천 순</Option>,
-      <Option key={"createdAt"}>최신 순</Option>,
-      <Option key={"comments"}>댓글 순</Option>,
-      <Option key={"scraps"}>스크랩 순</Option>,
-    ];
-    return {
-      orderBys,
-    };
-  }, []);
-
   return (
     <AppLayout>
       <div css={mainContainer}>
-        <PorfolioSearch {...portfolioSearchObjects} setSearchQuery={setSearchQuery} />
+        <PorfolioSearch setSearchQuery={setSearchQuery} me={me} />
         <Divider css={dividerCss} />
         <List
           grid={{
@@ -146,5 +135,9 @@ const mainContainer = css`
 `;
 const dividerCss = css`
   margin-top: 13px;
-  margin-bottom: 15;
+  margin-bottom: 15px;
+  @media (max-width: 768px) {
+    margin-top: 9px;
+    margin-bottom: 14px;
+  }
 `;

@@ -6,6 +6,7 @@ import { DEFAULTVALUE } from "./defaultValue";
 import { EditorSize, TextCener } from "./styles/EditorStyle";
 import { uploadImages } from "../../actions/image";
 import { useDispatch, useSelector } from "react-redux";
+import { backendUrl } from "../../config/config";
 import axios from "axios";
 const ReactEditorJS = createReactEditorJS();
 
@@ -45,6 +46,8 @@ const Editor = ({ imageArray, handleInitialize, data }) => {
                 formData.append("image", file);
                 // send image to server
                 // get the uploaded image path, pushing image path to image array
+                axios.defaults.baseURL = backendUrl;
+                axios.defaults.withCredentials = true;
                 return axios.post("/api/images", formData).then((res) => {
                   // get the uploaded image path, pushing image path to image array
                   console.log(res);
