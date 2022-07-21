@@ -12,7 +12,7 @@ export const profileContentCardContainer = css`
 export const myInfoFormStyle = css`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   width: 60%;
   & label {
     font-size: 16px;
@@ -56,7 +56,7 @@ export const myInfoFormStyle = css`
 
 export const myInfoSubmitBtnStyle = css`
   background-color: #aca3a37b;
-  margin-top: 20px;
+  margin-top: 10px;
   height: 40px;
   cursor: pointer;
   border: 1px solid #aca3a37b;
@@ -72,7 +72,7 @@ export const myInfoSubmitBtnStyle = css`
 export const myInfoSkills = css`
   width: 100%;
   & > div {
-    padding: 20px;
+    padding: 20px 20px 10px 20px;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -96,6 +96,33 @@ export const portfolioContainer = css`
   }
   @media (max-width: 768px) {
     justify-content: center;
+  }
+`;
+
+export const infoImageFormStyle = css`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  & > label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    height: 40px;
+    width: 200px;
+    border: 2px solid #aca3a37b;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.3);
+    transition: 100ms linear;
+    cursor: pointer;
+    &:hover {
+      box-shadow: none;
+    }
+  }
+  & > input {
+    display: none;
   }
 `;
 

@@ -12,14 +12,17 @@ async function authMailer(email: string, authNumber: number) {
       user: process.env.MAILER_ID,
       pass: process.env.MAILER_PW,
     },
+    from: process.env.MAILER_ID,
   });
 
   try {
     const info = await transporter.sendMail({
-      from: `"CFD Team" <${process.env.MAILER_ID}>`,
+      from: `CFD Team <${process.env.MAILER_ID}>`,
       to: email,
       subject: "이메일 인증번호 입니다",
-      html: `<p style="font-size: 16px;">인증번호 : ${authNumber}</p>`,
+      html: `<div>
+              <p style="font-size: 16px;">인증번호 : ${authNumber}</p>
+            </div>`,
     });
 
     console.log(info);

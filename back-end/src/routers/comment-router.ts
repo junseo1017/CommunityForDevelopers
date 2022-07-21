@@ -4,6 +4,7 @@ import { commentService, portfolioService, qnaService } from "../services";
 
 const commentRouter = Router();
 
+// 1. 포토폴리오 댓글 작성
 commentRouter.post(
   "/portfolio/:id",
   loginRequired,
@@ -25,6 +26,7 @@ commentRouter.post(
   }
 );
 
+// 2. QnA 댓글 작성
 commentRouter.post(
   "/qna/:id",
   loginRequired,
@@ -46,6 +48,7 @@ commentRouter.post(
   }
 );
 
+// 3. 댓글 수정
 commentRouter.put(
   "/:commentId",
   loginRequired,
@@ -66,7 +69,7 @@ commentRouter.put(
     }
   }
 );
-
+// 4. 댓글 삭제
 commentRouter.delete(
   "/:commentId",
   loginRequired,

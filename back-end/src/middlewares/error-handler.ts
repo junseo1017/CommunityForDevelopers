@@ -24,11 +24,12 @@ function errorHandler(
   console.log("\x1b[33m%s\x1b[0m", error.stack);
 
   if (error instanceof AppError) {
-    return res
+    res
       .status(error.status)
-      .json({ result: error.name, reson: error.message });
+      .json({ result: error.name, reason: error.message });
+  } else {
+    res.json({ result: error.name, reason: error.message });
   }
-  return res.status(500).json(error);
 }
 
 export { errorHandler, AppError };

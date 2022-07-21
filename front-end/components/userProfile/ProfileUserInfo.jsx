@@ -2,12 +2,13 @@
 import { css, jsx } from "@emotion/react";
 import { Card, Button, Tag, message } from "antd";
 import { useState } from "react";
-import { useEffect, useRef } from "react";
-import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { profileContentCardContainer } from "./styles/MyInfoStyles";
 import ProfileMyInfoForm from "./ProfileMyInfoForm";
 import ProfileUserInfoForm from "./ProfileUserInfoForm";
+import ProfileEditInfo from "./ProfileEditInfo";
+
 const ProfileUserInfo = () => {
   const [action, setAction] = useState(false);
   const [showMyInfo, setShowMyInfo] = useState(false);
@@ -15,10 +16,12 @@ const ProfileUserInfo = () => {
 
   // 프로필 조회 유저 본인인지 확인
   useEffect(() => {
-    if (me._id === userInfo.userinfo._id) {
-      setShowMyInfo(true);
-    } else {
-      setShowMyInfo(false);
+    if (me && userInfo) {
+      if (me._id === userInfo.userinfo._id) {
+        setShowMyInfo(true);
+      } else {
+        setShowMyInfo(false);
+      }
     }
   }, []);
 
@@ -38,7 +41,10 @@ const ProfileUserInfo = () => {
   return (
     <Card css={profileContentCardContainer}>
       {showMyInfo ? (
-        <ProfileMyInfoForm action={action} setAction={setAction} />
+        <>
+          <ProfileMyInfoForm action={action} setAction={setAction} />
+          <ProfileEditInfo />
+        </>
       ) : (
         <ProfileUserInfoForm />
       )}

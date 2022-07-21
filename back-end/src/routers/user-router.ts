@@ -129,7 +129,7 @@ userRouter.put(
     const image = req.file;
     const imgUrl = <string>await getImageUrl(<Express.Multer.File>image);
     const { nickname, job } = req.body;
-    const skills = JSON.parse(req.body.skills);
+    const skills = req.body.skills.split(",");
 
     const toUpdate = {
       nickname,
@@ -137,7 +137,7 @@ userRouter.put(
       imgUrl,
       skills,
     };
-
+    console.log(req.body);
     try {
       await userUpdateJoiSchema.validateAsync({ nickname });
       const updatedUserInfo = await userService.setUser(userId, toUpdate);
@@ -154,7 +154,6 @@ userRouter.put(
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
     const { password } = req.body;
-
     try {
       await userService.setPassword(userId, password);
       res.status(200).json({ changePassword: "succeed" });
