@@ -1,26 +1,30 @@
 /** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react";
 import Link from "next/link";
 import styled from "@emotion/styled";
-import AppLayout from "../../components/AppLayout";
+import AppLayout from "../../../components/AppLayout";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import { useCallback, useMemo } from "react";
-import useConfirmModal from "../../hooks/useConfirmModal";
+import { useCallback, useEffect, useMemo } from "react";
+import useConfirmModal from "../../../hooks/useConfirmModal";
 import axios from "axios";
 import { Affix, Button, Avatar, Comment, Form, Input, List } from "antd";
+import { removePortfolio } from "../../../actions/portfolio";
+
 import {
   loadPortfolio,
   likePortfolio,
   scrapPortfolio,
   unlikePortfolio,
   unscrapPortfolio,
-} from "../../actions/portfolio";
-import { myinfo } from "../../actions/user";
-import wrapper from "../../store";
+  removeComment,
+} from "../../../actions/portfolio";
+import { myinfo } from "../../../actions/user";
+import wrapper from "../../../store";
 import { useSelector, useDispatch } from "react-redux";
-import CommentEditor from "../../components/Portfolo/CommentEditor";
-import CommentList from "../../components/Portfolo/CommentList";
-import useComment from "../../hooks/useComment";
+import CommentEditor from "../../../components/Portfolo/CommentEditor";
+import CommentList from "../../../components/Portfolo/CommentList";
+import useComment from "../../../hooks/useComment";
 import { LikeTwoTone, StarTwoTone, LikeOutlined, StarOutlined } from "@ant-design/icons";
 import moment from "moment";
 import Router from "next/router";
@@ -36,12 +40,12 @@ const Output = dynamic(async () => (await import("editorjs-react-renderer")).def
 
 const Portfolio = () => {
   const dispatch = useDispatch();
-  const { singlePortfolio } = useSelector((state) => state.portfolio);
+  const { singlePortfolio, loadPortfoliosDone } = useSelector((state) => state.portfolio);
   const { me } = useSelector((state) => state.user);
-  console.log(singlePortfolio);
-  console.log(me);
+
   const liked = singlePortfolio?.recommends?.find((v) => v === me._id);
   const scrapped = singlePortfolio?.scraps?.find((v) => v === me._id);
+
   const redirectLogin = useCallback(() => {
     Router.push("/login");
   }, []);
@@ -72,24 +76,37 @@ const Portfolio = () => {
   };
 
   const comments = singlePortfolio.comments.map((data, index) => {
-    const newData = {
-      author: (
-        <Link href={`/profile/${data?.author?._id}`}>
-          <a>{data?.author?.nickname}</a>
-        </Link>
-      ),
-      avatar: (
-        <Link href={`/profile/${data?.author?._id}`}>
-          <Avatar
-            src={data?.author?.imgUrl || "https://joeschmoe.io/api/v1/random"}
-            alt="Han Solo"
-          />
-        </Link>
-      ),
-      content: data?.content,
-      datetime: moment(data?.createdAt).fromNow(),
-    };
-    return newData;
+    if (!data.isDeleted) {
+      const newData = {
+        actions: [
+          me?._id === data?.author?._id && (
+            <span
+              onClick={() => {
+                dispatch(removeComment({ commentId: data?._id }));
+              }}
+              key={`comment-basic-reply-to${data?._id}`}>
+              삭제
+            </span>
+          ),
+        ],
+        author: (
+          <Link href={`/profile/${data?.author?._id}`}>
+            <a>{data?.author?.nickname}</a>
+          </Link>
+        ),
+        avatar: (
+          <Link href={`/profile/${data?.author?._id}`}>
+            <Avatar
+              src={data?.author?.imgUrl || "https://joeschmoe.io/api/v1/random"}
+              alt="Han Solo"
+            />
+          </Link>
+        ),
+        content: data?.content,
+        datetime: moment(data?.createdAt).fromNow(),
+      };
+      return newData;
+    }
   });
 
   const [submitting, handleChange, handleSubmit, value] = useComment({
@@ -105,9 +122,59 @@ const Portfolio = () => {
     }
     return true;
   };
+  const removeMyPortfolio = useCallback(() => {
+    dispatch(removePortfolio({ portfolioId: singlePortfolio._id }));
+    Router.push("/");
+  }, []);
+
+  const onRemoveBtn = () => {
+    const [showConfirm] = useConfirmModal({
+      okFunc: removeMyPortfolio,
+      message: {
+        title: "정말로 삭제하겠습니까?",
+        description: "삭제하고 홈으로 돌아갑니다.",
+      },
+    });
+    showConfirm();
+  };
+
+  const onEditBtn = () => {
+    const [showConfirm] = useConfirmModal({
+      okFunc: () => {
+        Router.push(`/portfolio/${singlePortfolio._id}/edit`);
+      },
+      message: {
+        title: "수정하겠습니까?",
+        description: "수정하는 페이지로 갑니다.",
+      },
+    });
+    showConfirm();
+  };
+
+  if (loadPortfoliosDone === false) return <div>loading...</div>;
 
   return (
     <AppLayout>
+      {me._id === singlePortfolio.authorId ? (
+        <div style={{ paddingTop: "20px", width: "100%", display: "flex", justifyContent: "end" }}>
+          <div>
+            <Button
+              type="primary"
+              ghost
+              style={{
+                margin: "0 8px",
+              }}
+              onClick={onEditBtn}>
+              수정
+            </Button>
+          </div>
+          <Button danger onClick={onRemoveBtn}>
+            삭제
+          </Button>
+        </div>
+      ) : (
+        <div style={{ marginBottom: "3rem" }}>{}</div>
+      )}
       <ButtonContainer borderLike={liked} borderScrap={scrapped}>
         <Button
           onClick={onClickLikePort}
@@ -123,15 +190,18 @@ const Portfolio = () => {
         />
       </ButtonContainer>
 
-      <div style={{ marginBottom: "3rem" }}>{}</div>
+      {/*  maxWidth: "800px", */}
 
-      <div style={{ maxWidth: "800px", margin: "0 auto", height: "100%" }}>
-        {isJsonString(singlePortfolio.content) ? (
+      {isJsonString(singlePortfolio.content) ? (
+        <section
+          css={EditorSize}
+          style={{ width: "100%", overflow: "auto", overflowWrap: "break-word" }}>
           <Output data={JSON.parse(singlePortfolio.content)} />
-        ) : (
-          <div>{singlePortfolio.content}</div>
-        )}
-      </div>
+        </section>
+      ) : (
+        <div>{singlePortfolio.content}</div>
+      )}
+
       <div style={{ width: "100%" }}>
         {comments.length > 0 && <CommentList comments={comments} />}
         <Comment
@@ -149,6 +219,7 @@ const Portfolio = () => {
     </AppLayout>
   );
 };
+
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, params }) => {
   const cookie = req?.headers.cookie; // req가 있다면 cookie에 요청에 담겨진 cookie를 할당한다.
   axios.defaults.headers.Cookie = ""; // 요청이 들어올 때마다 초기화 시켜주는 것이다. 여기는 클라이언트 서버에서 실행되므로 이전 요청이 남아있을 수 있기 때문이다
@@ -166,6 +237,17 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
 });
 
 export default Portfolio;
+
+export const EditorSize = css`
+  & > figure {
+    height: 100% !important;
+    max-height: 100% !important;
+  }
+  & > figure > img {
+    height: 100% !important;
+    max-height: 100% !important;
+  }
+`;
 
 const ButtonContainer = styled.div`
   display: flex;

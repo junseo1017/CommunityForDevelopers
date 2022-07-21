@@ -61,7 +61,7 @@ export class PortfolioModel {
   }
 
   async update(portId: string, update: UpdateInfo) {
-    const filter = { portId };
+    const filter = { _id: portId };
     const option = { returnOriginal: false };
 
     return await Portfolio.findOneAndUpdate(filter, update, option);
@@ -98,7 +98,7 @@ export class PortfolioModel {
   }
 
   async deleteById(portId: string) {
-    return await Portfolio.findOneAndDelete({ portId });
+    return await Portfolio.findOneAndDelete({ _id: portId });
   }
 
   async deleteByEmail(email: string) {

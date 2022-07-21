@@ -4,6 +4,7 @@ import { ExtendReq, loginRequired } from "../middlewares/login-required";
 
 const qnaRouter = Router();
 
+// 1. 전체 QnA 조회
 qnaRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const QnAs = await qnaService.getQnas();
@@ -12,7 +13,7 @@ qnaRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
     next(error);
   }
 });
-
+// 2. QnA 조회
 qnaRouter.get(
   "/:qnaId",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -26,7 +27,7 @@ qnaRouter.get(
     }
   }
 );
-
+// 3. 유저별 QnA 조회
 qnaRouter.get(
   "/user/:userId",
   async (req: ExtendReq, res: Response, next: NextFunction) => {
@@ -39,7 +40,7 @@ qnaRouter.get(
     }
   }
 );
-
+// 4. QnA 작성
 qnaRouter.post(
   "/",
   loginRequired,
@@ -66,7 +67,7 @@ qnaRouter.post(
     }
   }
 );
-
+// 5. QnA 수정
 qnaRouter.put(
   "/:qnaId",
   loginRequired,
@@ -99,7 +100,7 @@ qnaRouter.put(
     }
   }
 );
-
+// 6. QnA 추천 추가/삭제
 qnaRouter.put(
   "/:qnaId/recommendation",
   loginRequired,
@@ -119,6 +120,8 @@ qnaRouter.put(
     }
   }
 );
+
+// 7. QnA 삭제
 qnaRouter.delete(
   "/:qnaId",
   loginRequired,

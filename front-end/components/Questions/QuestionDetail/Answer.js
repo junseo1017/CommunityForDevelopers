@@ -21,7 +21,10 @@ const Answer = ({ answer }) => {
     numberOfRecommends: 0,
   });
 
-  const initialLoginState = me._id === answer.author._id;
+  const isRecommended = answer.recommends.map((user) => user._id).includes(me._id);
+  const numberOfRecommends = answer.recommends.length;
+
+  const initialLoginState = me._id === answer.authorId;
 
   const [isChanged, setIsChanged] = useState(false);
 
@@ -30,9 +33,8 @@ const Answer = ({ answer }) => {
       try {
         const response = await axios.get(`/api/qnas/${answer._id}`);
         const qna = response.data;
-
-        const isRecommended = qna.recommends.map((user) => user._id).includes(me._id);
-        const numberOfRecommends = qna.recommends.length;
+        console.log("qna", qna);
+        // Answer가 Answers에 추가되지 않음 -> 확인 불가능
 
         setRecommendData({ isRecommended, numberOfRecommends });
         setIsChanged(false);
@@ -60,6 +62,9 @@ const Answer = ({ answer }) => {
   const handleUpdate = async () => {
     setIsAnswerUpdateMode(!isAnswerUpdateMode);
   };
+
+  console.log("recommendData", recommendData);
+  console.log("answer.comments", answer.comments);
 
   return (
     <div css={DetailAnswerContainer} key={answer._id}>
@@ -90,8 +95,8 @@ const Answer = ({ answer }) => {
           </div>
         )}
       </div>
-      {answer.recommends &&
-        answer.recommends.map((user) => <div key={user._id}>{user.nickname}</div>)}
+      {/* {answer.recommends &&
+        answer.recommends.map((user) => <div key={user._id}>{user.nickname}</div>)} */}
       {!isAnswerUpdateMode ? (
         <Output data={JSON.parse(answer.contents)} />
       ) : (
@@ -104,7 +109,7 @@ const Answer = ({ answer }) => {
       )}
       <Collapse>
         <Collapse.Panel header="댓글 보기">
-          <Comments contentId={answer._id} user={me} />
+          <Comments currentComments={answer.comments} contentId={answer._id} user={me} />
         </Collapse.Panel>
       </Collapse>
     </div>

@@ -4,6 +4,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { createReactEditorJS } from "react-editor-js";
 import Image from "@editorjs/image";
+import axios from "axios";
 const ReactEditorJS = createReactEditorJS();
 
 const Editor = ({ imageArray, handleInitialize, data }) => {
@@ -40,17 +41,19 @@ const Editor = ({ imageArray, handleInitialize, data }) => {
           class: Image,
           config: {
             uploader: {
-              uploadByFile(file) {
+              async uploadByFile(file) {
                 let formData = new FormData();
+                console.log(file);
                 formData.append("images", file);
 
                 // 서버에 이미지 전달하기
-                return API.imageUpload(formData).then((response) => {
-                  imageArray.push(response.data.data);
+                return axios.post("/api/images", formData).then((response) => {
+                  console.log(response);
+                  imageArray.push(response.data.imgUrl);
                   return {
                     success: 1,
                     file: {
-                      url: response.data.data,
+                      url: response.data.imgUrl,
                     },
                   };
                 });

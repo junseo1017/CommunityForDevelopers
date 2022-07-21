@@ -34,7 +34,7 @@ import { useState } from "react";
 const CreatePortfolioCard = ({ onSubmitCard }) => {
   const [items, name, onNameChange, addItem] = useSelects();
   const { singlePortfolio } = useSelector((state) => state.portfolio);
-  const [imgSrc, setImgSrc] = useState(singlePortfolio?.imgSrc);
+  const [imgSrc, setImgSrc] = useState(singlePortfolio?.thumbnail);
   const [imgFormErr, setImgFormErr] = useState();
   console.log(singlePortfolio);
   const [imgFile, setImgFile] = useState();
@@ -249,9 +249,10 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
             <PortfolioCard
               title={titleValue}
               description={descriptionValue}
-              image={imgSrc}
+              thumbnail={imgSrc}
               skills={skillsValue}
-              author={{ nickname: me.nickname, imgUrl: me.imgUrl }}
+              author={me.nickname}
+              authorImg={me.imgUrl ? me.imgUrl : ""}
             />
           </Card>
         </div>

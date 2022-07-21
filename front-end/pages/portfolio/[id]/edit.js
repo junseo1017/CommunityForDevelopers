@@ -2,27 +2,31 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Head from "next/head";
-import AppLayout from "../components/AppLayout";
+import AppLayout from "../../../components/AppLayout";
 import dynamic from "next/dynamic";
-import { portfolioActions } from "../reducers/portfolio";
-import ResultComp from "../components/CreatePortfolio/ResultComp";
-import CreatePortfolioCard from "../components/Portfolo/CreatePortfolioCard";
-import StepsComp from "../components/CreatePortfolio/StepsComp";
-import ModalAsync from "../components/Common/ModalAsync";
-import useEditor from "../hooks/useEditor";
-import useModalAsync from "../hooks/useModalAsync";
-import { addPortfolio, uploadImages /*uploadImages*/ } from "../actions/portfolio";
-import { myinfo } from "../actions/user";
-import wrapper from "../store";
+import { portfolioActions } from "../../../reducers/portfolio";
+import ResultComp from "../../../components/CreatePortfolio/ResultComp";
+import CreatePortfolioCard from "../../../components/Portfolo/CreatePortfolioCard";
+import StepsComp from "../../../components/CreatePortfolio/StepsComp";
+import ModalAsync from "../../../components/Common/ModalAsync";
+import useEditor from "../../../hooks/useEditor";
+import useModalAsync from "../../../hooks/useModalAsync";
+import {
+  addPortfolio,
+  loadPortfolio,
+  updatePortfolio /*uploadImages*/,
+} from "../../../actions/portfolio";
+import { myinfo } from "../../../actions/user";
+import wrapper from "../../../store";
 import axios from "axios";
-import useConfirmModal from "../hooks/useConfirmModal";
+import useConfirmModal from "../../../hooks/useConfirmModal";
 import Router from "next/router";
 
-let Editor = dynamic(() => import("../components/Editor/Editor"), {
+let Editor = dynamic(() => import("../../../components/Editor/Editor"), {
   ssr: false,
 });
 
-const createPortfolio = (props) => {
+const EditPortfolio = (props) => {
   /* 비로그인 */
   const [imgFormData, setImgFormData] = useState();
   const { error } = props;
@@ -67,12 +71,11 @@ const createPortfolio = (props) => {
       const newData = { ...data, contentText: texts + data.description };
       delete newData.imgSrc;
       //formdata.append("body", JSON.stringify(newData));
-      console.log(newData);
       for (const [key, value] of Object.entries(newData)) {
         formdata.append(`${key}`, `${value}`);
       }
       formdata.set("skills", JSON.stringify(newData.skills));
-      dispatch(addPortfolio(formdata));
+      dispatch(updatePortfolio({ portfolioId: newData._id, formdata }));
     },
     [imgFormData],
   );
@@ -99,7 +102,6 @@ const createPortfolio = (props) => {
     //dispatch(portfolioActions.updateState(value));
     //dispatch(portfolioActions.updateState({ ...values, image: formData }));
     dispatch(portfolioActions.updateState({ ...values, image: "" }));
-
     //dispatch(uploadImages(formData));
     next();
   }, []);
@@ -135,10 +137,10 @@ const createPortfolio = (props) => {
   );
 };
 
-export default createPortfolio;
+export default EditPortfolio;
 
 // SSR (프론트 서버에서 실행)
-export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req }) => {
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, params }) => {
   const cookie = req?.headers.cookie; // req가 있다면 cookie에 요청에 담겨진 cookie를 할당한다.
   axios.defaults.headers.Cookie = ""; // 요청이 들어올 때마다 초기화 시켜주는 것이다. 여기는 클라이언트 서버에서 실행되므로 이전 요청이 남아있을 수 있기 때문이다
   if (req && cookie) {
@@ -149,4 +151,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
     };
   }
   await store.dispatch(myinfo());
+  if (params && params.id) {
+    await store.dispatch(loadPortfolio({ portfolioId: params.id }));
+  }
 });

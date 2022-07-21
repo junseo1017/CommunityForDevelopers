@@ -17,7 +17,7 @@ export class CommentModel {
   }
 
   async update(commentId: string, update: ICommentForUpdate) {
-    const filter = { commentId };
+    const filter = { _id: commentId };
     const option = { returnOriginal: false };
 
     return await Comment.findOneAndUpdate(filter, update, option);

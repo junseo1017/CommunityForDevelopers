@@ -17,39 +17,53 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { myinfo } from "../actions/user";
 import useDidMountEffect from "../hooks/useDidMountEffect";
+import { throttle, debounce } from "lodash";
 
 const Home = () => {
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
+  console.log(me);
   const { mainPortfolios, hasMorePortfolios, loadPortfoliosLoading } = useSelector(
     (state) => state.portfolio,
   );
+  console.log(mainPortfolios);
   const [query, setQuery] = useState();
   const setSearchQuery = useCallback((q) => {
     setQuery(q);
   }, []);
   useEffect(() => {
-    function onScroll() {
+    const onScroll = throttle(() => {
       // window.scrollY : 얼마나 내렸는지
       // document.documentElement.clientHeight : 화면에 보이는 길이
       // document.documentElement.scrollHeight : 총길이
-      console.log(hasMorePortfolios, loadPortfoliosLoading);
       if (hasMorePortfolios && !loadPortfoliosLoading) {
         if (
           window.scrollY + document.documentElement.clientHeight >
           document.documentElement.scrollHeight - 300
         ) {
           //const lastId = mainPortfolios[mainPortfolios.length - 1]?._id;
-          const page = Math.floor((mainPortfolios.length - 1) / 12) + 1;
-          const newQuery = query?.substring(0, 6) + `${page}` + query?.substring(7);
-          dispatch(
-            loadPortfoliosSearchScroll({
-              query: newQuery,
-            }),
-          );
+          const page = Math.floor((mainPortfolios.length - 1) / 12) + 2;
+          if (query) {
+            const newQuery = query?.substring(0, 6) + `${page}` + query?.substring(7);
+            debounce((value) => {
+              dispatch(
+                loadPortfoliosSearchScroll({
+                  query: newQuery,
+                }),
+              );
+            }, 500);
+          } else {
+            debounce((value) => {
+              dispatch(
+                loadPortfoliosSearchScroll({
+                  query: `?page=${page}`,
+                }),
+              );
+            }, 500);
+          }
         }
       }
-    }
+    }, 500);
     window.addEventListener("scroll", onScroll);
     return () => {
       window.removeEventListener("scroll", onScroll);
@@ -57,16 +71,12 @@ const Home = () => {
   }, [hasMorePortfolios, loadPortfoliosLoading, mainPortfolios]);
 
   useDidMountEffect(() => {
-    console.log(query);
     dispatch(
       loadPortfoliosSearch({
         query,
       }),
     );
   }, [query]);
-
-  console.log(me);
-  console.log(mainPortfolios);
 
   const { Option } = Select;
   const portfolioSearchObjects = useMemo(() => {
@@ -92,9 +102,9 @@ const Home = () => {
             xs: 1,
             sm: 1,
             md: 2,
-            lg: 2,
-            xl: 3,
-            xxl: 3,
+            lg: 3,
+            xl: 4,
+            xxl: 4,
           }}
           dataSource={mainPortfolios}
           renderItem={(item) => {
@@ -120,7 +130,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   }
   await store.dispatch(
     loadPortfoliosSearch({
-      query: "?page=1&orderBy=recommends",
+      query: "?page=1",
     }),
   );
   await store.dispatch(myinfo());
