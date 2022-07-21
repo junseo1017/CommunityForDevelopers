@@ -7,7 +7,6 @@ import { BackTop } from "antd";
 //import PortfolioCard from "../components/Portfolo/PortfolioCard";
 import PortfolioCard from "../components/Common/PortfolioCard";
 import PorfolioSearch from "../components/Portfolo/PorfolioSearch";
-import { debounce } from "lodash";
 import {
   loadPortfolios,
   loadPortfoliosSearch,
@@ -18,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { myinfo } from "../actions/user";
 import useDidMountEffect from "../hooks/useDidMountEffect";
-import { throttle } from "lodash";
+import { throttle, debounce } from "lodash";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -27,6 +26,7 @@ const Home = () => {
   const { mainPortfolios, hasMorePortfolios, loadPortfoliosLoading } = useSelector(
     (state) => state.portfolio,
   );
+  console.log(mainPortfolios);
   const [query, setQuery] = useState();
   const setSearchQuery = useCallback((q) => {
     setQuery(q);
@@ -102,9 +102,9 @@ const Home = () => {
             xs: 1,
             sm: 1,
             md: 2,
-            lg: 2,
-            xl: 3,
-            xxl: 3,
+            lg: 3,
+            xl: 4,
+            xxl: 4,
           }}
           dataSource={mainPortfolios}
           renderItem={(item) => {

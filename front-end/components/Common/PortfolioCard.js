@@ -82,7 +82,7 @@ const PortfolioCard = ({
             <Avatar
               style={{ cursor: "pointer" }}
               size={25}
-              src={authorImg ? authorImg : "https://joeschmoe.io/api/v1/random"}
+              src={authorImg ? authorImg : "/image/profile_image_default.jpg"}
             />
           </Link>
           <h3>

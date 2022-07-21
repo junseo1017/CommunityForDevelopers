@@ -336,10 +336,10 @@ const portfolioSlice = createSlice({
         state.updatePortfolioError = null;
       })
       .addCase(updatePortfolio.fulfilled, (state, action) => {
-        //const portfolio = _find(state.mainPortfolios, { id: action.payload.PortfolioId });
+        const portfolio = _find(state.mainPortfolios, { id: action.payload.PortfolioId });
         state.updatePortfolioLoading = false;
         state.updatePortfolioDone = true;
-        //portfolio.content = action.payload.content;
+        portfolio = action.payload;
       })
       .addCase(updatePortfolio.rejected, (state, action) => {
         state.updatePortfolioLoading = false;

@@ -164,7 +164,7 @@ export const likePortfolio = createAsyncThunk(
     try {
       console.log(`%c 포트폴리오 추천 요청: ${Object.values(data)} `, "color: green;");
       const response = await axios.put(
-        `/api/portfolios/${data.portfolioId}/?field=recommends&adding=true`,
+        `/api/portfolios/${data.portfolioId}?field=recommends&adding=true`,
         data,
       );
       return { ...response.data, UserId: data.UserId };
@@ -180,7 +180,7 @@ export const unlikePortfolio = createAsyncThunk(
     try {
       console.log(`%c 포트폴리오 추천취소 요청: ${Object.values(data)} `, "color: green;");
       const response = await axios.put(
-        `/api/portfolios/${data.portfolioId}/?field=recommends&adding=false`,
+        `/api/portfolios/${data.portfolioId}?field=recommends&adding=false`,
         data,
       );
       return { ...response.data, UserId: data.UserId };
@@ -196,7 +196,7 @@ export const scrapPortfolio = createAsyncThunk(
     try {
       console.log(`%c 포트폴리오 스크랩 요청: ${Object.values(data)} `, "color: green;");
       const response = await axios.put(
-        `/api/portfolios/${data.portfolioId}/?field=scraps&adding=true`,
+        `/api/portfolios/${data.portfolioId}?field=scraps&adding=true`,
         data,
       );
       return { ...response.data, UserId: data.UserId };
@@ -212,7 +212,7 @@ export const unscrapPortfolio = createAsyncThunk(
     try {
       console.log(`%c 포트폴리오 스크랩 요청: ${Object.values(data)} `, "color: green;");
       const response = await axios.put(
-        `/api/portfolios/${data.portfolioId}/?field=scraps&adding=false`,
+        `/api/portfolios/${data.portfolioId}?field=scraps&adding=false`,
         data,
       );
       return { ...response.data, UserId: data.UserId };
@@ -241,7 +241,7 @@ export const updatePortfolio = createAsyncThunk(
       console.log(data.portfolioId);
       const response = await axios.put(`/api/portfolios/${data.portfolioId}`, data.formdata);
       console.log(response.data);
-      return response.data;
+      return { ...response.data, PortfolioId: data.portfolioId };
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
