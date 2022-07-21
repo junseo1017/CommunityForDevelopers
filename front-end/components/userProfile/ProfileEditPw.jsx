@@ -8,15 +8,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { editPassword } from "../../actions/user";
 import { useRouter } from "next/router";
+
+const RegExp = {
+  email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+  password: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,15}$/,
+};
+
 const ProfileEditPw = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { editPasswordDone, editPasswordError } = useSelector((state) => state.user);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, watch } = useForm();
 
   useEffect(() => {
     if (editPasswordDone) {
@@ -29,6 +31,14 @@ const ProfileEditPw = () => {
   }, [editPasswordDone, editPasswordError]);
 
   const onSubmit = (data) => {
+    console.log(watch("password"));
+    console.log(RegExp.password.test(watch("password")));
+    if (!RegExp.password.test(watch("password"))) {
+      return message.error("형식에 맞는 비밀번호를 입력해주세요.");
+    }
+    if (watch("password") !== watch("passwordConfirm")) {
+      return message.error("비밀번호가 일치하지 않습니다.");
+    }
     dispatch(editPassword(data.password));
   };
   return (
@@ -38,11 +48,13 @@ const ProfileEditPw = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
             <label htmlFor="새 비밀번호">새 비밀번호</label>
-            <p>영문, 숫자를 포함한 8자 이상 15자 이하의 비밀번호를 입력해주세요.</p>
+            <p>문자,숫자,특수문자를 조합한 8~15자리 비밀번호를 입력해주세요</p>
             <input
               type="password"
               autoComplete="off"
-              {...register("password", { required: true })}
+              {...register("password", {
+                required: true,
+              })}
             />
           </div>
           <label htmlFor="새 비밀번호">새 비밀번호 확인</label>

@@ -75,6 +75,7 @@ const userSlice = createSlice({
     builder
       // login
       .addCase(login.pending, (state) => {
+        console.log("pending");
         state.loginLoading = true;
         state.loginDone = false;
         state.loginError = null;
@@ -85,7 +86,8 @@ const userSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.loginLoading = false;
-        state.loginError = action.payload;
+        state.loginError = action;
+        console.log(state.loginError);
       })
       // github login
       .addCase(getGithubLoginUrl.pending, (state) => {

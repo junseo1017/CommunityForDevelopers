@@ -1,6 +1,8 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { authService } from "../services";
 const authRouter = Router();
+
+// 1. Kakao 로그인 url
 authRouter.get(
   "/kakao",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -21,6 +23,7 @@ authRouter.get(
   }
 );
 
+// 2. Kakao 로그인
 authRouter.get(
   "/kakao/callback",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -48,6 +51,7 @@ authRouter.get(
   }
 );
 
+// 3. Github 로그인 url
 authRouter.get(
   "/github",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -68,6 +72,7 @@ authRouter.get(
   }
 );
 
+// 4. Github 로그인
 authRouter.get(
   "/github/callback",
   async (req: Request, res: Response, next: NextFunction) => {

@@ -9,7 +9,7 @@ const Footer = () => {
         <div css={FooterContent}>
           <h2>CFD</h2>
           <p>개발자들을 위한 커뮤니티 플랫폼 </p>
-          <h3></h3>
+          <h3>프로그램 참여 : Team6</h3>
         </div>
       </div>
     </footer>

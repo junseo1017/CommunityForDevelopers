@@ -5,6 +5,7 @@ import { RandomNum } from "../Common/utils";
 import { EmailAuthBtn, emailAuthStyle } from "./styles/emailAuth";
 import { useDispatch } from "react-redux";
 import { emailAuth } from "../../actions/user";
+import { message } from "antd";
 
 let Timer;
 
@@ -34,6 +35,7 @@ const EmailAuth = ({ setShowEmailAuth, randomNumRef, setAuthDone, email }) => {
       setEmailCorrect(true);
     } else {
       setEmailCorrect(false);
+      message.error("인증번호가 일치하지 않습니다.");
     }
   };
 

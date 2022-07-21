@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
+import { message } from "antd";
 import LoginLogo from "../../components/Sign/LoginLogo";
 import SignUpForm from "../../components/Sign/SignUpForm";
 import Link from "next/link";
@@ -35,7 +36,7 @@ const SignUp = () => {
   return (
     <div css={signUpContainer}>
       <Link href="/">
-        <a>
+        <a aria-label="CFD 홈페이지로 이동하기">
           <LoginLogo />
         </a>
       </Link>

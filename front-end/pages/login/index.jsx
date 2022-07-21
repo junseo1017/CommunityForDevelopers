@@ -22,7 +22,7 @@ const Login = () => {
   return (
     <div css={LoginPageContainer}>
       <Link href="/">
-        <a>
+        <a aria-label="CFD 홈페이지로 이동하기">
           <LoginLogo />
         </a>
       </Link>

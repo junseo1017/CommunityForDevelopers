@@ -3,6 +3,7 @@ import { portfolioService, qnaService } from "../services";
 
 const searchRouter = Router();
 
+// 1. 포토폴리오 검색
 searchRouter.get(
   "/portfolios",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -28,7 +29,7 @@ searchRouter.get(
     }
   }
 );
-
+// 2. QnA 검색
 searchRouter.get(
   "/qnas",
   async (req: Request, res: Response, next: NextFunction) => {
