@@ -9,7 +9,6 @@ import { useMediaQuery } from "react-responsive";
 
 const ProfileQnAContent = ({ selectMenu, qnabyUserId }) => {
   const [showHeader, setShowHeader] = useState(null);
-  const [tags, setTags] = useState(["react", "next.js", "node.js", "css", "html"]);
   const [question, setQuestion] = useState(null);
   const [answer, setAnswer] = useState(null);
   const isresponsive = useMediaQuery({
@@ -59,7 +58,7 @@ const ProfileQnAContent = ({ selectMenu, qnabyUserId }) => {
                 <div>
                   <p>{toStringData(e.createdAt)}</p>
                   <span>
-                    {tags.map((e) => {
+                    {e.tags.map((e) => {
                       return <Tag key={e}>{e}</Tag>;
                     })}
                   </span>
