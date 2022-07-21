@@ -1,12 +1,8 @@
-import { model } from "mongoose";
+import { model, Document } from "mongoose";
 import { CommentSchema, CommentType } from "../schemas/comment-schema";
 import { ICommentForUpdate, ICommentInput } from "../../interfaces";
-import { SoftDeleteModel } from "soft-delete-plugin-mongoose";
 
-const Comment = model<CommentType, SoftDeleteModel<CommentType>>(
-  "comments",
-  CommentSchema
-);
+const Comment = model<CommentType & Document>("comments", CommentSchema);
 export class CommentModel {
   async findById(commentId: string) {
     return await Comment.findOne({ _id: commentId });
@@ -24,7 +20,7 @@ export class CommentModel {
   }
 
   async deleteById(commentId: string) {
-    return await Comment.softDelete({ _id: commentId });
+    return await Comment.findOneAndDelete({ _id: commentId });
   }
 }
 

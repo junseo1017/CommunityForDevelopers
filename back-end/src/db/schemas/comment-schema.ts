@@ -1,5 +1,4 @@
 import { Schema, Document, Types } from "mongoose";
-import { softDeletePlugin } from "soft-delete-plugin-mongoose";
 export interface CommentType extends Document {
   postId: string;
   content: string;
@@ -32,5 +31,5 @@ const CommentSchema = new Schema(
     timestamps: true,
   }
 );
-CommentSchema.plugin(softDeletePlugin);
+
 export { CommentSchema };
