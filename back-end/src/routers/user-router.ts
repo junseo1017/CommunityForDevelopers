@@ -1,26 +1,17 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { userService } from "../services";
-import { ExtendReq, loginRequired } from "../middlewares";
-import {
-  userCreateJoiSchema,
-  userUpdateJoiSchema,
-} from "../db/schemas/joi-schemas";
+import { ExtendReq, loginRequired, Validator } from "../middlewares";
 import { upload, getImageUrl, authMailer } from "../utils";
 
 const userRouter = Router();
 
 userRouter.post(
   "/",
+  Validator("register"),
   async (req: Request, res: Response, next: NextFunction) => {
     const { nickname, email, password } = req.body;
 
     try {
-      await userCreateJoiSchema.validateAsync({
-        email,
-        nickname,
-        password,
-      });
-
       await userService.addUser({
         nickname,
         email,
@@ -123,6 +114,7 @@ userRouter.get(
 userRouter.put(
   "/info",
   loginRequired,
+  Validator("updateUser"),
   upload,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
@@ -139,7 +131,6 @@ userRouter.put(
     };
 
     try {
-      await userUpdateJoiSchema.validateAsync({ nickname });
       const updatedUserInfo = await userService.setUser(userId, toUpdate);
       res.status(200).json(updatedUserInfo);
     } catch (error) {
