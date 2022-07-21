@@ -2,20 +2,28 @@
 import { css } from "@emotion/react";
 import { blackBtn } from "../Common/style/btnStyle";
 import React from "react";
+import Link from "next/link";
 import { Button, Result } from "antd";
+import { useSelector, useDispatch } from "react-redux";
 
 const ResultComp = () => {
+  const { me } = useSelector((state) => state.user);
+
   return (
     <div css={blackBtn}>
       <Result
         status="success"
-        title="Successfully Purchased Cloud Server ECS!"
-        subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
+        title="성공적으로 포트폴리오를 작성했습니다."
+        subTitle="홈이나 내 정보로 가서 확인해주세요."
         extra={[
-          <Button type="primary" key="console">
-            Go Console
-          </Button>,
-          <Button key="buy">Buy Again</Button>,
+          <Link href={`/profile/${me._id}`}>
+            <Button type="primary" key="console">
+              내 정보
+            </Button>
+          </Link>,
+          <Link href="/">
+            <Button key="buy">홈으로</Button>
+          </Link>,
         ]}
       />
     </div>

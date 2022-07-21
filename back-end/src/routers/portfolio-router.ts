@@ -120,6 +120,7 @@ portfolioRouter.put(
   upload,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
+      console.log(req);
       const portId = req.params.portId;
       const userId = req.currentUserId || "";
       const { title, description, content, contentText } = req.body;

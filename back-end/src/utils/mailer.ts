@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 dotenv.config();
+import { AppError } from "../middlewares";
 
 async function authMailer(email: string, authNumber: number) {
   const transporter = nodemailer.createTransport({
@@ -27,7 +28,7 @@ async function authMailer(email: string, authNumber: number) {
 
     console.log(info);
   } catch (error) {
-    console.log(error);
+    throw new AppError(500, "메일 발송을 실패했습니다.", (<Error>error).name);
   }
 }
 export { authMailer };
