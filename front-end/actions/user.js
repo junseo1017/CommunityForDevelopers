@@ -62,7 +62,6 @@ export const logout = createAsyncThunk("user/logout", async (data, { rejectWithV
 export const myinfo = createAsyncThunk("user/myinfo", async (data, { rejectWithValue }) => {
   try {
     const response = await axios.get("/api/users/token");
-    console.log(response.data);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);

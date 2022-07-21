@@ -15,7 +15,7 @@ import {
 
 const initialState = {
   // 내 정보
-  me: false,
+  me: null,
   // 회원가입
   signupLoading: false,
   signupDone: false,
@@ -66,10 +66,6 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    /* By 지의신 Portfolio */
-    addPortfolioToMe(state, action) {
-      state.me.Portfolios.unshift({ id: action.payload });
-    },
   },
   extraReducers: (builder) =>
     builder
@@ -87,7 +83,6 @@ const userSlice = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.loginLoading = false;
         state.loginError = action;
-        console.log(state.loginError);
       })
       // github login
       .addCase(getGithubLoginUrl.pending, (state) => {
@@ -136,7 +131,7 @@ const userSlice = createSlice({
         state.me = null;
       })
       .addCase(logout.rejected, (state, action) => {
-        state.loginLoading = false;
+        state.logoutLoading = false;
         state.logoutError = action.payload;
       })
 
