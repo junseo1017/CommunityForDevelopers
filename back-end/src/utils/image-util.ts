@@ -9,6 +9,7 @@ import {
   getDownloadURL,
   deleteObject,
 } from "firebase/storage";
+import { AppError } from "../middlewares";
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_APIKEY,
@@ -45,8 +46,11 @@ async function getImageUrl(image: Express.Multer.File) {
     const snapshot = await uploadBytes(imageRef, image.buffer, metadata);
     return await getDownloadURL(snapshot.ref);
   } catch (error) {
-    console.log(error);
-    //에러처리 질문할 것.
+    throw new AppError(
+      500,
+      "이미지 업로드를 실패했습니다.",
+      (<Error>error).name
+    );
   }
 }
 
@@ -57,7 +61,7 @@ async function deleteImage(imgUrl: string) {
     const imageRef = ref(storage, imgUrl);
     await deleteObject(imageRef);
   } catch (error) {
-    console.log(error);
+    throw new AppError(500, "이미지 삭제를 실패했습니다.", (<Error>error).name);
   }
 }
 
