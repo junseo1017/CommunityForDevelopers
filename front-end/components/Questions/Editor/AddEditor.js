@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "antd";
 import { EditorContainer } from "../styles/QuestionStyle";
@@ -30,9 +30,24 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
     setImageArray(newArr);
   };
 
-  const saveContents = async () => {
-    const savedData = await editorCore.current.save();
+  const addImages = (image) => {
+    imageArray.push(image);
+  };
 
+  useEffect(() => {
+    if (data) {
+      const editorData = JSON.parse(data);
+      for (const block of editorData.blocks) {
+        if (block.type === "image") {
+          addImages(block.data.file.url);
+        }
+      }
+    }
+  }, [data]);
+
+  const saveQna = async () => {
+    const savedData = await editorCore.current.save();
+    console.log(savedData);
     const filteredBlocks = savedData.blocks.map(({ type, data }) => {
       return type === "paragraph" || type === "header" ? data : "";
     });
@@ -63,6 +78,7 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
         });
 
         // 서버에서 사용하지 않는 이미지 제거하기
+        await clearEditorLeftoverImages();
 
         // 서버에 질문 저장하기
 
@@ -86,12 +102,12 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
         if (!currentImages.includes(img)) {
           try {
             // 서버에서 이미지 삭제하기
-            await API.deleteImage({ imagePath: img });
+            await axios.delete(`/api/images`, { imgUrl: img });
 
             // imageArray에서 삭제하기
             removeImage(img);
-          } catch (e) {
-            console.log(e.message);
+          } catch (error) {
+            console.log(error.message);
           }
         }
       }
@@ -102,7 +118,7 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
     <div className="editor-container">
       <Button
         onClick={() => {
-          saveContents(qnaId);
+          saveQna(qnaId);
           // ModalAsync();
           // router.push(`/qna/${router.query._id}`);
         }}>
