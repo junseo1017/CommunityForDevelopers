@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { useMemo, useRef } from "react";
 import TagRender from "./TagRender";
-import { Row, Col, Select, Input, Divider, Space, Typography } from "antd";
+import { Row, Col, Select, Input, Divider, Space, Typography, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import useSelects from "../../hooks/useSelects";
 import MainSearch from "./MainSearch";
@@ -50,10 +50,13 @@ const PorfolioSearch = ({ orderBys, setSearchQuery }) => {
       ["options"]: Object.keys(newSearchOptions).filter((key) => newSearchOptions[key]),
     });
   };
-
+  onSearchValueChange;
   const delaySetValue = useCallback(
     debounce((value) => {
       setSearchValue(value);
+      if (value?.length == 1) {
+        message.error("두 글자 이상이어야 합니다.");
+      }
     }, 500),
     [],
   );
@@ -82,7 +85,7 @@ const PorfolioSearch = ({ orderBys, setSearchQuery }) => {
   }, [inputs, optionsInputs, searchValue]);
 
   const [items, name, onNameChange, addItem] = useSelects();
-  const OrderBySelectStyle = useMemo(() => ({ width: 106, textAlign: "end" }), []);
+  const OrderBySelectStyle = useMemo(() => ({ width: 106, textAlign: "start" }), []);
   const { Option } = Select;
 
   return (
