@@ -7,7 +7,8 @@ const qnaRouter = Router();
 // 1. 전체 QnA 조회
 qnaRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const QnAs = await qnaService.getQnas();
+    const lastId = req.query.lastId as string;
+    const QnAs = await qnaService.getQnas(lastId);
     res.status(200).json(QnAs);
   } catch (error) {
     next(error);
