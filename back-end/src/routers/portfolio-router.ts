@@ -5,6 +5,7 @@ import { upload, getImageUrl } from "../utils/image-util";
 
 const portfolioRouter = Router();
 
+// 1. 전체 포토폴리오 조회
 portfolioRouter.get(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -17,7 +18,7 @@ portfolioRouter.get(
     }
   }
 );
-
+// 2. 포토폴리오 조회
 portfolioRouter.get(
   "/:portId",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -30,7 +31,7 @@ portfolioRouter.get(
     }
   }
 );
-
+// 3. 유저별 포토폴리오 조회
 portfolioRouter.get(
   "/user/:userId",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -43,7 +44,7 @@ portfolioRouter.get(
     }
   }
 );
-
+// 4. 유저별 스크랩 포토폴리오 조회
 portfolioRouter.get(
   "/user/:userId/scraps",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -55,7 +56,7 @@ portfolioRouter.get(
     }
   }
 );
-
+// 5. 포토폴리오 작성
 portfolioRouter.post(
   "/",
   loginRequired,
@@ -90,7 +91,7 @@ portfolioRouter.post(
     }
   }
 );
-
+// 6. 포토폴리오 스크랩&추천 추가/삭제
 portfolioRouter.put(
   "/:portId/",
   loginRequired,
@@ -112,7 +113,7 @@ portfolioRouter.put(
     }
   }
 );
-
+// 7. 포토폴리오 수정
 portfolioRouter.put(
   "/:portId",
   loginRequired,
@@ -145,7 +146,7 @@ portfolioRouter.put(
     }
   }
 );
-
+// 8. 포토폴리오 삭제
 portfolioRouter.delete(
   "/:portId",
   loginRequired,

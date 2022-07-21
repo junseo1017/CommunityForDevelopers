@@ -98,7 +98,7 @@ export class PortfolioModel {
   }
 
   async deleteById(portId: string) {
-    return await Portfolio.findOneAndDelete({ portId });
+    return await Portfolio.findOneAndDelete({ _id: portId });
   }
 
   async deleteByEmail(email: string) {

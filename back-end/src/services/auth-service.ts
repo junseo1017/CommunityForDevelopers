@@ -2,6 +2,7 @@ import { UserModel, userModel } from "../db";
 import axios, { AxiosResponse } from "axios";
 import { GithubEmailInfo } from "../interfaces/user-interface";
 import { jwtUtil } from "../utils/jwt-util";
+import { AppError } from "../middlewares/error-handler";
 class AuthService {
   userModel;
 
@@ -20,7 +21,7 @@ class AuthService {
       headers: { Accept: "application/json" },
     });
     if (response.data.error) {
-      throw new Error("Unauthorized");
+      throw new AppError(401, "깃허브 인증을 실패하였습니다.");
     }
     const { access_token } = response.data;
     const { data: userData } = await axios.get(getUserUrl, {
@@ -53,7 +54,7 @@ class AuthService {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     });
     if (response.data.error) {
-      throw new Error("Unauthorized");
+      throw new AppError(401, "카카오 인증을 실패하였습니다.");
     }
     const { access_token } = response.data;
     const { data } = await axios.get(getUserUrl, {
