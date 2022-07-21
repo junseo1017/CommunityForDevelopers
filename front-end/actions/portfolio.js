@@ -148,7 +148,9 @@ export const loadPortfolio = createAsyncThunk(
   "portfolio/loadPortfolio",
   async (data, { rejectWithValue }) => {
     try {
+      console.log(data);
       const response = await axios.get(`/api/portfolios/${data.portfolioId}`);
+      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue("wow", error.response.data);

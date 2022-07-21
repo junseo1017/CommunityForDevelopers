@@ -7,6 +7,7 @@ import { BackTop } from "antd";
 //import PortfolioCard from "../components/Portfolo/PortfolioCard";
 import PortfolioCard from "../components/Common/PortfolioCard";
 import PorfolioSearch from "../components/Portfolo/PorfolioSearch";
+import { debounce } from "lodash";
 import {
   loadPortfolios,
   loadPortfoliosSearch,
@@ -22,6 +23,7 @@ import { throttle } from "lodash";
 const Home = () => {
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
+  console.log(me);
   const { mainPortfolios, hasMorePortfolios, loadPortfoliosLoading } = useSelector(
     (state) => state.portfolio,
   );
@@ -34,7 +36,6 @@ const Home = () => {
       // window.scrollY : 얼마나 내렸는지
       // document.documentElement.clientHeight : 화면에 보이는 길이
       // document.documentElement.scrollHeight : 총길이
-      console.log(hasMorePortfolios, loadPortfoliosLoading);
       if (hasMorePortfolios && !loadPortfoliosLoading) {
         if (
           window.scrollY + document.documentElement.clientHeight >
@@ -42,20 +43,23 @@ const Home = () => {
         ) {
           //const lastId = mainPortfolios[mainPortfolios.length - 1]?._id;
           const page = Math.floor((mainPortfolios.length - 1) / 12) + 2;
-          console.log("page=", page);
           if (query) {
             const newQuery = query?.substring(0, 6) + `${page}` + query?.substring(7);
-            dispatch(
-              loadPortfoliosSearchScroll({
-                query: newQuery,
-              }),
-            );
+            debounce((value) => {
+              dispatch(
+                loadPortfoliosSearchScroll({
+                  query: newQuery,
+                }),
+              );
+            }, 500);
           } else {
-            dispatch(
-              loadPortfoliosSearchScroll({
-                query: `?page=${page}`,
-              }),
-            );
+            debounce((value) => {
+              dispatch(
+                loadPortfoliosSearchScroll({
+                  query: `?page=${page}`,
+                }),
+              );
+            }, 500);
           }
         }
       }
@@ -67,16 +71,12 @@ const Home = () => {
   }, [hasMorePortfolios, loadPortfoliosLoading, mainPortfolios]);
 
   useDidMountEffect(() => {
-    console.log(query);
     dispatch(
       loadPortfoliosSearch({
         query,
       }),
     );
   }, [query]);
-
-  console.log(me);
-  console.log(mainPortfolios);
 
   const { Option } = Select;
   const portfolioSearchObjects = useMemo(() => {

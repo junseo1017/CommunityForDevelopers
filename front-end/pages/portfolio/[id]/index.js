@@ -10,6 +10,7 @@ import useConfirmModal from "../../../hooks/useConfirmModal";
 import axios from "axios";
 import { Affix, Button, Avatar, Comment, Form, Input, List } from "antd";
 import { removePortfolio } from "../../../actions/portfolio";
+
 import {
   loadPortfolio,
   likePortfolio,
@@ -41,8 +42,6 @@ const Portfolio = () => {
   const dispatch = useDispatch();
   const { singlePortfolio, loadPortfoliosDone } = useSelector((state) => state.portfolio);
   const { me } = useSelector((state) => state.user);
-  console.log(singlePortfolio);
-  console.log(me);
 
   const liked = singlePortfolio?.recommends?.find((v) => v === me._id);
   const scrapped = singlePortfolio?.scraps?.find((v) => v === me._id);
@@ -85,7 +84,7 @@ const Portfolio = () => {
               onClick={() => {
                 dispatch(removeComment({ commentId: data?._id }));
               }}
-              key="comment-basic-reply-to">
+              key={`comment-basic-reply-to${data?._id}`}>
               삭제
             </span>
           ),

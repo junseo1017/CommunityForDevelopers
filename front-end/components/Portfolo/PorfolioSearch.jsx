@@ -13,8 +13,6 @@ import useDebouncedEffect from "../../hooks/useDebouncedEffect";
 import { debounce } from "lodash";
 
 const PorfolioSearch = ({ orderBys, setSearchQuery }) => {
-  const dispatch = useDispatch();
-
   const [searchOptions, setSearchOptions] = useState({
     contentText: false,
     title: false,
@@ -81,7 +79,6 @@ const PorfolioSearch = ({ orderBys, setSearchQuery }) => {
       query = inputs.skills.reduce((prev, cur) => prev + `&skill=${cur}`, query);
     }
     setSearchQuery(query);
-    //dispatch(loadPortfoliosSearch({ ...inputs, ...optionsInputs }));
   }, [inputs, optionsInputs, searchValue]);
 
   const [items, name, onNameChange, addItem] = useSelects();

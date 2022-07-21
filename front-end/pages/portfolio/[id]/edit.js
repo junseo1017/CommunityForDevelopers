@@ -75,7 +75,6 @@ const EditPortfolio = (props) => {
         formdata.append(`${key}`, `${value}`);
       }
       formdata.set("skills", JSON.stringify(newData.skills));
-      console.log(newData);
       dispatch(updatePortfolio({ portfolioId: newData._id, formdata }));
     },
     [imgFormData],
@@ -95,7 +94,7 @@ const EditPortfolio = (props) => {
 
   /* 첫번째 단계 */
   const onSubmitCard = useCallback((values) => {
-    console.log("Received values of form: ", values);
+    //console.log("Received values of form: ", values);
     const formData = new FormData();
     //if (values.image) formData.append("file", values.image[0].originFileObj);
     if (values.image) formData.append("image", values.image);
