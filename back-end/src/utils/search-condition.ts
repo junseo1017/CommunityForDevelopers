@@ -1,4 +1,5 @@
 import { SearchInfo } from "../interfaces/portfolio-interface";
+import { Types } from "mongoose";
 
 function getSearchCondition(searchInfo: SearchInfo, page: number) {
   const condition: Array<any> = [];
@@ -49,8 +50,9 @@ function qnaSearchCondition(value: string, lastId: string) {
     });
   }
   if (lastId) {
+    const id = new Types.ObjectId(lastId);
     condition.push({
-      $match: { _id: { $lt: lastId } },
+      $match: { _id: { $lt: id } },
     });
   }
   condition.push({ $sort: { _id: -1 } }, { $limit: 8 });
