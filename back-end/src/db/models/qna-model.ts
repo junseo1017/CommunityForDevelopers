@@ -50,7 +50,7 @@ export class QnaModel {
   }
 
   async findByUserId(userId: string) {
-    return await Qna.find({ author: userId });
+    return await Qna.find({ authorId: userId });
   }
 
   async findBySearch(value: string, lastId: string) {
@@ -59,11 +59,11 @@ export class QnaModel {
   }
 
   async getQuestionCountByUserId(userId: string) {
-    return await Qna.find({ author: userId, isAnswer: false }).count();
+    return await Qna.find({ authorId: userId, isAnswer: false }).count();
   }
 
   async getAnswerCountByUserId(userId: string) {
-    return await Qna.find({ author: userId, isAnswer: true }).count();
+    return await Qna.find({ authorId: userId, isAnswer: true }).count();
   }
 
   async create(qnaInfo: QnaInputDTO) {

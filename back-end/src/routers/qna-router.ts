@@ -33,7 +33,9 @@ qnaRouter.get(
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const userId = req.params.userId;
+      console.log("유저아이디", userId);
       const QnA = await qnaService.getQnaByUserId(userId);
+      console.log(QnA);
       res.status(200).json(QnA);
     } catch (error) {
       next(error);

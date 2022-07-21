@@ -50,7 +50,7 @@ const PorfolioSearch = ({ orderBys, setSearchQuery }) => {
       ["options"]: Object.keys(newSearchOptions).filter((key) => newSearchOptions[key]),
     });
   };
-  onSearchValueChange;
+  // onSearchValueChange;
   const delaySetValue = useCallback(
     debounce((value) => {
       setSearchValue(value);

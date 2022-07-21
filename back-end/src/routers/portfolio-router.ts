@@ -68,6 +68,9 @@ portfolioRouter.post(
       const author = userInfo.nickname;
       const authorImg = userInfo.imgUrl;
       const { title, description, content, contentText } = req.body;
+
+      console.log("req.body: ", req.body);
+
       const skills = JSON.parse(req.body.skills);
 
       const image = req.file;

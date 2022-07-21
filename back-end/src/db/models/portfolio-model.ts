@@ -27,7 +27,7 @@ export class PortfolioModel {
   }
 
   async getCountByUserId(userId: string) {
-    return await Portfolio.find({ author: userId }).count();
+    return await Portfolio.find({ authorId: userId }).count();
   }
 
   async getScrapsCountByUserId(userId: string) {
