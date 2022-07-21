@@ -62,35 +62,35 @@ const QuestionDetail = ({ qna }) => {
   return (
     <div css={DetailContainer}>
       <div css={DetailQuestionContainer}>
-        <h1>{question.title}</h1>
         {isAuthor && (
-          <div>
-            <EditOutlined
-              style={{ fontSize: "2em" }}
+          <div className="button-wrapper">
+            <button
               onClick={() => {
                 handleUpdate();
-              }}
-            />
-            <DeleteOutlined
-              style={{ fontSize: "2em" }}
+              }}>
+              수정하기
+            </button>
+            <button
               onClick={() => {
                 handleDelete(question._id);
-              }}
-            />
+              }}>
+              삭제하기
+            </button>
           </div>
         )}
+        <h1>{question.title}</h1>
         <div className="tag-container">
           {question.tags.map((tag, index) => (
             <Tag key={index}>{tag}</Tag>
           ))}
-          <p>질문자: {question.author.nickname}</p>
-          <p>질문일: {moment(question.createdAt).format("YYYY월 MM월 DD일")}</p>
-          <p>최근 수정일: {moment(question.updatedAt).format("YYYY월 MM월 DD일")}</p>
         </div>
-        <div>
-          <Button
-            size="large"
-            type="primary"
+        <div className="info-container">
+          <div className="info-box">
+            <p>질문자: {question.author}</p>
+            <p>질문일: {moment(question.createdAt).format("YYYY월 MM월 DD일")}</p>
+            <p>최근 수정일: {moment(question.updatedAt).format("YYYY월 MM월 DD일")}</p>
+          </div>
+          <button
             onClick={() => {
               isAnswerCreateMode
                 ? (EditorRef.current.style.display = "none")
@@ -99,12 +99,14 @@ const QuestionDetail = ({ qna }) => {
               handleScroll();
             }}>
             답변하기
-          </Button>
+          </button>
         </div>
-        <Divider plain />
-        {!isAnswerUpdateMode ? (
-          <Output data={JSON.parse(question.contents)} />
-        ) : (
+      </div>
+      <Divider plain />
+      {!isAnswerUpdateMode ? (
+        <Output data={JSON.parse(question.contents)} />
+      ) : (
+        <div className="answer-editor">
           <AddEditor
             data={JSON.parse(question.contents)}
             title={answerTitle}
@@ -112,16 +114,16 @@ const QuestionDetail = ({ qna }) => {
             qnaId={question._id}
             isUpdate={true}
           />
-        )}
-        <div ref={EditorRef} css={AnswerEditorContainer}>
-          <h2>답변하기</h2>
-          <Input
-            size="large"
-            placeholder="답변의 제목을 작성하세요"
-            onChange={(e) => setAnswerTItle(e.target.value)}
-          />
-          <AddEditor title={answerTitle} isAnswer parentQnaId={question._id} />
         </div>
+      )}
+      <div ref={EditorRef} css={AnswerEditorContainer}>
+        <h2>답변하기</h2>
+        <Input
+          size="large"
+          placeholder="답변의 제목을 작성하세요"
+          onChange={(e) => setAnswerTItle(e.target.value)}
+        />
+        <AddEditor title={answerTitle} isAnswer parentQnaId={question._id} />
       </div>
       <Answers answers={answers} />
       <TopButton />
