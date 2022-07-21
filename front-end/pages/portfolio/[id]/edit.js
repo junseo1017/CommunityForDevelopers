@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useState, useCallback, useEffect, useMemo } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Head from "next/head";
 import AppLayout from "../../../components/AppLayout";
@@ -19,6 +19,8 @@ import {
 import { myinfo } from "../../../actions/user";
 import wrapper from "../../../store";
 import axios from "axios";
+import { backendUrl } from "../../../config/config";
+import { removeImages } from "../../../actions/image";
 import useConfirmModal from "../../../hooks/useConfirmModal";
 import Router from "next/router";
 
@@ -63,6 +65,7 @@ const EditPortfolio = (props) => {
 
   const dispatchAddPortfolio = useCallback(
     (data, formdata) => {
+      console.log("????");
       const filteredBlocks = JSON.parse(data.content).blocks.map(({ type, data }) => {
         return type === "paragraph" || type === "header" ? data : "";
       });
@@ -72,9 +75,17 @@ const EditPortfolio = (props) => {
       delete newData.imgSrc;
       //formdata.append("body", JSON.stringify(newData));
       for (const [key, value] of Object.entries(newData)) {
-        formdata.append(`${key}`, `${value}`);
+        formdata.append(`${key}`, value);
       }
-      formdata.set("skills", JSON.stringify(newData.skills));
+      const isJsonString = (str) => {
+        try {
+          JSON.parse(str);
+        } catch (e) {
+          return false;
+        }
+        return true;
+      };
+      if (!isJsonString(newData.skills)) formdata.set("skills", JSON.stringify(newData.skills));
       dispatch(updatePortfolio({ portfolioId: newData._id, formdata }));
     },
     [imgFormData],
@@ -107,6 +118,7 @@ const EditPortfolio = (props) => {
   }, []);
 
   const [savePortf, handleInitialize, imageArray] = useEditor();
+
   const [modalVisible, setModalVisible, handleOk, confirmLoading, modalText, showModal] =
     useModalAsync(
       savePortf,
@@ -119,7 +131,7 @@ const EditPortfolio = (props) => {
   return (
     <AppLayout>
       <Head>
-        <title>포트폴리오 작성</title>
+        <title>포트폴리오 수정</title>
       </Head>
       <ModalAsync
         visible={modalVisible}

@@ -3,6 +3,7 @@ import useConfirmModal from "./useConfirmModal";
 import { addComment } from "../actions/portfolio";
 import { useDispatch } from "react-redux";
 import Router from "next/router";
+import { debounce } from "lodash";
 
 const useComment = ({ nickname, Portf_id, imgUrl }) => {
   //const [comments, setComments] = useState([]);
@@ -25,7 +26,10 @@ const useComment = ({ nickname, Portf_id, imgUrl }) => {
   const dispatch = useDispatch();
 
   const handleSubmit = () => {
-    if (!nickname) showConfirm();
+    if (!nickname) {
+      showConfirm();
+      return;
+    }
     if (!value) return;
     setSubmitting(true);
     setTimeout(() => {
@@ -44,9 +48,10 @@ const useComment = ({ nickname, Portf_id, imgUrl }) => {
     }, 1000);
   };
 
-  const handleChange = (e) => {
+  const handleChange = debounce((e) => {
+    console.log(e.target.value);
     setValue(e.target.value);
-  };
+  }, 500);
 
   return [submitting, handleChange, handleSubmit, value];
 };

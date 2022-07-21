@@ -4,6 +4,9 @@ import { css } from "@emotion/react";
 export const formContainer = css`
   width: 100%;
 `;
+export const fontWeight = css`
+  font-weight: 500;
+`;
 
 export const submitButton = css`
   padding-bottom: 20px;
@@ -35,17 +38,22 @@ export const submitButton = css`
 export const Container = css`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
   height: 100%;
+  gap: 10px;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 export const LeftCard = css`
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-  flex: 1;
-  margin-right: 20px;
-  min-width: 400px;
+  flex: 1.5;
+  width: 100%;
+  height: 100%;
+
   // .ant-form-item-label {
   //   flex: 0 0 100%;
   //   max-width: 100%;
@@ -59,8 +67,9 @@ export const LeftCard = css`
 
 export const RightCard = css`
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-  flex: 0.97;
-  min-width: 400px;
+  flex: 1;
+  width: 100%;
+  height: 100%;
 `;
 
 //ant-form-item-explain-error

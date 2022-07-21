@@ -9,26 +9,30 @@ import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loadPortfoliosSearch } from "../../actions/portfolio";
 import useDidMountEffect from "../../hooks/useDidMountEffect";
-import useDebouncedEffect from "../../hooks/useDebouncedEffect";
+import { useMediaQuery } from "react-responsive";
 import { debounce } from "lodash";
 
-const PorfolioSearch = ({ orderBys, setSearchQuery }) => {
+const PorfolioSearch = ({ setSearchQuery }) => {
+  const [size, setSize] = useState(null);
+  const isresponsive = useMediaQuery({
+    query: "(max-width:768px)",
+  });
+  useEffect(() => {
+    setSize(isresponsive);
+  }, [isresponsive]);
   const [searchOptions, setSearchOptions] = useState({
     contentText: false,
     title: false,
     author: false,
   });
-
   const [optionsInputs, setOptionsInputs] = useState({
     options: ["contentText", "title", "author"],
   });
-
   const [inputs, setInputs] = useState({
     orderBy: "recommends",
     skills: [],
     page: 1,
   });
-
   const orderByChange = (value) => {
     setInputs({
       ...inputs,
@@ -50,18 +54,17 @@ const PorfolioSearch = ({ orderBys, setSearchQuery }) => {
       ["options"]: Object.keys(newSearchOptions).filter((key) => newSearchOptions[key]),
     });
   };
-  // onSearchValueChange;
+
   const delaySetValue = useCallback(
     debounce((value) => {
       setSearchValue(value);
       if (value?.length == 1) {
-        message.error("두 글자 이상이어야 합니다.");
+        message.warning("두 글자 이상이어야 합니다.");
       }
     }, 500),
     [],
   );
   const [searchValue, setSearchValue] = useState("");
-  //useDebouncedEffect(() => console.log(value), 1000, [value]);
   const onSearchValueChange = useCallback((e) => {
     delaySetValue(e.target.value);
   }, []);
@@ -87,6 +90,12 @@ const PorfolioSearch = ({ orderBys, setSearchQuery }) => {
   const [items, name, onNameChange, addItem] = useSelects();
   const OrderBySelectStyle = useMemo(() => ({ width: 106, textAlign: "start" }), []);
   const { Option } = Select;
+  const orderBys = [
+    <Option key={"recommends"}>추천 순</Option>,
+    <Option key={"createdAt"}>최신 순</Option>,
+    <Option key={"comments"}>댓글 순</Option>,
+    <Option key={"scraps"}>스크랩 순</Option>,
+  ];
 
   return (
     <>
@@ -101,8 +110,8 @@ const PorfolioSearch = ({ orderBys, setSearchQuery }) => {
         <Col flex="0 0 auto">
           <Select
             bordered={false}
-            size="large"
-            defaultValue="추천 순"
+            size={!size && "large"}
+            defaultValue="최신 순"
             onChange={orderByChange}
             style={OrderBySelectStyle}>
             {orderBys}
@@ -111,7 +120,7 @@ const PorfolioSearch = ({ orderBys, setSearchQuery }) => {
         <Col flex="0 0 auto">
           <Select
             placement="bottomRight"
-            size="large"
+            size={!size && "large"}
             style={{
               minWidth: "200px",
             }}

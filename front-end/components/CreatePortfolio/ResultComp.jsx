@@ -16,12 +16,12 @@ const ResultComp = () => {
         title="성공적으로 포트폴리오를 작성했습니다."
         subTitle="홈이나 내 정보로 가서 확인해주세요."
         extra={[
-          <Link href={`/profile/${me._id}`}>
+          <Link key={`${me?._id}myInfo`} href={`/profile/${me?._id}`}>
             <Button type="primary" key="console">
               내 정보
             </Button>
           </Link>,
-          <Link href="/">
+          <Link key={`${me?._id}goHome`} href="/">
             <Button key="buy">홈으로</Button>
           </Link>,
         ]}

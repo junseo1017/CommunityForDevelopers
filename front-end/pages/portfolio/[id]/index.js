@@ -8,9 +8,9 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo } from "react";
 import useConfirmModal from "../../../hooks/useConfirmModal";
 import axios from "axios";
-import { Affix, Button, Avatar, Comment, Form, Input, List } from "antd";
+import { Affix, Button, Avatar, Comment, Form, Input, Breadcrumb } from "antd";
 import { removePortfolio } from "../../../actions/portfolio";
-
+import Head from "next/head";
 import {
   loadPortfolio,
   likePortfolio,
@@ -25,7 +25,14 @@ import { useSelector, useDispatch } from "react-redux";
 import CommentEditor from "../../../components/Portfolo/CommentEditor";
 import CommentList from "../../../components/Portfolo/CommentList";
 import useComment from "../../../hooks/useComment";
-import { LikeTwoTone, StarTwoTone, LikeOutlined, StarOutlined } from "@ant-design/icons";
+import {
+  LikeTwoTone,
+  StarTwoTone,
+  LikeOutlined,
+  StarOutlined,
+  HomeOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import moment from "moment";
 import Router from "next/router";
 
@@ -42,9 +49,9 @@ const Portfolio = () => {
   const dispatch = useDispatch();
   const { singlePortfolio, loadPortfoliosDone } = useSelector((state) => state.portfolio);
   const { me } = useSelector((state) => state.user);
-
-  const liked = singlePortfolio?.recommends?.find((v) => v === me._id);
-  const scrapped = singlePortfolio?.scraps?.find((v) => v === me._id);
+  console.log(singlePortfolio);
+  const liked = singlePortfolio?.recommends?.find((v) => v === me?._id);
+  const scrapped = singlePortfolio?.scraps?.find((v) => v === me?._id);
 
   const redirectLogin = useCallback(() => {
     Router.push("/login");
@@ -64,49 +71,46 @@ const Portfolio = () => {
     if (!me) {
       showConfirm();
     }
-    if (liked) dispatch(unlikePortfolio({ portfolioId: singlePortfolio?._id, UserId: me._id }));
-    else dispatch(likePortfolio({ portfolioId: singlePortfolio?._id, UserId: me._id }));
+    if (liked) dispatch(unlikePortfolio({ portfolioId: singlePortfolio?._id, UserId: me?._id }));
+    else dispatch(likePortfolio({ portfolioId: singlePortfolio?._id, UserId: me?._id }));
   };
   const onClickScrapPort = () => {
     if (!me) {
       showConfirm();
     }
-    if (scrapped) dispatch(unscrapPortfolio({ portfolioId: singlePortfolio?._id, UserId: me._id }));
-    else dispatch(scrapPortfolio({ portfolioId: singlePortfolio?._id, UserId: me._id }));
+    if (scrapped)
+      dispatch(unscrapPortfolio({ portfolioId: singlePortfolio?._id, UserId: me?._id }));
+    else dispatch(scrapPortfolio({ portfolioId: singlePortfolio?._id, UserId: me?._id }));
   };
 
   const comments = singlePortfolio.comments.map((data, index) => {
-    if (!data.isDeleted) {
-      const newData = {
-        actions: [
-          me?._id === data?.author?._id && (
-            <span
-              onClick={() => {
-                dispatch(removeComment({ commentId: data?._id }));
-              }}
-              key={`comment-basic-reply-to${data?._id}`}>
-              삭제
-            </span>
-          ),
-        ],
-        author: (
-          <Link href={`/profile/${data?.author?._id}`}>
-            <a>{data?.author?.nickname}</a>
-          </Link>
+    const newData = {
+      actions: [
+        me && me?._id === data?.author?._id && (
+          <span
+            style={{ textDecoration: "underline" }}
+            onClick={() => {
+              dispatch(removeComment({ commentId: data?._id, portfolioId: singlePortfolio?._id }));
+            }}
+            key={`comment-basic-reply-to${data?._id}`}>
+            삭제
+          </span>
         ),
-        avatar: (
-          <Link href={`/profile/${data?.author?._id}`}>
-            <Avatar
-              src={data?.author?.imgUrl || "https://joeschmoe.io/api/v1/random"}
-              alt="Han Solo"
-            />
-          </Link>
-        ),
-        content: data?.content,
-        datetime: moment(data?.createdAt).fromNow(),
-      };
-      return newData;
-    }
+      ],
+      author: (
+        <Link href={`/profile/${data?.author?._id}`}>
+          <a>{data?.author?.nickname}</a>
+        </Link>
+      ),
+      avatar: (
+        <Link href={`/profile/${data?.author?._id}`}>
+          <Avatar src={data?.author?.imgUrl || "/image/profile_image_default.jpg"} alt="Han Solo" />
+        </Link>
+      ),
+      content: data?.content,
+      datetime: moment(data?.createdAt).fromNow(),
+    };
+    return newData;
   });
 
   const [submitting, handleChange, handleSubmit, value] = useComment({
@@ -155,22 +159,29 @@ const Portfolio = () => {
 
   return (
     <AppLayout>
-      {me._id === singlePortfolio.authorId ? (
-        <div style={{ paddingTop: "20px", width: "100%", display: "flex", justifyContent: "end" }}>
-          <div>
-            <Button
-              type="primary"
-              ghost
-              style={{
-                margin: "0 8px",
-              }}
-              onClick={onEditBtn}>
-              수정
-            </Button>
+      <Head>
+        <title>포트폴리오</title>
+      </Head>
+      {me?._id === singlePortfolio.authorId ? (
+        <div
+          style={{
+            paddingTop: "15px",
+            width: "100%",
+            display: "flex",
+            justifyContent: "end",
+            marginBottom: "3rem",
+          }}>
+          <div
+            style={{
+              margin: "0 8px",
+            }}
+            css={EditDelCss}
+            onClick={onEditBtn}>
+            수정
           </div>
-          <Button danger onClick={onRemoveBtn}>
+          <div css={EditDelCss} onClick={onRemoveBtn}>
             삭제
-          </Button>
+          </div>
         </div>
       ) : (
         <div style={{ marginBottom: "3rem" }}>{}</div>
@@ -191,11 +202,10 @@ const Portfolio = () => {
       </ButtonContainer>
 
       {/*  maxWidth: "800px", */}
-
       {isJsonString(singlePortfolio.content) ? (
         <section
           css={EditorSize}
-          style={{ width: "100%", overflow: "auto", overflowWrap: "break-word" }}>
+          style={{ maxWidth: "800px", overflow: "auto", overflowWrap: "break-word" }}>
           <Output data={JSON.parse(singlePortfolio.content)} />
         </section>
       ) : (
@@ -205,7 +215,7 @@ const Portfolio = () => {
       <div style={{ width: "100%" }}>
         {comments.length > 0 && <CommentList comments={comments} />}
         <Comment
-          avatar={<Avatar src={me.imgUrl || "https://joeschmoe.io/api/v1/random"} alt="Han Solo" />}
+          avatar={<Avatar src={me?.imgUrl || "/image/profile_image_default.jpg"} alt="Han Solo" />}
           content={
             <CommentEditor
               onChange={handleChange}
@@ -238,6 +248,15 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
 
 export default Portfolio;
 
+const EditDelCss = css`
+  font-size: 1rem;
+  color: rgb(160, 160, 160);
+  text-align: end;
+  text-decoration: underline;
+  font-weight: 700;
+  cursor: pointer;
+`;
+
 export const EditorSize = css`
   & > figure {
     height: 100% !important;
@@ -247,6 +266,7 @@ export const EditorSize = css`
     height: 100% !important;
     max-height: 100% !important;
   }
+  //background-color: #f7f9fa;
 `;
 
 const ButtonContainer = styled.div`
@@ -263,13 +283,19 @@ const ButtonContainer = styled.div`
   .ant-btn:first-of-type {
     border-color: ${(props) => (props.borderLike ? "#1890ff" : "#d9d9d9")};
   }
+  .ant-btn:first-of-type :focus {
+    border-color: ${(props) => (props.borderLike ? "#1890ff" : "#d9d9d9")};
+  }
   .ant-btn:last-of-type {
+    border-color: ${(props) => (props.borderScrap ? "#1890ff" : "#d9d9d9")};
+  }
+  .ant-btn:last-of-type :focus {
     border-color: ${(props) => (props.borderScrap ? "#1890ff" : "#d9d9d9")};
   }
 
   .ant-btn:focus {
     color: #000;
-    border-color: #d9d9d9;
+
     box-shadow: 0 2px 0 rgb(0 0 0 / 2%);
   }
   .ant-btn:hover {
