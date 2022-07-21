@@ -61,7 +61,7 @@ export class PortfolioModel {
   }
 
   async update(portId: string, update: UpdateInfo) {
-    const filter = { portId };
+    const filter = { _id: portId };
     const option = { returnOriginal: false };
 
     return await Portfolio.findOneAndUpdate(filter, update, option);
