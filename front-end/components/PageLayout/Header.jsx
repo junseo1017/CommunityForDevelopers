@@ -3,7 +3,7 @@ import { css, jsx } from "@emotion/react";
 import AddButton from "./AddButton";
 import LoggedinMenu from "./LoggedinMenu";
 import { HeaderContainer, HeaderContent } from "./styles/HeaderStyles";
-import Logo from "./logo";
+import Logo from "./Logo";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
