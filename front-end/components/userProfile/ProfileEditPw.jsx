@@ -8,11 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { editPassword } from "../../actions/user";
 import { useRouter } from "next/router";
-
-const RegExp = {
-  email: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-  password: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,15}$/,
-};
+import { RegExp } from "../../components/Common/utils";
 
 const ProfileEditPw = () => {
   const router = useRouter();
@@ -31,8 +27,6 @@ const ProfileEditPw = () => {
   }, [editPasswordDone, editPasswordError]);
 
   const onSubmit = (data) => {
-    console.log(watch("password"));
-    console.log(RegExp.password.test(watch("password")));
     if (!RegExp.password.test(watch("password"))) {
       return message.error("형식에 맞는 비밀번호를 입력해주세요.");
     }

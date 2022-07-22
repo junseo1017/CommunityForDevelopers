@@ -39,11 +39,20 @@ const Login = () => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({}) => {
-  await store.dispatch(getGithubLoginUrl());
-  await store.dispatch(getKakaoLoginUrl());
-  return {
-    props: {},
-  };
+  try {
+    await Promise.allSettled([
+      store.dispatch(getGithubLoginUrl()),
+      store.dispatch(getKakaoLoginUrl()),
+    ]);
+
+    return {
+      props: {},
+    };
+  } catch (error) {
+    return {
+      props: {},
+    };
+  }
 });
 
 export default Login;

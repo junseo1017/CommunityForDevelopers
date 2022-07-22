@@ -2,7 +2,10 @@
 import { css, jsx } from "@emotion/react";
 
 export const SearchBarContainer = css`
-  width: 75%;
+  width: 100%;
+  margin-top: 1em;
+  background-color: #f9f9f9;
+  border-radius: 2.5em;
 
   & input {
     width: 100%;
@@ -12,15 +15,15 @@ export const SearchBarContainer = css`
 
     font-size: 1.5em;
 
-    border: 2px solid gray;
+    border: 2px solid transparent;
     border-radius: 1.5em;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
     opacity: 0.75;
     outline: none;
 
     &:focus {
-      box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
-      border: 2px solid black;
+      box-shadow: 0 2px 2px rgba(190, 190, 190);
+      border: 2px solid rgba(190, 190, 190);
       color: black;
     }
   }
@@ -40,7 +43,7 @@ export const ColFlexBox = css`
 
 export const TitleContainer = css`
   display: flex;
-  gap: 1.5em;
+  gap: 0.75em;
   align-items: center;
 
   & svg,
@@ -73,22 +76,45 @@ export const TitleContainer = css`
 export const DescriptionContainer = css`
   display: flex;
   flex-direction: column;
-  margin-top: 1em;
+  margin-top: 0.25em;
 
   & span.descriptions {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    color: rgba(100, 100, 100);
   }
 
   & div.tag-container {
-    margin-top: 1em;
+    margin-top: 0.5em;
     display: flex;
     justify-content: space-between;
     align-items: center;
 
+    & .ant-tag {
+      margin-right: 0.25em;
+    }
+
     & > span {
-      opacity: 0.75;
+      color: rgba(190, 190, 190);
+    }
+  }
+
+  @media (max-width: 768px) {
+    & div.tag-container {
+      flex-direction: column;
+      align-items: flex-end;
+      margin-top: 0.5em;
+      gap: 0.5em;
+
+      & .ant-tag {
+        font-size: 0.625em;
+        margin-left: 0.5em;
+      }
+
+      & > span {
+        font-size: 0.625em;
+      }
     }
   }
 `;
@@ -105,24 +131,75 @@ export const DetailQuestionContainer = css`
   display: flex;
   flex-direction: column;
 
+  & div.button-wrapper {
+    align-self: flex-end;
+
+    & button {
+      margin: 0 0.5em;
+      padding: 0;
+      background-color: #ffffff;
+      border: none;
+      color: rgba(120, 120, 120);
+      font-size: 0.9em;
+
+      &:hover {
+        color: #000;
+        font-weight: bold;
+      }
+    }
+  }
+
   & h1 {
+    width: 100%;
     color: #1890ff;
     font-weight: 700;
+    word-break: break-all;
+    margin-bottom: 0;
   }
 
   & div.badge-container,
   div.tag-container {
     align-self: flex-start;
+  }
 
-    & p {
-      margin: 0.25em 0;
-      font-size: 12px;
+  & div.info-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0.5em 0;
+
+    & button {
+      height: 3em;
+      padding: 0 1.5em;
+      border: none;
+      border-radius: 5px;
+      background-color: #1890ff;
+      font-size: 1em;
+      font-weight: bold;
+      color: #fff;
+      align-self: flex-end;
+
+      &:hover {
+        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+      }
     }
   }
 
-  & > div,
-  button {
-    align-self: flex-end;
+  & div.info-box {
+    font-size: 0.75em;
+
+    & p {
+      margin: 0;
+    }
+  }
+
+  & div.answer-editor {
+    display: flex;
+    flex-direction: column;
+
+    & button {
+      align-self: flex-end;
+    }
   }
 `;
 
@@ -143,6 +220,28 @@ export const DetailAnswerContainer = css`
       margin: 0;
     }
 
+    & div.button-wrapper {
+      width: auto;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      & button {
+        width: 3em;
+        margin: 0;
+        padding: 0.25em;
+        background-color: #ffffff;
+        border: none;
+        color: rgba(120, 120, 120);
+        font-size: 0.9em;
+
+        &:hover {
+          color: #000;
+          font-weight: bold;
+        }
+      }
+    }
+
     & div.answer-mode {
       display: flex;
       gap: 1em;
@@ -155,6 +254,12 @@ export const DetailAnswerContainer = css`
 
   & div.badge-container {
     justify-content: flex-end;
+  }
+
+  & span.ant-badge {
+    &:hover {
+      color: #1890ff;
+    }
   }
 `;
 
@@ -194,13 +299,21 @@ export const CommentsContainer = css`
     background-color: rgb(24, 144, 255, 0.25);
   }
 
-  & div.comment-mode {
-    display: flex;
-    gap: 0.5em;
+  & div.comment-item {
+    & button {
+      width: 3em;
+      margin: 0;
+      padding: 0.25em;
+      background-color: #ffffff;
+      border: none;
+      color: rgba(120, 120, 120);
+      font-size: 0.9em;
 
-    position: absolute;
-    top: 1em;
-    right: 1em;
+      &:hover {
+        color: #000;
+        font-weight: bold;
+      }
+    }
   }
 `;
 
@@ -232,6 +345,7 @@ export const EditorContainer = css`
   align-items: center;
   padding: 1em 2em;
   gap: 1em;
+  margin-top: 1em;
 
   border-radius: 4px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
@@ -242,17 +356,40 @@ export const EditorContainer = css`
   }
 
   & > input.ant-input-lg {
-    width: 50vw;
+    width: 100%;
   }
 
-  & > span,
-  input.ant-input-sm {
-    width: 7em;
+  & span.ant-tag {
+    align-self: flex-end;
+    margin: 0;
+  }
+
+  & > input.ant-input.ant-input-sm {
+    width: 30%;
+    align-self: flex-end;
+    margin: 0;
+  }
+
+  & > div.tags-container {
+    display: flex;
+    flex-direction: row;
+    gap: 0.25em;
+    align-self: flex-end;
+
+    & span.ant-tag.tags-input {
+      margin: 0;
+    }
   }
 
   & div.editor-container {
-    width: 75%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
     margin: 0 auto;
+
+    & button {
+      align-self: end;
+    }
   }
 
   & div.codex-editor--narrow {
@@ -269,10 +406,6 @@ export const EditorContainer = css`
       width: 2em;
       height: 2em;
     }
-  }
-
-  & button {
-    align-self: end;
   }
 
   @media (max-width: 768px) {
@@ -294,29 +427,35 @@ export const AnswerEditorContainer = css`
   align-items: center;
   padding: 1em 2em;
   gap: 1em;
+  margin-top: 1em;
 
   display: none;
 
   border-radius: 4px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 
-  & > h1 {
-    color: #1890ff;
+  & > h2 {
     font-weight: bold;
   }
 
   & > input.ant-input-lg {
-    width: 50vw;
-  }
-
-  & > span,
-  input.ant-input-sm {
-    width: 7em;
+    width: 100%;
   }
 
   & div.editor-container {
-    width: 75%;
+    width: 100%;
     margin: 0 auto;
+    border: 1px solid;
+    display: flex;
+    flex-direction: column;
+
+    & button {
+      align-self: end;
+    }
+
+    & div.ce-block {
+      width: 100%;
+    }
   }
 
   & div.codex-editor--narrow {
@@ -333,10 +472,6 @@ export const AnswerEditorContainer = css`
       width: 2em;
       height: 2em;
     }
-  }
-
-  & button {
-    align-self: end;
   }
 
   @media (max-width: 768px) {

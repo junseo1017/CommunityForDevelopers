@@ -28,18 +28,27 @@ const ProfileCQnA = () => {
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ query, req }) => {
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, query }) => {
   const cookie = req?.headers.cookie;
   axios.defaults.headers.Cookie = "";
   if (req && cookie) {
     axios.defaults.headers.Cookie = cookie;
   }
-  await store.dispatch(myinfo());
-  await store.dispatch(userinfo(query.id));
-  await store.dispatch(getqnabyuserid(query.id));
-  return {
-    props: {},
-  };
+  try {
+    await Promise.allSettled([
+      store.dispatch(userinfo(query.id)),
+      store.dispatch(myinfo()),
+      store.dispatch(getqnabyuserid(query.id)),
+    ]);
+
+    return {
+      props: {},
+    };
+  } catch (error) {
+    return {
+      props: {},
+    };
+  }
 });
 
 export default ProfileCQnA;

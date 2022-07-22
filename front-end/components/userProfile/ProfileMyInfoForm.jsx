@@ -36,7 +36,9 @@ const ProfileMyInfoForm = () => {
   // form에 사용되는 state value 넣어주기(imagePreview, skills)
   useEffect(() => {
     if (userinfo) {
-      setSkills(userinfo.skills);
+      if (userinfo.skills[0] !== "") {
+        setSkills(userinfo.skills);
+      }
       if (userinfo.imgUrl) setImagePreview(userinfo.imgUrl);
     }
   }, [userinfo]);

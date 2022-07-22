@@ -15,13 +15,16 @@ import { myinfo } from "../actions/user";
 import useDidMountEffect from "../hooks/useDidMountEffect";
 import { throttle, debounce } from "lodash";
 import SkeletonCard from "../components/Common/skeletonCard";
+import { useRouter } from "next/router";
 
 const Home = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const { me } = useSelector((state) => state.user);
   const { mainPortfolios, hasMorePortfolios, loadPortfoliosLoading, loadPortfoliosDone } =
     useSelector((state) => state.portfolio);
+
   const [query, setQuery] = useState();
 
   const setSearchQuery = useCallback((q) => {

@@ -2,10 +2,10 @@
 import { css, jsx } from "@emotion/react";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
-import { Button } from "antd";
+import { Button, Modal } from "antd";
 import { EditorContainer } from "../styles/QuestionStyle";
 import axios from "axios";
-import { useRouter } from "next/router";
+import router from "next/router";
 import ModalAsync from "../../Common/ModalAsync";
 import useModalAsync from "../../../hooks/useModalAsync";
 
@@ -34,16 +34,16 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
     imageArray.push(image);
   };
 
-  useEffect(() => {
-    if (data) {
-      const editorData = JSON.parse(data);
-      for (const block of editorData.blocks) {
-        if (block.type === "image") {
-          addImages(block.data.file.url);
-        }
-      }
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     const editorData = JSON.parse(data);
+  //     for (const block of editorData.blocks) {
+  //       if (block.type === "image") {
+  //         addImages(block.data.file.url);
+  //       }
+  //     }
+  //   }
+  // }, [data]);
 
   const saveQna = async () => {
     const savedData = await editorCore.current.save();
@@ -55,37 +55,48 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
     const contentText = filteredBlocks.map((block) => block.text).join(" ");
 
     // 에디터의 컨텐츠를 가져와 서버에 저장하기
-    if (isUpdate) {
-      try {
-        await axios.put(`/api/qnas/${qnaId}`, {
-          contents: JSON.stringify(savedData),
-          contentText,
-        });
 
-        setIsChanged(true);
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      try {
-        await axios.post("/api/qnas", {
-          title,
-          contents: JSON.stringify(savedData),
-          contentText,
-          isAnswer,
-          parentQnaId,
-          tags,
-        });
+    try {
+      await axios.post("/api/qnas", {
+        title,
+        contents: JSON.stringify(savedData),
+        contentText,
+        isAnswer,
+        parentQnaId,
+        tags,
+      });
 
-        // 서버에서 사용하지 않는 이미지 제거하기
-        await clearEditorLeftoverImages();
+      // 서버에서 사용하지 않는 이미지 제거하기
+      await clearEditorLeftoverImages();
 
-        // 서버에 질문 저장하기
+      // 서버에 질문 저장하기
 
-        setIsChanged(true);
-      } catch (e) {
-        console.log(e);
-      }
+      setIsChanged(true);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const updateQna = async () => {
+    const savedData = await editorCore.current.save();
+    console.log(savedData);
+    const filteredBlocks = savedData.blocks.map(({ type, data }) => {
+      return type === "paragraph" || type === "header" ? data : "";
+    });
+
+    const contentText = filteredBlocks.map((block) => block.text).join(" ");
+
+    // 에디터의 컨텐츠를 가져와 서버에 저장하기
+    try {
+      await axios.put(`/api/qnas/${qnaId}`, {
+        contents: JSON.stringify(savedData),
+        contentText,
+        isAnswer,
+      });
+
+      setIsChanged(true);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -113,14 +124,41 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
       }
     }
   };
+  const [visible, setVisible] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState("작성한 질문 혹은 답변을 저장하시겠습니까?");
+
+  const showModal = () => {
+    setVisible(true);
+  };
+
+  const handleOk = async () => {
+    setConfirmLoading(true);
+
+    isUpdate ? await updateQna() : await saveQna();
+    setVisible(false);
+    setConfirmLoading(false);
+    router.push(`/qna`);
+  };
+
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setVisible(false);
+  };
 
   return (
     <div className="editor-container">
+      <Modal
+        title="저장하시겠습니까?"
+        visible={visible}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}>
+        <p>{modalText}</p>
+      </Modal>
       <Button
         onClick={() => {
-          saveQna(qnaId);
-          // ModalAsync();
-          // router.push(`/qna/${router.query._id}`);
+          showModal();
         }}>
         저장하기
       </Button>
