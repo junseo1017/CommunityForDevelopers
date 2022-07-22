@@ -1,8 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { authService } from "../services";
 const authRouter = Router();
-import dotenv from "dotenv";
-dotenv.config();
 
 // 1. Kakao 로그인 url
 authRouter.get(
@@ -12,7 +10,8 @@ authRouter.get(
       const baseUrl = "https://kauth.kakao.com/oauth/authorize";
       const config = {
         client_id: process.env.KAKAO_CLIENT_ID || "",
-        redirect_uri: `http://${process.env.DOMAIN}:5000/api/oauth/kakao/callback`,
+        redirect_uri:
+          "http://kdt-sw2-seoul-team06.elicecoding.com:5000/api/oauth/kakao/callback",
         response_type: "code",
         scope: "profile_nickname account_email",
       };
