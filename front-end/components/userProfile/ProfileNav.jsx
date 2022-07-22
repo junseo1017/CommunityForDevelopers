@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 const ProfileNav = () => {
   const router = useRouter();
   return (
-    <div css={profileNavContainer}>
+    <nav css={profileNavContainer}>
       <ul css={profileNavStyle}>
         <li>
           <Link href={`/profile/${router.query.id}`}>
@@ -30,7 +30,7 @@ const ProfileNav = () => {
           </Link>
         </li>
       </ul>
-    </div>
+    </nav>
   );
 };
 export default ProfileNav;

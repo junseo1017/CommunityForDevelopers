@@ -2,18 +2,15 @@
 import { css, jsx } from "@emotion/react";
 import { Tag } from "antd";
 import { useState } from "react";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { myInfoFormStyle, myInfoSkills } from "./styles/MyInfoStyles";
-import Image from "next/image";
 
 const ProfileUserInfoForm = () => {
-  const imageinputRef = useRef();
   const [skills, setSkills] = useState([]);
   const { userinfo } = useSelector((state) => state.user.userInfo);
   const { register } = useForm({ defaultValues: userinfo });
-  const { ref, ...rest } = register("imgUrl");
   // form에 사용되는 state value 넣어주기
   useEffect(() => {
     if (userinfo) {
