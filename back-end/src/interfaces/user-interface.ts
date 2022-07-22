@@ -1,4 +1,4 @@
-export interface InputDTO {
+export interface UserInputDTO {
   nickname: string;
   email: string;
   password: string;
@@ -8,7 +8,7 @@ export interface OAuthUserDTO {
   email: string;
   loginType: string;
 }
-export interface UpdateInfo {
+export interface UserUpdateInfo {
   nickname: string;
   job?: string;
   imgUrl: string;
