@@ -5,6 +5,7 @@ export const SearchBarContainer = css`
   width: 100%;
   margin-top: 1em;
   background-color: #f9f9f9;
+  border-radius: 2.5em;
 
   & input {
     width: 100%;
@@ -191,6 +192,15 @@ export const DetailQuestionContainer = css`
       margin: 0;
     }
   }
+
+  & div.answer-editor {
+    display: flex;
+    flex-direction: column;
+
+    & button {
+      align-self: flex-end;
+    }
+  }
 `;
 
 export const DetailAnswerContainer = css`
@@ -289,13 +299,21 @@ export const CommentsContainer = css`
     background-color: rgb(24, 144, 255, 0.25);
   }
 
-  & div.comment-mode {
-    display: flex;
-    gap: 0.5em;
+  & div.comment-item {
+    & button {
+      width: 3em;
+      margin: 0;
+      padding: 0.25em;
+      background-color: #ffffff;
+      border: none;
+      color: rgba(120, 120, 120);
+      font-size: 0.9em;
 
-    position: absolute;
-    top: 1em;
-    right: 1em;
+      &:hover {
+        color: #000;
+        font-weight: bold;
+      }
+    }
   }
 `;
 
