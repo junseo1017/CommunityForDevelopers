@@ -1,6 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { portfolioService, qnaService } from "../services";
-
 const searchRouter = Router();
 
 // 1. 포토폴리오 검색
@@ -35,8 +34,8 @@ searchRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const value = req.query.value as string;
-      const lastId = req.query.lastId as string;
-      const QnAs = await qnaService.getQnasBySearch(value, lastId);
+      const page = parseInt(req.query.page as string);
+      const QnAs = await qnaService.getQnasBySearch(value, page);
       res.status(200).json(QnAs);
     } catch (error) {
       next(error);

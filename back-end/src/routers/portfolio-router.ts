@@ -19,7 +19,7 @@ const portfolioRouter = Router();
 // 1. 전체 포토폴리오 조회
 portfolioRouter.get(
   "/",
-  validateRequestWith(portfolioSearchJoi, "query"),
+  // validateRequestWith(portfolioSearchJoi, "query"),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const lastId = req.query.lastId as string;
@@ -74,7 +74,7 @@ portfolioRouter.post(
   loginRequired,
   upload,
   checkImage,
-  validateRequestWith(portfolioCreateJoi, "body"),
+  // validateRequestWith(portfolioCreateJoi, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const authorId = req.currentUserId || "";
@@ -109,8 +109,8 @@ portfolioRouter.put(
   loginRequired,
   upload,
   checkImage,
-  validateRequestWith(portfolioUpdateQueryJoi, "query"),
-  validateRequestWith(portfolioUpdateJoi, "body"),
+  // validateRequestWith(portfolioUpdateQueryJoi, "query"),
+  // validateRequestWith(portfolioUpdateJoi, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const portId = req.params.portId;
     const userId = req.currentUserId || "";

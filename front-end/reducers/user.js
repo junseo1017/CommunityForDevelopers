@@ -75,7 +75,6 @@ const userSlice = createSlice({
     builder
       // login
       .addCase(login.pending, (state) => {
-        console.log("pending");
         state.loginLoading = true;
         state.loginDone = false;
         state.loginError = null;
@@ -107,20 +106,16 @@ const userSlice = createSlice({
       })
       // kakao login
       .addCase(getKakaoLoginUrl.pending, (state) => {
-        console.log("pending");
         state.getOAuthUrlLoading = true;
         state.getOAuthUrlDone = false;
         state.getOAuthUrlError = null;
       })
       .addCase(getKakaoLoginUrl.fulfilled, (state, action) => {
-        console.log("fulfilled");
-
         state.kakaoLoginUrl = action.payload;
         state.getOAuthUrlLoading = false;
         state.getOAuthUrlDone = true;
       })
       .addCase(getKakaoLoginUrl.rejected, (state, action) => {
-        console.log("reject");
         state.getOAuthUrlLoading = false;
         state.getOAuthUrlError = action.error.message;
       })
@@ -185,71 +180,58 @@ const userSlice = createSlice({
       })
       // patchuserinfo
       .addCase(patchUserinfo.pending, (state) => {
-        console.log("pending");
         state.patchUserLoading = true;
         state.patchUserDone = false;
         state.patchUserError = null;
       })
       .addCase(patchUserinfo.fulfilled, (state, action) => {
-        console.log("fulfilled");
         state.patchUserLoading = false;
         state.patchUserDone = true;
         state.me = action.payload;
       })
       .addCase(patchUserinfo.rejected, (state, action) => {
-        console.log("reject", action.payload);
-
         state.patchUserLoading = false;
         state.patchUserError = action.payload;
       })
       // editPassword
       .addCase(editPassword.pending, (state) => {
-        console.log("pending");
         state.editPasswordLoading = true;
         state.editPasswordDone = false;
         state.editPasswordError = null;
       })
       .addCase(editPassword.fulfilled, (state) => {
-        console.log("fulfilled");
         state.editPasswordLoading = false;
         state.editPasswordDone = true;
       })
       .addCase(editPassword.rejected, (state) => {
-        console.log("reject");
         state.editPasswordLoading = false;
         state.editPasswordError = action.payload;
       })
       // userWithdrawals
       .addCase(userWithdrawals.pending, (state) => {
-        console.log("pending");
         state.userWithdrawalsLoading = true;
         state.userWithdrawalsDone = false;
         state.userWithdrawalsError = null;
       })
       .addCase(userWithdrawals.fulfilled, (state) => {
-        console.log("fulfilled");
         state.userWithdrawalsLoading = false;
         state.userWithdrawalsDone = true;
       })
       .addCase(userWithdrawals.rejected, (state, action) => {
-        console.log("reject");
         state.userWithdrawalsLoading = false;
         state.userWithdrawalsError = action;
       })
       // emailAuth
       .addCase(emailAuth.pending, (state) => {
-        console.log("pending");
         state.emailAuthLoading = true;
         state.emailAuthDone = false;
         state.emailAuthError = null;
       })
       .addCase(emailAuth.fulfilled, (state) => {
-        console.log("fulfilled");
         state.emailAuthLoading = false;
         state.emailAuthDone = true;
       })
       .addCase(emailAuth.rejected, (state, action) => {
-        console.log("reject");
         state.emailAuthLoading = false;
         state.emailAuthError = action;
       })
