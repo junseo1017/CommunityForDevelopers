@@ -123,7 +123,7 @@ const Answer = ({ answer }) => {
       )}
       <Collapse>
         <Collapse.Panel header="댓글 보기">
-          <Comments currentComments={answer.comments} contentId={answer._id} user={me} />
+          <Comments currentComments={answer.comments} contentId={answer._id} />
         </Collapse.Panel>
       </Collapse>
     </div>
