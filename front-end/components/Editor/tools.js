@@ -14,6 +14,7 @@ import Delimiter from "@editorjs/delimiter";
 import ImageTool from "@editorjs/image";
 import InlineCode from "@editorjs/inline-code";
 import SimpleImage from "@editorjs/simple-image";
+import SimpleLink from "./SimpleLink";
 
 const EDITOR_JS_TOOLS = {
   embed: {
@@ -47,12 +48,13 @@ const EDITOR_JS_TOOLS = {
       useDefaultTheme: "light", // Optional. This also determines the background color of the language select drop-down
     },
   },
-  linkTool: {
-    class: LinkTool,
-    config: {
-      endpoint: "http://localhost:8008/fetchUrl", // Your backend endpoint for url data fetching,
-    },
-  },
+  // linkTool: {
+  //   class: LinkTool,
+  //   config: {
+  //     endpoint: "http://localhost:5000//api/users", // Your backend endpoint for url data fetching,
+  //   },
+  // },
+  linkTool: SimpleLink,
   raw: Raw,
   header: {
     class: Header,
