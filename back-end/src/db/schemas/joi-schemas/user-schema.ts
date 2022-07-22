@@ -30,9 +30,9 @@ const userEmailJoi = Joi.object({
 
 const userUpdateInfoJoi = Joi.object({
   nickname: Joi.string().required(),
-  job: Joi.string().min(0),
-  skills: Joi.string().min(0),
-  imgUrl: Joi.string().min(0),
+  job: Joi.string().empty(""),
+  skills: Joi.string().empty(""),
+  imgUrl: Joi.string().empty(""),
 });
 
 const userUpdatePWJoi = Joi.object({

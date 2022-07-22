@@ -132,7 +132,8 @@ userRouter.put(
   validateRequestWith(userUpdateInfoJoi, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
-    const { nickname, job, imgUrl } = req.body;
+    const { nickname, job } = req.body;
+    const imgUrl = req.body?.imgUrl;
     const skills = req.body?.skills.split(",");
     const toUpdate = {
       nickname,
