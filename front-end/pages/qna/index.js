@@ -32,11 +32,5 @@ export async function getServerSideProps() {
         answers,
       },
     };
-  } catch (error) {
-    return {
-      redirect: {
-        destination: "/",
-      },
-    };
-  }
+  } catch (error) {}
 }
