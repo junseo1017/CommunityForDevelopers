@@ -45,7 +45,7 @@ class AuthService {
       grant_type: "authorization_code",
       client_id: process.env.KAKAO_CLIENT_ID || "",
       client_secret: process.env.KAKAO_CLIENT_SECRET || "",
-      redirect_uri: `http://${process.env.DOMAIN}/api/oauth/kakao/callback`,
+      redirect_uri: `http://${process.env.DOMAIN}:5000/api/oauth/kakao/callback`,
       code,
     };
     const params = new URLSearchParams(request).toString();
