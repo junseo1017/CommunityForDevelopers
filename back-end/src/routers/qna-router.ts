@@ -11,19 +11,15 @@ import {
 const qnaRouter = Router();
 
 // 1. 전체 QnA 조회
-qnaRouter.get(
-  "/",
-  validateRequestWith(qnaSearchJoi, "query"),
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const lastId = req.query.lastId as string;
-      const QnAs = await qnaService.getQnas(lastId);
-      res.status(200).json(QnAs);
-    } catch (error) {
-      next(error);
-    }
+qnaRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const page = parseInt(req.query.page as string);
+    const Questions = await qnaService.getQuestions(page);
+    res.status(200).json(Questions);
+  } catch (error) {
+    next(error);
   }
-);
+});
 // 2. QnA 조회
 qnaRouter.get(
   "/:qnaId",
