@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import SignInForm from "../../components/Sign/SignInForm";
 import LoginLogo from "../../components/Sign/LoginLogo";
-import { LoginPageContainer } from "./loginstyle";
+import { LoginPageContainer } from "../../styles/loginstyle";
 import OAuthSign from "../../components/Sign/OAuthSign";
 import { getGithubLoginUrl, getKakaoLoginUrl } from "../../actions/user";
 import { useSelector } from "react-redux";

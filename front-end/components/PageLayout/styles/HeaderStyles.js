@@ -39,7 +39,16 @@ export const HeaderContent = css`
     @media (max-width: 768px) {
       gap: 4vw;
     }
+    & div > a {
+      transition: 50ms;
+      color: rgb(80, 80, 80);
+      &:hover {
+        border-bottom: 3px black solid;
+        color: black;
+      }
+    }
   }
+
   & > nav > div {
     display: flex;
     flex-direction: row;
