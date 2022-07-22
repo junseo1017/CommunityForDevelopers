@@ -12,8 +12,7 @@
     "airbnb-base/rules/strict",
     "airbnb/rules/react",
     "plugin:prettier/recommended",
-    "next/babel",
-    "next/core-web-vitals"
+    "next"
   ],
   "env": {
     "browser": true,
