@@ -2,7 +2,7 @@
 import { portfolioStyle } from "./style/PortfolioCardStyle";
 import { Skeleton, Popover } from "antd";
 
-const SkeletonCard = ({ key }) => {
+const SkeletonCard = () => {
   const cardHeader = (
     <div style={{ cursor: "pointer" }}>
       <div>
@@ -29,7 +29,7 @@ const SkeletonCard = ({ key }) => {
   const cardAvatar = <Skeleton.Avatar active shape="circle" />;
 
   return (
-    <div id="check" css={portfolioStyle} key={key}>
+    <div id="check" css={portfolioStyle}>
       {cardHeader}
       <div>
         <div>
