@@ -21,6 +21,7 @@ import useConfirmModal from "../../../hooks/useConfirmModal";
 const QuestionDetail = ({ qna }) => {
   const router = useRouter();
 
+  console.log(qna);
   // 질문 답변 분류
   const question = qna.Question;
   const answers = qna.Answers;
@@ -93,11 +94,8 @@ const QuestionDetail = ({ qna }) => {
   };
 
   const handleOk = async () => {
-    setConfirmLoading(true);
-
     await handleDelete(question._id);
     setVisible(false);
-    setConfirmLoading(false);
     router.push(`/qna`);
   };
 
@@ -122,7 +120,8 @@ const QuestionDetail = ({ qna }) => {
             <button
               onClick={() => {
                 handleUpdate();
-              }}>
+              }}
+              disabled={isAnswerUpdateMode}>
               수정하기
             </button>
             <button
