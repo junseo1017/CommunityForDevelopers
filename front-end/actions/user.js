@@ -1,7 +1,6 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { backendUrl } from "../config/config";
-import { popUp } from "../components/Common/popupCenter";
 axios.defaults.baseURL = backendUrl;
 axios.defaults.withCredentials = true; // front, backend 간 쿠키공유
 
