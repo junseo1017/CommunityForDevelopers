@@ -55,7 +55,11 @@ function qnaSearchCondition(value: string, lastId: string) {
       $match: { _id: { $lt: id } },
     });
   }
-  condition.push({ $sort: { _id: -1 } }, { $limit: 8 });
+  condition.push(
+    { $match: { isAnswer: false } },
+    { $sort: { _id: -1 } },
+    { $limit: 8 }
+  );
   return condition;
 }
 
