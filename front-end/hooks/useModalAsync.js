@@ -14,14 +14,12 @@ const useModalAsync = (asyncCallback, modalDescription, next, dispatchFunc, imgF
     setConfirmLoading(true);
     try {
       const data = await asyncCallback();
-      console.log(data);
 
       // setTimeout(() => {
       setModalVisible(false);
       setConfirmLoading(false);
       if (dispatchFunc) {
         const response = dispatchFunc(data, imgFormData);
-        console.log(response);
       } else {
         return;
       }

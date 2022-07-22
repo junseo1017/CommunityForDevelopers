@@ -11,12 +11,10 @@ const useConfirmModal = ({ okFunc, cancleFunc, message }) => {
       content: message.description,
 
       onOk() {
-        console.log("OK");
         okFunc();
       },
 
       onCancel() {
-        console.log("Cancel");
         if (cancleFunc) cancleFunc();
       },
     });
