@@ -14,7 +14,7 @@ import axios from "axios";
 import { myinfo } from "../actions/user";
 import useDidMountEffect from "../hooks/useDidMountEffect";
 import { throttle, debounce } from "lodash";
-import SkeletonCard from "../components/Common/skeletonCard";
+import SkeletonCard from "../components/Common/SkeletonCard";
 import { useRouter } from "next/router";
 
 const Home = () => {
