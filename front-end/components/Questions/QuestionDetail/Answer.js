@@ -3,7 +3,7 @@ import { css, jsx } from "@emotion/react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Comments from "./Comments";
-import { Divider, Collapse } from "antd";
+import { Divider, Collapse, Modal } from "antd";
 import { MessageOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { DetailAnswerContainer } from "../styles/QuestionStyle";
 import Like from "../Like";
@@ -13,8 +13,6 @@ import axios from "axios";
 
 const Answer = ({ answer }) => {
   const { me } = useSelector((state) => state.user);
-  console.log("answer me", me);
-  console.log("answer answer", answer);
 
   const [recommendData, setRecommendData] = useState({
     isRecommended: false,
@@ -27,6 +25,7 @@ const Answer = ({ answer }) => {
   const initialLoginState = me._id === answer.authorId;
 
   const [isChanged, setIsChanged] = useState(false);
+  const [deleteId, setDeleteId] = useState("");
 
   useEffect(() => {
     const getData = async () => {
@@ -50,12 +49,30 @@ const Answer = ({ answer }) => {
   const [isAnswerUpdateMode, setIsAnswerUpdateMode] = useState(false);
 
   // 답변 삭제하기
-  const handleDelete = async (deleteId) => {
+  const handleDelete = (id) => {
+    setVisible(true);
+    setDeleteId(id);
+  };
+
+  const [visible, setVisible] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState("삭제하면 다시 복구할 수 없습니다.");
+
+  const handleOk = async () => {
+    setModalText("답변을 삭제하겠습니다.");
+    setConfirmLoading(true);
     try {
-      await axios.delete(`/api/qnas/${deleteId}`);
+      const response = await axios.delete(`/api/qnas/${deleteId}`);
+      console.log("이승기 - 삭제", response);
+      setConfirmLoading(false);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setVisible(false);
   };
 
   // 답변 수정하기
@@ -63,49 +80,46 @@ const Answer = ({ answer }) => {
     setIsAnswerUpdateMode(!isAnswerUpdateMode);
   };
 
-  console.log("recommendData", recommendData);
-  console.log("answer.comments", answer.comments);
-
   return (
     <div css={DetailAnswerContainer} key={answer._id}>
       <Divider plain />
+      <Modal
+        title="답변을 삭제하시겠습니까?"
+        visible={visible}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}>
+        <p>{modalText}</p>
+      </Modal>
       <div className="answer-title">
-        <MessageOutlined style={{ fontSize: "2em" }} />
-        <h2>{answer.title}</h2>
         <Like
           className="answer-like"
           qnaId={answer._id}
           recommendData={recommendData}
           setIsChanged={setIsChanged}
         />
+        <h2>{answer.title}</h2>
         {isAuthor && (
-          <div className="answer-mode">
-            <EditOutlined
-              style={{ fontSize: "2em" }}
+          <div className="button-wrapper">
+            <button
               onClick={() => {
                 handleUpdate();
-              }}
-            />
-            <DeleteOutlined
-              style={{ fontSize: "2em" }}
+              }}>
+              수정
+            </button>
+            <button
               onClick={() => {
                 handleDelete(answer._id);
-              }}
-            />
+              }}>
+              삭제
+            </button>
           </div>
         )}
       </div>
-      {/* {answer.recommends &&
-        answer.recommends.map((user) => <div key={user._id}>{user.nickname}</div>)} */}
       {!isAnswerUpdateMode ? (
         <Output data={JSON.parse(answer.contents)} />
       ) : (
-        <AddEditor
-          data={JSON.parse(answer.contents)}
-          isAnswer={true}
-          qnaId={answer._id}
-          isUpdate={true}
-        />
+        <AddEditor data={answer.contents} isAnswer={true} qnaId={answer._id} isUpdate={true} />
       )}
       <Collapse>
         <Collapse.Panel header="댓글 보기">

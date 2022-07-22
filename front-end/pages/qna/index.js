@@ -21,7 +21,7 @@ export default questions;
 
 export async function getServerSideProps() {
   try {
-    const response = await axios.get("/api/qnas");
+    const response = await axios.get("/api/search/qnas?value=");
     const qnas = response.data;
     const questions = qnas.filter((qna) => !qna.isAnswer);
     const answers = qnas.filter((qna) => qna.isAnswer);
