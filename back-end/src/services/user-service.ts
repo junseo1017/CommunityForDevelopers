@@ -6,7 +6,11 @@ import {
   QnaModel,
   qnaModel,
 } from "../db";
-import { InputDTO, UpdateInfo, LoginInfo } from "../interfaces/user-interface";
+import {
+  UserInputDTO,
+  UserUpdateInfo,
+  LoginInfo,
+} from "../interfaces/user-interface";
 import bcrypt from "bcrypt";
 import { jwtUtil } from "../utils/jwt-util";
 import { AppError } from "../middlewares/error-handler";
@@ -25,7 +29,7 @@ class UserService {
     this.qnaModel = qnaModel;
   }
 
-  async addUser(userInfo: InputDTO) {
+  async addUser(userInfo: UserInputDTO) {
     const { nickname, email, password } = userInfo;
 
     const user = await this.userModel.findByEmail(email);
@@ -116,7 +120,7 @@ class UserService {
   }
 
   // 회원 정보 수정
-  async setUser(userId: string, toUpdate: UpdateInfo) {
+  async setUser(userId: string, toUpdate: UserUpdateInfo) {
     const userInfo = await this.userModel.update(userId, toUpdate);
 
     if (!userInfo) {
