@@ -52,8 +52,6 @@ const Portfolio = () => {
   const liked = singlePortfolio?.recommends?.find((v) => v === me?._id);
   const scrapped = singlePortfolio?.scraps?.find((v) => v === me?._id);
 
-  console.log(singlePortfolio);
-
   const redirectLogin = useCallback(() => {
     Router.push("/login");
   }, []);
