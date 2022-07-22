@@ -109,7 +109,7 @@ portfolioRouter.put(
   loginRequired,
   upload,
   checkImage,
-  validateRequestWith(portfolioUpdateQueryJoi, "body"),
+  validateRequestWith(portfolioUpdateQueryJoi, "query"),
   validateRequestWith(portfolioUpdateJoi, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const portId = req.params.portId;
