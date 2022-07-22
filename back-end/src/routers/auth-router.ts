@@ -48,7 +48,7 @@ authRouter.get(
         signed: true,
       });
 
-      res.redirect(`http://${process.env.DOMAIN}`);
+      res.redirect("http://kdt-sw2-seoul-team06.elicecoding.com");
     } catch (error) {
       next(error);
     }
@@ -99,7 +99,7 @@ authRouter.get(
         signed: true,
       });
 
-      res.redirect(`http://${process.env.DOMAIN}`);
+      res.redirect("http://kdt-sw2-seoul-team06.elicecoding.com");
     } catch (error) {
       next(error);
     }
