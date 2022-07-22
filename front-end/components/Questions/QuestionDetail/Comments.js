@@ -118,7 +118,6 @@ const Comments = ({ contentId, currentComments }) => {
     try {
       const response = await axios.delete(`api/comments/${id}`);
       console.log(response);
-      Router.reload();
     } catch (error) {
       console.log(error);
     }

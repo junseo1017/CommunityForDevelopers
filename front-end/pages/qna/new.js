@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import useConfirmModal from "../../hooks/useConfirmModal";
 import wrapper from "../../store";
 import axios from "axios";
+import { myinfo } from "../../actions/user";
 
 const newQuestion = ({ error }) => {
   const redirectLogin = useCallback(() => {
@@ -73,5 +74,5 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
       props: { error: "You are not authanticated" },
     };
   }
-  // await store.dispatch(myinfo());
+  await store.dispatch(myinfo());
 });

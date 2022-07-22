@@ -31,6 +31,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   if (req && cookie) {
     axios.defaults.headers.Cookie = cookie;
   }
+
   await store.dispatch(myinfo());
 
   try {
