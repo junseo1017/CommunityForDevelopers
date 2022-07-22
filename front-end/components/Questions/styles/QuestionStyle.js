@@ -168,6 +168,7 @@ export const DetailQuestionContainer = css`
     margin: 0.5em 0;
 
     & button {
+      height: 3em;
       padding: 0 1.5em;
       border: none;
       border-radius: 5px;
@@ -175,6 +176,7 @@ export const DetailQuestionContainer = css`
       font-size: 1em;
       font-weight: bold;
       color: #fff;
+      align-self: flex-end;
 
       &:hover {
         box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
@@ -208,6 +210,28 @@ export const DetailAnswerContainer = css`
       margin: 0;
     }
 
+    & div.button-wrapper {
+      width: auto;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      & button {
+        width: 3em;
+        margin: 0;
+        padding: 0.25em;
+        background-color: #ffffff;
+        border: none;
+        color: rgba(120, 120, 120);
+        font-size: 0.9em;
+
+        &:hover {
+          color: #000;
+          font-weight: bold;
+        }
+      }
+    }
+
     & div.answer-mode {
       display: flex;
       gap: 1em;
@@ -220,6 +244,12 @@ export const DetailAnswerContainer = css`
 
   & div.badge-container {
     justify-content: flex-end;
+  }
+
+  & span.ant-badge {
+    &:hover {
+      color: #1890ff;
+    }
   }
 `;
 
