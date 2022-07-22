@@ -13,6 +13,52 @@
 - QnA게시판을 이용하여 다른 개발자들과 질의응답을 할 수 있습니다.
 <br /><br />
 
+## :memo: 디렉토리 구조
+```
+community-for-developers
+├─ back-end
+│  ├─ src
+│  │  ├─ db
+|  |  |  ├─ models
+│  │  │  └─ schemas
+|  |  |     └─ joi-schemas
+│  │  |
+│  │  ├─ interfaces
+│  │  ├─ middlewares
+│  │  ├─ routers
+│  │  ├─ services
+│  │  └─ utils
+│  │
+├─ front-end
+│  ├─ .swc\plugins\v2
+│  ├─ actions
+│  ├─ components
+│  │  ├─ Common
+│  │  ├─ CreatePortfolio
+│  │  ├─ Editor
+│  │  ├─ PageLayout
+│  │  ├─ Portfolo
+│  │  ├─ Questions
+│  │  ├─ Sign
+│  │  └─ UserProfile
+│  │
+│  ├─ config
+│  ├─ hooks
+│  ├─ pages
+│  │  ├─ login
+│  │  ├─ portfolio
+│  │  ├─ profile
+│  │  ├─ qna
+│  │  └─ signup
+│  │
+│  ├─ public
+│  │  └─ images
+│  │
+│  ├─ reducers
+│  ├─ store
+│  └─ styles
+```
+
 ## :memo: 기능 및 구현 상세
 ```
 - 유저
@@ -52,21 +98,24 @@
 - **Front-End**
     - Next JS
     - Redux Toolkit
-    - Editor.js
+    - CSS AntDesign/Emotions
 - **Back-End**
-    - Typescript
-    - Multer & Firebase storage
+    - Express/Typescript
+    - MongoDB
+    - Firebase
 
-## 시연
+
 ## 결과물
+- 사진첨부예정
 
 ## 링크 (api 혹은 회의록 같은거?)
+
 
 ## :memo: 팀원 및 역할
 | 이름 | 포지션 | 업무 |
 | ------ | ------ | ------ |
-| 이준서 | FE | 
-| 지의신 | FE |
-| 이형민 | FE |
-| 김태준 | BE |
-| 김용민 | BE |
+| 이준서 | FE | ------ |
+| 지의신 | FE | ------ |
+| 이형민 | FE | ------ |
+| 김태준 | BE | ------ |
+| 김용민 | BE | ------ |
