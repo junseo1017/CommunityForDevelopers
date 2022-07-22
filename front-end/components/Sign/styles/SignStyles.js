@@ -68,7 +68,7 @@ export const OAuthStyle = css`
     padding: 0 !important;
   }
   & > h2 {
-    font-size: 14px;
+    font-size: 14px !important;
     text-align: center;
     margin: 0;
   }
