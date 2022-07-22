@@ -18,8 +18,9 @@ import axios from "axios";
 import { myinfo } from "../actions/user";
 import useDidMountEffect from "../hooks/useDidMountEffect";
 import { throttle, debounce } from "lodash";
-
+import { useRouter } from "next/router";
 const Home = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const { me } = useSelector((state) => state.user);
@@ -27,14 +28,11 @@ const Home = () => {
   const { mainPortfolios, hasMorePortfolios, loadPortfoliosLoading } = useSelector(
     (state) => state.portfolio,
   );
+
   console.log(mainPortfolios);
   const [query, setQuery] = useState();
   const setSearchQuery = useCallback((q) => {
     setQuery(q);
-  }, []);
-
-  useEffect(() => {
-    console.log("hihi");
   }, []);
 
   useEffect(() => {
