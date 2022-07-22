@@ -50,7 +50,6 @@ const ProfileCard = () => {
             <p>{count && count.answerCount}</p>
           </li>
         </ul>
-        <div></div>
       </section>
     </Card>
   );

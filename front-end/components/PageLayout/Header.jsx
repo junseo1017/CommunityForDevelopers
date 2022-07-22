@@ -5,17 +5,7 @@ import LoggedinMenu from "./LoggedinMenu";
 import { HeaderContainer, HeaderContent } from "./styles/HeaderStyles";
 import Logo from "./Logo";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 const Header = () => {
-  const router = useRouter();
-
-  useEffect(() => {
-    if (router.pathname === "/") {
-    }
-    if (router.pathname === "/qna") {
-    }
-  }, [router.pathname]);
   return (
     <header css={HeaderContainer}>
       <div>
