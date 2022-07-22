@@ -55,37 +55,48 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
     const contentText = filteredBlocks.map((block) => block.text).join(" ");
 
     // 에디터의 컨텐츠를 가져와 서버에 저장하기
-    if (isUpdate) {
-      try {
-        await axios.put(`/api/qnas/${qnaId}`, {
-          contents: JSON.stringify(savedData),
-          contentText,
-        });
 
-        setIsChanged(true);
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      try {
-        await axios.post("/api/qnas", {
-          title,
-          contents: JSON.stringify(savedData),
-          contentText,
-          isAnswer,
-          parentQnaId,
-          tags,
-        });
+    try {
+      await axios.post("/api/qnas", {
+        title,
+        contents: JSON.stringify(savedData),
+        contentText,
+        isAnswer,
+        parentQnaId,
+        tags,
+      });
 
-        // 서버에서 사용하지 않는 이미지 제거하기
-        await clearEditorLeftoverImages();
+      // 서버에서 사용하지 않는 이미지 제거하기
+      await clearEditorLeftoverImages();
 
-        // 서버에 질문 저장하기
+      // 서버에 질문 저장하기
 
-        setIsChanged(true);
-      } catch (e) {
-        console.log(e);
-      }
+      setIsChanged(true);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const updateQna = async () => {
+    const savedData = await editorCore.current.save();
+    console.log(savedData);
+    const filteredBlocks = savedData.blocks.map(({ type, data }) => {
+      return type === "paragraph" || type === "header" ? data : "";
+    });
+
+    const contentText = filteredBlocks.map((block) => block.text).join(" ");
+
+    // 에디터의 컨텐츠를 가져와 서버에 저장하기
+    try {
+      await axios.put(`/api/qnas/${qnaId}`, {
+        contents: JSON.stringify(savedData),
+        contentText,
+        isAnswer,
+      });
+
+      setIsChanged(true);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -115,7 +126,7 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
   };
   const [visible, setVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState("작성한 질문을 저장하시겠습니까?");
+  const [modalText, setModalText] = useState("작성한 질문 혹은 답변을 저장하시겠습니까?");
 
   const showModal = () => {
     setVisible(true);
@@ -124,7 +135,7 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
   const handleOk = async () => {
     setConfirmLoading(true);
 
-    await saveQna();
+    isUpdate ? await updateQna() : await saveQna();
     setVisible(false);
     setConfirmLoading(false);
     router.push(`/qna`);
