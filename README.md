@@ -1,38 +1,72 @@
-![CFD](https://firebasestorage.googleapis.com/v0/b/elice-cfd-253f0.appspot.com/o/images%2Fteam6.jpg?alt=media&token=a9370269-cd13-4463-b0b3-298e7b9ca88a)
+<p><img src="https://firebasestorage.googleapis.com/v0/b/elice-cfd-253f0.appspot.com/o/images%2Fteam6.jpg?alt=media&token=a9370269-cd13-4463-b0b3-298e7b9ca88a" width="1000px" /></p>
 ![license](https://img.shields.io/badge/license-CFD-blue)
 
 
 # :computer: Community For Developers
 
-**개발자를 위한 커뮤니티 서비스 입니다.**
+**개발자를 위한 커뮤니티 입니다.**
+<br /><br />
+
+## :memo: 서비스 소개
+- 개발자를 위한 커뮤니티 플랫폼입니다.
 - 포트폴리오를 작성하고 공유하며 자신을 어필할 수 있습니다.
 - QnA게시판을 이용하여 다른 개발자들과 질의응답을 할 수 있습니다.
+<br /><br />
 
-## 서비스
-
+## :memo: 기능 및 구현 상세
 ```
-- 
+- 유저
+    - 회원가입
+        - 소셜 로그인 -> Oauth [Github,Kakao]
+        - 이메일 인증 -> Nodemailer [Gmail SMTP]
+    - 로그인
+        - access token, refresh token [Jwt]
+        - Cookie
+    - 로그아웃
+    - 회원정보 수정
+    - 회원탈퇴
+        - soft delete
+    - 프로필 조회
+    - 작성한 포트폴리오 조회
+    - 스크랩한 포트폴리오 조회
+    - 질문 글 조회
+    - 답변 글 조회
+- 포트폴리오
+    - 포트폴리오 조회
+        - infinite scroll
+    - 포트폴리오 작성
+      포트폴리오 수정
+        - editor.js
+        - 이미지 업로드 -> Multer & Firebase storage
+    - 포트폴리오 삭제
+- QnA
+    - QnA 작성
+      QnA 수정
+        - editor.js
+        - 이미지 업로드 -> Multer & Firebase storage
+    - QnA 삭제
 ```
+<br />
 
-## Usage
+## :memo: 기술 스택
+- **Front-End**
+    - Next JS
+    - Redux Toolkit
+    - Editor.js
+- **Back-End**
+    - Typescript
+    - Multer & Firebase storage
 
-```python
-import foobar
+## 시연
+## 결과물
 
-# returns 'words'
-foobar.pluralize('word')
+## 링크 (api 혹은 회의록 같은거?)
 
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
-```
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
+## :memo: 팀원 및 역할
+| 이름 | 포지션 | 업무 |
+| ------ | ------ | ------ |
+| 이준서 | FE | 
+| 지의신 | FE |
+| 이형민 | FE |
+| 김태준 | BE |
+| 김용민 | BE |
