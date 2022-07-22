@@ -31,7 +31,6 @@ const Home = () => {
     setQuery(q);
   }, []);
 
-  console.log("index");
   const loadScrollQuery = debounce((newQuery) => {
     dispatch(
       loadPortfoliosSearchScroll({
