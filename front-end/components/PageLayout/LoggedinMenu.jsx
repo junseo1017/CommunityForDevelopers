@@ -4,12 +4,18 @@ import { useState, useEffect } from "react";
 import { message } from "antd";
 import { logout } from "../../actions/user";
 import { useRouter } from "next/router";
+import { myinfo } from '../../actions/user';
+
 const LoggedinMenu = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [action, setAction] = useState(false);
   const { me, logoutError, logoutDone } = useSelector((state) => state.user);
 
+  console.log(me);
+  useEffect(() => {
+    dispatch(myinfo());
+  }, [router.pathname]);
   // 로그아웃 알림
   useEffect(() => {
     if (!action) return;
