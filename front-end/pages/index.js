@@ -74,6 +74,14 @@ const Home = () => {
     };
   }, [hasMorePortfolios, loadPortfoliosLoading, mainPortfolios]);
 
+  useEffect(() => {
+    dispatch(
+      loadPortfoliosSearch({
+        query: "?page=1",
+      }),
+    );
+  }, []);
+
   useDidMountEffect(() => {
     dispatch(
       loadPortfoliosSearch({
