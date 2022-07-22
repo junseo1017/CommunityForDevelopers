@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 import Router, { useRouter } from "next/router";
 import TopButton from "../TopButton";
-import { Button, Badge, Tag, Divider, Collapse, Input } from "antd";
+import { Button, Modal, Tag, Divider, Collapse, Input } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import {
   DetailContainer,
@@ -16,6 +16,7 @@ import Answers from "./Answers";
 import Output from "editorjs-react-renderer";
 import axios from "axios";
 import moment from "moment";
+import useConfirmModal from "../../../hooks/useConfirmModal";
 
 const QuestionDetail = ({ qna }) => {
   const router = useRouter();
@@ -59,39 +60,94 @@ const QuestionDetail = ({ qna }) => {
   const handleScroll = () =>
     EditorRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
 
+  // 비로그인 시 모달로 돌려보내
+  const redirectLogin = useCallback(() => {
+    Router.push("/login");
+  }, []);
+
+  const redirectHome = useCallback(() => {
+    Router.push("/");
+  }, []);
+
+  const modalMessage = useMemo(
+    () => ({
+      title: "로그인이 필요한 서비스입니다.",
+      description: "로그인 하시겠습니까? 취소를 누르시면 홈으로 이동합니다.",
+    }),
+    [],
+  );
+
+  const [showConfirm] = useConfirmModal({
+    okFunc: redirectLogin,
+    cancleFunc: redirectHome,
+    message: modalMessage,
+  });
+
+  // 모달 처리
+  const [visible, setVisible] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState("질문을 삭제하시겠습니까?");
+
+  const showModal = () => {
+    setVisible(true);
+  };
+
+  const handleOk = async () => {
+    setConfirmLoading(true);
+
+    await handleDelete(question._id);
+    setVisible(false);
+    setConfirmLoading(false);
+    router.push(`/qna`);
+  };
+
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setVisible(false);
+  };
+
   return (
     <div css={DetailContainer}>
       <div css={DetailQuestionContainer}>
-        <h1>{question.title}</h1>
+        <Modal
+          title="수정, 삭제"
+          visible={visible}
+          onOk={handleOk}
+          confirmLoading={confirmLoading}
+          onCancel={handleCancel}>
+          <p>{modalText}</p>
+        </Modal>
         {isAuthor && (
-          <div>
-            <EditOutlined
-              style={{ fontSize: "2em" }}
+          <div className="button-wrapper">
+            <button
               onClick={() => {
                 handleUpdate();
-              }}
-            />
-            <DeleteOutlined
-              style={{ fontSize: "2em" }}
+              }}>
+              수정하기
+            </button>
+            <button
               onClick={() => {
-                handleDelete(question._id);
-              }}
-            />
+                showModal();
+              }}>
+              삭제하기
+            </button>
           </div>
         )}
+        <h1>{question.title}</h1>
         <div className="tag-container">
           {question.tags.map((tag, index) => (
             <Tag key={index}>{tag}</Tag>
           ))}
-          <p>질문자: {question.author.nickname}</p>
-          <p>질문일: {moment(question.createdAt).format("YYYY월 MM월 DD일")}</p>
-          <p>최근 수정일: {moment(question.updatedAt).format("YYYY월 MM월 DD일")}</p>
         </div>
-        <div>
-          <Button
-            size="large"
-            type="primary"
+        <div className="info-container">
+          <div className="info-box">
+            <p>질문자: {question.author}</p>
+            <p>질문일: {moment(question.createdAt).format("YYYY월 MM월 DD일")}</p>
+            <p>최근 수정일: {moment(question.updatedAt).format("YYYY월 MM월 DD일")}</p>
+          </div>
+          <button
             onClick={() => {
+              if (me === undefined) showConfirm();
               isAnswerCreateMode
                 ? (EditorRef.current.style.display = "none")
                 : (EditorRef.current.style.display = "flex");
@@ -99,12 +155,14 @@ const QuestionDetail = ({ qna }) => {
               handleScroll();
             }}>
             답변하기
-          </Button>
+          </button>
         </div>
-        <Divider plain />
-        {!isAnswerUpdateMode ? (
-          <Output data={JSON.parse(question.contents)} />
-        ) : (
+      </div>
+      <Divider plain />
+      {!isAnswerUpdateMode ? (
+        <Output data={JSON.parse(question.contents)} />
+      ) : (
+        <div className="answer-editor">
           <AddEditor
             data={JSON.parse(question.contents)}
             title={answerTitle}
@@ -112,16 +170,16 @@ const QuestionDetail = ({ qna }) => {
             qnaId={question._id}
             isUpdate={true}
           />
-        )}
-        <div ref={EditorRef} css={AnswerEditorContainer}>
-          <h2>답변하기</h2>
-          <Input
-            size="large"
-            placeholder="답변의 제목을 작성하세요"
-            onChange={(e) => setAnswerTItle(e.target.value)}
-          />
-          <AddEditor title={answerTitle} isAnswer parentQnaId={question._id} />
         </div>
+      )}
+      <div ref={EditorRef} css={AnswerEditorContainer}>
+        <h2>답변하기</h2>
+        <Input
+          size="large"
+          placeholder="답변의 제목을 작성하세요"
+          onChange={(e) => setAnswerTItle(e.target.value)}
+        />
+        <AddEditor title={answerTitle} isAnswer parentQnaId={question._id} />
       </div>
       <Answers answers={answers} />
       <TopButton />

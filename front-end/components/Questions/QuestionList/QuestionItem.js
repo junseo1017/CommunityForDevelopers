@@ -7,7 +7,7 @@ import { TitleContainer, DescriptionContainer } from "../styles/QuestionStyle";
 import Link from "next/link";
 
 const QuestionItem = ({ question, answers }) => {
-  console.log("question", question);
+  // console.log("question", question);
 
   const parsedContents = JSON.parse(question.contents);
 
@@ -21,7 +21,7 @@ const QuestionItem = ({ question, answers }) => {
 
   // answers = answers.filter((answer) => answer.parentQnaId === _id);
 
-  console.log(answers);
+  // console.log(answers);
 
   return (
     <div key={question._id}>

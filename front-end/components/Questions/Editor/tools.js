@@ -26,7 +26,7 @@ const EDITOR_JS_TOOLS = {
       },
     },
   },
-  simpleImage: SimpleImage,
+  // simpleImage: SimpleImage,
   table: Table,
   marker: Marker,
   list: {
@@ -47,13 +47,13 @@ const EDITOR_JS_TOOLS = {
       useDefaultTheme: "light", // Optional. This also determines the background color of the language select drop-down
     },
   },
-  linkTool: {
-    class: LinkTool,
-    config: {
-      endpoint: "http://localhost:8008/fetchUrl", // Your backend endpoint for url data fetching,
-    },
-  },
-  raw: Raw,
+  // linkTool: {
+  //   class: LinkTool,
+  //   config: {
+  //     endpoint: "http://localhost:8008/fetchUrl", // Your backend endpoint for url data fetching,
+  //   },
+  // },
+  // raw: Raw,
   header: {
     class: Header,
     shortcut: "CMD+SHIFT+H",
