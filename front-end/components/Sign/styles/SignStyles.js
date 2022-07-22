@@ -151,8 +151,8 @@ export const SignUpContentStyle = css`
     margin: 5px 0;
     border: 1px solid rgb(219, 219, 219);
     transition: 100ms linear;
+    padding-left: 10px;
     ::placeholder {
-      padding-left: 10px;
       font-weight: 500;
       @media (max-width: 768px) {
         font-size: 12px;
