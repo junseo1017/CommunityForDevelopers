@@ -3,10 +3,6 @@ import { css, jsx } from "@emotion/react";
 import AddButton from "./AddButton";
 import MenuButton from "./MenuButton";
 import { HeaderContainer, HeaderContent } from "./styles/HeaderStyles";
-<<<<<<< HEAD
-=======
-
->>>>>>> 7b335eea9d02e230c0d2a05a464e1a69bcde3ead
 import Logo from "./Logo";
 import Link from "next/link";
 
