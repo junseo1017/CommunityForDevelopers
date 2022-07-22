@@ -4,38 +4,50 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Divider } from "antd";
 import { SearchBarContainer, ColFlexBox } from "../styles/QuestionStyle";
 import axios, { Axios } from "axios";
-import { useInView } from "react-intersection-observer";
 import QuestionItem from "./QuestionItem";
 import TopButton from "../TopButton";
 import { throttle, debounce } from "lodash";
 
-const c = (word) => {
-  console.log(`"${word}", ${word}`);
-};
-
 const Questions = ({ questions, answers }) => {
-  const [questionsList, setQuestionsList] = useState(questions); // 불러온 데이터
+  const [questionsList, setQuestionsList] = useState([]); // 불러온 데이터
   console.log(questionsList);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState(""); // 유저가 입력한 검색어
 
-  c(value);
+  console.log(value);
 
-  const getQnaData = async (page) => {
-    try {
-      const response = axios.get(`/api/search/qnas?value=${value}&page=${page}`);
-      setQuestionsList([...questionsList, ...response.data]);
-      c(response);
-      setLoading(true);
-    } catch (error) {
-      console.log(error);
+  const getQnaData = async (value, page = 1) => {
+    if (value) {
+      try {
+        console.log(`/api/search/qnas?value=${value}&page=${page}`);
+        const response = await axios.get(`/api/search/qnas?value=${value}&page=${page}`);
+        console.log(response);
+        setQuestionsList([...response.data]);
+        setLoading(true);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      try {
+        console.log(`/api/search/qnas?value=${value}&page=${page}`);
+        const response = await axios.get(`/api/search/qnas?value=${value}&page=${page}`);
+        console.log(response);
+        setQuestionsList([...questionsList, ...response.data]);
+        setLoading(true);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
   useEffect(() => {
-    getQnaData(page);
-  }, [page]);
+    if (value === "") {
+      getQnaData(value, page);
+    } else {
+      getQnaData(value, page);
+    }
+  }, [page, value]);
 
   const loadMoreQnaData = () => setPage((prev) => prev + 1);
 
@@ -44,14 +56,13 @@ const Questions = ({ questions, answers }) => {
   let limit = 1;
   useEffect(() => {
     if (loading) {
-      //로딩되었을 때만 실행
       const observer = new IntersectionObserver(
         (entries) => {
           console.log(entries[0]);
           if (entries[0].isIntersecting) {
             limit++;
             loadMoreQnaData();
-            if (limit >= 5) observer.unobserve(target.current);
+            if (limit >= 10) observer.unobserve(target.current);
           }
         },
         { threshold: 1 },
