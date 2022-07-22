@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { message } from "antd";
 import { logout } from "../../actions/user";
 import { useRouter } from "next/router";
+import { myinfo } from '../../actions/user';
+
 const LoggedinMenu = () => {
   const router = useRouter();
   const dispatch = useDispatch();
