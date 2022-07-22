@@ -332,23 +332,46 @@ export const EditorContainer = css`
   border-radius: 4px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 
-  & > h2 {
+  & > h1 {
     color: #1890ff;
     font-weight: bold;
   }
 
   & > input.ant-input-lg {
-    width: 50vw;
+    width: 100%;
   }
 
-  & > span,
-  input.ant-input-sm {
-    width: 7em;
+  & span.ant-tag {
+    align-self: flex-end;
+    margin: 0;
+  }
+
+  & > input.ant-input.ant-input-sm {
+    width: 30%;
+    align-self: flex-end;
+    margin: 0;
+  }
+
+  & > div.tags-container {
+    display: flex;
+    flex-direction: row;
+    gap: 0.25em;
+    align-self: flex-end;
+
+    & span.ant-tag.tags-input {
+      margin: 0;
+    }
   }
 
   & div.editor-container {
-    width: 75%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
     margin: 0 auto;
+
+    & button {
+      align-self: end;
+    }
   }
 
   & div.codex-editor--narrow {
@@ -365,10 +388,6 @@ export const EditorContainer = css`
       width: 2em;
       height: 2em;
     }
-  }
-
-  & button {
-    align-self: end;
   }
 
   @media (max-width: 768px) {

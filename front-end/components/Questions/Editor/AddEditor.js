@@ -2,10 +2,10 @@
 import { css, jsx } from "@emotion/react";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
-import { Button } from "antd";
+import { Button, Modal } from "antd";
 import { EditorContainer } from "../styles/QuestionStyle";
 import axios from "axios";
-import { useRouter } from "next/router";
+import router from "next/router";
 import ModalAsync from "../../Common/ModalAsync";
 import useModalAsync from "../../../hooks/useModalAsync";
 
@@ -113,14 +113,41 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
       }
     }
   };
+  const [visible, setVisible] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState("작성한 질문을 저장하시겠습니까?");
+
+  const showModal = () => {
+    setVisible(true);
+  };
+
+  const handleOk = async () => {
+    setConfirmLoading(true);
+
+    await saveQna();
+    setVisible(false);
+    setConfirmLoading(false);
+    router.push(`/qna`);
+  };
+
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setVisible(false);
+  };
 
   return (
     <div className="editor-container">
+      <Modal
+        title="저장하시겠습니까?"
+        visible={visible}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}>
+        <p>{modalText}</p>
+      </Modal>
       <Button
         onClick={() => {
-          saveQna(qnaId);
-          // ModalAsync();
-          // router.push(`/qna/${router.query._id}`);
+          showModal();
         }}>
         저장하기
       </Button>
