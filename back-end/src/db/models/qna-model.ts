@@ -6,15 +6,10 @@ import { qnaSearchCondition } from "../../utils/search-condition";
 const Qna = model<QnaType & Document>("qnas", QnaSchema);
 
 export class QnaModel {
-  async findQnasInit() {
-    return await Qna.find({ isAnswer: false }).sort({ _id: -1 }).limit(8);
-  }
-
-  async findQnas(lastId: string) {
-    const id = new Types.ObjectId(lastId);
-    return await Qna.find({ _id: { $lt: id }, isAnswer: false })
+  async findQuestions(page: number) {
+    return await Qna.find({ isAnswer: false })
       .sort({ _id: -1 })
-      .limit(8);
+      .skip((page - 1) * 8);
   }
 
   async findById(qnaId: string) {
@@ -53,8 +48,8 @@ export class QnaModel {
     return await Qna.find({ authorId: userId });
   }
 
-  async findBySearch(value: string, lastId: string) {
-    const searchCondition = qnaSearchCondition(value, lastId);
+  async findBySearch(value: string, page: number) {
+    const searchCondition = qnaSearchCondition(value, page);
     return await Qna.aggregate(searchCondition);
   }
 

@@ -36,7 +36,7 @@ function getSearchCondition(searchInfo: SearchInfo, page: number) {
   return condition;
 }
 
-function qnaSearchCondition(value: string, lastId: string) {
+function qnaSearchCondition(value: string, page: number) {
   const condition: Array<any> = [];
   if (value) {
     condition.push({
@@ -49,15 +49,10 @@ function qnaSearchCondition(value: string, lastId: string) {
       },
     });
   }
-  if (lastId) {
-    const id = new Types.ObjectId(lastId);
-    condition.push({
-      $match: { _id: { $lt: id } },
-    });
-  }
   condition.push(
     { $match: { isAnswer: false } },
     { $sort: { _id: -1 } },
+    { $skip: (page - 1) * 8 },
     { $limit: 8 }
   );
   return condition;

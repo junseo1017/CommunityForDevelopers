@@ -30,15 +30,8 @@ class QnaService {
     return await this.qnaModel.create(newQnaInfo);
   }
 
-  async getQnas(lastId?: string) {
-    if (lastId) {
-      const QnAs = await this.qnaModel.findQnas(lastId);
-      if (!QnAs) {
-        throw new AppError(400, "QnA 정보가 없습니다.");
-      }
-      return QnAs;
-    }
-    const QnAs = await this.qnaModel.findQnasInit();
+  async getQuestions(page: number) {
+    const QnAs = await this.qnaModel.findQuestions(page);
     if (!QnAs) {
       throw new AppError(400, "QnA 정보가 없습니다.");
     }
@@ -65,8 +58,8 @@ class QnaService {
     return await this.qnaModel.findAnswerById(qnaId);
   }
 
-  async getQnasBySearch(value: string, lastId: string) {
-    const QnAs = await this.qnaModel.findBySearch(value, lastId);
+  async getQnasBySearch(value: string, page: number) {
+    const QnAs = await this.qnaModel.findBySearch(value, page);
     if (!QnAs) {
       throw new AppError(400, "검색 과정에서 문제가 발생하였습니다.");
     }
