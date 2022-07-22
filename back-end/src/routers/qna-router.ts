@@ -1,19 +1,29 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { qnaService, userService } from "../services";
-import { ExtendReq, loginRequired } from "../middlewares/login-required";
+import { ExtendReq, loginRequired, validateRequestWith } from "../middlewares";
+import {
+  qnaSearchJoi,
+  qnaCreateJoi,
+  qnaUpdateJoi,
+  qnaRecommendJoi,
+} from "../db/schemas/joi-schemas";
 
 const qnaRouter = Router();
 
 // 1. 전체 QnA 조회
-qnaRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const lastId = req.query.lastId as string;
-    const QnAs = await qnaService.getQnas(lastId);
-    res.status(200).json(QnAs);
-  } catch (error) {
-    next(error);
+qnaRouter.get(
+  "/",
+  validateRequestWith(qnaSearchJoi, "query"),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const lastId = req.query.lastId as string;
+      const QnAs = await qnaService.getQnas(lastId);
+      res.status(200).json(QnAs);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 // 2. QnA 조회
 qnaRouter.get(
   "/:qnaId",
@@ -34,9 +44,7 @@ qnaRouter.get(
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const userId = req.params.userId;
-      console.log("유저아이디", userId);
       const QnA = await qnaService.getQnaByUserId(userId);
-      console.log(QnA);
       res.status(200).json(QnA);
     } catch (error) {
       next(error);
@@ -47,6 +55,7 @@ qnaRouter.get(
 qnaRouter.post(
   "/",
   loginRequired,
+  validateRequestWith(qnaCreateJoi, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const authorId = req.currentUserId || "";
@@ -74,6 +83,7 @@ qnaRouter.post(
 qnaRouter.put(
   "/:qnaId",
   loginRequired,
+  validateRequestWith(qnaUpdateJoi, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const qnaId = req.params.qnaId;
@@ -107,6 +117,7 @@ qnaRouter.put(
 qnaRouter.put(
   "/:qnaId/recommendation",
   loginRequired,
+  validateRequestWith(qnaRecommendJoi, "query"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const qnaId = req.params.qnaId;
