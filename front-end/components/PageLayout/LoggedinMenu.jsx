@@ -15,7 +15,7 @@ const LoggedinMenu = () => {
   console.log(me);
   useEffect(() => {
     dispatch(myinfo());
-  }, [me]);
+  }, [router.pathname]);
   // 로그아웃 알림
   useEffect(() => {
     if (!action) return;
