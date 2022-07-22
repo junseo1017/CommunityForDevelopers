@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 import Router, { useRouter } from "next/router";
 import TopButton from "../TopButton";
@@ -16,6 +16,7 @@ import Answers from "./Answers";
 import Output from "editorjs-react-renderer";
 import axios from "axios";
 import moment from "moment";
+import useConfirmModal from "../../../hooks/useConfirmModal";
 
 const QuestionDetail = ({ qna }) => {
   const router = useRouter();
@@ -59,6 +60,25 @@ const QuestionDetail = ({ qna }) => {
   const handleScroll = () =>
     EditorRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
 
+  const redirectLogin = useCallback(() => {
+    Router.push("/login");
+  }, []);
+  const redirectHome = useCallback(() => {
+    Router.push("/");
+  }, []);
+  const modalMessage = useMemo(
+    () => ({
+      title: "로그인이 필요한 서비스입니다.",
+      description: "로그인 하시겠습니까? 취소하면 홈으로 이동합니다.",
+    }),
+    [],
+  );
+  const [showConfirm] = useConfirmModal({
+    okFunc: redirectLogin,
+    cancleFunc: redirectHome,
+    message: modalMessage,
+  });
+
   return (
     <div css={DetailContainer}>
       <div css={DetailQuestionContainer}>
@@ -92,6 +112,7 @@ const QuestionDetail = ({ qna }) => {
           </div>
           <button
             onClick={() => {
+              if (me === undefined) showConfirm();
               isAnswerCreateMode
                 ? (EditorRef.current.style.display = "none")
                 : (EditorRef.current.style.display = "flex");
