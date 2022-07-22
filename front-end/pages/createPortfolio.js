@@ -65,12 +65,17 @@ const createPortfolio = (props) => {
       const texts = filteredBlocks.map((block) => block.text).join(" ");
       //const newData = { ...data, contentText: texts + data.description, imgUrl: formdata };
       const newData = { ...data, contentText: texts + data.description };
-      delete newData.imgSrc;
+      //delete newData.imgSrc;
       //formdata.append("body", JSON.stringify(newData));
       console.log(newData);
-      for (const [key, value] of Object.entries(newData)) {
-        if (value) formdata.append(`${key}`, value);
-      }
+      // for (const [key, value] of Object.entries(newData)) {
+      //   if (value) formdata.append(`${key}`, value);
+      // }
+      formdata.append("title", newData.title);
+      formdata.append("description", newData.description);
+      formdata.append("content", newData.content);
+      formdata.append("contentText", newData.contentText);
+      formdata.append("imgUrl", newData.imgUrl);
       const isJsonString = (str) => {
         try {
           JSON.parse(str);
