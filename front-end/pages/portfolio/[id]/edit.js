@@ -76,11 +76,12 @@ const EditPortfolio = (props) => {
       // for (const [key, value] of Object.entries(newData)) {
       //   if (value) formdata.append(`${key}`, value);
       // }
+      console.log(newData);
       formdata.append("title", newData.title);
       formdata.append("description", newData.description);
       formdata.append("content", newData.content);
       formdata.append("contentText", newData.contentText);
-      formdata.append("imgUrl", newData.imgUrl);
+      formdata.append("imgUrl", newData.thumbnail);
       const isJsonString = (str) => {
         try {
           JSON.parse(str);
