@@ -1,10 +1,10 @@
 import { model } from "mongoose";
 import { UserSchema, UserType } from "../schemas/user-schema";
 import {
-  InputDTO,
+  UserInputDTO,
   OAuthUserDTO,
   Password,
-  UpdateInfo,
+  UserUpdateInfo,
 } from "../../interfaces/user-interface";
 import { SoftDeleteModel } from "soft-delete-plugin-mongoose";
 
@@ -48,7 +48,7 @@ export class UserModel {
     );
   }
 
-  async create(userInfo: InputDTO) {
+  async create(userInfo: UserInputDTO) {
     return await User.create(userInfo);
   }
 
@@ -56,7 +56,7 @@ export class UserModel {
     return await User.create(userInfo);
   }
 
-  async update(userId: string, update: UpdateInfo | Password) {
+  async update(userId: string, update: UserUpdateInfo | Password) {
     const filter = { _id: userId, isDeleted: false };
     const option = { returnOriginal: false };
     return await User.findOneAndUpdate(filter, update, option);
