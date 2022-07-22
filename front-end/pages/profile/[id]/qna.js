@@ -5,11 +5,10 @@ import ProfileNav from "../../../components/userProfile/ProfileNav";
 import AppLayout from "../../../components/AppLayout";
 import ProfileCard from "../../../components/userProfile/ProfileCard";
 import ProfileQnA from "../../../components/userProfile/ProfileQnA";
-import { ProfileContentContainer } from "../profileStyle";
+import { ProfileContentContainer } from "../../../styles/profileStyle";
 import { myinfo, userinfo } from "../../../actions/user";
 import { getqnabyuserid } from "../../../actions/qna";
 import axios from "axios";
-import { useSelector } from "react-redux";
 import Head from "next/head";
 
 const ProfileCQnA = () => {

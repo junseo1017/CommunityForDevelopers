@@ -55,11 +55,9 @@ const AddButton = () => {
   return (
     <div css={addButtonStyle}>
       <Dropdown overlay={menu}>
-        <a>
-          <Space>
-            <div>등록하기</div>
-          </Space>
-        </a>
+        <Space>
+          <div style={{ cursor: "pointer" }}>등록하기</div>
+        </Space>
       </Dropdown>
     </div>
   );

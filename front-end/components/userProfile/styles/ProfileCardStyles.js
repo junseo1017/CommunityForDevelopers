@@ -36,14 +36,14 @@ export const ProfileCardContainer = css`
     height: 230px;
     margin: 10px 0;
   }
-  & > div {
+  & > section {
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
   }
-  & > div > div {
+  & section {
     @media (max-width: 768px) {
       width: 100%;
       display: flex;
@@ -61,18 +61,19 @@ export const ProfileCardContent = css`
   justify-content: center;
   gap: 15px;
   border-top: solid 1px #eaedef;
-  padding-top: 20px;
+  padding: 20px 0 0 0;
+  list-style: none;
   @media (max-width: 768px) {
-    width: 100px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     border-top: none;
     gap: 20px;
-    padding: 0px;
+    padding-top: 20px 0 0 0;
   }
-  & > div {
+  & > li {
     ${CardDetail}
   }
 `;
@@ -83,7 +84,7 @@ export const CardProfile = css`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  & > p {
+  & > h2 {
     font-size: 26px;
     font-weight: 900;
     padding: 20px 0 0 0;

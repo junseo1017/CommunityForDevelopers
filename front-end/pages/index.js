@@ -32,6 +32,11 @@ const Home = () => {
   const setSearchQuery = useCallback((q) => {
     setQuery(q);
   }, []);
+
+  useEffect(() => {
+    console.log("hihi");
+  }, []);
+
   useEffect(() => {
     const onScroll = throttle(() => {
       // window.scrollY : 얼마나 내렸는지
@@ -46,21 +51,23 @@ const Home = () => {
           const page = Math.floor((mainPortfolios.length - 1) / 12) + 2;
           if (query) {
             const newQuery = query?.substring(0, 6) + `${page}` + query?.substring(7);
-            debounce((value) => {
+            const func = debounce(() => {
               dispatch(
                 loadPortfoliosSearchScroll({
                   query: newQuery,
                 }),
               );
             }, 500);
+            func();
           } else {
-            debounce((value) => {
+            const func = debounce(() => {
               dispatch(
                 loadPortfoliosSearchScroll({
                   query: `?page=${page}`,
                 }),
               );
             }, 500);
+            func();
           }
         }
       }

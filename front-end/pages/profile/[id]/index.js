@@ -5,7 +5,7 @@ import ProfileNav from "../../../components/userProfile/ProfileNav";
 import AppLayout from "../../../components/AppLayout";
 import ProfileCard from "../../../components/userProfile/ProfileCard";
 import ProfileUserInfo from "../../../components/userProfile/ProfileUserInfo";
-import { ProfileContentContainer } from "../profileStyle";
+import { ProfileContentContainer } from "../../../styles/profileStyle";
 import { myinfo, userinfo } from "../../../actions/user";
 import Head from "next/head";
 
