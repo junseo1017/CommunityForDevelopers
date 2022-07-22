@@ -12,6 +12,20 @@ import { throttle, debounce } from "lodash";
 const Questions = ({ questions, answers }) => {
   const [questionsList, setQuestionsList] = useState(questions); // 불러온 데이터
   console.log(questionsList);
+
+  // useEffect(() => {
+  //   const firstPageRenderer = async () => {
+  //     try {
+  //       const response = await axios.get(`/api/search/qnas?value=`);
+  //       setQuestionsList(response.data.filter((question) => !question.isAnswer));
+  //       // setFirstPage(false);
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   };
+  //   firstPageRenderer();
+  // }, []);
+
   const [query, setQuery] = useState(""); // 유저가 입력한 검색어
   const [searchQueryString, setSearchQueryString] = useState(""); // 검색어 기반 url
   const [page, setPage] = useState(1);
@@ -31,8 +45,6 @@ const Questions = ({ questions, answers }) => {
   const handleInputChange = useCallback((e) => {
     delaySetQuery(e.target.value);
   }, []);
-
-  let qs = "";
 
   useEffect(() => {
     const makeQueryString = () => {
@@ -59,7 +71,9 @@ const Questions = ({ questions, answers }) => {
       const response = await axios.get(`/api/search/qnas?value=${searchQueryString}`);
       console.log(response);
       console.log("Fetch Data", response.data);
-      setQuestionsList(questionsList.concat(response.data));
+      setQuestionsList(
+        questionsList.concat(response.data.filter((question) => !question.isAnswer)),
+      );
       setPage(page + 1);
 
       if (questionsList.length < page * 8 - 1) {
