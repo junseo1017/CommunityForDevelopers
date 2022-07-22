@@ -89,6 +89,7 @@ const SignUpForm = () => {
     if (RegExp.email.test(watch("email"))) {
       randomNumRef.current = RandomNum();
       emailRef.current = watch("email");
+      console.log(randomNumRef.current);
       dispatch(emailAuth({ email: watch("email"), authNumber: randomNumRef.current }));
       return;
     } else {

@@ -17,7 +17,6 @@ const ProfileUserInfoForm = () => {
       if (userinfo.skills[0] !== "") {
         setSkills(userinfo.skills);
       }
-      if (userinfo.imgUrl) setImagePreview(userinfo.imgUrl);
     }
   }, []);
 
