@@ -27,7 +27,7 @@ export class QnaModel {
         path: "comments",
         populate: {
           path: "author",
-          select: "nickname",
+          select: ["nickname", "imgUrl"],
         },
       },
     ]);
@@ -43,7 +43,7 @@ export class QnaModel {
         path: "comments",
         populate: {
           path: "author",
-          select: "nickname",
+          select: ["nickname", "imgUrl"],
         },
       },
     ]);
