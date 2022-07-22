@@ -38,14 +38,11 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
   const { singlePortfolio } = useSelector((state) => state.portfolio);
   const [imgSrc, setImgSrc] = useState(singlePortfolio?.thumbnail);
   const [imgFormErr, setImgFormErr] = useState();
-  console.log(singlePortfolio);
   const [imgFile, setImgFile] = useState();
   const { me } = useSelector((state) => state.user);
   //const portfolioValue = useSelector(({ portfolio }) => portfolio);
 
   const onFinish = (values) => {
-    console.log(values);
-    console.log(imgFile);
     if (!imgSrc) {
       setImgFormErr("error");
       message.error("썸네일 이미지를 첨부해주세요.");
@@ -56,11 +53,9 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
   const onChange = (info) => {
     const { status } = info.file;
     if (status !== "uploading") {
-      console.log(info.file, info.fileList);
     }
     if (status === "done") {
       message.success(`${info.file.name} file uploaded successfully.`);
-      console.log(info);
       const FileObj = info.fileList && info.fileList[0].originFileObj;
       setImgFile(FileObj);
       setImgFormErr();
@@ -69,12 +64,8 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
       message.error(`${info.file.name} file upload failed.`);
     }
   };
-  const onDrop = (e) => {
-    console.log("Dropped files", e.dataTransfer.files);
-  };
 
   const normFile = (e) => {
-    console.log("Upload event:", e);
     if (Array.isArray(e)) {
       return e;
     }
@@ -172,8 +163,7 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
                       name="image"
                       /*action="/upload.do"*/ maxCount={1}
                       onChange={onChange}
-                      onRemove={onRemove}
-                      onDrop={onDrop}>
+                      onRemove={onRemove}>
                       <p className="ant-upload-drag-icon">
                         <UploadOutlined />
                       </p>
@@ -224,7 +214,7 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
               rules={[
                 {
                   required: true,
-                  message: "Please select your country!",
+                  message: "skills를 하나 이상 골라주세요.",
                 },
               ]}>
               <Select
@@ -269,6 +259,7 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
           </Card>
           <Card css={RightCard}>
             <PortfolioCard
+              create={true}
               title={titleValue}
               description={descriptionValue}
               thumbnail={imgSrc}

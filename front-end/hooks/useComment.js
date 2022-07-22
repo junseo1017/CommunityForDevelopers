@@ -48,10 +48,9 @@ const useComment = ({ nickname, Portf_id, imgUrl }) => {
     }, 1000);
   };
 
-  const handleChange = debounce((e) => {
-    console.log(e.target.value);
+  const handleChange = (e) => {
     setValue(e.target.value);
-  }, 500);
+  };
 
   return [submitting, handleChange, handleSubmit, value];
 };

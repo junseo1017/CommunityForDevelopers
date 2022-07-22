@@ -3,7 +3,6 @@ import React, { useState } from "react";
 
 const ModalAsync = ({ visible, setVisible, handleOk, confirmLoading, modalText }) => {
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     setVisible(false);
   };
 

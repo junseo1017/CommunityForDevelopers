@@ -63,14 +63,7 @@ const createPortfolio = (props) => {
         return type === "paragraph" || type === "header" ? data : "";
       });
       const texts = filteredBlocks.map((block) => block.text).join(" ");
-      //const newData = { ...data, contentText: texts + data.description, imgUrl: formdata };
       const newData = { ...data, contentText: texts + data.description };
-      //delete newData.imgSrc;
-      //formdata.append("body", JSON.stringify(newData));
-      console.log(newData);
-      // for (const [key, value] of Object.entries(newData)) {
-      //   if (value) formdata.append(`${key}`, value);
-      // }
       formdata.append("title", newData.title);
       formdata.append("description", newData.description);
       formdata.append("content", newData.content);
@@ -104,16 +97,11 @@ const createPortfolio = (props) => {
 
   /* 첫번째 단계 */
   const onSubmitCard = useCallback((values) => {
-    //console.log("Received values of form: ", values);
     const formData = new FormData();
     //if (values.image) formData.append("file", values.image[0].originFileObj);
     if (values.image) formData.append("image", values.image);
     setImgFormData(formData);
-    //dispatch(portfolioActions.updateState(value));
-    //dispatch(portfolioActions.updateState({ ...values, image: formData }));
     dispatch(portfolioActions.updateState({ ...values, image: "" }));
-
-    //dispatch(uploadImages(formData));
     next();
   }, []);
 

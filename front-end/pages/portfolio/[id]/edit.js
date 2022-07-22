@@ -65,7 +65,6 @@ const EditPortfolio = (props) => {
 
   const dispatchAddPortfolio = useCallback(
     (data, formdata) => {
-      console.log("????");
       const filteredBlocks = JSON.parse(data.content).blocks.map(({ type, data }) => {
         return type === "paragraph" || type === "header" ? data : "";
       });
@@ -77,11 +76,12 @@ const EditPortfolio = (props) => {
       // for (const [key, value] of Object.entries(newData)) {
       //   if (value) formdata.append(`${key}`, value);
       // }
+      console.log(newData);
       formdata.append("title", newData.title);
       formdata.append("description", newData.description);
       formdata.append("content", newData.content);
       formdata.append("contentText", newData.contentText);
-      formdata.append("imgUrl", newData.imgUrl);
+      formdata.append("imgUrl", newData.thumbnail);
       const isJsonString = (str) => {
         try {
           JSON.parse(str);
@@ -110,15 +110,11 @@ const EditPortfolio = (props) => {
 
   /* 첫번째 단계 */
   const onSubmitCard = useCallback((values) => {
-    //console.log("Received values of form: ", values);
     const formData = new FormData();
     //if (values.image) formData.append("file", values.image[0].originFileObj);
     if (values.image) formData.append("image", values.image);
     setImgFormData(formData);
-    //dispatch(portfolioActions.updateState(value));
-    //dispatch(portfolioActions.updateState({ ...values, image: formData }));
     dispatch(portfolioActions.updateState({ ...values, image: "" }));
-    //dispatch(uploadImages(formData));
     next();
   }, []);
 

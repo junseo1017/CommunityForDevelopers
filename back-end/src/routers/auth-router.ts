@@ -10,7 +10,7 @@ authRouter.get(
       const baseUrl = "https://kauth.kakao.com/oauth/authorize";
       const config = {
         client_id: process.env.KAKAO_CLIENT_ID || "",
-        redirect_uri: "http://localhost:5000/api/oauth/kakao/callback",
+        redirect_uri: `http://${process.env.DOMAIN}/api/oauth/kakao/callback`,
         response_type: "code",
         scope: "profile_nickname account_email",
       };
@@ -44,7 +44,7 @@ authRouter.get(
         signed: true,
       });
 
-      res.redirect("http://localhost:3000");
+      res.redirect(`http://${process.env.DOMAIN}`);
     } catch (error) {
       next(error);
     }
@@ -93,7 +93,7 @@ authRouter.get(
         signed: true,
       });
 
-      res.redirect("http://localhost:3000");
+      res.redirect(`http://${process.env.DOMAIN}`);
     } catch (error) {
       next(error);
     }

@@ -14,7 +14,6 @@ const ReactEditorJS = createReactEditorJS();
 
 const Editor = ({ imageArray, handleInitialize, data }) => {
   const { singlePortfolio } = useSelector((state) => state.portfolio);
-  console.log(singlePortfolio);
   const dispatch = useDispatch();
   const [editorTools, setEditorTools] = useState("");
   let editorComponent;
@@ -42,7 +41,6 @@ const Editor = ({ imageArray, handleInitialize, data }) => {
             uploader: {
               async uploadByFile(file) {
                 const formData = new FormData();
-                console.log(file);
                 formData.append("image", file);
                 // send image to server
                 // get the uploaded image path, pushing image path to image array
@@ -50,7 +48,6 @@ const Editor = ({ imageArray, handleInitialize, data }) => {
                 axios.defaults.withCredentials = true;
                 return axios.post("/api/images", formData).then((res) => {
                   // get the uploaded image path, pushing image path to image array
-                  console.log(res);
                   imageArray.push(res.data.imgUrl);
                   return {
                     success: 1,

@@ -9,7 +9,6 @@ import {
   popoverStyle,
 } from "./styles/MyInfoStyles";
 import { StarOutlined, LikeOutlined, MessageOutlined } from "@ant-design/icons";
-import { useSelector } from "react-redux";
 import { textLimitHandler } from "../Common/textLimit";
 
 const ProfilePortfolio = ({ portfoliodata }) => {

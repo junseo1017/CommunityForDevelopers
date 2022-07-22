@@ -2,7 +2,6 @@
 import { css, jsx } from "@emotion/react";
 import Link from "next/link";
 import { Dropdown, Menu, Space } from "antd";
-import { PlusCircleOutlined } from "@ant-design/icons";
 
 const addButtonStyle = css`
   & div {
