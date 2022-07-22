@@ -47,7 +47,6 @@ const ProfileMyInfoForm = () => {
       formData.append("image", imageinputRef.current.files[0]);
     }
     formData.append("nickname", data.nickname);
-    formData.append("userId", data.userId);
     formData.append("job", data.job);
     formData.append("skills", skills);
     dispatch(patchUserinfo(formData));

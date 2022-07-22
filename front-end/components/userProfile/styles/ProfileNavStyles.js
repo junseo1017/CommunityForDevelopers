@@ -22,5 +22,10 @@ export const profileNavStyle = css`
   & a {
     color: black;
     font-weight: 600;
+    transition: 100ms linear;
+    &:hover {
+      padding-bottom: 2px;
+      border-bottom: 3px solid black;
+    }
   }
 `;

@@ -3,9 +3,11 @@ import { css, jsx } from "@emotion/react";
 import Link from "next/link";
 import { profileNavContainer, profileNavStyle } from "./styles/ProfileNavStyles";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 const ProfileNav = () => {
   const router = useRouter();
+
   return (
     <nav css={profileNavContainer}>
       <ul css={profileNavStyle}>

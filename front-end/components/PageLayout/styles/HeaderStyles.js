@@ -39,7 +39,7 @@ export const HeaderContent = css`
     @media (max-width: 768px) {
       gap: 4vw;
     }
-    & a {
+    & div > a {
       transition: 50ms;
       color: rgb(80, 80, 80);
       &:hover {
