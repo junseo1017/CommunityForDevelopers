@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef, useCallback, useMemo } from "react"
 import { useSelector } from "react-redux";
 import Router, { useRouter } from "next/router";
 import TopButton from "../TopButton";
-import { Button, Badge, Tag, Divider, Collapse, Input } from "antd";
+import { Button, Modal, Tag, Divider, Collapse, Input } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import {
   DetailContainer,
@@ -60,28 +60,63 @@ const QuestionDetail = ({ qna }) => {
   const handleScroll = () =>
     EditorRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
 
+  // 비로그인 시 모달로 돌려보내
   const redirectLogin = useCallback(() => {
     Router.push("/login");
   }, []);
+
   const redirectHome = useCallback(() => {
     Router.push("/");
   }, []);
+
   const modalMessage = useMemo(
     () => ({
       title: "로그인이 필요한 서비스입니다.",
-      description: "로그인 하시겠습니까? 취소하면 홈으로 이동합니다.",
+      description: "로그인 하시겠습니까? 취소를 누르시면 홈으로 이동합니다.",
     }),
     [],
   );
+
   const [showConfirm] = useConfirmModal({
     okFunc: redirectLogin,
     cancleFunc: redirectHome,
     message: modalMessage,
   });
 
+  // 모달 처리
+  const [visible, setVisible] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState("질문을 삭제하시겠습니까?");
+
+  const showModal = () => {
+    setVisible(true);
+  };
+
+  const handleOk = async () => {
+    setConfirmLoading(true);
+
+    await handleDelete(question._id);
+    setVisible(false);
+    setConfirmLoading(false);
+    router.push(`/qna`);
+  };
+
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setVisible(false);
+  };
+
   return (
     <div css={DetailContainer}>
       <div css={DetailQuestionContainer}>
+        <Modal
+          title="수정, 삭제"
+          visible={visible}
+          onOk={handleOk}
+          confirmLoading={confirmLoading}
+          onCancel={handleCancel}>
+          <p>{modalText}</p>
+        </Modal>
         {isAuthor && (
           <div className="button-wrapper">
             <button
@@ -92,7 +127,7 @@ const QuestionDetail = ({ qna }) => {
             </button>
             <button
               onClick={() => {
-                handleDelete(question._id);
+                showModal();
               }}>
               삭제하기
             </button>
