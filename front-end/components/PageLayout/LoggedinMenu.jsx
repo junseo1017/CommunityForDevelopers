@@ -10,6 +10,10 @@ const LoggedinMenu = () => {
   const [action, setAction] = useState(false);
   const { me, logoutError, logoutDone } = useSelector((state) => state.user);
 
+  console.log(me);
+  useEffect(() => {
+    dispatch(myinfo());
+  }, [me]);
   // 로그아웃 알림
   useEffect(() => {
     if (!action) return;
