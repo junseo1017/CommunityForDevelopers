@@ -14,7 +14,7 @@ import axios from "axios";
 import { myinfo } from "../actions/user";
 import useDidMountEffect from "../hooks/useDidMountEffect";
 import { throttle, debounce } from "lodash";
-import SkeletonCard from "../components/Common/skeletonCard";
+import SkeletonCard from "../components/Common/SkeletonCard";
 import { useRouter } from "next/router";
 
 const Home = () => {
@@ -31,7 +31,6 @@ const Home = () => {
     setQuery(q);
   }, []);
 
-  console.log("index");
   const loadScrollQuery = debounce((newQuery) => {
     dispatch(
       loadPortfoliosSearchScroll({
@@ -122,7 +121,7 @@ const Home = () => {
             renderItem={(item) => {
               return (
                 <List.Item>
-                  <SkeletonCard key={item} />
+                  <SkeletonCard />
                   {/* <Skeleton.Image active /> */}
                 </List.Item>
               );
