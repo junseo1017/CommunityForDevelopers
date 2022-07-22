@@ -34,16 +34,16 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
     imageArray.push(image);
   };
 
-  useEffect(() => {
-    if (data) {
-      const editorData = JSON.parse(data);
-      for (const block of editorData.blocks) {
-        if (block.type === "image") {
-          addImages(block.data.file.url);
-        }
-      }
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     const editorData = JSON.parse(data);
+  //     for (const block of editorData.blocks) {
+  //       if (block.type === "image") {
+  //         addImages(block.data.file.url);
+  //       }
+  //     }
+  //   }
+  // }, [data]);
 
   const saveQna = async () => {
     const savedData = await editorCore.current.save();
