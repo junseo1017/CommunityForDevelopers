@@ -39,11 +39,17 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   if (req && cookie) {
     axios.defaults.headers.Cookie = cookie;
   }
-  await store.dispatch(userinfo(query.id));
-  await store.dispatch(myinfo());
-  return {
-    props: {},
-  };
+  try {
+    await Promise.allSettled([store.dispatch(userinfo(query.id)), store.dispatch(myinfo())]);
+
+    return {
+      props: {},
+    };
+  } catch (error) {
+    return {
+      props: {},
+    };
+  }
 });
 
 export default EditPassword;
