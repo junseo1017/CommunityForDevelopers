@@ -1,6 +1,8 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { authService } from "../services";
 const authRouter = Router();
+import dotenv from "dotenv";
+dotenv.config();
 
 // 1. Kakao 로그인 url
 authRouter.get(
