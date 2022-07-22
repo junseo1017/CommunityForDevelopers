@@ -126,7 +126,6 @@ const PorfolioSearch = ({ setSearchQuery }) => {
             bordered={false}
             mode="multiple"
             showArrow
-            readOnly
             tagRender={TagRender}
             placeholder="skills를 선택해주세요."
             options={items}
