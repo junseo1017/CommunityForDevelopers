@@ -17,7 +17,6 @@ import {
   unscrapPortfolio,
   updatePortfolio,
   removeComment,
-  loadUserPortfolios,
   loadMyPortfolios,
   loadScrapPortfolios,
   loadPortfoliosSearchScroll,
@@ -57,9 +56,11 @@ const initialState = {
   // 준서
   userPortfolios: null,
   userScrapPortfolios: null,
+  // 유저 포트폴리오 가져오기
   loadMyPortfoliosLoading: false,
   loadMyPortfoliosDone: false,
   loadMyPortfoliosError: false,
+  // 스크랩한 포트폴리오 가져오기
   loadScrapPortfoliosLoading: false,
   loadScrapPortfoliosDone: false,
   loadScrapPortfoliosError: false,
@@ -150,22 +151,6 @@ const portfolioSlice = createSlice({
         state.loadPortfoliosLoading = false;
         state.loadPortfoliosError = action.error.message;
       })
-      // loadUserPortfolios
-      // .addCase(loadUserPortfolios.pending, (state) => {
-      //   state.loadPortfoliosLoading = true;
-      //   state.loadPortfoliosDone = false;
-      //   state.loadPortfoliosError = null;
-      // })
-      // .addCase(loadUserPortfolios.fulfilled, (state, action) => {
-      //   state.loadPortfoliosLoading = false;
-      //   state.loadPortfoliosDone = true;
-      //   state.mainPortfolios = _concat(state.mainPortfolios, action.payload);
-      //   state.hasMorePortfolios = action.payload.length === 10;
-      // })
-      // .addCase(loadUserPortfolios.rejected, (state, action) => {
-      //   state.loadPortfoliosLoading = false;
-      //   state.loadPortfoliosError = action.error.message;
-      // })
       // addPortfolio
       .addCase(addPortfolio.pending, (state) => {
         state.addPortfolioLoading = true;
@@ -346,13 +331,11 @@ const portfolioSlice = createSlice({
       })
       // loadUserPortfolios
       .addCase(loadMyPortfolios.pending, (state) => {
-        console.log("pending");
         state.loadMyPortfoliosLoading = true;
         state.loadMyPortfoliosDone = false;
         state.loadMyPortfoliosError = null;
       })
       .addCase(loadMyPortfolios.fulfilled, (state, action) => {
-        console.log("fulfilled");
         state.loadMyPortfoliosLoading = false;
         state.loadMyPortfoliosDone = true;
         state.userPortfolios = action.payload;
@@ -363,13 +346,11 @@ const portfolioSlice = createSlice({
       })
       // loadUserPortfolios
       .addCase(loadScrapPortfolios.pending, (state) => {
-        console.log("pending");
         state.loadScrapPortfoliosLoading = true;
         state.loadScrapPortfoliosDone = false;
         state.loadScrapPortfoliosError = null;
       })
       .addCase(loadScrapPortfolios.fulfilled, (state, action) => {
-        console.log("fulfilled");
         state.loadScrapPortfoliosLoading = false;
         state.loadScrapPortfoliosDone = true;
         state.userScrapPortfolios = action.payload;

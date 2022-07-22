@@ -2,9 +2,8 @@
 import { css, jsx } from "@emotion/react";
 import { KakaoLogo, GithubLogo } from "./OAuthLogos/OAtuhLogos";
 import { OAuthStyle } from "./styles/SignStyles";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 const OAuthSign = () => {
-  const dispatch = useDispatch();
   const { githubLoginUrl, kakaoLoginUrl } = useSelector((state) => state.user);
 
   return (
