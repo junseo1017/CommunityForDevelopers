@@ -4,7 +4,7 @@ import AddButton from "./AddButton";
 import MenuButton from "./MenuButton";
 import { HeaderContainer, HeaderContent } from "./styles/HeaderStyles";
 
-import Logo from "./logo";
+import Logo from "./Logo";
 import Link from "next/link";
 const Header = () => {
   return (
