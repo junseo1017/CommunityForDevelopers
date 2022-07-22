@@ -1,6 +1,17 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { portfolioService, userService } from "../services";
-import { ExtendReq, loginRequired, checkImage } from "../middlewares";
+import {
+  ExtendReq,
+  loginRequired,
+  checkImage,
+  validateRequestWith,
+} from "../middlewares";
+import {
+  portfolioSearchJoi,
+  portfolioCreateJoi,
+  portfolioUpdateQueryJoi,
+  portfolioUpdateJoi,
+} from "../db/schemas/joi-schemas";
 import { upload } from "../utils";
 
 const portfolioRouter = Router();
@@ -8,6 +19,7 @@ const portfolioRouter = Router();
 // 1. 전체 포토폴리오 조회
 portfolioRouter.get(
   "/",
+  validateRequestWith(portfolioSearchJoi, "query"),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const lastId = req.query.lastId as string;
@@ -62,6 +74,7 @@ portfolioRouter.post(
   loginRequired,
   upload,
   checkImage,
+  validateRequestWith(portfolioCreateJoi, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const authorId = req.currentUserId || "";
@@ -69,10 +82,7 @@ portfolioRouter.post(
       const author = userInfo.nickname;
       const authorImg = userInfo.imgUrl;
       const { title, description, content, contentText } = req.body;
-
-      console.log("req.body: ", req.body);
-
-      const skills = JSON.parse(req.body.skills);
+      const skills = JSON.parse(req.body?.skills);
       const thumbnail = req.body.imgUrl;
 
       const newPortfolio = await portfolioService.addPortfolio({
@@ -99,6 +109,8 @@ portfolioRouter.put(
   loginRequired,
   upload,
   checkImage,
+  validateRequestWith(portfolioUpdateQueryJoi, "body"),
+  validateRequestWith(portfolioUpdateJoi, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const portId = req.params.portId;
     const userId = req.currentUserId || "";
@@ -114,7 +126,8 @@ portfolioRouter.put(
         );
         res.status(200).json(updatedPortfolio);
       }
-      const { title, description, skills, content, contentText } = req.body;
+      const { title, description, content, contentText } = req.body;
+      const skills = JSON.parse(req.body?.skills);
       const thumbnail = req.body.imgUrl;
       const toUpdate = {
         ...(title && { title }),

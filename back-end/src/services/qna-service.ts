@@ -101,11 +101,13 @@ class QnaService {
       if (!QnA) {
         throw new AppError(400, "추천할 QnA정보가 없습니다.");
       }
+      return QnA;
     }
     const QnA = await this.qnaModel.deleteRecommend(qnaId, userId);
     if (!QnA) {
       throw new AppError(400, "추천 취소할 QnA정보가 없습니다.");
     }
+    return QnA;
   }
 
   async deleteQna(qnaId: string, userId: string) {

@@ -133,7 +133,7 @@ userRouter.put(
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     const userId = req.currentUserId || "";
     const { nickname, job, imgUrl } = req.body;
-    const skills = req.body.skills.split(",");
+    const skills = req.body?.skills.split(",");
     const toUpdate = {
       nickname,
       job,
