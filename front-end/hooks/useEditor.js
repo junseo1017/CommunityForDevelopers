@@ -33,7 +33,6 @@ const useEditor = () => {
     /* get the editor.js content and save it to server */
     try {
       const savedData = await editorCore.current.save();
-      console.log(savedData);
       const data = {
         content: JSON.stringify(savedData),
       };
@@ -58,15 +57,10 @@ const useEditor = () => {
 
     if (imageArray.length > currentImages.length) {
       /* image deleted */
-      console.log(imageArray);
-      console.log("0------------");
-      console.log(currentImages);
       for (const img of imageArray) {
         if (!currentImages.includes(img)) {
           try {
             /* delete image from backend */
-            //await API.deleteImage({ imagePath: img });
-            console.log(img);
             axios.defaults.baseURL = backendUrl;
             axios.defaults.withCredentials = true;
             await axios.delete("/api/images", { data: { imgUrl: img } });

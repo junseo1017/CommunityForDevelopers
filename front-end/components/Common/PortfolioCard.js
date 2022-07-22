@@ -19,6 +19,7 @@ const PortfolioCard = ({
   _id,
   authorImg,
   thumbnail,
+  create,
 }) => {
   const { me } = useSelector((state) => state.user);
   const { loadPortfoliosDone } = useSelector((state) => state.portfolio);
@@ -50,45 +51,54 @@ const PortfolioCard = ({
     );
   };
 
-  return (
-    <div id="check" css={portfolioStyle} key={_id}>
-      <Link href={`/portfolio/${_id}`}>
-        <div style={{ cursor: "pointer" }}>
-          <div>
-            <img src={thumbnail || "/image/profile_image_default.jpg"} />
-            <div id="gradation">
-              <div id="textbox">
-                <h3>{showHeader ? textLimitHandler(title, 20) : textLimitHandler(title, 35)}</h3>
-                <p>
-                  {showHeader
-                    ? textLimitHandler(description, 25)
-                    : textLimitHandler(description, 40)}
-                </p>
-              </div>
-            </div>
-            <div>
-              <div>
-                <Popover placement="bottom" content={skillsTag(skills)}>
-                  <h3>skills</h3>
-                </Popover>
-              </div>
-            </div>
+  const cardHeader = (
+    <div style={{ cursor: "pointer" }}>
+      <div>
+        <img src={thumbnail || "/image/profile_image_default.jpg"} />
+        <div id="gradation">
+          <div id="textbox">
+            <h3>{showHeader ? textLimitHandler(title, 20) : textLimitHandler(title, 35)}</h3>
+            <p>
+              {showHeader ? textLimitHandler(description, 25) : textLimitHandler(description, 40)}
+            </p>
           </div>
         </div>
-      </Link>
+        <div>
+          <div>
+            <Popover placement="bottom" content={skillsTag(skills)}>
+              <h3>skills</h3>
+            </Popover>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+  const cardAvatar = (
+    <Avatar
+      style={{ cursor: "pointer" }}
+      size={25}
+      src={authorImg ? authorImg : "/image/profile_image_default.jpg"}
+    />
+  );
+
+  return (
+    <div id="check" css={portfolioStyle} key={_id}>
+      {create ? cardHeader : <Link href={create ? `` : `/portfolio/${_id}`}>{cardHeader}</Link>}
       <div>
         <div>
-          <Link href={`/profile/${authorId}`}>
-            <Avatar
-              style={{ cursor: "pointer" }}
-              size={25}
-              src={authorImg ? authorImg : "/image/profile_image_default.jpg"}
-            />
-          </Link>
+          {create ? (
+            cardAvatar
+          ) : (
+            <Link href={create ? `` : `/profile/${authorId}`}>{cardAvatar}</Link>
+          )}
           <h3>
-            <Link href={`/profile/${authorId}`}>
-              <a>{author}</a>
-            </Link>
+            {create ? (
+              author
+            ) : (
+              <Link href={create ? `` : `/profile/${authorId}`}>
+                <a>{author}</a>
+              </Link>
+            )}
           </h3>
         </div>
         <div>

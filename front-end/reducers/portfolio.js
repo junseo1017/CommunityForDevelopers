@@ -17,7 +17,6 @@ import {
   unscrapPortfolio,
   updatePortfolio,
   removeComment,
-  uploadImages,
   loadUserPortfolios,
   loadMyPortfolios,
   loadScrapPortfolios,
@@ -183,21 +182,6 @@ const portfolioSlice = createSlice({
         state.addPortfolioLoading = false;
         state.addPortfolioError = action.error.message;
       })
-      // uploadImages
-      .addCase(uploadImages.pending, (state) => {
-        state.uploadImagesLoading = true;
-        state.uploadImagesDone = false;
-        state.uploadImagesError = null;
-      })
-      .addCase(uploadImages.fulfilled, (state, action) => {
-        state.uploadImagesLoading = false;
-        state.uploadImagesDone = true;
-        state.imagePaths = _concat(state.imagePaths, action.payload);
-      })
-      .addCase(uploadImages.rejected, (state, action) => {
-        state.uploadImagesLoading = false;
-        state.uploadImagesError = action.error.message;
-      })
       // addComment
       .addCase(addComment.pending, (state) => {
         state.addCommentLoading = true;
@@ -352,7 +336,6 @@ const portfolioSlice = createSlice({
         state.loadPortfoliosError = null;
       })
       .addCase(loadPortfolio.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.loadPortfoliosLoading = false;
         state.loadPortfoliosDone = true;
         state.singlePortfolio = action.payload;

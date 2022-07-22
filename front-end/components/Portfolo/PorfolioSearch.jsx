@@ -1,13 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import { useMemo, useRef } from "react";
+import { useMemo } from "react";
 import TagRender from "./TagRender";
 import { Row, Col, Select, Input, Divider, Space, Typography, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import useSelects from "../../hooks/useSelects";
 import MainSearch from "./MainSearch";
 import { useEffect, useState, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { loadPortfoliosSearch } from "../../actions/portfolio";
 import useDidMountEffect from "../../hooks/useDidMountEffect";
 import { useMediaQuery } from "react-responsive";
 import { debounce } from "lodash";
@@ -29,7 +27,7 @@ const PorfolioSearch = ({ setSearchQuery }) => {
     options: ["contentText", "title", "author"],
   });
   const [inputs, setInputs] = useState({
-    orderBy: "recommends",
+    orderBy: "createdAt",
     skills: [],
     page: 1,
   });
@@ -87,12 +85,12 @@ const PorfolioSearch = ({ setSearchQuery }) => {
     setSearchQuery(query);
   }, [inputs, optionsInputs, searchValue]);
 
-  const [items, name, onNameChange, addItem] = useSelects();
+  const [items, name, addItem, onNameChange] = useSelects();
   const OrderBySelectStyle = useMemo(() => ({ width: 106, textAlign: "start" }), []);
   const { Option } = Select;
   const orderBys = [
-    <Option key={"recommends"}>추천 순</Option>,
     <Option key={"createdAt"}>최신 순</Option>,
+    <Option key={"recommends"}>추천 순</Option>,
     <Option key={"comments"}>댓글 순</Option>,
     <Option key={"scraps"}>스크랩 순</Option>,
   ];
@@ -128,6 +126,7 @@ const PorfolioSearch = ({ setSearchQuery }) => {
             bordered={false}
             mode="multiple"
             showArrow
+            readOnly
             tagRender={TagRender}
             placeholder="skills를 선택해주세요."
             options={items}

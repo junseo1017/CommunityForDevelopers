@@ -60,6 +60,9 @@ export const portfolioStyle = css`
         opacity: 0.8;
         margin-bottom: 0;
       }
+      @media (max-width: 768px) {
+        opacity: 1;
+      }
     }
 
     & > div:last-of-type {

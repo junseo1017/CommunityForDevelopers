@@ -1,39 +1,52 @@
 /** @jsxImportSource @emotion/react */
 import AppLayout from "../components/AppLayout";
-import React, { useMemo, useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState } from "react";
 import wrapper from "../store";
-import { List, Select, Divider } from "antd";
-import { BackTop } from "antd";
+import { List, Divider } from "antd";
+import { BackTop, Skeleton } from "antd";
 //import PortfolioCard from "../components/Portfolo/PortfolioCard";
 import PortfolioCard from "../components/Common/PortfolioCard";
 import PorfolioSearch from "../components/Portfolo/PorfolioSearch";
-import {
-  loadPortfolios,
-  loadPortfoliosSearch,
-  loadPortfoliosSearchScroll,
-} from "../actions/portfolio";
+import { loadPortfoliosSearch, loadPortfoliosSearchScroll } from "../actions/portfolio";
 import { css } from "@emotion/react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { myinfo } from "../actions/user";
 import useDidMountEffect from "../hooks/useDidMountEffect";
 import { throttle, debounce } from "lodash";
+import SkeletonCard from "../components/Common/skeletonCard";
 import { useRouter } from "next/router";
+
 const Home = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
   const { me } = useSelector((state) => state.user);
-  console.log(me);
-  const { mainPortfolios, hasMorePortfolios, loadPortfoliosLoading } = useSelector(
-    (state) => state.portfolio,
-  );
+  const { mainPortfolios, hasMorePortfolios, loadPortfoliosLoading, loadPortfoliosDone } =
+    useSelector((state) => state.portfolio);
 
-  console.log(mainPortfolios);
   const [query, setQuery] = useState();
+
   const setSearchQuery = useCallback((q) => {
     setQuery(q);
   }, []);
+
+  console.log("index");
+  const loadScrollQuery = debounce((newQuery) => {
+    dispatch(
+      loadPortfoliosSearchScroll({
+        query: newQuery,
+      }),
+    );
+  }, 500);
+
+  const loadScroll = debounce((page) => {
+    dispatch(
+      loadPortfoliosSearchScroll({
+        query: `?page=${page}`,
+      }),
+    );
+  }, 500);
 
   useEffect(() => {
     const onScroll = throttle(() => {
@@ -48,24 +61,10 @@ const Home = () => {
           //const lastId = mainPortfolios[mainPortfolios.length - 1]?._id;
           const page = Math.floor((mainPortfolios.length - 1) / 12) + 2;
           if (query) {
-            const newQuery = query?.substring(0, 6) + `${page}` + query?.substring(7);
-            const func = debounce(() => {
-              dispatch(
-                loadPortfoliosSearchScroll({
-                  query: newQuery,
-                }),
-              );
-            }, 500);
-            func();
+            const newQuery = query.substring(0, 6) + `${page}` + query.substring(7);
+            loadScrollQuery(newQuery);
           } else {
-            const func = debounce(() => {
-              dispatch(
-                loadPortfoliosSearchScroll({
-                  query: `?page=${page}`,
-                }),
-              );
-            }, 500);
-            func();
+            loadScroll(page);
           }
         }
       }
@@ -77,7 +76,6 @@ const Home = () => {
   }, [hasMorePortfolios, loadPortfoliosLoading, mainPortfolios]);
 
   useDidMountEffect(() => {
-    console.log(query);
     dispatch(
       loadPortfoliosSearch({
         query,
@@ -109,6 +107,28 @@ const Home = () => {
             );
           }}
         />
+        {loadPortfoliosLoading && (
+          <List
+            grid={{
+              gutter: 18,
+              xs: 1,
+              sm: 1,
+              md: 2,
+              lg: 3,
+              xl: 4,
+              xxl: 4,
+            }}
+            dataSource={[1, 2, 3, 4, 5, 6, 7, 8]}
+            renderItem={(item) => {
+              return (
+                <List.Item>
+                  <SkeletonCard key={item} />
+                  {/* <Skeleton.Image active /> */}
+                </List.Item>
+              );
+            }}
+          />
+        )}
       </div>
       <BackTop />
     </AppLayout>
