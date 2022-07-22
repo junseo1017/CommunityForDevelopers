@@ -122,7 +122,7 @@ const Home = () => {
             renderItem={(item) => {
               return (
                 <List.Item>
-                  <SkeletonCard key={item} />
+                  <SkeletonCard />
                   {/* <Skeleton.Image active /> */}
                 </List.Item>
               );
