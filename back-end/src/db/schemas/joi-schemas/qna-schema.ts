@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 const qnaSearchJoi = Joi.object({
-  lastId: Joi.string(),
+  lastId: Joi.string().min(0),
 });
 
 const qnaCreateJoi = Joi.object({
@@ -10,7 +10,7 @@ const qnaCreateJoi = Joi.object({
   contentText: Joi.string().required(),
   tags: Joi.array().items(Joi.string()),
   isAnswer: Joi.boolean().required(),
-  parentQnaId: Joi.string(),
+  parentQnaId: Joi.string().min(0),
 });
 
 const qnaUpdateJoi = Joi.object({
@@ -20,7 +20,7 @@ const qnaUpdateJoi = Joi.object({
   recommends: Joi.string(),
   tags: Joi.array().items(Joi.string()),
   isAnswer: Joi.boolean().required(),
-  parentQnaId: Joi.string(),
+  parentQnaId: Joi.string().min(0),
 });
 
 const qnaRecommendJoi = Joi.object({
