@@ -32,6 +32,11 @@ const Home = () => {
   const setSearchQuery = useCallback((q) => {
     setQuery(q);
   }, []);
+
+  useEffect(() => {
+    console.log("hihi");
+  }, []);
+
   useEffect(() => {
     const onScroll = throttle(() => {
       // window.scrollY : 얼마나 내렸는지

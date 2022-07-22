@@ -14,7 +14,7 @@ const ProfileCard = () => {
   const isresponsive = useMediaQuery({
     query: "(max-width:768px)",
   });
-  
+
   useEffect(() => {
     if (isresponsive) {
       setShowUI(true);
@@ -23,40 +23,35 @@ const ProfileCard = () => {
 
   return (
     <Card css={ProfileCardContainer}>
-      <div>
+      <section>
         <div css={CardProfile}>
           <Avatar
+            alt="사용자 프로필 사진"
             size={showUI ? 100 : 150}
-            src={
-              !userinfo
-                ? "/image/profile_image_default.jpg"
-                : userinfo.imgUrl
-                ? userinfo.imgUrl
-                : "/image/profile_image_default.jpg"
-            }
+            src={userinfo?.imgUrl ? userinfo.imgUrl : "/image/profile_image_default.jpg"}
           />
-          {userinfo && <p>{userinfo.nickname}</p>}
+          {userinfo && <h2>{userinfo.nickname}</h2>}
         </div>
-        <div css={ProfileCardContent}>
-          <div>
-            <p>포트폴리오</p>
-            <h3>{count && count.portfolioCount}</h3>
-          </div>
-          <div>
-            <p>스크랩</p>
-            <h3>{count && count.scrapCount}</h3>
-          </div>
-          <div>
-            <p>질문</p>
-            <h3>{count && count.questionCount}</h3>
-          </div>
-          <div>
-            <p>답변</p>
-            <h3>{count && count.answerCount}</h3>
-          </div>
-        </div>
+        <ul css={ProfileCardContent}>
+          <li>
+            <h3>포트폴리오</h3>
+            <p>{count && count.portfolioCount}</p>
+          </li>
+          <li>
+            <h3>스크랩</h3>
+            <p>{count && count.scrapCount}</p>
+          </li>
+          <li>
+            <h3>질문</h3>
+            <p>{count && count.questionCount}</p>
+          </li>
+          <li>
+            <h3>답변</h3>
+            <p>{count && count.answerCount}</p>
+          </li>
+        </ul>
         <div></div>
-      </div>
+      </section>
     </Card>
   );
 };

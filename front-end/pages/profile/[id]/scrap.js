@@ -3,24 +3,17 @@ import { css, jsx } from "@emotion/react";
 import ProfileNav from "../../../components/userProfile/ProfileNav";
 import AppLayout from "../../../components/AppLayout";
 import ProfileCard from "../../../components/userProfile/ProfileCard";
-import ProfileScrap from "../../../components/userProfile/ProfileScrap";
-import { ProfileContentContainer } from "../profileStyle";
+import ProfilePortfolio from "../../../components/userProfile/ProfilePortfolio";
+import { ProfileContentContainer } from "../../../styles/profileStyle";
 import { myinfo, userinfo } from "../../../actions/user";
 import { loadScrapPortfolios } from "../../../actions/portfolio";
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import wrapper from "../../../store";
 import axios from "axios";
 import Head from "next/head";
 
 const ProfileCScrap = () => {
-  const dispatch = useDispatch();
   const { userScrapPortfolios } = useSelector((state) => state.portfolio);
-
-  useEffect(() => {
-    console.log(userScrapPortfolios);
-  }, []);
-
   return (
     <>
       <Head>
@@ -30,7 +23,7 @@ const ProfileCScrap = () => {
         <ProfileNav />
         <div css={ProfileContentContainer}>
           <ProfileCard />
-          <ProfileScrap />
+          <ProfilePortfolio portfoliodata={userScrapPortfolios} />
         </div>
       </AppLayout>
     </>

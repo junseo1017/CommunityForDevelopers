@@ -156,7 +156,7 @@ export const portfolioStyle = css`
       opacity: 0;
       transition: 150ms;
 
-      h3 {
+      h2 {
         font-size: 16px;
         font-weight: 700;
         color: white;
@@ -171,7 +171,7 @@ export const portfolioStyle = css`
         opacity: 1;
       }
     }
-
+    // skills
     & > div:last-of-type {
       position: absolute;
       opacity: 0;
@@ -189,7 +189,7 @@ export const portfolioStyle = css`
         background-color: rgba(0, 0, 0, 0.3);
         border-radius: 5px;
       }
-      h3 {
+      h5 {
         color: white;
         text-align: center;
         font-size: 16px;
@@ -203,7 +203,7 @@ export const portfolioStyle = css`
     }
   }
   & > div:last-of-type {
-    padding: 10px 5px 10px 5px;
+    padding: 5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -227,9 +227,9 @@ export const portfolioStyle = css`
     & > div:last-of-type {
       display: flex;
       align-items: center;
-      gap: 2px;
+      gap: 3px;
       @media (max-width: 768px) {
-        gap: 2px;
+        gap: 3px;
       }
     }
   }
