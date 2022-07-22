@@ -14,7 +14,6 @@ const qnaCreateJoi = Joi.object({
 });
 
 const qnaUpdateJoi = Joi.object({
-  title: Joi.string().min(2).max(50).required(),
   contents: Joi.string().required(),
   contentText: Joi.string().required(),
   recommends: Joi.string().empty(""),
