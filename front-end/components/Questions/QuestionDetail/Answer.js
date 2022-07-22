@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Comments from "./Comments";
 import { Divider, Collapse, Modal } from "antd";
-import { MessageOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { DetailAnswerContainer } from "../styles/QuestionStyle";
 import Like from "../Like";
 import Output from "editorjs-react-renderer";
@@ -12,6 +11,7 @@ import AddEditor from "../Editor/AddEditor";
 import axios from "axios";
 
 const Answer = ({ answer }) => {
+  console.log("좋아요 넘어가는 answer", answer);
   const { me } = useSelector((state) => state.user);
 
   const [recommendData, setRecommendData] = useState({
@@ -19,31 +19,18 @@ const Answer = ({ answer }) => {
     numberOfRecommends: 0,
   });
 
-  const isRecommended = answer.recommends.map((user) => user._id).includes(me._id);
-  const numberOfRecommends = answer.recommends.length;
+  useEffect(() => {
+    const currentIsRecommended = answer.recommends.map((user) => user._id).includes(me._id);
+    const currentNumberOfRecommends = answer.recommends.length;
+    setRecommendData({
+      isRecommended: currentIsRecommended,
+      numberOfRecommends: currentNumberOfRecommends,
+    });
+  }, []);
 
   const initialLoginState = me._id === answer.authorId;
 
-  const [isChanged, setIsChanged] = useState(false);
   const [deleteId, setDeleteId] = useState("");
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await axios.get(`/api/qnas/${answer._id}`);
-        const qna = response.data;
-        console.log("qna", qna);
-        // Answer가 Answers에 추가되지 않음 -> 확인 불가능
-
-        setRecommendData({ isRecommended, numberOfRecommends });
-        setIsChanged(false);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    getData();
-  }, [isChanged]);
 
   const [isAuthor, setIsAuthor] = useState(initialLoginState);
   const [isAnswerUpdateMode, setIsAnswerUpdateMode] = useState(false);
@@ -92,12 +79,7 @@ const Answer = ({ answer }) => {
         <p>{modalText}</p>
       </Modal>
       <div className="answer-title">
-        <Like
-          className="answer-like"
-          qnaId={answer._id}
-          recommendData={recommendData}
-          setIsChanged={setIsChanged}
-        />
+        <Like className="answer-like" qnaId={answer._id} recommendData={recommendData} />
         <h2>{answer.title}</h2>
         {isAuthor && (
           <div className="button-wrapper">

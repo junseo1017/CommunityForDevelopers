@@ -2,28 +2,18 @@ import React, { useState } from "react";
 import { Badge } from "antd";
 import { LikeOutlined, LikeFilled } from "@ant-design/icons";
 import axios from "axios";
+import Router from "next/router";
 
 axios.defaults.withCredentials = true;
 
 const Like = ({ qnaId, recommendData }) => {
   console.log(recommendData);
 
-  const [isChanged, setIsChanged] = useState(false);
-
   const handleLikeClick = async () => {
     try {
-      if (!isChanged) {
-        setIsChanged(true);
-        const res = await axios.put(
-          `/api/qnas/${qnaId}/recommendation?recommended=${!recommendData.isRecommended}`,
-        );
-        console.log(res);
-        recommendData = {
-          isRecommended: !recommendData.isRecommended,
-          numberOfRecommends: recommendData.numberOfRecommends++,
-        };
-        setIsChanged(false);
-      }
+      await axios.put(
+        `/api/qnas/${qnaId}/recommendation?recommended=${!recommendData.isRecommended}`,
+      );
     } catch (error) {
       console.log(error);
     }
