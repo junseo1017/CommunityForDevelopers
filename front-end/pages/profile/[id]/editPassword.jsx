@@ -5,7 +5,7 @@ import ProfileNav from "../../../components/userProfile/ProfileNav";
 import AppLayout from "../../../components/AppLayout";
 import ProfileEditPw from "../../../components/userProfile/ProfileEditPw";
 import { useEffect } from "react";
-import { ProfileContentContainer } from "../profileStyle";
+import { ProfileContentContainer } from "../../../styles/profileStyle";
 import { myinfo, userinfo } from "../../../actions/user";
 import axios from "axios";
 import { useRouter } from "next/router";
