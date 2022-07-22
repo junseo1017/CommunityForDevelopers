@@ -50,17 +50,12 @@ const MenuButton = () => {
 
   return (
     <>
-      <div onClick={showDrawer} css={MenuButtonStyle}>
+      <div aria-label="메뉴 열기" onClick={showDrawer} css={MenuButtonStyle}>
         <div>
           <MenuOutlined />
         </div>
       </div>
-      <Drawer
-        aria-label="메뉴 열기"
-        css={DrawerStyle}
-        placement="right"
-        onClose={onClose}
-        visible={visible}>
+      <Drawer css={DrawerStyle} placement="right" onClose={onClose} visible={visible}>
         <nav css={MenuContanier}>
           <Link href="/">
             <a>포트폴리오</a>

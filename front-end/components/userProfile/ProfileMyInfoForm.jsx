@@ -23,7 +23,7 @@ const ProfileMyInfoForm = () => {
   const { register, handleSubmit, reset } = useForm(
     userinfo && {
       defaultValues: {
-        userId: userinfo._id,
+        email: userinfo.email,
         nickname: userinfo.nickname,
         job: userinfo.job,
         image: userinfo.imgUrl,
@@ -47,7 +47,6 @@ const ProfileMyInfoForm = () => {
       formData.append("image", imageinputRef.current.files[0]);
     }
     formData.append("nickname", data.nickname);
-    formData.append("userId", data.userId);
     formData.append("job", data.job);
     formData.append("skills", skills);
     dispatch(patchUserinfo(formData));
@@ -92,7 +91,7 @@ const ProfileMyInfoForm = () => {
       <label>{"이메일"}</label>
       <input
         style={{ backgroundColor: "rgb(220,220,220)" }}
-        value={(userinfo && userinfo.email) || ""}
+        readOnly={userinfo?.email || ""}
         {...register("email")}
       />
 
@@ -113,12 +112,24 @@ const ProfileMyInfoForm = () => {
           onChange={(e) => addPreviewImage(e.target.files[0])}
         />
         <div style={{ width: "200px" }}>
-          <Image priority src={imagePreview} layout="responsive" width="100%" height="100%" />
+          <Image
+            priority
+            src={imagePreview}
+            layout="responsive"
+            width="100%"
+            height="100%"
+            alt="프로필 이미지 미리보기"
+          />
         </div>
       </div>
 
       <label>{"직업"}</label>
-      <input {...register("job")} list="list" autoComplete="off" />
+      <input
+        {...register("job")}
+        list="list"
+        autoComplete="off"
+        placeholder="직업을 입력해주세요"
+      />
       <datalist id="list">
         <option value="웹 개발자" />
         <option value="서버 개발자" />

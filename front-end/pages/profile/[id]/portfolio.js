@@ -5,13 +5,15 @@ import AppLayout from "../../../components/AppLayout";
 import ProfileCard from "../../../components/userProfile/ProfileCard";
 import ProfilePortfolio from "../../../components/userProfile/ProfilePortfolio";
 import wrapper from "../../../store";
-import { ProfileContentContainer } from "../profileStyle";
+import { ProfileContentContainer } from "../../../styles/profileStyle";
 import { loadMyPortfolios } from "../../../actions/portfolio";
 import { myinfo, userinfo } from "../../../actions/user";
 import axios from "axios";
 import Head from "next/head";
-
+import { useSelector } from "react-redux";
 const ProfileCPortfolio = () => {
+  const { userPortfolios } = useSelector((state) => state.portfolio);
+
   return (
     <>
       <Head>
@@ -21,7 +23,7 @@ const ProfileCPortfolio = () => {
         <ProfileNav />
         <div css={ProfileContentContainer}>
           <ProfileCard />
-          <ProfilePortfolio />
+          <ProfilePortfolio portfoliodata={userPortfolios} />
         </div>
       </AppLayout>
     </>
