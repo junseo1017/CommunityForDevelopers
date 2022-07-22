@@ -1,23 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
 import { Tag } from "antd";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { QnAContentStyle } from "./styles/MyInfoStyles";
 import Link from "next/link";
 import { textLimitHandler } from "../Common/textLimit";
-import { useMediaQuery } from "react-responsive";
 
 const ProfileQnAContent = ({ selectMenu, qnabyUserId }) => {
-  const [showHeader, setShowHeader] = useState(null);
   const [question, setQuestion] = useState(null);
   const [answer, setAnswer] = useState(null);
-  const isresponsive = useMediaQuery({
-    query: "(max-width:768px)",
-  });
-
-  useEffect(() => {
-    setShowHeader(isresponsive);
-  }, [isresponsive]);
 
   useEffect(() => {
     setQuestion(

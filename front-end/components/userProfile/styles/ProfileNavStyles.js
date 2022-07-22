@@ -20,10 +20,11 @@ export const profileNavStyle = css`
   margin: 0;
   padding: 0;
   & a {
-    color: black;
+    color: rgb(80, 80, 80);
     font-weight: 600;
     transition: 100ms linear;
     &:hover {
+      color: black;
       padding-bottom: 2px;
       border-bottom: 3px solid black;
     }
