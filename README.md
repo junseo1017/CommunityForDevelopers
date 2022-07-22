@@ -58,6 +58,7 @@ community-for-developers
 │  ├─ store
 │  └─ styles
 ```
+<br />
 
 ## :memo: 기능 및 구현 상세
 ```
