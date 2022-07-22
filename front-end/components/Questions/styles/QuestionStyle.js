@@ -124,7 +124,7 @@ export const DetailContainer = css`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 2em;
+  padding: 1em;
 `;
 
 export const DetailQuestionContainer = css`

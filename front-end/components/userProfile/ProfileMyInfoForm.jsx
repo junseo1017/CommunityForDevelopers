@@ -41,7 +41,7 @@ const ProfileMyInfoForm = () => {
       }
       if (userinfo.imgUrl) setImagePreview(userinfo.imgUrl);
     }
-  }, [userinfo]);
+  }, []);
 
   const onSubmit = (data) => {
     const formData = new FormData();

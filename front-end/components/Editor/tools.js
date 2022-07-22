@@ -54,8 +54,8 @@ const EDITOR_JS_TOOLS = {
   //     endpoint: "http://localhost:5000//api/users", // Your backend endpoint for url data fetching,
   //   },
   // },
-  linkTool: SimpleLink,
-  raw: Raw,
+  // linkTool: SimpleLink,
+  // raw: Raw,
   header: {
     class: Header,
     shortcut: "CMD+SHIFT+H",
