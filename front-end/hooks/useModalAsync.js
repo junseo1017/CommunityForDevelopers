@@ -20,10 +20,10 @@ const useModalAsync = (asyncCallback, modalDescription, next, dispatchFunc, imgF
       setConfirmLoading(false);
       if (dispatchFunc) {
         const response = dispatchFunc(data, imgFormData);
+        next();
       } else {
         return;
       }
-      next();
       message.success("Processing complete!");
       // }, 2000);
     } catch (err) {
