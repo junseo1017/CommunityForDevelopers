@@ -9,7 +9,8 @@ export class QnaModel {
   async findQuestions(page: number) {
     return await Qna.find({ isAnswer: false })
       .sort({ _id: -1 })
-      .skip((page - 1) * 8);
+      .skip((page - 1) * 8)
+      .limit(8);
   }
 
   async findById(qnaId: string) {
