@@ -39,6 +39,7 @@ export const getKakaoLoginUrl = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await axios.get("/api/oauth/kakao");
+      console.log(response);
       return response.data.url;
     } catch (error) {
       return rejectWithValue(error.response.data);
