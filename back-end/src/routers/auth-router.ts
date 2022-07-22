@@ -18,7 +18,7 @@ authRouter.get(
       const params = new URLSearchParams(config).toString();
       const finalUrl = `${baseUrl}?${params}`;
 
-      console.log("컨피그:", config);
+      console.log("카카오컨피그:", config);
       console.log("카카오파이널유알앨:", finalUrl);
       res.json({ url: finalUrl });
     } catch (error) {
@@ -69,7 +69,8 @@ authRouter.get(
       const params = new URLSearchParams(config).toString();
       const finalUrl = `${baseUrl}?${params}`;
 
-      console.log("파이널url:", finalUrl);
+      console.log("깃헙컨피그:", config);
+      console.log("깃헙파이널유알앨:", finalUrl);
       res.json({ url: finalUrl });
     } catch (error) {
       next(error);
