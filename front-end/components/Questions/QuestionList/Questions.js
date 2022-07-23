@@ -8,21 +8,16 @@ import QuestionItem from "./QuestionItem";
 import TopButton from "../TopButton";
 import { throttle, debounce } from "lodash";
 
-const Questions = ({ questions, answers }) => {
+const Questions = ({ qnas }) => {
   const [questionsList, setQuestionsList] = useState([]); // 불러온 데이터
-  console.log(questionsList);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState(""); // 유저가 입력한 검색어
 
-  console.log(value);
-
-  const getQnaData = async (value, page = 1) => {
-    if (value) {
+  const getQnaData = async (value, page) => {
+    if (page === 1) {
       try {
-        console.log(`/api/search/qnas?value=${value}&page=${page}`);
         const response = await axios.get(`/api/search/qnas?value=${value}&page=${page}`);
-        console.log(response);
         setQuestionsList([...response.data]);
         setLoading(true);
       } catch (error) {
@@ -30,9 +25,7 @@ const Questions = ({ questions, answers }) => {
       }
     } else {
       try {
-        console.log(`/api/search/qnas?value=${value}&page=${page}`);
         const response = await axios.get(`/api/search/qnas?value=${value}&page=${page}`);
-        console.log(response);
         setQuestionsList([...questionsList, ...response.data]);
         setLoading(true);
       } catch (error) {
@@ -42,11 +35,7 @@ const Questions = ({ questions, answers }) => {
   };
 
   useEffect(() => {
-    if (value === "") {
-      getQnaData(value, page);
-    } else {
-      getQnaData(value, page);
-    }
+    getQnaData(value, page);
   }, [page, value]);
 
   const loadMoreQnaData = () => setPage((prev) => prev + 1);
@@ -71,80 +60,20 @@ const Questions = ({ questions, answers }) => {
     }
   }, [loading, limit]);
 
-  // // 디바운싱 적용한 search query 가져오기
   const delaySetValue = useCallback(
     debounce((value) => {
       setValue(value);
+      setPage(1);
       if (value?.length == 1) {
         alert("두 글자 이상이어야 합니다.");
       }
-    }, 500),
+    }, 1000),
     [],
   );
 
   const handleInputChange = useCallback((e) => {
     delaySetValue(e.target.value);
   }, []);
-
-  // useEffect(() => {
-  //   const makeQueryString = () => {
-  //     const queryString = "";
-  //     if (query) {
-  //       queryString = `${query}`;
-  //     }
-
-  //     console.log(lastId);
-  //     if (lastId) {
-  //       queryString += `&lastId=${lastId}`;
-  //     }
-
-  //     return queryString;
-  //   };
-  //   setSearchQueryString(makeQueryString());
-  // }, [query, lastId, searchQueryString]);
-
-  // console.log(searchQueryString);
-  // const loadMoreQnaData = async (searchQueryString) => {
-  //   console.log(searchQueryString);
-  //   try {
-  //     console.log(searchQueryString);
-  //     const response = await axios.get(`/api/search/qnas?value=${searchQueryString}`);
-  //     console.log(response);
-  //     console.log("Fetch Data", response.data);
-  //     setQuestionsList(
-  //       questionsList.concat(response.data.filter((question) => !question.isAnswer)),
-  //     );
-  //     setPage(page + 1);
-
-  //     if (questionsList.length < page * 8 - 1) {
-  //       setLastId(questionsList[questionsList.length - 1]._id);
-  //     } else if (questionsList.length === page * 8) {
-  //       setLastId(questionsList[page * 8 - 1]._id);
-  //     }
-  //     console.log(page);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const handleScroll = (e) => {
-  //     console.log("Scroll");
-  //     // console.log(searchQueryString);
-  //     if (
-  //       window.innerHeight + e.target.documentElement.scrollTop + 1 >=
-  //       e.target.documentElement.scrollHeight
-  //     ) {
-  //       loadMoreQnaData(searchQueryString);
-  //     }
-  //   };
-
-  //   window.addEventListener("scroll", handleScroll);
-
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, [query, searchQueryString]);
 
   return (
     <>
@@ -162,10 +91,7 @@ const Questions = ({ questions, answers }) => {
         {questionsList.map((question) => {
           return (
             <div key={question._id}>
-              <QuestionItem
-                question={question}
-                answers={answers.filter((answer) => answer.parentQnaId === question._id)}
-              />
+              <QuestionItem question={question} />
               <Divider plain />
             </div>
           );

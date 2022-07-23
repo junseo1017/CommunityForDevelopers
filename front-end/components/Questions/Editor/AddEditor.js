@@ -138,9 +138,13 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
     setConfirmLoading(true);
 
     isUpdate ? await updateQna() : await saveQna();
+    if (isAnswer) {
+      router.push(`/qna/${parentQnaId}`);
+      return;
+    }
+    router.push(`/qna/${qnaId}`);
     setVisible(false);
     setConfirmLoading(false);
-    router.push(`/qna`);
   };
 
   const handleCancel = () => {

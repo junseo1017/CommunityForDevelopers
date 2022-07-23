@@ -31,7 +31,6 @@ const QuestionDetail = ({ qna }) => {
 
   // user 정보 가져오기
   const { me } = useSelector((state) => state.user);
-  console.log("me", me);
 
   // 현재 로그인 유저가 질문자인지 확인
   const initialLoginState = me?._id === question.authorId;
@@ -121,13 +120,13 @@ const QuestionDetail = ({ qna }) => {
               onClick={() => {
                 handleUpdate();
               }}>
-              수정하기
+              수정
             </button>
             <button
               onClick={() => {
                 showModal();
               }}>
-              삭제하기
+              삭제
             </button>
           </div>
         )}
