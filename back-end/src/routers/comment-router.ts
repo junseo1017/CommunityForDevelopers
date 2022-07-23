@@ -2,6 +2,8 @@ import { Router, Response, NextFunction } from "express";
 import { ExtendReq, loginRequired } from "../middlewares/login-required";
 import { commentService, portfolioService, qnaService } from "../services";
 import { Types } from "mongoose";
+import { validateRequestWith } from "../middlewares";
+import { commentInputJoi, commentDeleteJoi } from "../db/schemas/joi-schemas";
 
 const commentRouter = Router();
 
@@ -9,6 +11,7 @@ const commentRouter = Router();
 commentRouter.post(
   "/portfolio/:id",
   loginRequired,
+  validateRequestWith(commentInputJoi, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const postId = req.params.id;
@@ -31,6 +34,7 @@ commentRouter.post(
 commentRouter.post(
   "/qna/:id",
   loginRequired,
+  validateRequestWith(commentInputJoi, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const postId = req.params.id;
@@ -53,6 +57,7 @@ commentRouter.post(
 commentRouter.put(
   "/:commentId",
   loginRequired,
+  validateRequestWith(commentInputJoi, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const commentId = req.params.commentId;
@@ -74,6 +79,7 @@ commentRouter.put(
 commentRouter.delete(
   "/:commentId",
   loginRequired,
+  validateRequestWith(commentDeleteJoi, "query"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const commentId = req.params.commentId;
