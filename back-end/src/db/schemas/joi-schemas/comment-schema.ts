@@ -5,7 +5,8 @@ const commentInputJoi = Joi.object({
 });
 
 const commentDeleteJoi = Joi.object({
-  portId: Joi.string().required(),
+  portId: Joi.string().optional(),
+  qnaId: Joi.string().optional(),
 });
 
 export { commentInputJoi, commentDeleteJoi };
