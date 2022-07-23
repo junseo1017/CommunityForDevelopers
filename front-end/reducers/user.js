@@ -216,6 +216,7 @@ const userSlice = createSlice({
       .addCase(userWithdrawals.fulfilled, (state) => {
         state.userWithdrawalsLoading = false;
         state.userWithdrawalsDone = true;
+        state.me = false;
       })
       .addCase(userWithdrawals.rejected, (state, action) => {
         state.userWithdrawalsLoading = false;

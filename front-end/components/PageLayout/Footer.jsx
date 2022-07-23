@@ -18,17 +18,21 @@ const Footer = () => {
             <ul>
               <h4>김용민(L,Backend)</h4>
               <div>
-                <address>ddd@gmail.com</address>
-                <li>한 일</li>
-                <li>한 일</li>
+                <address>bdd3452@gmail.com</address>
+                <li>User API / QnA API</li>
+                <li>Cookie & Jwt token</li>
+                <li>Image Upload</li>
+                <li>Email 인증</li>
               </div>
             </ul>
             <ul>
               <h4>김태준(Backend)</h4>
               <div>
-                <address>ddd@gmail.com</address>
-                <li>한 일</li>
-                <li>한 일</li>
+                <address>xowns1016@gmail.com</address>
+                <li>Portfolio API / Comment API</li>
+                <li>Oauth [Social Login]</li>
+                <li>검색기능</li>
+                <li>댓글기능</li>
               </div>
             </ul>
             <ul>
@@ -36,26 +40,29 @@ const Footer = () => {
               <div>
                 <address>dlwnstjzld@gmail.com</address>
                 <li>페이지 레이아웃 컴포넌트</li>
-                <li>헤더, 푸터</li>
-                <li>로그인</li>
-                <li>회원가입</li>
+                <li>헤더/푸터</li>
+                <li>로그인/회원가입</li>
                 <li>유저 프로필</li>
               </div>
             </ul>
             <ul>
               <h4>이형민(Frontend)</h4>
               <div>
-                <address>ddd@gmail.com</address>
-                <li>한 일</li>
-                <li>한 일</li>
+                <address>hyoungqu23@gmail.com</address>
+                <li>QnA 레이아웃 컴포넌트</li>
+                <li>질문 CRUD</li>
+                <li>답변 CRUD</li>
+                <li>추천/스크랩</li>
               </div>
             </ul>
             <ul>
               <h4>지의신(Frontend)</h4>
               <div>
-                <address>ddd@gmail.com</address>
-                <li>한 일</li>
-                <li>한 일</li>
+                <address>usgeeus@gmail.com</address>
+                <li>Portfolio 레이아웃 컴포넌트</li>
+                <li>에디터 JS</li>
+                <li>검색/스크롤</li>
+                <li>댓글</li>
               </div>
             </ul>
           </div>
