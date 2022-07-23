@@ -4,7 +4,7 @@ const searchPortfolioJoi = Joi.object({
   option: Joi.alternatives()
     .try(Joi.array().items(Joi.string()), Joi.string())
     .optional(),
-  value: Joi.string().empty().optional(),
+  value: Joi.string().optional(),
   orderBy: Joi.string().optional(),
   skill: Joi.alternatives()
     .try(Joi.array().items(Joi.string()), Joi.string())
@@ -13,7 +13,7 @@ const searchPortfolioJoi = Joi.object({
 });
 
 const searchQnaJoi = Joi.object({
-  value: Joi.string().optional(),
+  value: Joi.string().empty("").optional(),
   page: Joi.string().required(),
 });
 
