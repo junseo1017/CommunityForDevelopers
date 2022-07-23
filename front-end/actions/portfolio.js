@@ -105,10 +105,15 @@ export const removePortfolio = createAsyncThunk(
   },
 );
 
-//http://localhost:5000/api/comments/:commentId
 export const removeComment = createAsyncThunk("portfolio/removeComment", async (data, thunkAPI) => {
   try {
-    const response = await axios.delete(`/api/comments/${data.commentId}`); //
+    console.log(
+      `%c 댓글 삭제 요청: /api/comments/${data.commentId}?portId=${data.portfolioId}`,
+      "color: green;",
+    );
+    const response = await axios.delete(
+      `/api/comments/${data.commentId}?portId=${data.portfolioId}`,
+    ); //
     //return response.data;
     return { commentId: data.commentId };
   } catch (error) {
@@ -194,35 +199,12 @@ export const unscrapPortfolio = createAsyncThunk(
   },
 );
 
-export const retweet = createAsyncThunk("portfolio/retweet", async (data, { rejectWithValue }) => {
-  try {
-    const response = await axios.post(`/portfolio/${data.portfolioId}/retweet`, data);
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error.response.data);
-  }
-});
-
 export const updatePortfolio = createAsyncThunk(
   "portfolio/updatePortfolio",
   async (data, { rejectWithValue }) => {
     try {
       const response = await axios.put(`/api/portfolios/${data.portfolioId}`, data.formdata);
       return { ...response.data, PortfolioId: data.portfolioId };
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  },
-);
-
-export const loadHashtagPortfolios = createAsyncThunk(
-  "portfolio/loadHashtagPortfolios",
-  async (data, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(
-        `/hashtag/${encodeURIComponent(data.hashtag)}?last=${data?.lastId || 0}`,
-      );
-      return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
