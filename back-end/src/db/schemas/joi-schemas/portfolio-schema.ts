@@ -1,29 +1,30 @@
 import Joi from "joi";
 
 const portfolioSearchJoi = Joi.object({
-  lastId: Joi.string().empty(""),
+  lastId: Joi.string().allow("", null),
 });
 
 const portfolioCreateJoi = Joi.object({
-  title: Joi.string().min(2).max(30).empty(""),
-  description: Joi.string().max(100).empty(""),
-  skills: Joi.string().empty(""),
-  content: Joi.string().empty(""),
-  contentText: Joi.string().empty(""),
-  imgUrl: Joi.string().empty(""),
+  title: Joi.string().min(2).max(30).required(),
+  description: Joi.string().max(100).required(),
+  skills: Joi.string().required(),
+  content: Joi.string().required(),
+  contentText: Joi.string().required(),
+  imgUrl: Joi.string().required(),
 });
 
 const portfolioUpdateQueryJoi = Joi.object({
-  field: Joi.string().empty(""),
-  adding: Joi.string().empty(""),
+  field: Joi.string().empty("").optional(),
+  adding: Joi.string().empty("").optional(),
 });
 
 const portfolioUpdateJoi = Joi.object({
-  description: Joi.string().max(100).empty(""),
-  skills: Joi.string().empty(""),
-  content: Joi.string().empty(""),
-  contentText: Joi.string().empty(""),
-  imgUrl: Joi.string().empty(""),
+  title: Joi.string().min(2).max(30).required(),
+  description: Joi.string().max(100).required(),
+  skills: Joi.string().required(),
+  content: Joi.string().required(),
+  contentText: Joi.string().required(),
+  imgUrl: Joi.string().required(),
 });
 
 export {

@@ -86,8 +86,12 @@ commentRouter.delete(
       const id = new Types.ObjectId(commentId);
       const userId = req.currentUserId || "";
       const portId = req.query.portId as string;
+      const qnaId = req.query.qnaId as string;
       if (portId) {
         await portfolioService.deletePortfolioComment(portId, id);
+      };
+      if (qnaId) {
+        await qnaService.deleteQnaComment(qnaId, id);
       }
 
       const deletedComment = await commentService.deleteComment(
