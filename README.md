@@ -90,12 +90,19 @@ community-for-developers
         - editor.js
         - 이미지 업로드 -> Multer & Firebase storage
     - 포트폴리오 삭제
+    - 포토폴리오 검색 -> MongoDB searchIndex, 동적 필터
+    - 포토폴리오 추천 & 스크랩
+    - 포토폴리오 댓글 CRUD
 - QnA
     - QnA 작성
       QnA 수정
         - editor.js
         - 이미지 업로드 -> Multer & Firebase storage
     - QnA 삭제
+    - QnA 추천  
+    - QnA 답변 댓글 CRUD
+    - 질문 검색 -> MongoDB searchIndex
+    - 질문 조회 
 - 에러 페이지
     - 404 페이지  
 - 기타
@@ -127,3 +134,6 @@ community-for-developers
 | 이형민 | FE | ------ |
 | 김태준 | BE | - 포토폴리오/댓글 API<br> - OAuth 로그인/가입<br> - 검색 기능(MongoDB searchIndex)<br> - Joi validation 미들웨어<br> - custom errorHandler<br>|
 | 김용민 | BE | ------ |
+
+## 제작과정 
+- notion: https://www.notion.so/Elice-Team-6-917622bb4c974c2cb46c4a3040b904e3 
