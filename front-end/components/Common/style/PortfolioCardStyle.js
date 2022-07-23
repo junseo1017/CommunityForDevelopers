@@ -48,7 +48,7 @@ export const portfolioStyle = css`
 
       h3 {
         font-size: 16px;
-        font-weight: 900;
+        font-weight: 700;
         color: white;
         margin-bottom: 0;
         padding-top: 15px;
