@@ -1,21 +1,54 @@
 import Joi from "joi";
 
-const userCreateJoiSchema = Joi.object({
+const userRegisterJoi = Joi.object({
   nickname: Joi.string().required(),
-  email: Joi.string()
+  email: Joi.string().email({ minDomainSegments: 2 }).required(),
+  password: Joi.string()
     .pattern(
       new RegExp(
-        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/i
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,15}$/
       )
     )
     .required(),
+});
+
+const userLoginJoi = Joi.object({
+  email: Joi.string().email({ minDomainSegments: 2 }).required(),
   password: Joi.string()
-    .pattern(new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/))
+    .pattern(
+      new RegExp(
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,15}$/
+      )
+    )
     .required(),
 });
 
-const userUpdateJoiSchema = Joi.object({
-  nickname: Joi.string().required(),
+const userEmailJoi = Joi.object({
+  email: Joi.string().email({ minDomainSegments: 2 }).required(),
+  authNumber: Joi.number(),
 });
 
-export { userCreateJoiSchema, userUpdateJoiSchema };
+const userUpdateInfoJoi = Joi.object({
+  nickname: Joi.string().required(),
+  job: Joi.string().empty(""),
+  skills: Joi.string().empty(""),
+  imgUrl: Joi.string().empty(""),
+});
+
+const userUpdatePWJoi = Joi.object({
+  password: Joi.string()
+    .pattern(
+      new RegExp(
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,15}$/
+      )
+    )
+    .required(),
+});
+
+export {
+  userRegisterJoi,
+  userLoginJoi,
+  userEmailJoi,
+  userUpdateInfoJoi,
+  userUpdatePWJoi,
+};

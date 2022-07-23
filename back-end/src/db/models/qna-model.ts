@@ -1,42 +1,65 @@
 import { model, Types, Document } from "mongoose";
 import { QnaSchema, QnaType } from "../schemas/qna-schema";
 import { QnaInputDTO } from "../../interfaces/qna-interface";
+import { qnaSearchCondition } from "../../utils/search-condition";
 
 const Qna = model<QnaType & Document>("qnas", QnaSchema);
 
 export class QnaModel {
-  async findAll() {
-    return await Qna.find({}).populate({
-      path: "author",
-      select: "nickname",
-    });
+  async findQuestions(page: number) {
+    return await Qna.find({ isAnswer: false })
+      .sort({ _id: -1 })
+      .skip((page - 1) * 8)
+      .limit(8);
   }
 
   async findById(qnaId: string) {
     return await Qna.findOne({ _id: qnaId }).populate([
       {
-        path: "author",
-        select: "nickname",
-      },
-      {
         path: "recommends",
-        select: "nickname",
+        select: ["nickname", "imgUrl"],
       },
       {
         path: "comments",
         populate: {
           path: "author",
-          select: "nickname",
+          select: ["nickname", "imgUrl"],
+        },
+      },
+    ]);
+  }
+
+  async findAnswerById(qnaId: string) {
+    return await Qna.find({ parentQnaId: qnaId }).populate([
+      {
+        path: "recommends",
+        select: ["nickname", "imgUrl"],
+      },
+      {
+        path: "comments",
+        populate: {
+          path: "author",
+          select: ["nickname", "imgUrl"],
         },
       },
     ]);
   }
 
   async findByUserId(userId: string) {
-    return await Qna.find({ author: userId }).populate({
-      path: "author",
-      select: "nickname",
-    });
+    return await Qna.find({ authorId: userId });
+  }
+
+  async findBySearch(value: string, page: number) {
+    const searchCondition = qnaSearchCondition(value, page);
+    return await Qna.aggregate(searchCondition);
+  }
+
+  async getQuestionCountByUserId(userId: string) {
+    return await Qna.find({ authorId: userId, isAnswer: false }).count();
+  }
+
+  async getAnswerCountByUserId(userId: string) {
+    return await Qna.find({ authorId: userId, isAnswer: true }).count();
   }
 
   async create(qnaInfo: QnaInputDTO) {
@@ -80,6 +103,19 @@ export class QnaModel {
     );
   }
 
+  async updateQnaComment(
+    portId: string,
+    commentId: Types.ObjectId,
+    setType: string
+  ) {
+    const filter = { _id: portId };
+    const option = { returnOriginal: false };
+    return await Qna.findOneAndUpdate(
+      filter,
+      { [setType]: { comments: commentId } },
+      option
+    );
+  }
   async deleteById(qnaId: string) {
     return await Qna.findOneAndDelete({ _id: qnaId });
   }

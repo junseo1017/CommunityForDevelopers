@@ -1,11 +1,23 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { portfolioService } from "../services/portfolio-service";
-import { ExtendReq, loginRequired } from "../middlewares/login-required";
+import { portfolioService, userService } from "../services";
+import {
+  ExtendReq,
+  loginRequired,
+  checkImage,
+  validateRequestWith,
+} from "../middlewares";
+import {
+  portfolioSearchJoi,
+  portfolioCreateJoi,
+} from "../db/schemas/joi-schemas";
+import { upload } from "../utils";
 
 const portfolioRouter = Router();
 
+// 1. 전체 포토폴리오 조회
 portfolioRouter.get(
   "/",
+  validateRequestWith(portfolioSearchJoi, "query"),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const lastId = req.query.lastId as string;
@@ -16,7 +28,7 @@ portfolioRouter.get(
     }
   }
 );
-
+// 2. 포토폴리오 조회
 portfolioRouter.get(
   "/:portId",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -29,31 +41,10 @@ portfolioRouter.get(
     }
   }
 );
-
-portfolioRouter.get(
-  "/search/list",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const options = req.query.option as string[];
-      const value = req.query.value as string;
-      const orderBy = req.query.orderBy as string;
-      const skills = req.query.skill as string[];
-      const searchInfo = { options, value, orderBy, skills };
-      const page = parseInt(req.query.page as string);
-      const Portfolios = await portfolioService.getPortfoliosBySearch(
-        searchInfo,
-        page
-      );
-      res.status(200).json(Portfolios);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
+// 3. 유저별 포토폴리오 조회
 portfolioRouter.get(
   "/user/:userId",
-  async (req: ExtendReq, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.params.userId;
       const Portfolio = await portfolioService.getUserPortfolio(userId);
@@ -63,69 +54,88 @@ portfolioRouter.get(
     }
   }
 );
-
+// 4. 유저별 스크랩 포토폴리오 조회
+portfolioRouter.get(
+  "/user/:userId/scraps",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.params.userId;
+      res.status(200).json(await portfolioService.getUserScraps(userId));
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+// 5. 포토폴리오 작성
 portfolioRouter.post(
   "/",
   loginRequired,
+  upload,
+  checkImage,
+  validateRequestWith(portfolioCreateJoi, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
-      const author = req.currentUserId || "";
-      const { title, description, skills, content, contentText } = req.body;
+      const authorId = req.currentUserId || "";
+      const userInfo = await userService.getUserInfo(authorId);
+      const author = userInfo.nickname;
+      const authorImg = userInfo.imgUrl;
+      const { title, description, content, contentText } = req.body;
+      const skills = JSON.parse(req.body?.skills);
+      const thumbnail = req.body.imgUrl;
+
       const newPortfolio = await portfolioService.addPortfolio({
+        authorId,
         author,
+        authorImg,
         title,
         description,
         skills,
         content,
         contentText,
+        thumbnail,
       });
+
       res.status(201).json(newPortfolio);
     } catch (error) {
       next(error);
     }
   }
 );
-
-portfolioRouter.put(
-  "/:portId/",
-  loginRequired,
-  async (req: ExtendReq, res: Response, next: NextFunction) => {
-    try {
-      const portId = req.params.portId;
-      const userId = req.currentUserId || "";
-      const field = req.query.field as string;
-      const adding = req.query.adding === "true";
-      const updatedPortfolio = await portfolioService.setField(
-        portId,
-        userId,
-        field,
-        adding
-      );
-      res.status(200).json(updatedPortfolio);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
+// 6. 포토폴리오 수정
 portfolioRouter.put(
   "/:portId",
   loginRequired,
+  upload,
+  checkImage,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
+    const portId = req.params.portId;
+    const userId = req.currentUserId || "";
+    const field = req.query.field as string;
+    const adding = req.query.adding === "true";
     try {
-      const portId = req.params.portId;
-      const author = req.currentUserId || "";
-      const { title, description, skills, content, contentText } = req.body;
+      if (field) {
+        const updatedPortfolio = await portfolioService.setField(
+          portId,
+          userId,
+          field,
+          adding
+        );
+        res.status(200).json(updatedPortfolio);
+      }
+      const { title, description, content, contentText } = req.body;
+      const skills = JSON.parse(req.body?.skills);
+      const thumbnail = req.body.imgUrl;
       const toUpdate = {
         ...(title && { title }),
         ...(description && { description }),
         ...(skills && { skills }),
         ...(content && { content }),
         ...(contentText && { contentText }),
+        ...(thumbnail && { thumbnail }),
       };
       const updatedPortfolioInfo = await portfolioService.setPortfolio(
         portId,
-        author,
+        userId,
         toUpdate
       );
       res.status(200).json(updatedPortfolioInfo);
@@ -134,17 +144,17 @@ portfolioRouter.put(
     }
   }
 );
-
+// 7. 포토폴리오 삭제
 portfolioRouter.delete(
   "/:portId",
   loginRequired,
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const portId = req.params.portId;
-      const author = req.currentUserId || "";
+      const userId = req.currentUserId || "";
       const deletedPortfolioInfo = await portfolioService.deletePortfolio(
         portId,
-        author
+        userId
       );
       res.status(200).json(deletedPortfolioInfo);
     } catch (error) {

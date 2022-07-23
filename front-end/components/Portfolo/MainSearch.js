@@ -1,8 +1,12 @@
 import React from "react";
 /** @jsxImportSource @emotion/react */
-import { SearchCss } from "./styles/mainSearchStyle";
+import { SearchCss, Button } from "./styles/mainSearchStyle";
 
-const MainSearch = () => {
+const onSubmit = (e) => {
+  e.preventDefault();
+};
+
+const MainSearch = ({ onChange, searchOptions, onSearchValueChange }) => {
   return (
     <div css={SearchCss}>
       <div>
@@ -12,14 +16,15 @@ const MainSearch = () => {
               <path d="M11.407,10.421,8.818,7.832a4.276,4.276,0,1,0-.985.985l2.589,2.589a.7.7,0,0,0,.985-.985ZM2.355,5.352a3,3,0,1,1,3,3,3,3,0,0,1-3-3Z"></path>
             </svg>
           </div>
-          <form>
+          <form onSubmit={onSubmit}>
             <label htmlFor="search">
               <input
                 type="search"
-                name="search"
+                name="value"
                 authocomplete="off"
                 placeholder="검색"
                 aria-label="포트폴리오 검색"
+                onChange={onSearchValueChange}
               />
             </label>
           </form>
@@ -27,14 +32,20 @@ const MainSearch = () => {
       </div>
       <div>
         <ul>
-          <li className="checked">
-            <button>제목</button>
+          <li>
+            <Button checked={searchOptions.title} name="title" onClick={onChange}>
+              제목
+            </Button>
           </li>
           <li>
-            <button>내용</button>
+            <Button checked={searchOptions.contentText} name="contentText" onClick={onChange}>
+              내용
+            </Button>
           </li>
           <li>
-            <button>유저</button>
+            <Button checked={searchOptions["author"]} name="author" onClick={onChange}>
+              유저
+            </Button>
           </li>
         </ul>
       </div>

@@ -35,13 +35,10 @@ const initialState = {
 
 const qnaSlice = createSlice({
   name: "qna",
-
   initialState,
-
   reducers: {
     // Reducers
   },
-
   extraReducers: (builder) => {
     builder
       .addCase(getQnaData.pending, (state, action) => {
@@ -57,44 +54,21 @@ const qnaSlice = createSlice({
       })
       // getCommentByUserId
       .addCase(getqnabyuserid.pending, (state, action) => {
-        console.log("pending");
         state.getQnAByUserIdLoading = true;
         state.getQnAByUserIdDone = false;
         state.getQnAByUserIdError = false;
       })
       .addCase(getqnabyuserid.fulfilled, (state, action) => {
-        console.log("fulfilled");
         state.getQnAByUserIdLoading = false;
         state.getQnAByUserIdDone = true;
         state.qnabyUserId = action.payload;
       })
       .addCase(getqnabyuserid.rejected, (state, action) => {
-        console.log("rejected");
         state.getQnAByUserIdLoading = false;
-        state.getQnAByUserIdError = action.payload;
+        state.getQnAByUserIdError = action.error;
       });
   },
 });
 
 export const qnaActions = qnaSlice.actions;
 export default qnaSlice;
-
-// export const getQnaData = () => {
-//   return async (dispatch) => {
-//     const getData = async () => {
-//       const response = await axios.get("/api/qnas");
-//       const result = response.data;
-
-//       return result;
-//     };
-
-//     try {
-//       const questions = await getData();
-//       console.log(questions);
-
-//       dispatch(qnaActions.showQuestionsList(questions));
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
-// };

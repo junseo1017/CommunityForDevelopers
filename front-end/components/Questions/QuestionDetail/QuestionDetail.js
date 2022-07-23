@@ -1,156 +1,184 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 import Router, { useRouter } from "next/router";
-import Comments from "./Comments";
 import TopButton from "../TopButton";
-import { Button, Badge, Tag, Divider, Collapse, Input } from "antd";
+import { Button, Modal, Tag, Divider, Collapse, Input } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { DetailContainer, DetailQuestionContainer, EditorContainer } from "../styles/QuestionStyle";
-import Link from "next/link";
+import {
+  DetailContainer,
+  DetailQuestionContainer,
+  AnswerEditorContainer,
+} from "../styles/QuestionStyle";
 import AddEditor from "../Editor/AddEditor";
-import Like from "../Like";
 import Answers from "./Answers";
 import Output from "editorjs-react-renderer";
 import axios from "axios";
+import moment from "moment";
+import useConfirmModal from "../../../hooks/useConfirmModal";
 
-const OutputStyle = {
-  codeBox: {
-    code: { fontSize: "1em" },
-  },
-};
-
-const QuestionDetail = ({ qna, answers }) => {
-  // qna의 id 가져오기
+const QuestionDetail = ({ qna }) => {
   const router = useRouter();
-  const qnaId = router.query._id;
+
+  console.log(qna);
+
+  // 질문 답변 분류
+  const question = qna?.Question;
+  const answers = qna?.Answers;
 
   // user 정보 가져오기
   const { me } = useSelector((state) => state.user);
 
-  const initialMode = !!(me._id === qna.author._id);
+  // 현재 로그인 유저가 질문자인지 확인
+  const initialLoginState = me?._id === question?.authorId;
 
-  const [isAnswerCreateMode, setIsAnswerCreateMode] = useState(false);
-  const [isAnswerDeleteMode, setIsAnswerDeleteMode] = useState(initialMode);
+  const [isAuthor, setIsAuthor] = useState(initialLoginState); // 수정, 삭제 버튼 보여주기
+  const [isAnswerUpdateMode, setIsAnswerUpdateMode] = useState(false); // 답변 수정 form 변경
+  const [isAnswerCreateMode, setIsAnswerCreateMode] = useState(false); // 답변 form 열기
+  const [answerTitle, setAnswerTItle] = useState(""); // 답변 제목 저장
 
-  // 수정 삭제 작업 중..
+  // 질문 삭제
   const handleDelete = async (deleteId) => {
     try {
       await axios.delete(`/api/qnas/${deleteId}`);
+      router.push(`/qna`);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleUpdate = async (updateId) => {
-    try {
-      await axios.put(`/api/qnas/${updateId}`);
-    } catch (error) {
-      console.log(error);
-    }
+  // 질문 수정
+  const handleUpdate = async () => {
+    setIsAnswerUpdateMode(!isAnswerUpdateMode);
   };
 
-  const [answerTitle, setAnswerTItle] = useState("");
+  // 답변하기 form 오픈 시 스크롤
+  const EditorRef = useRef();
+  const handleScroll = () =>
+    EditorRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
 
-  const formattingDate = (date) => {
-    return `${new Date(date).getFullYear()}년 ${new Date(date).getMonth() + 1}월 ${new Date(
-      date,
-    ).getDate()}일`;
-  };
+  // 비로그인 시 모달로 돌려보내
+  const redirectLogin = useCallback(() => {
+    Router.push("/login");
+  }, []);
 
-  const [recommendData, setRecommendData] = useState({
-    isRecommended: false,
-    numberOfRecommends: 0,
+  const redirectHome = useCallback(() => {
+    Router.push("/");
+  }, []);
+
+  const modalMessage = useMemo(
+    () => ({
+      title: "로그인이 필요한 서비스입니다.",
+      description: "로그인 하시겠습니까? 취소를 누르시면 홈으로 이동합니다.",
+    }),
+    [],
+  );
+
+  const [showConfirm] = useConfirmModal({
+    okFunc: redirectLogin,
+    cancleFunc: redirectHome,
+    message: modalMessage,
   });
 
-  console.log(recommendData);
+  // 모달 처리
+  const [visible, setVisible] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState("질문을 삭제하시겠습니까?");
 
-  const [isChanged, setIsChanged] = useState(false);
+  const showModal = () => {
+    setVisible(true);
+  };
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await axios.get(`/api/qnas/${qnaId}`);
-        const qna = response.data;
+  const handleOk = async () => {
+    await handleDelete(question._id);
+    setVisible(false);
+    router.push(`/qna`);
+  };
 
-        const isRecommended = qna.recommends.map((user) => user._id).includes(me._id);
-        const numberOfRecommends = qna.recommends.length;
-
-        setRecommendData({ isRecommended, numberOfRecommends });
-        setIsChanged(false);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    getData();
-  }, [isChanged]);
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setVisible(false);
+  };
 
   return (
     <div css={DetailContainer}>
       <div css={DetailQuestionContainer}>
-        {/* <Like qnaId={qna._id} recommendData={recommendData} setIsChanged={setIsChanged} /> */}
-        <h1>{qna.title}</h1>
-        {isAnswerDeleteMode && (
-          <div>
-            <EditOutlined
-              style={{ fontSize: "2em" }}
+        <Modal
+          title="수정, 삭제"
+          visible={visible}
+          onOk={handleOk}
+          confirmLoading={confirmLoading}
+          onCancel={handleCancel}>
+          <p>{modalText}</p>
+        </Modal>
+        {isAuthor && (
+          <div className="button-wrapper">
+            <button
               onClick={() => {
                 handleUpdate();
-              }}
-            />
-            <DeleteOutlined
-              style={{ fontSize: "2em" }}
+              }}>
+              수정
+            </button>
+            <button
               onClick={() => {
-                handleDelete(qna._id);
-              }}
-            />
+                showModal();
+              }}>
+              삭제
+            </button>
           </div>
         )}
+        <h1>{question.title}</h1>
         <div className="tag-container">
-          {qna.tags.map((tag, index) => (
+          {question.tags.map((tag, index) => (
             <Tag key={index}>{tag}</Tag>
           ))}
-          <p>질문자: {qna.author.nickname}</p>
-          <p>질문일: {formattingDate(qna.createdAt)}</p>
-          <p>최근 수정일: {formattingDate(qna.updatedAt)}</p>
         </div>
-        <div>
-          {/* <Link href="/qna">
-            <Button size="large" type="text">
-              목록으로 가기
-            </Button>
-          </Link>
-          <Link href="/qna/new">
-            <Button size="large" type="primary">
-              다른 질문하기
-            </Button>
-          </Link> */}
-          <Button
-            size="large"
-            type="primary"
-            onClick={() => setIsAnswerCreateMode(!isAnswerCreateMode)}>
-            답변하기
-          </Button>
-        </div>
-        <Divider plain />
-        <Output data={JSON.parse(qna.contents)} style={OutputStyle} />
-        {isAnswerCreateMode && (
-          <div css={EditorContainer}>
-            <Divider plain />
-            <h2>답변하기</h2>
-            <Input
-              size="large"
-              placeholder="답변의 제목을 작성하세요"
-              onChange={(e) => setAnswerTItle(e.target.value)}
-            />
-            <AddEditor title={answerTitle} isAnswer parentQnaId={qna._id} />
+        <div className="info-container">
+          <div className="info-box">
+            <p>질문자: {question.author}</p>
+            <p>질문일: {moment(question.createdAt).format("YYYY월 MM월 DD일")}</p>
+            <p>최근 수정일: {moment(question.updatedAt).format("YYYY월 MM월 DD일")}</p>
           </div>
-        )}
-        <div></div>
+          <button
+            disabled={isAnswerUpdateMode}
+            onClick={() => {
+              if (me === undefined) showConfirm();
+              isAnswerCreateMode
+                ? (EditorRef.current.style.display = "none")
+                : (EditorRef.current.style.display = "flex");
+              setIsAnswerCreateMode(!isAnswerCreateMode);
+              handleScroll();
+            }}>
+            답변하기
+          </button>
+        </div>
       </div>
-      <Answers answers={answers} me={me ? me : null} />
+      <Divider plain />
+      {!isAnswerUpdateMode ? (
+        <Output data={JSON.parse(question.contents)} />
+      ) : (
+        <div className="answer-editor">
+          <AddEditor
+            data={JSON.parse(question.contents)}
+            title={answerTitle}
+            isAnswer={false}
+            qnaId={question._id}
+            isUpdate={true}
+            setChanged={setIsAnswerUpdateMode}
+          />
+        </div>
+      )}
+      <div ref={EditorRef} css={AnswerEditorContainer}>
+        <h2>답변하기</h2>
+        <Input
+          size="large"
+          placeholder="답변의 제목을 작성하세요"
+          onChange={(e) => setAnswerTItle(e.target.value)}
+        />
+        <AddEditor title={answerTitle} isAnswer parentQnaId={question._id} />
+      </div>
+      <Answers answers={answers} />
       <TopButton />
     </div>
   );

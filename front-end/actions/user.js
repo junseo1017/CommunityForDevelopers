@@ -1,7 +1,6 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { backendUrl } from "../config/config";
-
 axios.defaults.baseURL = backendUrl;
 axios.defaults.withCredentials = true; // front, backend 간 쿠키공유
 
@@ -10,20 +9,43 @@ export const signup = createAsyncThunk("user/signup", async (data, { rejectWithV
     const response = await axios.post("/api/users/", data);
     return response.data;
   } catch (error) {
-    console.log(error.response);
     return rejectWithValue(error.response.data);
   }
 });
 
 export const login = createAsyncThunk("user/login", async (data, { rejectWithValue }) => {
   try {
-    console.log(`%c 로그인 요청: ${Object.values(data)} `, "color: green;");
     const response = await axios.post("/api/users/login", data);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);
   }
 });
+
+export const getGithubLoginUrl = createAsyncThunk(
+  "user/getGithubLoginUrl",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("/api/oauth/github");
+      return response.data.url;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const getKakaoLoginUrl = createAsyncThunk(
+  "user/getKakaoLoginUrl",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("/api/oauth/kakao");
+      console.log(response);
+      return response.data.url;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
 
 export const logout = createAsyncThunk("user/logout", async (data, { rejectWithValue }) => {
   try {
@@ -61,6 +83,39 @@ export const userinfo = createAsyncThunk("user/userinfo", async (data, { rejectW
   try {
     const response = await axios.get(`/api/users/${data}`);
 
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+});
+
+export const editPassword = createAsyncThunk(
+  "user/editPassword",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`/api/users/password`, { password: data });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const userWithdrawals = createAsyncThunk(
+  "user/userWithdrawals",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(`/api/users`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const emailAuth = createAsyncThunk("user/emailauth", async (data, { rejectWithValue }) => {
+  try {
+    const response = await axios.post("/api/users/email", data);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);

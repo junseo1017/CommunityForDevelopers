@@ -43,10 +43,13 @@ const AddTags = ({ addTags }) => {
 
   return (
     <>
-      <div>
+      <div className="tags-container">
         {tags.map((tag, index) => {
           return (
-            <Tag key={index} onClick={(e) => handleClose(e.target.innerText)}>
+            <Tag
+              className="tags-input"
+              key={index}
+              onClick={(e) => handleClose(e.target.innerText)}>
               {tag}
             </Tag>
           );

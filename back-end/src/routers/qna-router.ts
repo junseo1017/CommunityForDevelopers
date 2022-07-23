@@ -1,31 +1,40 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { qnaService } from "../services/qna-service";
-import { ExtendReq, loginRequired } from "../middlewares/login-required";
+import { qnaService, userService } from "../services";
+import { ExtendReq, loginRequired, validateRequestWith } from "../middlewares";
+import {
+  qnaSearchJoi,
+  qnaCreateJoi,
+  qnaUpdateJoi,
+  qnaRecommendJoi,
+} from "../db/schemas/joi-schemas";
 
 const qnaRouter = Router();
 
+// 1. 전체 QnA 조회
 qnaRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const QnAs = await qnaService.getQnas();
-    res.status(200).json(QnAs);
+    const page = parseInt(req.query.page as string);
+    const Questions = await qnaService.getQuestions(page);
+    res.status(200).json(Questions);
   } catch (error) {
     next(error);
   }
 });
-
+// 2. QnA 조회
 qnaRouter.get(
   "/:qnaId",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const qnaId = req.params.qnaId;
-      const QnA = await qnaService.getQnaById(qnaId);
-      res.status(200).json(QnA);
+      const Question = await qnaService.getQnaById(qnaId);
+      const Answers = await qnaService.getAnswerByQuestion(qnaId);
+      res.status(200).json({ Question, Answers });
     } catch (error) {
       next(error);
     }
   }
 );
-
+// 3. 유저별 QnA 조회
 qnaRouter.get(
   "/user/:userId",
   async (req: ExtendReq, res: Response, next: NextFunction) => {
@@ -38,19 +47,24 @@ qnaRouter.get(
     }
   }
 );
-
+// 4. QnA 작성
 qnaRouter.post(
   "/",
   loginRequired,
+  validateRequestWith(qnaCreateJoi, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
-      const author = req.currentUserId || "";
-      const { title, contents, imgUrl, tags, isAnswer, parentQnaId } = req.body;
+      const authorId = req.currentUserId || "";
+      const userInfo = await userService.getUserInfo(authorId);
+      const author = userInfo.nickname;
+      const { title, contents, contentText, tags, isAnswer, parentQnaId } =
+        req.body;
       const newQnA = await qnaService.addQna({
         title,
         contents,
+        contentText,
+        authorId,
         author,
-        imgUrl,
         tags,
         isAnswer,
         parentQnaId,
@@ -61,18 +75,19 @@ qnaRouter.post(
     }
   }
 );
-
+// 5. QnA 수정
 qnaRouter.put(
   "/:qnaId",
   loginRequired,
+  validateRequestWith(qnaUpdateJoi, "body"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const qnaId = req.params.qnaId;
-      const author = req.currentUserId || "";
+      const userId = req.currentUserId || "";
       const {
         title,
         contents,
-        imgUrl,
+        contentText,
         recommends,
         tags,
         isAnswer,
@@ -81,23 +96,24 @@ qnaRouter.put(
       const toUpdate = {
         ...(title && { title }),
         ...(contents && { contents }),
-        ...(imgUrl && { imgUrl }),
+        ...(contentText && { contentText }),
         ...(recommends && { recommends }),
         ...(tags && { tags }),
         ...(isAnswer && { isAnswer }),
         ...(parentQnaId && { parentQnaId }),
       };
-      const updatedQnaA = await qnaService.setQna(qnaId, author, toUpdate);
+      const updatedQnaA = await qnaService.setQna(qnaId, userId, toUpdate);
       res.status(200).json(updatedQnaA);
     } catch (error) {
       next(error);
     }
   }
 );
-
+// 6. QnA 추천 추가/삭제
 qnaRouter.put(
   "/:qnaId/recommendation",
   loginRequired,
+  validateRequestWith(qnaRecommendJoi, "query"),
   async (req: ExtendReq, res: Response, next: NextFunction) => {
     try {
       const qnaId = req.params.qnaId;
@@ -114,6 +130,8 @@ qnaRouter.put(
     }
   }
 );
+
+// 7. QnA 삭제
 qnaRouter.delete(
   "/:qnaId",
   loginRequired,

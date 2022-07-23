@@ -1,107 +1,75 @@
 import { Request, Response, NextFunction } from "express";
-import { JwtPayload } from "jsonwebtoken";
 import { jwtUtil } from "../utils";
-import { UserType } from "../db/schemas/user-schema";
+import { userService } from "../services";
+import { AppError } from "./error-handler";
 
 export interface ExtendReq extends Request {
   currentUserId?: string;
 }
-interface CookieType {
-  accessToken: string;
-  refreshToken: string;
-}
 
-interface TokenObject {
-  userId?: string;
-  role?: string;
-  error?: unknown;
-}
-
-function loginRequired(req: ExtendReq, res: Response, next: NextFunction) {
-  // const userToken = req.headers["authorization"]?.split(" ")[1];
+async function loginRequired(
+  req: ExtendReq,
+  res: Response,
+  next: NextFunction
+) {
   const userToken = req.signedCookies.userinfo;
 
-  console.log("쿠키 토큰 : ", userToken);
-
   if (!userToken || userToken === "null") {
-    console.log("서비스 사용 요청이 있습니다.하지만, Authorization 토큰: 없음");
-    // res.status(403).json({
-    //   result: "forbidden-approach",
-    //   reason: "로그인한 유저만 사용할 수 있는 서비스입니다.",
-    // });
-    throw new Error("로그인한 유저만 사용할 수 있는 서비스입니다.");
+    next(new AppError(500, "로그인한 유저만 사용할 수 있는 서비스입니다."));
   }
 
-  const verifiedToken = tokenVerify(userToken, res);
+  try {
+    // access token verify
+    const verifiedToken = jwtUtil.verifyAccess(userToken.accessToken);
+    req.currentUserId = verifiedToken.userId;
+    next();
+  } catch (error) {
+    // access token이 만료된 경우에는 새롭게 토큰을 발급하고 쿠키를 재세팅
+    if ((<Error>error).message === "EXPIRED_ACCESS_TOKEN_ERROR") {
+      const newAccessToken = await regenerateAccessToken(
+        userToken.refreshToken
+      );
 
-  console.log("결과", verifiedToken);
+      const verifiedToken = jwtUtil.verifyAccess(<string>newAccessToken);
+      req.currentUserId = verifiedToken.userId;
+      res.cookie("userinfo", userToken, {
+        expires: new Date(Date.now() + 60000 * 1440), //24시간
+        httpOnly: true,
+        signed: true,
+      });
+      next();
+      return;
+    }
 
-  if (!verifiedToken) {
-    throw new Error("정상적인 토큰이 아닙니다.");
+    next(error);
   }
-
-  req.currentUserId = verifiedToken.userId;
-
-  next();
 }
 
-function tokenVerify(
-  userToken: CookieType,
-  res: Response
-): TokenObject | undefined {
-  // access token verify
-  const accessAuth = jwtUtil.verify(userToken.accessToken);
-  console.log("엑세스토큰", accessAuth);
-  // 유효한 경우
-  if (!accessAuth?.error) {
-    return accessAuth;
-  }
+async function regenerateAccessToken(refreshToken: string) {
+  try {
+    // refresh token verify
+    const verifiedRefreshToken = jwtUtil.verifyRefresh(refreshToken);
 
-  // 그렇지 않은 경우 refresh
+    // refresh token의 userId로 유저정보 get
+    const userId = verifiedRefreshToken.userId;
+    const { role } = await userService.getUserInfo(userId);
 
-  // refresh token verify
-  const refreshAuth = jwtUtil.verify(userToken.refreshToken);
-  console.log("리프레시토큰", refreshAuth);
-
-  // 유효하지 않으면
-  if (refreshAuth?.error) {
-    return;
-  }
-
-  // access token과 refresh token의 id값 비교
-  const accessDecoded = jwtUtil.decoded(userToken.accessToken);
-  console.log("디코딩결과", accessDecoded);
-
-  // 일치하지 않으면
-  if ((<JwtPayload>accessDecoded).userId !== refreshAuth?.userId) {
-    return;
-  }
-
-  // access token 재발급
-  const newAccessToken = jwtUtil.access(<UserType>{
-    _id: (<JwtPayload>accessDecoded).userId,
-    role: (<JwtPayload>accessDecoded).role,
-  });
-
-  // cookie 재설정
-  res.cookie(
-    "userinfo",
-    { accessToken: newAccessToken, refreshToken: userToken.refreshToken },
-    {
-      expires: new Date(Date.now() + 60000 * 1440), //24시간
-      httpOnly: true,
-      signed: true,
+    // access token 재발급
+    const newAccessToken = jwtUtil.generateAccessToken({
+      userId,
+      role,
+    });
+    return newAccessToken;
+  } catch (error) {
+    //refresh token 만료
+    if ((<Error>error).message === "EXPIRED_REFRESH_TOKEN_ERROR") {
+      throw new AppError(500, "로그인 후 이용하세요.");
     }
-  );
-
-  // 재확인
-  return tokenVerify(
-    {
-      accessToken: newAccessToken,
-      refreshToken: userToken.refreshToken,
-    },
-    res
-  );
+    //유효하지 않은 refresh token
+    if ((<Error>error).message === "INVALID_REFRESH_TOKEN_ERROR") {
+      throw new AppError(500, "유효하지 않은 토큰입니다.");
+    }
+  }
 }
 
 export { loginRequired };

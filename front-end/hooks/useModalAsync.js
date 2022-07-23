@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { message } from "antd";
 
-const useModalAsync = (asyncCallback, modalDescription, next, dispatchFunc) => {
+const useModalAsync = (asyncCallback, modalDescription, next, dispatchFunc, imgFormData) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState(modalDescription);
   const [modalVisible, setModalVisible] = useState(false);
@@ -14,19 +14,16 @@ const useModalAsync = (asyncCallback, modalDescription, next, dispatchFunc) => {
     setConfirmLoading(true);
     try {
       const data = await asyncCallback();
-      console.log(data);
 
       // setTimeout(() => {
       setModalVisible(false);
       setConfirmLoading(false);
-      console.log(dispatchFunc);
       if (dispatchFunc) {
-        const response = dispatchFunc(data);
-        console.log(response);
+        const response = dispatchFunc(data, imgFormData);
+        next();
       } else {
         return;
       }
-      next();
       message.success("Processing complete!");
       // }, 2000);
     } catch (err) {

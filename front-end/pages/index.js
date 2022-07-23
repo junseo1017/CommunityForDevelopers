@@ -1,43 +1,99 @@
 /** @jsxImportSource @emotion/react */
 import AppLayout from "../components/AppLayout";
-import React, { useMemo } from "react";
+import { useEffect, useCallback, useState } from "react";
 import wrapper from "../store";
-import { List, Select, Divider } from "antd";
-import { BackTop } from "antd";
-import PortfolioCard from "../components/Portfolo/PortfolioCard";
+import { List, Divider } from "antd";
+import { BackTop, Skeleton } from "antd";
+//import PortfolioCard from "../components/Portfolo/PortfolioCard";
+import PortfolioCard from "../components/Common/PortfolioCard";
 import PorfolioSearch from "../components/Portfolo/PorfolioSearch";
-import { loadPortfolios } from "../actions/portfolio";
+import { loadPortfoliosSearch, loadPortfoliosSearchScroll } from "../actions/portfolio";
 import { css } from "@emotion/react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { myinfo } from "../actions/user";
+import useDidMountEffect from "../hooks/useDidMountEffect";
+import { throttle, debounce } from "lodash";
+import SkeletonCard from "../components/Common/SkeletonCard";
+import { useRouter } from "next/router";
 
 const Home = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
-  const { me } = useSelector((state) => state.user);
-  const { mainPortfolios, hasMorePortfolios, loadPortfoliosLoading } = useSelector(
-    (state) => state.portfolio,
-  );
-  console.log(me);
-  console.log(mainPortfolios);
 
-  const { Option } = Select;
-  const portfolioSearchObjects = useMemo(() => {
-    const orderBys = [
-      <Option key={0}>추천 순</Option>,
-      <Option key={1}>최신 순</Option>,
-      <Option key={2}>댓글 순</Option>,
-      <Option key={3}>스크랩 순</Option>,
-    ];
-    return {
-      orderBys,
-    };
+  const { me } = useSelector((state) => state.user);
+  const { mainPortfolios, hasMorePortfolios, loadPortfoliosLoading, loadPortfoliosDone } =
+    useSelector((state) => state.portfolio);
+
+  const [query, setQuery] = useState();
+
+  const setSearchQuery = useCallback((q) => {
+    setQuery(q);
   }, []);
+
+  const loadScrollQuery = debounce((newQuery) => {
+    dispatch(
+      loadPortfoliosSearchScroll({
+        query: newQuery,
+      }),
+    );
+  }, 500);
+
+  const loadScroll = debounce((page) => {
+    dispatch(
+      loadPortfoliosSearchScroll({
+        query: `?page=${page}`,
+      }),
+    );
+  }, 500);
+
+  useEffect(() => {
+    const onScroll = throttle(() => {
+      // window.scrollY : 얼마나 내렸는지
+      // document.documentElement.clientHeight : 화면에 보이는 길이
+      // document.documentElement.scrollHeight : 총길이
+      if (hasMorePortfolios && !loadPortfoliosLoading) {
+        if (
+          window.scrollY + document.documentElement.clientHeight >
+          document.documentElement.scrollHeight - 300
+        ) {
+          //const lastId = mainPortfolios[mainPortfolios.length - 1]?._id;
+          const page = Math.floor((mainPortfolios.length - 1) / 12) + 2;
+          if (query) {
+            const newQuery = query.substring(0, 6) + `${page}` + query.substring(7);
+            loadScrollQuery(newQuery);
+          } else {
+            loadScroll(page);
+          }
+        }
+      }
+    }, 500);
+    window.addEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [hasMorePortfolios, loadPortfoliosLoading, mainPortfolios]);
+
+  useEffect(() => {
+    dispatch(
+      loadPortfoliosSearch({
+        query: "?page=1",
+      }),
+    );
+  }, []);
+
+  useDidMountEffect(() => {
+    dispatch(
+      loadPortfoliosSearch({
+        query,
+      }),
+    );
+  }, [query]);
 
   return (
     <AppLayout>
       <div css={mainContainer}>
-        <PorfolioSearch {...portfolioSearchObjects} />
+        <PorfolioSearch setSearchQuery={setSearchQuery} me={me} />
         <Divider css={dividerCss} />
         <List
           grid={{
@@ -45,9 +101,9 @@ const Home = () => {
             xs: 1,
             sm: 1,
             md: 2,
-            lg: 2,
-            xl: 3,
-            xxl: 3,
+            lg: 3,
+            xl: 4,
+            xxl: 4,
           }}
           dataSource={mainPortfolios}
           renderItem={(item) => {
@@ -58,6 +114,28 @@ const Home = () => {
             );
           }}
         />
+        {loadPortfoliosLoading && (
+          <List
+            grid={{
+              gutter: 18,
+              xs: 1,
+              sm: 1,
+              md: 2,
+              lg: 3,
+              xl: 4,
+              xxl: 4,
+            }}
+            dataSource={[1, 2, 3, 4, 5, 6, 7, 8]}
+            renderItem={(item) => {
+              return (
+                <List.Item>
+                  <SkeletonCard />
+                  {/* <Skeleton.Image active /> */}
+                </List.Item>
+              );
+            }}
+          />
+        )}
       </div>
       <BackTop />
     </AppLayout>
@@ -71,7 +149,11 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   if (req && cookie) {
     axios.defaults.headers.Cookie = cookie;
   }
-  await store.dispatch(loadPortfolios());
+  await store.dispatch(
+    loadPortfoliosSearch({
+      query: "?page=1",
+    }),
+  );
   await store.dispatch(myinfo());
   return {
     props: {},
@@ -80,8 +162,14 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
 
 export default Home;
 
-const mainContainer = css``;
+const mainContainer = css`
+  width: 100%;
+`;
 const dividerCss = css`
   margin-top: 13px;
-  margin-bottom: 15;
+  margin-bottom: 15px;
+  @media (max-width: 768px) {
+    margin-top: 9px;
+    margin-bottom: 14px;
+  }
 `;

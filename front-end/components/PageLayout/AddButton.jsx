@@ -2,27 +2,28 @@
 import { css, jsx } from "@emotion/react";
 import Link from "next/link";
 import { Dropdown, Menu, Space } from "antd";
-import { PlusCircleOutlined } from "@ant-design/icons";
 
 const addButtonStyle = css`
   & div {
-    background-color: rgb(220, 220, 220);
-    transition: 400ms;
-    color: black;
-    border-radius: 10px;
-    width: 60px;
-    height: 40px;
+    width: 80px;
+    height: 35px;
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  & div:hover {
-    background-color: black;
-    color: white;
+  & div > div {
+    transition: 400ms;
+    width: 100%;
+    border-radius: 100px;
+    border: 1px solid #e8e8e8 !important;
+    color: rgb(50, 50, 50);
+  }
+  & div > div:hover {
+    background-color: #e8e8e8;
   }
   @media (max-width: 768px) {
     & div {
-      width: 40px;
+      font-size: 16px;
     }
   }
 `;
@@ -53,11 +54,9 @@ const AddButton = () => {
   return (
     <div css={addButtonStyle}>
       <Dropdown overlay={menu}>
-        <a href="#">
-          <Space>
-            <PlusCircleOutlined style={{ fontSize: "25px" }} />
-          </Space>
-        </a>
+        <Space>
+          <div style={{ cursor: "pointer" }}>등록하기</div>
+        </Space>
       </Dropdown>
     </div>
   );

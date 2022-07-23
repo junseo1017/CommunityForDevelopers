@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useCallback } from "react";
 
 const options = [
   {
@@ -17,17 +17,19 @@ const options = [
 
 const useSelects = () => {
   const [items, setItems] = useState(options);
-  const [name, setName] = useState("");
-  const onNameChange = (event) => {
-    setName(event.target.value);
-  };
-  const addItem = (e) => {
-    e.preventDefault();
-    if (name) setItems([...items, { value: name }]);
-    setName("");
+  const [onName, setOnName] = useState("");
+
+  const onNameChange = (e) => {
+    setOnName(e.target.value);
   };
 
-  return [items, name, onNameChange, addItem];
+  const addItem = (e) => {
+    e.preventDefault();
+    if (onName) setItems([...items, { value: onName }]);
+    setOnName("");
+  };
+
+  return [items, onName, onNameChange, addItem];
 };
 
 export default useSelects;

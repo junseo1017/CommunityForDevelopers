@@ -1,5 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { signup, login, userinfo, patchUserinfo, myinfo, logout } from "../actions/user";
+import {
+  signup,
+  login,
+  userinfo,
+  patchUserinfo,
+  myinfo,
+  logout,
+  getGithubLoginUrl,
+  getKakaoLoginUrl,
+  editPassword,
+  userWithdrawals,
+  emailAuth,
+} from "../actions/user";
 
 const initialState = {
   // 내 정보
@@ -12,6 +24,12 @@ const initialState = {
   loginLoading: false,
   loginDone: false,
   loginError: null,
+  // OAuth로그인
+  githubLoginUrl: null,
+  kakaoLoginUrl: null,
+  getOAuthUrlLoading: false,
+  getOAuthUrlDone: false,
+  getOAuthUrlError: null,
   // 로그아웃
   logoutLoading: false,
   logoutDone: false,
@@ -21,7 +39,7 @@ const initialState = {
   loadMyInfoDone: false,
   loadMyInfoError: null,
   // 유저 정보 가져오기
-  userInfo: null,
+  userInfo: { userinfo: null, count: null },
   userInfoLoading: false,
   userInfoDone: false,
   userInfoError: null,
@@ -29,6 +47,18 @@ const initialState = {
   patchUserLoading: false,
   patchUserDone: false,
   patchUserError: null,
+  // 비밀번호 변경
+  editPasswordLoading: false,
+  editPasswordDone: false,
+  editPasswordError: null,
+  // 유저 탈퇴
+  userWithdrawalsLoading: false,
+  userWithdrawalsDone: false,
+  userWithdrawalsError: null,
+  // 이메일 인증
+  emailAuthLoading: false,
+  emailAuthDone: false,
+  emailAuthError: null,
   /* By 지의신 Portfolio */
 };
 
@@ -55,24 +85,52 @@ const userSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.loginLoading = false;
-        state.loginError = action.payload;
+        state.loginError = action;
+        console.log(state.loginError);
       })
-
+      // github login
+      .addCase(getGithubLoginUrl.pending, (state) => {
+        state.getOAuthUrlLoading = true;
+        state.getOAuthUrlDone = false;
+        state.getOAuthUrlError = null;
+      })
+      .addCase(getGithubLoginUrl.fulfilled, (state, action) => {
+        state.githubLoginUrl = action.payload;
+        state.getOAuthUrlLoading = false;
+        state.getOAuthUrlDone = true;
+      })
+      .addCase(getGithubLoginUrl.rejected, (state, action) => {
+        console.log(action);
+        state.getOAuthUrlLoading = false;
+        state.getOAuthUrlError = action.error;
+      })
+      // kakao login
+      .addCase(getKakaoLoginUrl.pending, (state) => {
+        state.getOAuthUrlLoading = true;
+        state.getOAuthUrlDone = false;
+        state.getOAuthUrlError = null;
+      })
+      .addCase(getKakaoLoginUrl.fulfilled, (state, action) => {
+        state.kakaoLoginUrl = action.payload;
+        state.getOAuthUrlLoading = false;
+        state.getOAuthUrlDone = true;
+      })
+      .addCase(getKakaoLoginUrl.rejected, (state, action) => {
+        state.getOAuthUrlLoading = false;
+        state.getOAuthUrlError = action.error.message;
+      })
       // logout
       .addCase(logout.pending, (state) => {
-        console.log("pending");
         state.logoutLoading = true;
         state.logoutDone = false;
         state.logoutError = null;
       })
       .addCase(logout.fulfilled, (state) => {
-        console.log("fulfilled");
         state.logoutLoading = false;
         state.logoutDone = true;
         state.me = null;
       })
       .addCase(logout.rejected, (state, action) => {
-        console.log("rejected");
         state.loginLoading = false;
         state.logoutError = action.payload;
       })
@@ -122,22 +180,61 @@ const userSlice = createSlice({
       })
       // patchuserinfo
       .addCase(patchUserinfo.pending, (state) => {
-        console.log("pending");
         state.patchUserLoading = true;
         state.patchUserDone = false;
         state.patchUserError = null;
       })
       .addCase(patchUserinfo.fulfilled, (state, action) => {
-        console.log("fulfilled");
         state.patchUserLoading = false;
         state.patchUserDone = true;
         state.me = action.payload;
       })
       .addCase(patchUserinfo.rejected, (state, action) => {
-        console.log("reject", action.payload);
-
         state.patchUserLoading = false;
         state.patchUserError = action.payload;
+      })
+      // editPassword
+      .addCase(editPassword.pending, (state) => {
+        state.editPasswordLoading = true;
+        state.editPasswordDone = false;
+        state.editPasswordError = null;
+      })
+      .addCase(editPassword.fulfilled, (state) => {
+        state.editPasswordLoading = false;
+        state.editPasswordDone = true;
+      })
+      .addCase(editPassword.rejected, (state) => {
+        state.editPasswordLoading = false;
+        state.editPasswordError = action.payload;
+      })
+      // userWithdrawals
+      .addCase(userWithdrawals.pending, (state) => {
+        state.userWithdrawalsLoading = true;
+        state.userWithdrawalsDone = false;
+        state.userWithdrawalsError = null;
+      })
+      .addCase(userWithdrawals.fulfilled, (state) => {
+        state.userWithdrawalsLoading = false;
+        state.userWithdrawalsDone = true;
+        state.me = false;
+      })
+      .addCase(userWithdrawals.rejected, (state, action) => {
+        state.userWithdrawalsLoading = false;
+        state.userWithdrawalsError = action;
+      })
+      // emailAuth
+      .addCase(emailAuth.pending, (state) => {
+        state.emailAuthLoading = true;
+        state.emailAuthDone = false;
+        state.emailAuthError = null;
+      })
+      .addCase(emailAuth.fulfilled, (state) => {
+        state.emailAuthLoading = false;
+        state.emailAuthDone = true;
+      })
+      .addCase(emailAuth.rejected, (state, action) => {
+        state.emailAuthLoading = false;
+        state.emailAuthError = action;
       })
       .addDefaultCase((state) => state),
 });

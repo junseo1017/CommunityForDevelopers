@@ -10,6 +10,8 @@ export interface UserType extends Document {
   skills: string[];
   scraps: string[];
   role: string;
+  loginType: string;
+  isDeleted?: boolean;
 }
 
 const UserSchema = new Schema(
@@ -24,7 +26,7 @@ const UserSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
+      required: false,
     },
     job: {
       type: String,
@@ -40,14 +42,15 @@ const UserSchema = new Schema(
       type: [String],
       required: false,
     },
-    scraps: {
-      type: [String],
-      required: false,
-    },
     role: {
       type: String,
       required: true,
       default: "user",
+    },
+    loginType: {
+      type: String,
+      required: true,
+      default: "CFD",
     },
   },
   {

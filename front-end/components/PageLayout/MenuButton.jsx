@@ -22,10 +22,11 @@ const MenuContanier = css`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 5vw;
+  gap: 3vw;
   & a {
     color: black;
-    font-size: 22px;
+    font-size: 16px;
+    padding-bottom: 5px;
     font-weight: 700;
   }
 `;
@@ -49,22 +50,21 @@ const MenuButton = () => {
 
   return (
     <>
-      <div onClick={showDrawer} css={MenuButtonStyle}>
+      <div aria-label="메뉴 열기" onClick={showDrawer} css={MenuButtonStyle}>
         <div>
           <MenuOutlined />
         </div>
       </div>
       <Drawer css={DrawerStyle} placement="right" onClose={onClose} visible={visible}>
-        <div css={MenuContanier}>
+        <nav css={MenuContanier}>
           <Link href="/">
             <a>포트폴리오</a>
           </Link>
           <Link href="/qna">
             <a>Q&A</a>
           </Link>
-          <a>Magazine</a>
           <LoggedinMenu />
-        </div>
+        </nav>
       </Drawer>
     </>
   );

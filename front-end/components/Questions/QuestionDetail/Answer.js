@@ -1,80 +1,118 @@
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from "@emotion/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { useSelector } from "react-redux";
 import Comments from "./Comments";
-import { Divider, Collapse } from "antd";
-import { MessageOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Divider, Collapse, Modal } from "antd";
 import { DetailAnswerContainer } from "../styles/QuestionStyle";
 import Like from "../Like";
 import Output from "editorjs-react-renderer";
+import AddEditor from "../Editor/AddEditor";
 import axios from "axios";
+import Router from "next/router";
 
-const Answer = ({ answer, me }) => {
+const Answer = ({ answer }) => {
+  const questionId = useRef(answer.parentQnaId);
+  const { me } = useSelector((state) => state.user);
+
   const [recommendData, setRecommendData] = useState({
     isRecommended: false,
     numberOfRecommends: 0,
   });
 
-  const initialMode = !!(me._id === answer.author._id);
+  useEffect(() => {
+    const currentIsRecommended = answer.recommends.map((user) => user._id).includes(me._id);
+    const currentNumberOfRecommends = answer.recommends.length;
+    setRecommendData({
+      isRecommended: currentIsRecommended,
+      numberOfRecommends: currentNumberOfRecommends,
+    });
+  }, []);
 
-  const [isChanged, setIsChanged] = useState(false);
-  const [isAnswerDeleteMode, setIsAnswerDeleteMode] = useState(initialMode);
+  const initialLoginState = me?._id === answer.authorId;
 
+  const [isAuthor, setIsAuthor] = useState(initialLoginState);
+  const [isAnswerUpdateMode, setIsAnswerUpdateMode] = useState(false);
+
+  // 답변 삭제하기
   const handleDelete = async (deleteId) => {
     try {
       await axios.delete(`/api/qnas/${deleteId}`);
+      Router.push(`/qna/${questionId.current}`);
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await axios.get(`/api/qnas/${answer._id}`);
-        const qna = response.data;
+  const [visible, setVisible] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState("삭제하면 다시 복구할 수 없습니다.");
 
-        const isRecommended = qna.recommends.map((user) => user._id).includes(me._id);
-        const numberOfRecommends = qna.recommends.length;
+  const showModal = () => {
+    setVisible(true);
+  };
 
-        setRecommendData({ isRecommended, numberOfRecommends });
-        setIsChanged(false);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  const handleOk = async () => {
+    await handleDelete(answer._id);
+    setVisible(false);
+  };
 
-    getData();
-  }, [isChanged]);
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setVisible(false);
+  };
+
+  // 답변 수정하기
+  const handleUpdate = async () => {
+    setIsAnswerUpdateMode(!isAnswerUpdateMode);
+  };
 
   return (
     <div css={DetailAnswerContainer} key={answer._id}>
       <Divider plain />
+      <Modal
+        title="답변을 삭제하시겠습니까?"
+        visible={visible}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}>
+        <p>{modalText}</p>
+      </Modal>
       <div className="answer-title">
-        <MessageOutlined style={{ fontSize: "2em" }} />
+        <Like className="answer-like" qnaId={answer._id} answer={answer} />
         <h2>{answer.title}</h2>
-        <Like
-          className="answer-like"
-          qnaId={answer._id}
-          recommendData={recommendData}
-          setIsChanged={setIsChanged}
-        />
-        {isAnswerDeleteMode && (
-          <div className="answer-mode">
-            <EditOutlined style={{ fontSize: "2em" }} />
-            <DeleteOutlined
-              style={{ fontSize: "2em" }}
+        {isAuthor && (
+          <div className="button-wrapper">
+            <button
               onClick={() => {
-                handleDelete(answer._id);
-              }}
-            />
+                handleUpdate();
+              }}>
+              수정
+            </button>
+            <button
+              onClick={() => {
+                showModal();
+              }}>
+              삭제
+            </button>
           </div>
         )}
       </div>
-      <Output data={JSON.parse(answer.contents)} />
+      {!isAnswerUpdateMode ? (
+        <Output data={JSON.parse(answer.contents)} />
+      ) : (
+        <AddEditor
+          data={JSON.parse(answer.contents)}
+          isAnswer={true}
+          qnaId={answer._id}
+          isUpdate={true}
+          parentQnaId={questionId.current}
+          setChanged={setIsAnswerUpdateMode}
+        />
+      )}
       <Collapse>
         <Collapse.Panel header="댓글 보기">
-          <Comments contentId={answer._id} user={me} />
+          <Comments currentComments={answer.comments} contentId={answer._id} />
         </Collapse.Panel>
       </Collapse>
     </div>

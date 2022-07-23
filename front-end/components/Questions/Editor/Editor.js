@@ -4,6 +4,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import { createReactEditorJS } from "react-editor-js";
 import Image from "@editorjs/image";
+import axios from "axios";
 const ReactEditorJS = createReactEditorJS();
 
 const Editor = ({ imageArray, handleInitialize, data }) => {
@@ -36,28 +37,30 @@ const Editor = ({ imageArray, handleInitialize, data }) => {
       // 에디터 기존 도구 불러오기 및 이미지 도구 추가
       const tools = {
         ...EDITOR_JS_TOOLS,
-        image: {
-          class: Image,
-          config: {
-            uploader: {
-              uploadByFile(file) {
-                let formData = new FormData();
-                formData.append("images", file);
+        // image: {
+        //   class: Image,
+        //   config: {
+        //     uploader: {
+        //       async uploadByFile(file) {
+        //         let formData = new FormData();
+        //         console.log(file);
+        //         formData.append("images", file);
 
-                // 서버에 이미지 전달하기
-                return API.imageUpload(formData).then((response) => {
-                  imageArray.push(response.data.data);
-                  return {
-                    success: 1,
-                    file: {
-                      url: response.data.data,
-                    },
-                  };
-                });
-              },
-            },
-          },
-        },
+        //         // 서버에 이미지 전달하기
+        //         return axios.post("/api/images", formData).then((response) => {
+        //           console.log(response);
+        //           imageArray.push(response.data.imgUrl);
+        //           return {
+        //             success: 1,
+        //             file: {
+        //               url: response.data.imgUrl,
+        //             },
+        //           };
+        //         });
+        //       },
+        //     },
+        //   },
+        // },
       };
       setEditorTools(tools);
     };

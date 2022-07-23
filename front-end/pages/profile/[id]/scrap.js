@@ -3,37 +3,54 @@ import { css, jsx } from "@emotion/react";
 import ProfileNav from "../../../components/userProfile/ProfileNav";
 import AppLayout from "../../../components/AppLayout";
 import ProfileCard from "../../../components/userProfile/ProfileCard";
-import ProfileScrap from "../../../components/userProfile/ProfileScrap";
-import { ProfileContentContainer } from "../profileStyle";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { myinfo } from "../../../actions/user";
+import ProfilePortfolio from "../../../components/userProfile/ProfilePortfolio";
+import { ProfileContentContainer } from "../../../styles/profileStyle";
+import { myinfo, userinfo } from "../../../actions/user";
+import { loadScrapPortfolios } from "../../../actions/portfolio";
 import { useDispatch, useSelector } from "react-redux";
-const ProfileCScrap = () => {
-  const dispatch = useDispatch();
-  const { me } = useSelector((state) => state.user);
-  console.log("scrap");
+import wrapper from "../../../store";
+import axios from "axios";
+import Head from "next/head";
 
-  useEffect(() => {
-    // 로그인 여부 확인
-    dispatch(myinfo());
-  }, []);
+const ProfileCScrap = () => {
+  const { userScrapPortfolios } = useSelector((state) => state.portfolio);
   return (
-    <AppLayout>
-      <ProfileNav />
-      <div css={ProfileContentContainer}>
-        <ProfileCard me={me} />
-        <ProfileScrap />
-      </div>
-    </AppLayout>
+    <>
+      <Head>
+        <title>CFDㅣ프로필</title>
+      </Head>
+      <AppLayout>
+        <ProfileNav />
+        <div css={ProfileContentContainer}>
+          <ProfileCard />
+          <ProfilePortfolio portfoliodata={userScrapPortfolios} />
+        </div>
+      </AppLayout>
+    </>
   );
 };
 
-// export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ query }) => {
-//   await store.dispatch(loadMyPortfolios(query.id));
-//   return {
-//     props: {},
-//   };
-// });
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, query }) => {
+  const cookie = req?.headers.cookie;
+  axios.defaults.headers.Cookie = "";
+  if (req && cookie) {
+    axios.defaults.headers.Cookie = cookie;
+  }
+  try {
+    await Promise.allSettled([
+      store.dispatch(userinfo(query.id)),
+      store.dispatch(myinfo()),
+      store.dispatch(loadScrapPortfolios(query.id)),
+    ]);
+
+    return {
+      props: {},
+    };
+  } catch (error) {
+    return {
+      props: {},
+    };
+  }
+});
 
 export default ProfileCScrap;

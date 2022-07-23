@@ -3,9 +3,8 @@ import { css, jsx } from "@emotion/react";
 import AddButton from "./AddButton";
 import LoggedinMenu from "./LoggedinMenu";
 import { HeaderContainer, HeaderContent } from "./styles/HeaderStyles";
-import Logo from "./logo";
+import Logo from "./Logo";
 import Link from "next/link";
-
 const Header = () => {
   return (
     <header css={HeaderContainer}>
@@ -13,7 +12,7 @@ const Header = () => {
         <div css={HeaderContent}>
           <nav>
             <Link href="/">
-              <a>
+              <a aria-label="CFD 홈페이지로 이동">
                 <Logo />
               </a>
             </Link>
@@ -24,7 +23,6 @@ const Header = () => {
               <Link href="/qna">
                 <a>Q&A</a>
               </Link>
-              <a>Magazine</a>
             </div>
           </nav>
           <nav>

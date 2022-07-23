@@ -9,28 +9,9 @@ import {
   popoverStyle,
 } from "./styles/MyInfoStyles";
 import { StarOutlined, LikeOutlined, MessageOutlined } from "@ant-design/icons";
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useMediaQuery } from "react-responsive";
-const ProfilePortfolio = () => {
-  const [showHeader, setShowHeader] = useState(null);
-  const { myPortfolios } = useSelector((state) => state.portfolio);
+import { textLimitHandler } from "../Common/textLimit";
 
-  const isresponsive = useMediaQuery({
-    query: "(max-width:768px)",
-  });
-
-  useEffect(() => {
-    setShowHeader(isresponsive);
-  }, [isresponsive]);
-
-  const textLimitHandler = (text, limit) => {
-    if (text.length >= limit) {
-      return text.substr(0, limit) + "...";
-    }
-    return text;
-  };
-
+const ProfilePortfolio = ({ portfoliodata }) => {
   const skills = (list) => {
     return (
       <div css={popoverStyle}>
@@ -44,32 +25,24 @@ const ProfilePortfolio = () => {
   return (
     <Card css={profileContentCardContainer}>
       <div css={portfolioContainer}>
-        {myPortfolios &&
-          myPortfolios.map((e) => {
+        {portfoliodata &&
+          portfoliodata.map((e) => {
             return (
-              <div id="check" css={portfolioStyle} key={e._id}>
+              <article id="check" css={portfolioStyle} key={e._id}>
                 <Link href={`/portfolio/${e._id}`}>
                   <div style={{ cursor: "pointer" }}>
                     <div>
-                      <img src="https://static.remove.bg/remove-bg-web/5c20d2ecc9ddb1b6c85540a333ec65e2c616dbbd/assets/start-1abfb4fe2980eabfbbaaa4365a0692539f7cd2725f324f904565a9a744f8e214.jpg" />
+                      <img src={e.thumbnail} />
                       <div id="gradation">
                         <div id="textbox">
-                          <h3>
-                            {showHeader
-                              ? textLimitHandler(e.title, 20)
-                              : textLimitHandler(e.title, 35)}
-                          </h3>
-                          <p>
-                            {showHeader
-                              ? textLimitHandler(e.content, 25)
-                              : textLimitHandler(e.content, 40)}
-                          </p>
+                          <h2>{textLimitHandler(e.title, 13)}</h2>
+                          <p>{textLimitHandler(e.description, 17)}</p>
                         </div>
                       </div>
                       <div>
                         <div>
                           <Popover placement="bottom" content={skills(e.skills)}>
-                            <h3>skills</h3>
+                            <h5>skills</h5>
                           </Popover>
                         </div>
                       </div>
@@ -78,29 +51,33 @@ const ProfilePortfolio = () => {
                 </Link>
                 <div>
                   <div>
-                    <Link href={`/profile/${e.author._id}`}>
-                      <Avatar
-                        style={{ cursor: "pointer" }}
-                        size={25}
-                        src="https://joeschmoe.io/api/v1/random"
-                      />
+                    <Link href={`/profile/${e.authorId}`}>
+                      <a aria-label="유저 프로필 페이지로 이동">
+                        <Avatar
+                          style={{ cursor: "pointer" }}
+                          size={25}
+                          src={e.authorImg ? e.authorImg : "/image/profile_image_default.jpg"}
+                        />
+                      </a>
                     </Link>
                     <h3>
-                      <Link href={`/profile/${e.author._id}`}>
-                        <a>{e.author.nickname}</a>
+                      <Link href={`/profile/${e.authorId}`}>
+                        <a aria-label="유저 프로필 페이지로 이동">
+                          {textLimitHandler(e.author, 13)}
+                        </a>
                       </Link>
                     </h3>
                   </div>
                   <div>
                     <StarOutlined />
-                    <p>{e.recommends}</p>
+                    <p>{e.scraps.length}</p>
                     <LikeOutlined />
-                    <p>{e.comments.length}</p>
+                    <p>{e.recommends.length}</p>
                     <MessageOutlined />
                     <p>{e.comments.length}</p>
                   </div>
                 </div>
-              </div>
+              </article>
             );
           })}
       </div>
