@@ -99,7 +99,7 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
       console.log(error);
     }
 
-    router.push(`/qnas/${parentQnaId}`);
+    router.push(`/qna/${parentQnaId}`);
   };
 
   // 사용하지 않는 이미지를 제거하기 위해 imageArray와 현재 에디터의 이미지를 가져와 비교하기
