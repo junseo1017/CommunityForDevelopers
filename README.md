@@ -132,7 +132,7 @@ community-for-developers
 | ------ | ------ | ------ |
 | 이준서 | FE | - 헤더 / 푸터 / 컨텐츠 레이아웃<br> - 로그인 / 회원가입(OAuth 로그인/가입) <br> - 유저 프로필 페이지 <br> - 404 페이지 <br> - 프로젝트 세팅(Next.js / redux-toolkit) <br>|
 | 지의신 | FE | - 포트폴리오 컴포넌트<br> - 에디터 커스텀<br> - 무한스크롤 / 검색필터<br> - 댓글 기능<br> |
-| 이형민 | FE | ------ |
+| 이형민 | FE | -  QnA 컴포넌트<br> - 무한스크롤 / 검색 <br> - 댓글 기능<br> - Editor.js <br> - Like 기능 |
 | 김태준 | BE | - 포토폴리오/댓글 API<br> - OAuth 로그인/가입<br> - 검색 기능(MongoDB searchIndex)<br> - Joi validation 미들웨어<br> - custom errorHandler<br>|
 | 김용민 | BE | - User/QnA API<br> - Cookie & Jwt token<br> - 이미지 업로드<br> - Email 인증<br> |
 
