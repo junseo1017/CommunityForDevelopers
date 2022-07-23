@@ -16,7 +16,7 @@ const CommentList = ({ comments, me, handleDelete }) => (
     renderItem={(comment) => (
       <div className="comment-item">
         <Comment
-          author={<a>{comment.author.nickname}</a>}
+          author={<a>{comment.author?.nickname}</a>}
           avatar={
             <Avatar
               src={comment.author?.imgUrl || "/image/profile_image_default.jpg"}
@@ -27,6 +27,7 @@ const CommentList = ({ comments, me, handleDelete }) => (
             <div>
               {me?._id === comment.author?._id && (
                 <button
+                  className="comment-delete"
                   onClick={() => {
                     handleDelete(comment._id);
                   }}>
@@ -51,7 +52,7 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
     </Form.Item>
     <Form.Item>
       <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
-        Add Comment
+        댓글 작성하기
       </Button>
     </Form.Item>
   </>
@@ -99,24 +100,19 @@ const Comments = ({ contentId, currentComments }) => {
     const response = await axios.post(`/api/comments/qna/${contentId}`, {
       content: value,
     });
-    console.log("댓글 추가 response", response);
     setValue("");
     setComments([...comments, response.data]);
     setSubmitting(false);
   };
 
-  // const handleChange = debounce((e) => {
-  //   console.log(e.target.value);
-  //   setValue(e.target.value);
-  // }, 500);
   const handleChange = (e) => {
-    console.log(e.target.value);
     setValue(e.target.value);
   };
 
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(`api/comments/${id}`);
+      setComments((prev) => prev.filter((comment) => comment.id !== id));
       console.log(response);
     } catch (error) {
       console.log(error);
