@@ -3,8 +3,7 @@ import AppLayout from "../components/AppLayout";
 import { useEffect, useCallback, useState } from "react";
 import wrapper from "../store";
 import { List, Divider } from "antd";
-import { BackTop, Skeleton } from "antd";
-//import PortfolioCard from "../components/Portfolo/PortfolioCard";
+import { BackTop } from "antd";
 import PortfolioCard from "../components/Common/PortfolioCard";
 import PorfolioSearch from "../components/Portfolo/PorfolioSearch";
 import { loadPortfoliosSearch, loadPortfoliosSearchScroll } from "../actions/portfolio";
@@ -15,12 +14,9 @@ import { myinfo } from "../actions/user";
 import useDidMountEffect from "../hooks/useDidMountEffect";
 import { throttle, debounce } from "lodash";
 import SkeletonCard from "../components/Common/SkeletonCard";
-import { useRouter } from "next/router";
 
 const Home = () => {
-  const router = useRouter();
   const dispatch = useDispatch();
-
   const { me } = useSelector((state) => state.user);
   const { mainPortfolios, hasMorePortfolios, loadPortfoliosLoading, loadPortfoliosDone } =
     useSelector((state) => state.portfolio);

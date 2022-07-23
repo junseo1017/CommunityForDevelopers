@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
+import { portfolioActions } from "../reducers/portfolio";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import axios from "axios";
@@ -39,7 +40,8 @@ const useEditor = () => {
       const data = {
         content: contentString,
       };
-      dispatch(portfolioActions.updateState({ content: contentString, image: "" }));
+      console.log("savePortf");
+      dispatch(portfolioActions.updateState({ content: contentString }));
       /* Clear all the unused images from server */
       await clearEditorLeftoverImages();
       return { ...portfolioValue, ...data };

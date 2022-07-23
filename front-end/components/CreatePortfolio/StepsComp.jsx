@@ -6,7 +6,7 @@ import { StepsPadding, ButtonCss } from "./styles/StepsComponentStyle";
 import { blackBtn } from "../Common/style/btnStyle";
 const { Step } = Steps;
 
-const StepsComp = ({ current = 0, showModal, prev }) => {
+const StepsComp = ({ current = 0, showModal, prev, savePortf }) => {
   return (
     <>
       <Steps css={StepsPadding} current={current}>
@@ -28,7 +28,10 @@ const StepsComp = ({ current = 0, showModal, prev }) => {
                 style={{
                   margin: "0 8px",
                 }}
-                onClick={() => prev()}>
+                onClick={() => {
+                  savePortf();
+                  prev();
+                }}>
                 뒤로
               </Button>
             )}
