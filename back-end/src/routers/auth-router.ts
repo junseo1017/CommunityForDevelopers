@@ -10,16 +10,13 @@ authRouter.get(
       const baseUrl = "https://kauth.kakao.com/oauth/authorize";
       const config = {
         client_id: process.env.KAKAO_CLIENT_ID || "",
-        redirect_uri:
-          "http://kdt-sw2-seoul-team06.elicecoding.com:5000/api/oauth/kakao/callback",
+        redirect_uri: `http://${process.env.DOMAIN}:5000/api/oauth/kakao/callback`,
         response_type: "code",
         scope: "profile_nickname account_email",
       };
       const params = new URLSearchParams(config).toString();
       const finalUrl = `${baseUrl}?${params}`;
 
-      console.log("카카오컨피그:", config);
-      console.log("카카오파이널유알앨:", finalUrl);
       res.json({ url: finalUrl });
     } catch (error) {
       next(error);
@@ -39,8 +36,6 @@ authRouter.get(
         nickname,
         "KAKAO"
       );
-      if (req.cookies)
-        console.log("쿠키:", req.cookies, "\n인증쿠키:", req.signedCookies);
 
       res.cookie("userinfo", userToken, {
         expires: new Date(Date.now() + 60000 * 1440), //24시간
@@ -48,7 +43,7 @@ authRouter.get(
         signed: true,
       });
 
-      res.redirect("http://kdt-sw2-seoul-team06.elicecoding.com");
+      res.redirect(`http://${process.env.DOMAIN}`);
     } catch (error) {
       next(error);
     }
@@ -68,9 +63,6 @@ authRouter.get(
       };
       const params = new URLSearchParams(config).toString();
       const finalUrl = `${baseUrl}?${params}`;
-
-      console.log("깃헙컨피그:", config);
-      console.log("깃헙파이널유알앨:", finalUrl);
       res.json({ url: finalUrl });
     } catch (error) {
       next(error);
@@ -90,8 +82,6 @@ authRouter.get(
         nickname,
         "GITHUB"
       );
-      if (req.cookies)
-        console.log("쿠키:", req.cookies, "\n인증쿠키:", req.signedCookies);
 
       res.cookie("userinfo", userToken, {
         expires: new Date(Date.now() + 60000 * 1440), //24시간
@@ -99,7 +89,7 @@ authRouter.get(
         signed: true,
       });
 
-      res.redirect("http://kdt-sw2-seoul-team06.elicecoding.com");
+      res.redirect(`http://${process.env.DOMAIN}`);
     } catch (error) {
       next(error);
     }
