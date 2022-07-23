@@ -6,13 +6,13 @@ import axios from "axios";
 // import { useDispatch, useSelector } from "react-redux";
 // import { qnaActions, getQnaData } from "../../reducers/qna";
 
-const questions = ({ questions, answers }) => {
+const questions = ({ qnas }) => {
   return (
     <AppLayout>
       <Head>
         <title>모든 질문</title>
       </Head>
-      <Questions questions={questions} answers={answers} />
+      <Questions qnas={qnas} />
     </AppLayout>
   );
 };
@@ -23,13 +23,10 @@ export async function getServerSideProps() {
   try {
     const response = await axios.get("/api/qnas");
     const qnas = response.data;
-    const questions = qnas.filter((qna) => !qna.isAnswer);
-    const answers = qnas.filter((qna) => qna.isAnswer);
 
     return {
       props: {
-        questions,
-        answers,
+        qnas,
       },
     };
   } catch (error) {}

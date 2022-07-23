@@ -8,7 +8,7 @@ import QuestionItem from "./QuestionItem";
 import TopButton from "../TopButton";
 import { throttle, debounce } from "lodash";
 
-const Questions = ({ questions, answers }) => {
+const Questions = ({ qnas }) => {
   const [questionsList, setQuestionsList] = useState([]); // 불러온 데이터
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -91,10 +91,7 @@ const Questions = ({ questions, answers }) => {
         {questionsList.map((question) => {
           return (
             <div key={question._id}>
-              <QuestionItem
-                question={question}
-                answers={answers.filter((answer) => answer.parentQnaId === question._id)}
-              />
+              <QuestionItem question={question} />
               <Divider plain />
             </div>
           );
