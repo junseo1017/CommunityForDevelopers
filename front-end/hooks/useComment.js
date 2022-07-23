@@ -3,7 +3,6 @@ import useConfirmModal from "./useConfirmModal";
 import { addComment } from "../actions/portfolio";
 import { useDispatch } from "react-redux";
 import Router from "next/router";
-import { debounce } from "lodash";
 
 const useComment = ({ nickname, Portf_id, imgUrl }) => {
   //const [comments, setComments] = useState([]);

@@ -20,13 +20,12 @@ const useSelects = () => {
   const [onName, setOnName] = useState("");
 
   const onNameChange = (e) => {
-    console.log(e.target.value);
     setOnName(e.target.value);
   };
 
   const addItem = (e) => {
     e.preventDefault();
-    if (onName) setItems([...items, { value: name }]);
+    if (onName) setItems([...items, { value: onName }]);
     setOnName("");
   };
 
