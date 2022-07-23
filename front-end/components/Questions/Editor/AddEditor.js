@@ -72,7 +72,7 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate, 
         router.push(`/qna/${parentQnaId}`);
         return;
       }
-      router.push(`/qna/${qnaId}`);
+      router.push(`/qna`);
     } catch (e) {
       console.log(e);
     }
@@ -96,12 +96,12 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate, 
       });
       if (isAnswer) {
         console.log("페이지 push parent");
-        setChanged(true);
+        setChanged && setChanged(true);
         router.push(`/qna/${parentQnaId}`);
         return;
       } else {
         console.log("페이지 push id");
-        setChanged(true);
+        setChanged && setChanged(true);
         router.push(`/qna/${qnaId}`);
       }
     } catch (error) {
@@ -145,7 +145,7 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate, 
     setConfirmLoading(true);
 
     isUpdate ? await updateQna() : await saveQna();
-    setChanged(false);
+    setChanged && setChanged(false);
     setVisible(false);
     setConfirmLoading(false);
   };
@@ -165,13 +165,14 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate, 
         onCancel={handleCancel}>
         <p>{modalText}</p>
       </Modal>
+      <Editor handleInitialize={handleInitialize} imageArray={imageArray} data={data} />
       <Button
+        className="editor-submitBtn"
         onClick={() => {
           showModal();
         }}>
-        저장하기
+        저장
       </Button>
-      <Editor handleInitialize={handleInitialize} imageArray={imageArray} data={data} />
     </div>
   );
 };
