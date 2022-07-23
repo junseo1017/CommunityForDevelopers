@@ -15,14 +15,13 @@ export const SearchBarContainer = css`
 
     font-size: 1.5em;
 
-    border: 2px solid transparent;
+    border: 2px solid rgba(190, 190, 190);
     border-radius: 1.5em;
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
     opacity: 0.75;
     outline: none;
+    font-weight: 700;
 
     &:focus {
-      box-shadow: 0 2px 2px rgba(190, 190, 190);
       border: 2px solid rgba(190, 190, 190);
       color: black;
     }
@@ -261,6 +260,28 @@ export const DetailAnswerContainer = css`
       color: #1890ff;
     }
   }
+
+  & div.ant-comment-content-detail {
+    position: relative;
+  }
+
+  & button.comment-delete {
+    width: 3em;
+    margin: 0;
+    padding: 0.25em;
+    background-color: #ffffff;
+    border: none;
+    color: rgba(120, 120, 120);
+    font-size: 0.9em;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    &:hover {
+      color: #000;
+      font-weight: bold;
+    }
+  }
 `;
 
 export const CommentsContainer = css`
@@ -297,23 +318,6 @@ export const CommentsContainer = css`
 
   & .focused {
     background-color: rgb(24, 144, 255, 0.25);
-  }
-
-  & div.comment-item {
-    & button {
-      width: 3em;
-      margin: 0;
-      padding: 0.25em;
-      background-color: #ffffff;
-      border: none;
-      color: rgba(120, 120, 120);
-      font-size: 0.9em;
-
-      &:hover {
-        color: #000;
-        font-weight: bold;
-      }
-    }
   }
 `;
 

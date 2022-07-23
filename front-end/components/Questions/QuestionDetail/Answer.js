@@ -81,7 +81,7 @@ const Answer = ({ answer }) => {
         <p>{modalText}</p>
       </Modal>
       <div className="answer-title">
-        <Like className="answer-like" qnaId={answer._id} recommendData={recommendData} />
+        <Like className="answer-like" qnaId={answer._id} answer={answer} />
         <h2>{answer.title}</h2>
         {isAuthor && (
           <div className="button-wrapper">
