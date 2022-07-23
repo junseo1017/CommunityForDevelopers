@@ -17,19 +17,20 @@ const options = [
 
 const useSelects = () => {
   const [items, setItems] = useState(options);
-  const [name, setName] = useState("");
+  const [onName, setOnName] = useState("");
 
   const onNameChange = (e) => {
-    setName(e.target.value);
+    console.log(e.target.value);
+    setOnName(e.target.value);
   };
 
   const addItem = (e) => {
     e.preventDefault();
-    if (name) setItems([...items, { value: name }]);
-    setName("");
+    if (onName) setItems([...items, { value: name }]);
+    setOnName("");
   };
 
-  return [items, name, onNameChange, addItem];
+  return [items, onName, onNameChange, addItem];
 };
 
 export default useSelects;
