@@ -73,7 +73,8 @@ community-for-developers
     - 회원정보 수정
     - 회원탈퇴
         - soft delete
-    - 프로필 조회
+    - 비밀번호 변경 (소셜 로그인 가입자 x)
+    - 유저 프로필 조회 (본인/다른 유저 구분)
     - 작성한 포트폴리오 조회
     - 스크랩한 포트폴리오 조회
     - 질문 글 조회
@@ -92,14 +93,19 @@ community-for-developers
         - editor.js
         - 이미지 업로드 -> Multer & Firebase storage
     - QnA 삭제
+- 에러 페이지
+    - 404 페이지  
+- 기타
+    - 모든 페이지 반응형으로 제작 (max-width:768px 기준/ 모바일, 데스크탑 대응)
 ```
 <br />
 
 ## :memo: 기술 스택
 - **Front-End**
-    - Next JS
-    - Redux Toolkit
-    - CSS AntDesign/Emotions
+    - SSR: Next JS
+    - 상태 관리: Redux Toolkit
+    - CSS: Emotions
+    - UI framework: antd
 - **Back-End**
     - Express/Typescript
     - MongoDB
@@ -115,7 +121,7 @@ community-for-developers
 ## :memo: 팀원 및 역할
 | 이름 | 포지션 | 업무 |
 | ------ | ------ | ------ |
-| 이준서 | FE | ------ |
+| 이준서 | FE | - 헤더 / 푸터 / 컨텐츠 레이아웃<br> - 로그인 / 회원가입(OAuth 로그인/가입) <br> - 유저 프로필 페이지 <br> - 404 페이지 <br> - 프로젝트 세팅(Next.js / redux-toolkit) <br>|
 | 지의신 | FE | ------ |
 | 이형민 | FE | ------ |
 | 김태준 | BE | ------ |
