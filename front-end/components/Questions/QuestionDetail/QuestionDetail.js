@@ -121,13 +121,13 @@ const QuestionDetail = ({ qna }) => {
               onClick={() => {
                 handleUpdate();
               }}>
-              수정하기
+              수정
             </button>
             <button
               onClick={() => {
                 showModal();
               }}>
-              삭제하기
+              삭제
             </button>
           </div>
         )}
