@@ -5,10 +5,10 @@ import { Badge, Tag } from "antd";
 import { MessageOutlined, StarOutlined } from "@ant-design/icons";
 import { TitleContainer, DescriptionContainer } from "../styles/QuestionStyle";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const QuestionItem = ({ question, answers }) => {
-  // console.log("question", question);
-
+const QuestionItem = ({ question }) => {
   const parsedContents = JSON.parse(question.contents);
 
   const filteredBlocks =
@@ -19,9 +19,15 @@ const QuestionItem = ({ question, answers }) => {
 
   const texts = filteredBlocks.map((block) => block.text).slice(0, 1);
 
-  // answers = answers.filter((answer) => answer.parentQnaId === _id);
+  const [answers, setAnswers] = useState([]);
 
-  // console.log(answers);
+  useEffect(() => {
+    const getAnswerLength = async () => {
+      const response = await axios.get(`/api/qnas/${question._id}`);
+      setAnswers([...response.data.Answers]);
+    };
+    getAnswerLength();
+  }, []);
 
   return (
     <div key={question._id}>
