@@ -95,16 +95,17 @@ community-for-developers
     - 포토폴리오 댓글 CRUD
 - QnA
     - QnA 작성
-      QnA 수정
         - editor.js
-        - 이미지 업로드 -> Multer & Firebase storage
+    - QnA 수정
+        - editor.js
     - QnA 삭제
-    - QnA 추천  
+    - QnA 추천(좋아요)
     - QnA 답변 댓글 CRUD
     - 질문 검색 -> MongoDB searchIndex
-    - 질문 조회 
+    - 질문 조회
+        - infinite scroll
 - 에러 페이지
-    - 404 페이지  
+    - 404 페이지
 - 기타
     - 모든 페이지 반응형으로 제작 (max-width:768px 기준/ 모바일, 데스크탑 대응)
 ```
