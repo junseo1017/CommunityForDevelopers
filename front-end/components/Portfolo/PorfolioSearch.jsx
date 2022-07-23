@@ -85,7 +85,34 @@ const PorfolioSearch = ({ setSearchQuery }) => {
     setSearchQuery(query);
   }, [inputs, optionsInputs, searchValue]);
 
-  const [items, name, addItem, onNameChange] = useSelects();
+  const options = [
+    {
+      value: "React",
+    },
+    {
+      value: "Next js",
+    },
+    {
+      value: "Redux",
+    },
+    {
+      value: "Typescript",
+    },
+  ];
+
+  const [items, setItems] = useState(options);
+  const [onName, setOnName] = useState("");
+
+  const onNameChange = (e) => {
+    setOnName(e.target.value);
+  };
+
+  const addItem = (e) => {
+    e.preventDefault();
+    if (onName) setItems([...items, { value: onName }]);
+    setOnName("");
+  };
+
   const OrderBySelectStyle = useMemo(() => ({ width: 106, textAlign: "start" }), []);
   const { Option } = Select;
   const orderBys = [
@@ -142,7 +169,7 @@ const PorfolioSearch = ({ setSearchQuery }) => {
                   style={{
                     padding: "0 8px 4px",
                   }}>
-                  <Input placeholder="Please enter item" value={name} onChange={onNameChange} />
+                  <Input placeholder="Please enter item" value={onName} onChange={onNameChange} />
                   <Typography.Link
                     onClick={addItem}
                     style={{

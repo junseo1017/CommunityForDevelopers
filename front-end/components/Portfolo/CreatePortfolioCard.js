@@ -34,7 +34,7 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 
 const CreatePortfolioCard = ({ onSubmitCard }) => {
-  const [items, name, onNameChange, addItem] = useSelects();
+  const [items, onName, onNameChange, addItem] = useSelects();
   const { singlePortfolio } = useSelector((state) => state.portfolio);
   const [imgSrc, setImgSrc] = useState(singlePortfolio?.thumbnail);
   const [imgFormErr, setImgFormErr] = useState();
@@ -240,7 +240,11 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
                       style={{
                         padding: "0 8px 4px",
                       }}>
-                      <Input placeholder="Please enter item" value={name} onChange={onNameChange} />
+                      <Input
+                        placeholder="Please enter item"
+                        value={onName}
+                        onChange={onNameChange}
+                      />
                       <Typography.Link
                         onClick={addItem}
                         style={{

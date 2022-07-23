@@ -6,6 +6,9 @@ import { useSelector } from "react-redux";
 const OAuthSign = () => {
   const { githubLoginUrl, kakaoLoginUrl } = useSelector((state) => state.user);
 
+  console.log("깃헙:",githubLoginUrl);
+  console.log("카카오:",kakaoLoginUrl);
+
   return (
     <section css={OAuthStyle}>
       <h2>SNS 계정으로 간편 로그인/회원가입</h2>
