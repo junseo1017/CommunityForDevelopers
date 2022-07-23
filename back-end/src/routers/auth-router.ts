@@ -17,7 +17,6 @@ authRouter.get(
       const params = new URLSearchParams(config).toString();
       const finalUrl = `${baseUrl}?${params}`;
 
-      console.log("카카오컨피그:", config);
       res.json({ url: finalUrl });
     } catch (error) {
       next(error);
@@ -37,8 +36,6 @@ authRouter.get(
         nickname,
         "KAKAO"
       );
-      if (req.cookies)
-        console.log("쿠키:", req.cookies, "\n인증쿠키:", req.signedCookies);
 
       res.cookie("userinfo", userToken, {
         expires: new Date(Date.now() + 60000 * 1440), //24시간
@@ -66,8 +63,6 @@ authRouter.get(
       };
       const params = new URLSearchParams(config).toString();
       const finalUrl = `${baseUrl}?${params}`;
-
-      console.log("깃헙컨피그:", config);
       res.json({ url: finalUrl });
     } catch (error) {
       next(error);
@@ -87,8 +82,6 @@ authRouter.get(
         nickname,
         "GITHUB"
       );
-      if (req.cookies)
-        console.log("쿠키:", req.cookies, "\n인증쿠키:", req.signedCookies);
 
       res.cookie("userinfo", userToken, {
         expires: new Date(Date.now() + 60000 * 1440), //24시간
