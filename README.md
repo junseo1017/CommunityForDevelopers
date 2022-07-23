@@ -121,11 +121,7 @@ community-for-developers
     - Express/Typescript
     - MongoDB
     - Firebase
-
-
-## 결과물
-- 사진첨부예정
-
+<br />
 
 ## :memo: 팀원 및 역할
 | 이름 | 포지션 | 업무 |
