@@ -120,8 +120,7 @@ const QuestionDetail = ({ qna }) => {
             <button
               onClick={() => {
                 handleUpdate();
-              }}
-              disabled={isAnswerUpdateMode}>
+              }}>
               수정하기
             </button>
             <button
@@ -145,6 +144,7 @@ const QuestionDetail = ({ qna }) => {
             <p>최근 수정일: {moment(question.updatedAt).format("YYYY월 MM월 DD일")}</p>
           </div>
           <button
+            disabled={isAnswerUpdateMode}
             onClick={() => {
               if (me === undefined) showConfirm();
               isAnswerCreateMode
