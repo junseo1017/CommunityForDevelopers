@@ -21,13 +21,9 @@ import useConfirmModal from "../../../hooks/useConfirmModal";
 const QuestionDetail = ({ qna }) => {
   const router = useRouter();
 
-  console.log(qna);
   // 질문 답변 분류
   const question = qna.Question;
   const answers = qna.Answers;
-  console.log("qna", qna);
-  console.log("question", question);
-  console.log("answers", answers);
 
   // user 정보 가져오기
   const { me } = useSelector((state) => state.user);
@@ -167,6 +163,7 @@ const QuestionDetail = ({ qna }) => {
             isAnswer={false}
             qnaId={question._id}
             isUpdate={true}
+            setChanged={setIsAnswerUpdateMode}
           />
         </div>
       )}
