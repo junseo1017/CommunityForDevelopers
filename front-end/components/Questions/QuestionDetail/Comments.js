@@ -29,7 +29,7 @@ const CommentList = ({ comments, me, handleDelete }) => (
                 <button
                   className="comment-delete"
                   onClick={() => {
-                    handleDelete(comment._id);
+                    handleDelete(comment._id, comment.postId);
                   }}>
                   삭제
                 </button>
@@ -109,9 +109,12 @@ const Comments = ({ contentId, currentComments }) => {
     setValue(e.target.value);
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id, postId) => {
+    console.log(`deleting ${id}`);
+    console.log(`deleting ${postId}`);
+
     try {
-      const response = await axios.delete(`api/comments/${id}`);
+      const response = await axios.delete(`api/comments/${id}?qnaId=${postId}`);
       setComments((prev) => prev.filter((comment) => comment.id !== id));
       console.log(response);
     } catch (error) {
