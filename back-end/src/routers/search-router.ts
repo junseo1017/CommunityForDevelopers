@@ -1,10 +1,13 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { portfolioService, qnaService } from "../services";
+import { validateRequestWith } from "../middlewares";
+import { searchPortfolioJoi, searchQnaJoi } from "../db/schemas/joi-schemas";
 const searchRouter = Router();
 
 // 1. 포토폴리오 검색
 searchRouter.get(
   "/portfolios",
+  validateRequestWith(searchPortfolioJoi, "query"),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const options = (req.query.option as string[]) || [
@@ -31,6 +34,7 @@ searchRouter.get(
 // 2. QnA 검색
 searchRouter.get(
   "/qnas",
+  validateRequestWith(searchQnaJoi, "query"),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const value = req.query.value as string;

@@ -1,5 +1,4 @@
 import { SearchInfo } from "../interfaces/portfolio-interface";
-import { Types } from "mongoose";
 
 function getSearchCondition(searchInfo: SearchInfo, page: number) {
   const condition: Array<any> = [];

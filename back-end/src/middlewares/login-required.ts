@@ -14,8 +14,6 @@ async function loginRequired(
 ) {
   const userToken = req.signedCookies.userinfo;
 
-  console.log("유저토큰:", userToken);
-
   if (!userToken || userToken === "null") {
     next(new AppError(500, "로그인한 유저만 사용할 수 있는 서비스입니다."));
   }

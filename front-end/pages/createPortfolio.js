@@ -127,7 +127,13 @@ const createPortfolio = (props) => {
         confirmLoading={confirmLoading}
         modalText={modalText}
       />
-      <StepsComp current={current} setCurrent={setCurrentStep} showModal={showModal} prev={prev} />
+      <StepsComp
+        current={current}
+        setCurrent={setCurrentStep}
+        showModal={showModal}
+        prev={prev}
+        savePortf={savePortf}
+      />
 
       {current === 2 && <ResultComp />}
       {current === 0 && <CreatePortfolioCard onSubmitCard={onSubmitCard} />}

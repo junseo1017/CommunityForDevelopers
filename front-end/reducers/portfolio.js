@@ -7,12 +7,10 @@ import {
   scrapPortfolio,
   addPortfolio,
   likePortfolio,
-  loadHashtagPortfolios,
   loadPortfolio,
   loadPortfolios,
   loadPortfoliosSearch,
   removePortfolio,
-  retweet,
   unlikePortfolio,
   unscrapPortfolio,
   updatePortfolio,
@@ -132,22 +130,6 @@ const portfolioSlice = createSlice({
         state.hasMorePortfolios = action.payload.length === 12;
       })
       .addCase(loadPortfoliosSearchScroll.rejected, (state, action) => {
-        state.loadPortfoliosLoading = false;
-        state.loadPortfoliosError = action.error.message;
-      })
-      // loadHashtagPortfolios
-      .addCase(loadHashtagPortfolios.pending, (state) => {
-        state.loadPortfoliosLoading = true;
-        state.loadPortfoliosDone = false;
-        state.loadPortfoliosError = null;
-      })
-      .addCase(loadHashtagPortfolios.fulfilled, (state, action) => {
-        state.loadPortfoliosLoading = false;
-        state.loadPortfoliosDone = true;
-        state.mainPortfolios = _concat(state.mainPortfolios, action.payload);
-        state.hasMorePortfolios = action.payload.length === 10;
-      })
-      .addCase(loadHashtagPortfolios.rejected, (state, action) => {
         state.loadPortfoliosLoading = false;
         state.loadPortfoliosError = action.error.message;
       })
@@ -274,7 +256,6 @@ const portfolioSlice = createSlice({
         //const portfolio = _find(state.mainPortfolios, { id: action.payload.PortfolioId });
         state.likePortfolioLoading = false;
         state.likePortfolioDone = true;
-
         _remove(state.singlePortfolio.recommends, function (c) {
           return c === action.payload.UserId;
         });
@@ -282,21 +263,6 @@ const portfolioSlice = createSlice({
       .addCase(unlikePortfolio.rejected, (state, action) => {
         state.likePortfolioLoading = false;
         state.likePortfolioError = action.error.message;
-      })
-      // retweet
-      .addCase(retweet.pending, (state) => {
-        state.retweetLoading = true;
-        state.retweetDone = false;
-        state.retweetError = null;
-      })
-      .addCase(retweet.fulfilled, (state, action) => {
-        state.retweetLoading = false;
-        state.retweetDone = true;
-        state.mainPortfolios.unshift(action.payload);
-      })
-      .addCase(retweet.rejected, (state, action) => {
-        state.retweetLoading = false;
-        state.retweetError = action.error.message;
       })
       // updatePortfolio
       .addCase(updatePortfolio.pending, (state) => {
