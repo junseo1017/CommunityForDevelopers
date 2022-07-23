@@ -41,14 +41,14 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
   const [imgFile, setImgFile] = useState();
   const { me } = useSelector((state) => state.user);
   //const portfolioValue = useSelector(({ portfolio }) => portfolio);
-
+  const textColor = singlePortfolio.thumbnail ? "green" : "#ff4d4f";
   const onFinish = (values) => {
     if (!imgSrc) {
       setImgFormErr("error");
       message.error("썸네일 이미지를 첨부해주세요.");
       return;
     }
-    onSubmitCard({ ...values, image: imgFile, imgSrc: imgSrc });
+    onSubmitCard({ ...values, image: imgFile, thumbnail: imgSrc });
   };
   const onChange = (info) => {
     const { status } = info.file;
@@ -168,8 +168,9 @@ const CreatePortfolioCard = ({ onSubmitCard }) => {
                         <UploadOutlined />
                       </p>
                       <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                      <p className="ant-upload-hint" style={{ color: "#ff4d4f" }}>
+                      <p className="ant-upload-hint" style={{ color: `${textColor}` }}>
                         {imgFormErr ? "썸네일 이미지를 첨부해주세요." : <br />}
+                        {singlePortfolio.thumbnail ? "첨부되었습니다." : <br />}
                       </p>
                     </Upload.Dragger>
                   </ImgCrop>
