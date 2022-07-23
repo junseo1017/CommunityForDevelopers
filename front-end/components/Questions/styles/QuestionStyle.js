@@ -124,6 +124,15 @@ export const DetailContainer = css`
   flex-direction: column;
   justify-content: center;
   padding: 1em;
+
+  & div.editor-container {
+    display: flex;
+    flex-direction: column;
+
+    & button.editor-submitBtn {
+      align-self: end;
+    }
+  }
 `;
 
 export const DetailQuestionContainer = css`
@@ -283,6 +292,15 @@ export const DetailAnswerContainer = css`
       font-weight: bold;
     }
   }
+
+  & div.editor-container {
+    display: flex;
+    flex-direction: column;
+
+    & button.editor-submitBtn {
+      align-self: end;
+    }
+  }
 `;
 
 export const CommentsContainer = css`
@@ -395,6 +413,10 @@ export const EditorContainer = css`
     & button {
       align-self: end;
     }
+
+    & button.editor-submitBtn {
+      align-self: end;
+    }
   }
 
   & div.codex-editor--narrow {
@@ -455,6 +477,10 @@ export const AnswerEditorContainer = css`
     flex-direction: column;
 
     & button {
+      align-self: end;
+    }
+
+    & button.editor-submitBtn {
       align-self: end;
     }
 
