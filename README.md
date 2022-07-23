@@ -133,7 +133,7 @@ community-for-developers
 | 지의신 | FE | ------ |
 | 이형민 | FE | ------ |
 | 김태준 | BE | - 포토폴리오/댓글 API<br> - OAuth 로그인/가입<br> - 검색 기능(MongoDB searchIndex)<br> - Joi validation 미들웨어<br> - custom errorHandler<br>|
-| 김용민 | BE | ------ |
+| 김용민 | BE | - User/QnA API<br> - Cookie & Jwt token<br> - 이미지 업로드<br> - Email 인증<br> |
 
 ## 제작과정 
 - notion: https://www.notion.so/Elice-Team-6-917622bb4c974c2cb46c4a3040b904e3 
