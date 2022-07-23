@@ -15,14 +15,13 @@ export const SearchBarContainer = css`
 
     font-size: 1.5em;
 
-    border: 2px solid transparent;
+    border: 2px solid rgba(190, 190, 190);
     border-radius: 1.5em;
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
     opacity: 0.75;
     outline: none;
+    font-weight: 700;
 
     &:focus {
-      box-shadow: 0 2px 2px rgba(190, 190, 190);
       border: 2px solid rgba(190, 190, 190);
       color: black;
     }
