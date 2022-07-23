@@ -10,8 +10,7 @@ authRouter.get(
       const baseUrl = "https://kauth.kakao.com/oauth/authorize";
       const config = {
         client_id: process.env.KAKAO_CLIENT_ID || "",
-        redirect_uri:
-          "http://kdt-sw2-seoul-team06.elicecoding.com:5000/api/oauth/kakao/callback",
+        redirect_uri: `http://${process.env.DOMAIN}:5000/api/oauth/kakao/callback`,
         response_type: "code",
         scope: "profile_nickname account_email",
       };
@@ -19,7 +18,6 @@ authRouter.get(
       const finalUrl = `${baseUrl}?${params}`;
 
       console.log("카카오컨피그:", config);
-      console.log("카카오파이널유알앨:", finalUrl);
       res.json({ url: finalUrl });
     } catch (error) {
       next(error);
@@ -48,7 +46,7 @@ authRouter.get(
         signed: true,
       });
 
-      res.redirect("http://kdt-sw2-seoul-team06.elicecoding.com");
+      res.redirect(`http://${process.env.DOMAIN}`);
     } catch (error) {
       next(error);
     }
@@ -70,7 +68,6 @@ authRouter.get(
       const finalUrl = `${baseUrl}?${params}`;
 
       console.log("깃헙컨피그:", config);
-      console.log("깃헙파이널유알앨:", finalUrl);
       res.json({ url: finalUrl });
     } catch (error) {
       next(error);
@@ -99,7 +96,7 @@ authRouter.get(
         signed: true,
       });
 
-      res.redirect("http://kdt-sw2-seoul-team06.elicecoding.com");
+      res.redirect(`http://${process.env.DOMAIN}`);
     } catch (error) {
       next(error);
     }
