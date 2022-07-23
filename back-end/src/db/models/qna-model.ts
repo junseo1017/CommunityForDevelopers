@@ -103,6 +103,19 @@ export class QnaModel {
     );
   }
 
+  async updateQnaComment(
+    portId: string,
+    commentId: Types.ObjectId,
+    setType: string
+  ) {
+    const filter = { _id: portId };
+    const option = { returnOriginal: false };
+    return await Qna.findOneAndUpdate(
+      filter,
+      { [setType]: { comments: commentId } },
+      option
+    );
+  }
   async deleteById(qnaId: string) {
     return await Qna.findOneAndDelete({ _id: qnaId });
   }

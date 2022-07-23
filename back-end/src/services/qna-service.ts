@@ -117,6 +117,14 @@ class QnaService {
     }
     return QnA;
   }
+
+  async deleteQnaComment(qnaId: string, commentId: Types.ObjectId) {
+    const QnA = await this.qnaModel.findById(qnaId);
+    if (!QnA) {
+      throw new AppError(400, "QnA 정보가 없습니다.");
+    }
+    return await this.qnaModel.updateQnaComment(qnaId, commentId, "$pull");
+  }
 }
 
 const qnaService = new QnaService(qnaModel);
