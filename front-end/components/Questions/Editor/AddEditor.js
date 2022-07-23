@@ -13,9 +13,7 @@ const Editor = dynamic(() => import("./Editor"), {
   ssr: false,
 });
 
-const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }) => {
-  const [isChanged, setIsChanged] = useState(false);
-
+const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate, setChanged }) => {
   const editorCore = useRef(null);
   // 업로드된 이미지 추적
   const [imageArray, setImageArray] = useState([]);
@@ -46,8 +44,8 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
   // }, [data]);
 
   const saveQna = async () => {
+    console.log("saving");
     const savedData = await editorCore.current.save();
-    console.log(savedData);
     const filteredBlocks = savedData.blocks.map(({ type, data }) => {
       return type === "paragraph" || type === "header" ? data : "";
     });
@@ -70,16 +68,19 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
       await clearEditorLeftoverImages();
 
       // 서버에 질문 저장하기
-
-      setIsChanged(true);
+      if (isAnswer) {
+        router.push(`/qna/${parentQnaId}`);
+        return;
+      }
+      router.push(`/qna`);
     } catch (e) {
       console.log(e);
     }
   };
 
   const updateQna = async () => {
+    console.log("Updating");
     const savedData = await editorCore.current.save();
-    console.log(savedData);
     const filteredBlocks = savedData.blocks.map(({ type, data }) => {
       return type === "paragraph" || type === "header" ? data : "";
     });
@@ -93,13 +94,19 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
         contentText,
         isAnswer,
       });
-
-      setIsChanged(true);
+      if (isAnswer) {
+        console.log("페이지 push parent");
+        setChanged && setChanged(true);
+        router.push(`/qna/${parentQnaId}`);
+        return;
+      } else {
+        console.log("페이지 push id");
+        setChanged && setChanged(true);
+        router.push(`/qna/${qnaId}`);
+      }
     } catch (error) {
       console.log(error);
     }
-
-    router.push(`/qna/${parentQnaId}`);
   };
 
   // 사용하지 않는 이미지를 제거하기 위해 imageArray와 현재 에디터의 이미지를 가져와 비교하기
@@ -138,11 +145,7 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
     setConfirmLoading(true);
 
     isUpdate ? await updateQna() : await saveQna();
-    if (isAnswer) {
-      router.push(`/qna/${parentQnaId}`);
-      return;
-    }
-    router.push(`/qna/${qnaId}`);
+    setChanged && setChanged(false);
     setVisible(false);
     setConfirmLoading(false);
   };
@@ -162,13 +165,14 @@ const AddEditor = ({ title, data, isAnswer, qnaId, parentQnaId, tags, isUpdate }
         onCancel={handleCancel}>
         <p>{modalText}</p>
       </Modal>
+      <Editor handleInitialize={handleInitialize} imageArray={imageArray} data={data} />
       <Button
+        className="editor-submitBtn"
         onClick={() => {
           showModal();
         }}>
-        저장하기
+        저장
       </Button>
-      <Editor handleInitialize={handleInitialize} imageArray={imageArray} data={data} />
     </div>
   );
 };

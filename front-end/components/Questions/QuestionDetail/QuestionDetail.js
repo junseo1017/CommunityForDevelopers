@@ -22,18 +22,16 @@ const QuestionDetail = ({ qna }) => {
   const router = useRouter();
 
   console.log(qna);
+
   // 질문 답변 분류
-  const question = qna.Question;
-  const answers = qna.Answers;
-  console.log("qna", qna);
-  console.log("question", question);
-  console.log("answers", answers);
+  const question = qna?.Question;
+  const answers = qna?.Answers;
 
   // user 정보 가져오기
   const { me } = useSelector((state) => state.user);
 
   // 현재 로그인 유저가 질문자인지 확인
-  const initialLoginState = me?._id === question.authorId;
+  const initialLoginState = me?._id === question?.authorId;
 
   const [isAuthor, setIsAuthor] = useState(initialLoginState); // 수정, 삭제 버튼 보여주기
   const [isAnswerUpdateMode, setIsAnswerUpdateMode] = useState(false); // 답변 수정 form 변경
@@ -167,6 +165,7 @@ const QuestionDetail = ({ qna }) => {
             isAnswer={false}
             qnaId={question._id}
             isUpdate={true}
+            setChanged={setIsAnswerUpdateMode}
           />
         </div>
       )}

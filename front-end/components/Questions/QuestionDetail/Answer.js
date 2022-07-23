@@ -13,8 +13,6 @@ import Router from "next/router";
 
 const Answer = ({ answer }) => {
   const questionId = useRef(answer.parentQnaId);
-  console.log("questionId", questionId);
-  console.log("좋아요 넘어가는 answer", answer);
   const { me } = useSelector((state) => state.user);
 
   const [recommendData, setRecommendData] = useState({
@@ -31,7 +29,7 @@ const Answer = ({ answer }) => {
     });
   }, []);
 
-  const initialLoginState = me._id === answer.authorId;
+  const initialLoginState = me?._id === answer.authorId;
 
   const [isAuthor, setIsAuthor] = useState(initialLoginState);
   const [isAnswerUpdateMode, setIsAnswerUpdateMode] = useState(false);
@@ -104,11 +102,12 @@ const Answer = ({ answer }) => {
         <Output data={JSON.parse(answer.contents)} />
       ) : (
         <AddEditor
-          data={answer.contents}
+          data={JSON.parse(answer.contents)}
           isAnswer={true}
           qnaId={answer._id}
           isUpdate={true}
           parentQnaId={questionId.current}
+          setChanged={setIsAnswerUpdateMode}
         />
       )}
       <Collapse>
