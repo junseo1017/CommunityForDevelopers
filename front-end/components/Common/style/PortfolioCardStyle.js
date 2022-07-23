@@ -101,6 +101,7 @@ export const portfolioStyle = css`
 
     & a {
       color: black;
+      font-size: 15px;
     }
 
     & > div:first-of-type {
