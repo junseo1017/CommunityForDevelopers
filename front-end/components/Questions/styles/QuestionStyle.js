@@ -247,8 +247,9 @@ export const DetailAnswerContainer = css`
     }
   }
 
-  & div.ant-collapse {
+  & div.ant-collapse.ant-collapse-icon-position-start {
     background-color: #fff;
+    margin-top: 1.5em;
   }
 
   & div.badge-container {
