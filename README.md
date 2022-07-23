@@ -125,5 +125,5 @@ community-for-developers
 | 이준서 | FE | - 헤더 / 푸터 / 컨텐츠 레이아웃<br> - 로그인 / 회원가입(OAuth 로그인/가입) <br> - 유저 프로필 페이지 <br> - 404 페이지 <br> - 프로젝트 세팅(Next.js / redux-toolkit) <br>|
 | 지의신 | FE | ------ |
 | 이형민 | FE | ------ |
-| 김태준 | BE | ------ |
+| 김태준 | BE | - 포토폴리오/댓글 API<br> - OAuth 로그인/가입<br> - 검색 기능(MongoDB searchIndex)<br> - Joi validation 미들웨어<br> - custom errorHandler<br>|
 | 김용민 | BE | ------ |
