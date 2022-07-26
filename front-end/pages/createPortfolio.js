@@ -98,7 +98,6 @@ const createPortfolio = (props) => {
   /* 첫번째 단계 */
   const onSubmitCard = useCallback((values) => {
     const formData = new FormData();
-    //if (values.image) formData.append("file", values.image[0].originFileObj);
     if (values.image) formData.append("image", values.image);
     setImgFormData(formData);
     dispatch(portfolioActions.updateState({ ...values, image: "" }));

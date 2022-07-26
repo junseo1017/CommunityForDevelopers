@@ -21,6 +21,17 @@ import {
 } from "../actions/portfolio";
 //수정중
 const initialState = {
+  singlePortfolio: {
+    title: "",
+    skills: [],
+    description: "",
+    thumbnail: "",
+    content: "",
+    comments: [],
+    contentText: "",
+    scraps: [],
+    recommends: [],
+  },
   mainPortfolios: [],
   hasMorePortfolios: true, // 다음 portfolios 여부
   imagePaths: [],
@@ -62,17 +73,6 @@ const initialState = {
   loadScrapPortfoliosLoading: false,
   loadScrapPortfoliosDone: false,
   loadScrapPortfoliosError: false,
-  singlePortfolio: {
-    title: "",
-    skills: [],
-    description: "",
-    thumbnail: "",
-    content: "",
-    comments: [],
-    contentText: "",
-    scraps: [],
-    recommends: [],
-  },
 };
 
 const portfolioSlice = createSlice({

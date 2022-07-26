@@ -1,9 +1,12 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
+import { portfolioActions } from "../reducers/portfolio";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 
 const useEditor = () => {
   const editorCore = useRef(null);
+  const dispatch = useDispatch();
   const portfolioValue = useSelector(({ portfolio }) => portfolio.singlePortfolio);
   const [imageArray, setImageArray] = useState([]); /* to keep track of uploaded image */
   const handleInitialize = useCallback((instance) => {
@@ -33,9 +36,12 @@ const useEditor = () => {
     /* get the editor.js content and save it to server */
     try {
       const savedData = await editorCore.current.save();
+      const contentString = JSON.stringify(savedData);
       const data = {
-        content: JSON.stringify(savedData),
+        content: contentString,
       };
+      console.log("savePortf");
+      dispatch(portfolioActions.updateState({ content: contentString }));
       /* Clear all the unused images from server */
       await clearEditorLeftoverImages();
       return { ...portfolioValue, ...data };
